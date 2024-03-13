@@ -175,7 +175,6 @@ exports.signUp = async (req, res) => {
         });
 
         //send SignUp Mail to user
-
     } catch (error) {
         console.log("Error in SignUp", error);
 
@@ -225,7 +224,7 @@ exports.logIn = async (req, res) => {
         const payload = {
             email: user.email,
             id: user._id,
-            role: user.role,
+            accountType: user.accountType,
         };
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "2h",
@@ -253,6 +252,7 @@ exports.logIn = async (req, res) => {
     }
 };
 
+//TODO : Check the code properly
 exports.changePassword = async (req, res) => {
     try {
         //get data
@@ -310,7 +310,6 @@ exports.changePassword = async (req, res) => {
         });
 
         //send mail
-
     } catch (error) {
         return res.status(400).json({
             success: false,
