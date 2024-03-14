@@ -7,6 +7,7 @@ const Profile_Model = require("../models/Profile.model");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
+const mailSender = require("../utils/mailSender");
 // const cookie = require("cookie-parser");
 
 //! Send OTP after hitting SignUp submit button and before DB entry to verify email
@@ -259,7 +260,7 @@ exports.changePassword = async (req, res) => {
         const { email, oldPassword, newPassword, confirmNewPassword } =
             req.body;
 
-        // Validations
+        //* Validations
 
         if (!oldPassword || !newPassword || !confirmNewPassword) {
             return res.status(400).json({
@@ -267,10 +268,8 @@ exports.changePassword = async (req, res) => {
                 message: "Enter all the fields.",
             });
         }
+
         //decrypt old password from db
-        const user = await User_Model.findOne({
-            email,
-        });
         const isOldPasswordValid = await bcrypt.compare(
             oldPassword,
             user.password
@@ -296,22 +295,32 @@ exports.changePassword = async (req, res) => {
         }
 
         //encrypt new Password
-
         const hashedNewPassword = await bcrypt.hash(newPassword, 12);
 
         //update password to new password
-        user.password = hashedNewPassword;
-        await user.save();
+        const updateUser = await User_Model.findOneAndUpdate(
+            { email: email },
+            {
+                password: hashedNewPassword,
+            },
+            { new: true }
+        );
+
+        //send mail
+        await mailSender(
+            email,
+            "Password Changed",
+            "Your password has be updated Successfully."
+        );
 
         // Send success response
         return res.status(200).json({
             success: true,
             message: "Password changed successfully.",
+            updateUser,
         });
-
-        //send mail
     } catch (error) {
-        return res.status(400).json({
+        return res.status(500).json({
             success: false,
             message: "Error in changing Password",
         });
