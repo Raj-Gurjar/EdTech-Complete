@@ -16,7 +16,7 @@ exports.createSubsection = async (req, res) => {
         if (
             !sectionId ||
             !title ||
-            !timeDuration || 
+            !timeDuration ||
             !description ||
             !additionalUrl ||
             !video
@@ -109,7 +109,8 @@ exports.updateSubSection = async (req, res) => {
                 description: description,
                 additionalUrl: additionalUrl,
                 videoUrl: uploadVideo.secure_url,
-            }
+            },
+            { new: true }
         );
 
         //return
