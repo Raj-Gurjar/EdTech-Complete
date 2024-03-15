@@ -9,10 +9,10 @@ const Section_Schema = new mongoose.Schema({
     subSections: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "SubSection_Schema",
+            ref: "SubSection_Model",
             required: true,
         },
     ],
 });
 
-module.exports = mongoose.model("Section_Schema", Section_Schema);
+module.exports = mongoose.model("Section_Model", Section_Schema);

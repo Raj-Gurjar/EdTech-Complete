@@ -1,5 +1,5 @@
 const Course_Model = require("../models/Course.model");
-const Tag_Model = require("../models/Tag.model");
+const Category_Model = require("../models/Category.model");
 const User_Model = require("../models/User.model");
 
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
@@ -8,7 +8,7 @@ const { uploadImageToCloudinary } = require("../utils/imageUploader");
 exports.createCourse = async (req, res) => {
     try {
         //*get the data
-        const { courseName, courseDescription, whatYouWillLearn, price, tag } =
+        const { courseName, courseDescription, whatYouWillLearn, price, category } =
             req.body;
 
         const thumbnail = req.file.thumbnailImage;
@@ -20,7 +20,7 @@ exports.createCourse = async (req, res) => {
             !courseDescription ||
             !whatYouWillLearn ||
             !price ||
-            !tag ||
+            !category ||
             !thumbnail
         ) {
             return res.status(400).json({
@@ -29,10 +29,13 @@ exports.createCourse = async (req, res) => {
             });
         }
         //get instructor data bcs instructor is in db
+
+        //TODO: check userID and instructorDetail are equal or not
         const userId = req.user.id;
+        console.log("usedId: ", userId);
 
         const instructorDetails = await User_Model.findById(userId);
-        console.log("Instructor details :", instructorDetails);
+        console.log("Instructor details: ", instructorDetails);
 
         if (!instructorDetails) {
             return res.status(404).json({
@@ -40,13 +43,13 @@ exports.createCourse = async (req, res) => {
                 message: "Instructor not found",
             });
         }
-        //* Add course in that tag
-        const tagDetail = await Tag_Model.findById(tag);
+        //* Add course in that Category
+        const categoryDetail = await Category_Model.findById(category);
 
-        if (!tag) {
+        if (!categoryDetail) {
             return res.status(404).json({
                 success: false,
-                message: "Tag not found",
+                message: "Category not found",
             });
         }
 
@@ -65,7 +68,7 @@ exports.createCourse = async (req, res) => {
             instructor: instructorDetails._id, //to give reference to instructor obj
             whatYouWillLearn,
             price,
-            tag: tagDetail._id,
+            category: categoryDetail._id,
             thumbnail: thumbnailImage.secure_url,
         });
 
@@ -81,9 +84,9 @@ exports.createCourse = async (req, res) => {
         );
 
         //TODO: this was h.w.
-        //* Add course in tag schema
-        await Tag_Model.findByIdAndUpdate(
-            { _id: tagDetail._id },
+        //* Add course in Category schema
+        await Category_Model.findByIdAndUpdate(
+            { _id: categoryDetail._id },
             {
                 $push: {
                     course: newCourse._id,
@@ -96,7 +99,7 @@ exports.createCourse = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: "New Course Created Succesfully.",
+            message: "New Course Created Successfully.",
         });
     } catch (error) {
         return res.status(500).json({

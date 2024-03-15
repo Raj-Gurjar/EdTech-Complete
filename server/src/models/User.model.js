@@ -31,18 +31,18 @@ const User_Schema = new mongoose.Schema({
     },
     additionalDetails: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Profile_Schema",
+        ref: "Profile_Model",
         required: true,
     },
     courses: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Course_Schema",
+        ref: "Course_Model",
     },
 
     courseProgress: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "CourseProgress_Schema",
+            ref: "CourseProgress_Model",
             required: true,
         },
     ],
@@ -56,4 +56,4 @@ const User_Schema = new mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model("User_Schema", User_Schema);
+module.exports = mongoose.model("User_Model", User_Schema);

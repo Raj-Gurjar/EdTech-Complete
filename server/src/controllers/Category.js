@@ -1,7 +1,7 @@
-const Tag_Model = require("../models/Tag.model");
+const Category_Model = require("../models/Category.model");
 
-//! creating a new tag by admin
-exports.createTag = async (req, res) => {
+//! creating a new category by admin
+exports.createCategory = async (req, res) => {
     try {
         //get data
 
@@ -19,48 +19,47 @@ exports.createTag = async (req, res) => {
 
         //create entry
 
-        const tagDetails = await Tag_Model.create({
+        const categoryDetails = await Category_Model.create({
             name: name,
             description: description,
         });
 
-        console.log("tag Details:", tagDetails);
+        console.log("category Details:", categoryDetails);
 
         //return res
 
         return res.status(200).json({
             success: true,
-            message: "Tag Created Successfully",
+            message: "Category Created Successfully",
         });
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: `Error in creating Tags`,
+            message: `Error in creating Categories`,
         });
     }
 };
 
-//! Getting all tags
+//! Getting all categories
 
-exports.showAllTags = async (req, res) => {
+exports.showAllCategories = async (req, res) => {
     try {
-        const allTags = await Tag_Model.find(
+        const allCategories = await Category_Model.find(
             {},
             { name: true, description: true }
         );
 
-        console.log("all Tags: ",allTags);
+        console.log("all categories: ", allCategories);
 
         return res.status(200).json({
             success: true,
-            message: "All the Tags are returned successfully.",
-        
+            message: "All the categories are returned successfully.",
         });
     } catch (error) {
-        console.log("Error in getting all tags: ", error);
+        console.log("Error in getting all categories: ", error);
         return res.status(500).json({
             success: false,
-            message: "Error in Getting all Tags",
+            message: "Error in Getting all categories",
         });
     }
 };
