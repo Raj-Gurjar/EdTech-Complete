@@ -63,3 +63,48 @@ exports.showAllCategories = async (req, res) => {
         });
     }
 };
+
+exports.categoryPageDetails = async (req, res) => {
+    try {
+        //get the data
+        const { categoryId } = req.body;
+
+        //get top selling courses
+        const selectCategory = await Category_Model.findById(categoryId)
+            .populate("courses")
+            .exec();
+
+        //validate
+        if (!selectCategory) {
+            return res.status(404).json({
+                success: false,
+                message: "Category not found.",
+            });
+        }
+
+        //get courses for different category if searched category not found
+        const differentCategory = await Category_Model.find({
+            _id: { $ne: categoryId },
+        })
+            .populate("courses")
+            .exec();
+
+        //TODO: H.W. get top selling course (top 10)
+
+        //return
+        return res.status(200).json({
+            success: true,
+            message: "Category Page Data fetched Successfully.",
+            data: {
+                selectCategory,
+                differentCategory,
+                // topSelling,
+            },
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error in getting page details",
+        });
+    }
+};

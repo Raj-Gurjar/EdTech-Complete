@@ -8,8 +8,13 @@ const { uploadImageToCloudinary } = require("../utils/imageUploader");
 exports.createCourse = async (req, res) => {
     try {
         //*get the data
-        const { courseName, courseDescription, whatYouWillLearn, price, category } =
-            req.body;
+        const {
+            courseName,
+            courseDescription,
+            whatYouWillLearn,
+            price,
+            category,
+        } = req.body;
 
         const thumbnail = req.file.thumbnailImage;
 
@@ -144,3 +149,46 @@ exports.getAllCourse = async (req, res) => {
 
 //! Get Course by Id
 
+exports.getCourseById = async (req, res) => {
+    try {
+        const { courseId } = req.body;
+
+        const courseDetails = await Course_Model.findById(courseId)
+            .populate({
+                path: "instructor",
+                populate: {
+                    path: "additionalDetails",
+                },
+            })
+            .populate("category")
+            .populate("ratingAndReview")
+            .populate({
+                path: "courseContent",
+                populate: {
+                    path: "subSection",
+                },
+            })
+            .exec();
+
+        //valid
+        if(!courseDetails)
+        {
+            return res.status(400).json({
+            success: false,
+            message: `Could not find the Course with ${courseId}` 
+            });
+        }
+        console.log("Course Details:", courseDetails);
+        //return
+        return res.status(200).json({
+            success: true,
+            message: "Course Data fetched Successfully.",
+            courseDetails,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error in fetching this course data.",
+        });
+    }
+};
