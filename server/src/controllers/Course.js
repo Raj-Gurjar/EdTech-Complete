@@ -141,3 +141,6 @@ exports.getAllCourse = async (req, res) => {
         });
     }
 };
+
+//! Get Course by Id
+
