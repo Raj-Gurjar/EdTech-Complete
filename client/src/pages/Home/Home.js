@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import "./Home.scss";
 
 //!-- assets
-import home_vid_1 from "../../assets/videos/home-vid-1.mp4"
+import home_vid_1 from "../../assets/videos/home-vid-1.mp4";
+import home_img_1 from "../../assets/images/home-img-1.jpg";
 //!-- icons
 import { FaLongArrowAltRight } from "react-icons/fa";
 
@@ -43,7 +44,25 @@ export default function Home() {
 
       {/* //!--- Section 3  */}
 
-      
+      <div className="coding-panel bg-green-300 flex m-20 justify-between gap-10">
+        <div className="coding-panel-1 bg-red-200 w-[50%] flex flex-col gap-8">
+          <h2>Heading lines</h2>
+          <p>Paragraph</p>
+          <div className="coding-panel-buttons flex gap-10">
+            <button>
+              <Link to="/"> Try it now</Link>
+            </button>
+            
+            <button>
+              <Link to="/"> Learn More </Link>
+            </button>
+
+          </div>
+        </div>
+        <div className="coding-panel-2 w-[50%]">
+          <img src={home_img_1} alt="home-img-1" />
+        </div>
+      </div>
 
       {/* //!--- Section Footer */}
     </div>
