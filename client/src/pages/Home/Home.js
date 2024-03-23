@@ -52,17 +52,39 @@ export default function Home() {
             <button>
               <Link to="/"> Try it now</Link>
             </button>
-            
+
             <button>
               <Link to="/"> Learn More </Link>
             </button>
-
           </div>
         </div>
         <div className="coding-panel-2 w-[50%]">
-          <img src={home_img_1} alt="home-img-1" />
+          {/*//! make the code moving by using (React Typing Animation) */}
+          <p>
+            {
+              '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8" />\n<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n<title>Document</title>\n</head>\n<body>\n</body>\n</html>\n'
+            }
+          </p>
         </div>
       </div>
+
+      {/* //!--- Section 4  */}
+      <div className="course-catalogs">
+        <h1 className="text-xl">Some Tag line</h1>
+        <p>some subtitle</p>
+        <p>
+          Create top 4 or 5 top courses card with Title , 20 words description,
+          level ,no of lessons + add carousel effect
+        </p>
+        <button>
+          <Link to="/"> See all the Courses</Link>
+        </button>
+      </div>
+
+        {/* //!--- Section 5  */}
+        
+
+        {/* //!--- Section 6  */}
 
       {/* //!--- Section Footer */}
     </div>
