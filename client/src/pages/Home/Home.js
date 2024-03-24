@@ -68,10 +68,11 @@ export default function Home() {
         </div>
       </div>
 
-      {/* //!--- Section 4  */}
-      <div className="course-catalogs">
+      {/* //!--- Section 4 add a component  */}
+      <div className="course-catalogs"> 
         <h1 className="text-xl">Some Tag line</h1>
         <p>some subtitle</p>
+        <p>Add filters also like free,top rated,new, etc.</p>
         <p>
           Create top 4 or 5 top courses card with Title , 20 words description,
           level ,no of lessons + add carousel effect

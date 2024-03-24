@@ -2,11 +2,12 @@ import { Route, Routes } from "react-router-dom";
 import "./App.scss";
 
 import Home from "./pages/Home/Home";
+import Navbar from './components/Navbar/Navbar'
 
-function App() {
+function App() { 
   return (
     <div className="App">
-      
+      <Navbar/>
       <Routes>
         <Route path="/" element={<Home />} />
       </Routes>
