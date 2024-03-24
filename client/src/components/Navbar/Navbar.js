@@ -5,6 +5,7 @@ import "./Navbar.scss";
 import { useSelector } from "react-redux";
 import { BsCart3 } from "react-icons/bs";
 import ProfileDropDown from "./ProfileDropDown";
+import { IoSearch } from "react-icons/io5";
 
 export default function Navbar() {
   const { token } = useSelector((state) => state.auth);
@@ -34,13 +35,6 @@ export default function Navbar() {
 
         {/* //! Log In /SignUp / DashBoard */}
         <div className="dynamic-buttons ">
-          {user && user?.accountType !== "Instructor" && (
-            <Link to="/dashboard/cart" className="relative">
-              <BsCart3 />
-              {totalItems > 0 && <span>{totalItems}</span>}
-            </Link>
-          )}
-
           {token === null && (
             <div className="auth-buttons flex gap-x-5">
               <NavLink to="/login">
@@ -51,8 +45,22 @@ export default function Navbar() {
               </NavLink>
             </div>
           )}
+          {token !== null && (
+            <div className="flex gap-x-5">
+              <IoSearch className="text-xl" />
 
-          {token !== null && <ProfileDropDown />}
+              {user && (
+                // user?.accountType === "Student"
+
+                <Link to="/dashboard/cart" className="relative flex">
+                  <BsCart3 className="text-xl" />
+
+                  {totalItems > 0 && <span className="bg-white rounded-full px-[3px] py-[1px]">{totalItems}</span>}
+                </Link>
+              )}
+              <ProfileDropDown />
+            </div>
+          )}
         </div>
       </div>
     </div>
