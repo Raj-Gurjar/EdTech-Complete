@@ -132,11 +132,11 @@ exports.signUp = async (req, res) => {
 
         console.log("Recent Otp :", recentOtp);
 
-        //* validate OTP
+        // //* validate OTP
         if (recentOtp.length === 0) {
             // OTP not found
             return res.status(400).json({
-                success: false,
+                success: false, 
                 message: "OTP not found/Entered",
             });
         } else if (otp !== recentOtp.otp) {
@@ -175,7 +175,7 @@ exports.signUp = async (req, res) => {
             user,
         });
 
-        //send SignUp Mail to user
+        //!send SignUp Mail to user
     } catch (error) {
         console.log("Error in SignUp", error);
 

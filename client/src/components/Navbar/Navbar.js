@@ -13,8 +13,8 @@ export default function Navbar() {
   const { totalItems } = useSelector((state) => state.cart);
 
   return (
-    <div className="bg-red-400 flex h-14 items-center justify-center border-b-[1px] border-b-black-700">
-      <div className="navbar flex w-11/12 max-w-maxContent items-center justify-between">
+    <div className=" bg-red-400 fixed z-50 max-w-maxContent w-[100%]  flex h-14 items-center justify-center border-b-[1px] border-b-black-700">
+      <div className="navbar  flex w-11/12 max-w-maxContent items-center justify-between">
         <Link to="/">Logo</Link>
 
         <nav>

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const profileInitialState = {
-  user:1,
+  user:"",
 
 };
 

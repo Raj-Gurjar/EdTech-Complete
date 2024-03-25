@@ -9,17 +9,18 @@ export default function SignUp() {
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName:"",
     email: "",
     password: "",
     confPassword: "",
     isAdmin: userType,
   });
 
-
   async function signUpHandler(event) {
     event.preventDefault();
-    toast.success("Sign Up");
+    toast.success("Data Collected");
+    navigate("/signUpOTP");
   }
 
   function changeHandler(event) {
@@ -32,7 +33,7 @@ export default function SignUp() {
       };
     });
   }
- 
+
   return (
     <div className="log-container">
       <h2 className="log-heading">Sign Up</h2>
@@ -40,13 +41,23 @@ export default function SignUp() {
       <form className="log-form flex flex-col" onSubmit={signUpHandler}>
         <h4>Sign Up as {userType === true ? "Admin" : "Customer"}</h4>
 
-        <label htmlFor="username">Username:</label>
+        <label htmlFor="firstName">First Name:</label>
         <input
           className="bg-black-200 border-[2px]"
           type="text"
-          id="username"
-          name="name"
-          value={formData.name}
+          id="firstName"
+          name="firstName"
+          value={formData.firstName}
+          onChange={changeHandler}
+          required
+        />
+        <label htmlFor="lastName">Last Name:</label>
+        <input
+          className="bg-black-200 border-[2px]"
+          type="text"
+          id="lastName"
+          name="lastName"
+          value={formData.lastName}
           onChange={changeHandler}
           required
         />
@@ -84,7 +95,7 @@ export default function SignUp() {
         />
 
         <button type="submit" className="bg-red-300">
-          Sign Up
+          Create Account
         </button>
 
         <div>
