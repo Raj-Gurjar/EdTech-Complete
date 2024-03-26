@@ -16,7 +16,9 @@ const cartSlice = createSlice({
     //! add a func to add to cart
     //! add a func to remove to cart
     //! add a func to reset cart
-    
+    resetCart() {
+      console.log("resetCart Called");
+    },
   },
 });
 

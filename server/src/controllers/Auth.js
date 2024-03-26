@@ -123,29 +123,29 @@ exports.signUp = async (req, res) => {
             });
         }
 
-        //! Verify OTP
+        // //! Verify OTP
 
-        //* find most resent OTP for user
-        const recentOtp = await OTP_Model.find({ email })
-            .sort({ createdAt: -1 })
-            .limit(1);
+        // //* find most resent OTP for user
+        // const recentOtp = await OTP_Model.find({ email })
+        //     .sort({ createdAt: -1 })
+        //     .limit(1);
 
-        console.log("Recent Otp :", recentOtp);
+        // console.log("Recent Otp :", recentOtp);
 
-        // //* validate OTP
-        if (recentOtp.length === 0) {
-            // OTP not found
-            return res.status(400).json({
-                success: false, 
-                message: "OTP not found/Entered",
-            });
-        } else if (otp !== recentOtp.otp) {
-            //OTP is invalid
-            return res.status(400).json({
-                success: false,
-                message: "Entered OTP is Invalid or not Matched",
-            });
-        }
+        // // //* validate OTP
+        // if (recentOtp.length === 0) {
+        //     // OTP not found
+        //     return res.status(400).json({
+        //         success: false, 
+        //         message: "OTP not found/Entered",
+        //     });
+        // } else if (otp !== recentOtp.otp) {
+        //     //OTP is invalid
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: "Entered OTP is Invalid or not Matched",
+        //     });
+        // }
 
         //* Hash Password
         const hashedPassword = await bcrypt.hash(password, 12);
@@ -165,7 +165,7 @@ exports.signUp = async (req, res) => {
             password: hashedPassword,
             accountType,
             additionalDetails: profileDetails._id,
-            image: `https://api.dicebear.com/7.x/initials/svg?seed=${firstName} ${lastName}`,
+            image: `https://api.dicebear.com/7.x/initials/svg?seed=${firstName}${lastName}`,
         });
 
         //return res
