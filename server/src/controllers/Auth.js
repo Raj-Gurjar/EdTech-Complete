@@ -191,6 +191,7 @@ exports.signUp = async (req, res) => {
 exports.logIn = async (req, res) => {
     try {
         //Get data
+        console.log("Entering login controller");
         const { email, password } = req.body;
 
         //! User Validation

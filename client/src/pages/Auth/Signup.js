@@ -38,7 +38,7 @@ export default function SignUp() {
     <div className="log-container">
       <h2 className="log-heading">Sign Up</h2>
 
-      <form className="log-form flex flex-col" onSubmit={signUpHandler}>
+      <form className="log-form flex flex-col m-auto justify-center w-11/12" onSubmit={signUpHandler}>
         <h4>Sign Up as {userType === true ? "Admin" : "Customer"}</h4>
 
         <label htmlFor="firstName">First Name:</label>
@@ -83,13 +83,13 @@ export default function SignUp() {
           onChange={changeHandler}
           required
         />
-        <label htmlFor="confpassword">Confirm Password:</label>
+        <label htmlFor="confirmPassword">Confirm Password:</label>
         <input
           className="bg-black-200 border-[2px]"
           type="password"
-          id="confPassword"
-          name="confPassword"
-          value={formData.confPassword}
+          id="confirmPassword"
+          name="confirmPassword"
+          value={formData.confirmPassword}
           onChange={changeHandler}
           required
         />

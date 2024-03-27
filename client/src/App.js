@@ -11,6 +11,8 @@ import Cart from "./pages/Cart/Cart";
 import Error404 from "./pages/Errors/Error404";
 import Courses from "./pages/Courses/AllCourses";
 import SignUpOTP from "./pages/Auth/SignUpOTP";
+import ResetPassword from "./pages/Auth/ResetPassword";
+import CommonDashBoard from "./pages/Users/CommonDashBoard";
 
 function App() {
   return (
@@ -21,12 +23,21 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+
+          {/* //!auth */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/allCourses" element={<Courses />} />
 
           <Route path="/signupOTP" element={<SignUpOTP />} />
+          <Route path="/resetPassword" element={<ResetPassword />} />
+
+          {/* //!Users */}
+          <Route path="/commonDashBoard" element={<CommonDashBoard />} />
+
+          {/* //!Courses */}
+
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/allCourses" element={<Courses />} />
 
           <Route path="*" element={<Error404 />} />
         </Routes>
