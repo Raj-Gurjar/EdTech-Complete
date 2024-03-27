@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 exports.resetPasswordToken = async (req, res) => {
     try {
         //get data
-        const { email } = req.body;
+        const { email } = req.body.email;
 
         //verify email
         if (!email) {
@@ -26,20 +26,20 @@ exports.resetPasswordToken = async (req, res) => {
         }
 
         //token generate
-        const newPasswordResetToken = crypto.randomUUID();
+        const newPasswordResetToken = crypto.randomBytes(20).toString("hex");
 
         //update user by adding token and expire time
         const updatedDetails = await User_Model.findOneAndUpdate(
             { email: email },
             {
                 resetPasswordToken: newPasswordResetToken,
-                resetPasswordExpires: Date.now() + 5 * 60 * 1000,
+                resetPasswordExpires: Date.now() + 60 * 60 * 1000,
             },
             { new: true }
         );
-
+        console.log("Updated Details .." , updatedDetails);
         //create url
-        const resetPasswordUrl = `https://localhost:3002/update-password/${newPasswordResetToken}`;
+        const resetPasswordUrl = `https://localhost:3000/update-password/${newPasswordResetToken}`;
 
         //send mail containing url
         await mailSender(

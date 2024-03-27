@@ -1,27 +1,22 @@
 import React, { useState, useContext } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { signUp } from "../../services/operations/authAPI";
 
 export default function SignUp() {
-  const [userType, setUserType] = useState("");
+  const [accountType, setAccountType] = useState("Student");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     firstName: "",
-    lastName:"",
+    lastName: "",
     email: "",
     password: "",
     confPassword: "",
-    isAdmin: userType,
   });
-
-  async function signUpHandler(event) {
-    event.preventDefault();
-    toast.success("Data Collected");
-    navigate("/signUpOTP");
-  }
 
   function changeHandler(event) {
     const { name, value, checked, type } = event.target;
@@ -34,12 +29,53 @@ export default function SignUp() {
     });
   }
 
+  const finalFormData = {
+    ...accountType, formData
+  } 
+  console.log("Final form Data..",finalFormData);
+
+  const {
+    // accountType,
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+    // otp,
+  } = finalFormData;
+
+  async function signUpHandler(event) {
+    event.preventDefault();
+    dispatch(
+      signUp(
+        accountType,
+        firstName,
+        lastName,
+        email,
+        password,
+        confirmPassword,
+        // otp,
+        navigate
+      )
+    );
+  }
+
   return (
     <div className="log-container">
       <h2 className="log-heading">Sign Up</h2>
 
-      <form className="log-form flex flex-col m-auto justify-center w-11/12" onSubmit={signUpHandler}>
-        <h4>Sign Up as {userType === true ? "Admin" : "Customer"}</h4>
+      <form
+        className="log-form flex flex-col m-auto justify-center w-11/12"
+        onSubmit={signUpHandler}
+      >
+        <div className="my-5">
+          Sign Up as {accountType}
+          <div className="flex gap-x-5">
+            <button onClick={()=>setAccountType("Student")} className={`${accountType === "Student" ? "bg-blue-400" : ""} `}>Student</button>
+            <button onClick={()=>setAccountType("Instructor")} className={`${accountType === "Instructor" ? "bg-blue-400" : ""} `}>Instructor</button>
+            <button onClick={()=>setAccountType("Admin")} className={`${accountType === "Admin" ? "bg-blue-400" : ""} `}>Admin</button>
+          </div>
+        </div>
 
         <label htmlFor="firstName">First Name:</label>
         <input
@@ -101,9 +137,7 @@ export default function SignUp() {
         <div>
           <h5>Already Signed Up?</h5>
           <Link to="/login">
-            <btn className="btn">
-              Login as {userType ? "Admin" : "Customer"}
-            </btn>
+            <btn className="btn">Login</btn>
           </Link>
         </div>
       </form>

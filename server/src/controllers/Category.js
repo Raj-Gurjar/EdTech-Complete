@@ -54,6 +54,7 @@ exports.showAllCategories = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "All the categories are returned successfully.",
+            data:allCategories
         });
     } catch (error) {
         console.log("Error in getting all categories: ", error);
@@ -102,6 +103,7 @@ exports.categoryPageDetails = async (req, res) => {
             },
         });
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             success: false,
             message: "Error in getting page details",

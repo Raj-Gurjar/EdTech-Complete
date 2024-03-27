@@ -135,3 +135,26 @@ export function logout(navigate) {
     console.log("nav calling");
   };
 }
+
+export function getPasswordResetToken(email, setEmailSent) {
+  return async (dispatch) => {
+    dispatch(setLoading(true));
+
+    try {
+      const response = await apiConnector("POST", RESET_PASSWORD_API, {
+        email,
+      });
+
+      console.log("Reset Password token response...", response);
+
+      if (!response.data.success) {
+        throw new Error(response.data.message);
+      }
+      toast.success("Reset Email Sent");
+      setEmailSent(true);
+    } catch (error) {
+      console.log("Reset password token error");
+    }
+    dispatch(setLoading(false));
+  };
+}
