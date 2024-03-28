@@ -15,4 +15,12 @@ export const NavbarLinks = [
     title: "Contact",
     path: "/contact",
   },
+  {
+    title: "Reset Password",
+    path: "/resetPassword",
+  },
+  {
+    title: "Verify Email",
+    path: "/verifyEmail",
+  },
 ];

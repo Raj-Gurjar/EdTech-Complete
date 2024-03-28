@@ -22,6 +22,7 @@ app.use("/api/v1/auth", require("./routes/auth"));
 app.use("/api/v1/course", require("./routes/category"))
 
 
+
 app.listen(PORT, () => {
   console.log("Server is listening on port " + PORT);
 });

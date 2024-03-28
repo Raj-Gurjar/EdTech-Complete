@@ -1,12 +1,13 @@
 const User_Model = require("../models/User.model");
 const mailSender = require("../utils/mailSender");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto")
 
 //! sends url with token to email to reset password
 exports.resetPasswordToken = async (req, res) => {
     try {
         //get data
-        const { email } = req.body.email;
+        const { email } = req.body;
 
         //verify email
         if (!email) {
@@ -25,29 +26,34 @@ exports.resetPasswordToken = async (req, res) => {
             });
         }
 
+        console.log("User exists");
+
         //token generate
         const newPasswordResetToken = crypto.randomBytes(20).toString("hex");
+
+        console.log("New token..", newPasswordResetToken);
 
         //update user by adding token and expire time
         const updatedDetails = await User_Model.findOneAndUpdate(
             { email: email },
             {
                 resetPasswordToken: newPasswordResetToken,
-                resetPasswordExpires: Date.now() + 60 * 60 * 1000,
+                resetPasswordExpires: Date.now() + 5 * 60 * 1000,
             },
             { new: true }
         );
-        console.log("Updated Details .." , updatedDetails);
+        console.log("Updated Details ..", updatedDetails);
         //create url
         const resetPasswordUrl = `https://localhost:3000/update-password/${newPasswordResetToken}`;
 
+        console.log("reset password url", resetPasswordUrl);
         //send mail containing url
         await mailSender(
             email,
             "Password Reset Link",
             `Here is your Password Reset Link : ${resetPasswordUrl} \n and the link will expire after ${Date.now() + 5 * 6 * 1000}`
         );
-
+        console.log("Main sent");
         //return res
         return res.status(200).json({
             success: true,
@@ -114,13 +120,11 @@ exports.resetPassword = async (req, res) => {
         );
 
         //send success mail
-       
-
 
         //return res
         return res.status(200).json({
-        success: true,
-        message: "Password reset Successful.",
+            success: true,
+            message: "Password reset Successful.",
         });
     } catch (error) {
         return res.status(500).json({

@@ -29,20 +29,16 @@ export default function SignUp() {
     });
   }
 
-  const finalFormData = {
-    ...accountType, formData
-  } 
-  console.log("Final form Data..",finalFormData);
+
 
   const {
-    // accountType,
     firstName,
     lastName,
     email,
     password,
     confirmPassword,
-    // otp,
-  } = finalFormData;
+    otp,
+  } = formData;
 
   async function signUpHandler(event) {
     event.preventDefault();
@@ -54,7 +50,7 @@ export default function SignUp() {
         email,
         password,
         confirmPassword,
-        // otp,
+        otp,
         navigate
       )
     );

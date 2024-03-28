@@ -1,27 +1,30 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { getPasswordResetToken } from "../../services/operations/authAPI";
+import { Link, useNavigate } from "react-router-dom";
+import { getPasswordResetToken } from "../../../services/operations/authAPI";
 
-
-
-export default function ResetPassword() {
+export default function ResetRequest() {
   const [emailSent, setEmailSent] = useState(false);
   const [email, setEmail] = useState("");
   const { loading } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
+  console.log("emailSent...", emailSent);
+
   const dispatch = useDispatch();
-  function handleOnSubmit(e)
-  { 
-     e.preventDefault();
-     dispatch(getPasswordResetToken(email,setEmailSent))
+  function handleOnSubmit(e) {
+    e.preventDefault();
+    // setEmailSent(true);
+    dispatch(getPasswordResetToken(email, setEmailSent));
   }
+
   return (
     <div className="flex flex-col m-auto justify-center">
-      {!emailSent ? (
+      {emailSent === false ? (
         <div className="flex flex-col bg-green-100 m-auto justify-center w-11/12">
           <h3>Enter Your Email to reset Password</h3>
 
-          <form onSubmit={handleOnSubmit}>
+          <form onSubmit={handleOnSubmit} className="flex flex-col gap-5">
             <label htmlFor="email">Email</label>
             <input
               required
@@ -33,30 +36,26 @@ export default function ResetPassword() {
               placeholder="Enter your Email"
               className="bg-black-100 border-red-800 border-2"
             />
-            <button type="submit">Send Mail</button>
+            <button type="submit" className="bg-red-400">
+              Reset Password
+            </button>
           </form>
 
-          <button><Link to='/login'>Back to Login</Link></button>
+          <Link to="/login"> --- Back to Login</Link>
         </div>
-
       ) : (
         <div className="flex flex-col bg-green-100 m-auto justify-center w-11/12">
-          <h3>Enter OTP</h3>
+          <h3>Check Your Email</h3>
+          <p>
+            We have sent you a resent link on your email at
+            <span className="text-2xl bg-blue-300">{email}</span>
+          </p>
 
-          <form action="" className="flex flex-col">
-            <label htmlFor="otp">Email</label>
-            <input
-              required
-              type="number"
-              id="reset_opt"
-              name="reset_otp"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter OTP"
-              className="bg-black-100 border-red-800 border-2"
-            />
-            <button className="bg-red-300" type="submit">Send OTP</button>
-          </form>
+          <button className="bg-red-300" onClick={() => setEmailSent(false)}>
+            Resend Link or Edit Email
+          </button>
+
+          <Link to="/login"> --- Back to Login</Link>
         </div>
       )}
     </div>

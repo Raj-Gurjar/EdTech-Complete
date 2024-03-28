@@ -1,7 +1,5 @@
 const User_Model = require("../models/User.model");
-
 const OTP_Model = require("../models/OTP.model");
-
 const otpGenerator = require("otp-generator");
 const Profile_Model = require("../models/Profile.model");
 const bcrypt = require("bcrypt");
@@ -41,6 +39,7 @@ exports.sendOTP = async (req, res) => {
         //Check otp is Unique (check in otp model)
 
         let otpResult = await OTP_Model.findOne({ otp: otp });
+        console.log("otpResult..",otpResult);
 
         while (otpResult) {
             otp = otpGenerator(6, {

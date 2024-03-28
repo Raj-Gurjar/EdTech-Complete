@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./Home.scss";
 
 //!-- assets
-import home_vid_1 from "../../assets/videos/home-vid-1.mp4";
+// import home_vid_1 from "../../assets/videos/home-vid-1.mp4";
 import home_img_1 from "../../assets/images/home-img-1.jpg";
 //!-- icons
 import { FaLongArrowAltRight } from "react-icons/fa";
@@ -36,9 +36,9 @@ export default function Home() {
         </div>
 
         <div className="video-banner w-2/4 my-10 mx-auto justify-center items-center bg-blue-500 p-5">
-          <video muted loop autoPlay>
-            <source src={home_vid_1} type="video/mp4" />
-          </video>
+          {/* <video muted loop autoPlay> */}
+            {/* <source src={home_vid_1} type="video/mp4" /> */}
+          {/* </video> */}
         </div>
       </div>
 

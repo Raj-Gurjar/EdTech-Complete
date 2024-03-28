@@ -10,8 +10,9 @@ import Signup from "./pages/Auth/Signup";
 import Cart from "./pages/Cart/Cart";
 import Error404 from "./pages/Errors/Error404";
 import Courses from "./pages/Courses/AllCourses";
-import SignUpOTP from "./pages/Auth/SignUpOTP";
-import ResetPassword from "./pages/Auth/ResetPassword";
+import VerifyEmail from "./pages/Auth/VerifyEmail";
+import ResetRequest from "./pages/Auth/ResetPassword/ResetRequest";
+import ResetPassword from "./pages/Auth/ResetPassword/ResetPassword";
 import CommonDashBoard from "./pages/Users/CommonDashBoard";
 
 function App() {
@@ -28,7 +29,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
-          <Route path="/signupOTP" element={<SignUpOTP />} />
+          <Route path="/verifyEmail" element={<VerifyEmail />} />
+          <Route path="/resetPasswordRequest" element={<ResetRequest />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
 
           {/* //!Users */}
