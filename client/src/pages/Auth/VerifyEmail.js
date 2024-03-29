@@ -1,64 +1,68 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import OTPInput from "react-otp-input";
+import OtpInput from "react-otp-input";
 import { useDispatch, useSelector } from "react-redux";
 import { sendOTP, signUp } from "../../services/operations/authAPI";
 
-
 export default function VerifyEmail() {
-  const [otp, setOTP] = useState("");
+  const [otp, setOtp] = useState("");
   const { loading, signupData } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!signupData) {
-      navigate("/signup");
-    }
-  });
+  console.log("signupData.. ", signupData);
 
-  const { accountType, firstName, lastName, email, password, confirmPassword } =
-    signupData;
+  // useEffect(() => {
+  //   if (signupData === null) {
+  //     navigate("/signup");
+  //   }
+  // }, []);
+
+  // const { accountType, firstName, lastName, email, password, confirmPassword } =
+  //   signupData;
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    dispatch(
-      signUp(
-        accountType,
-        firstName,
-        lastName,
-        email,
-        password,
-        confirmPassword,
-        otp,
-        navigate
-      )
-    );
+    // dispatch(
+    //   signUp(
+    //     accountType,
+    //     firstName,
+    //     lastName,
+    //     email,
+    //     password,
+    //     confirmPassword,
+    //     otp,
+    //     navigate
+    //   )
+    // );
   };
-  return (
-    <div className="flex flex-col w-11/12 justify-center m-auto">
-      <h2>Verify its you</h2>
-      <p>We have sent an email to your mail {email}</p>
 
+  console.log(otp);
+  return (
+    <div className="flex flex-col w-11/12 justify-center m-auto pt-10">
+      <h2>Verify its you</h2>
+      <p>We have sent an email to your mail</p>
+      <p>Enter OTP</p>
       <form
         onSubmit={onSubmitHandler}
         className="flex flex-col w-11/12 justify-center m-auto"
       >
-        <label htmlFor="">Enter OTP</label>
-        <OTPInput
+        <OtpInput
           // inputType="number"
           value={otp}
-          onChange={setOTP}
+          onChange={setOtp}
           numInputs={6}
-          className="border-2 border-black-500"
-          renderSeparator={<span className="bg-black-200">--</span>}
+          renderSeparator={<span>-</span>}
           renderInput={(props) => <input {...props} />}
+          inputStyle="text-white bg-red-500"
         />
 
         <button type="submit">Verify Email</button>
       </form>
       <Link to="/login">Back to login</Link>
-      <button onClick={() => dispatch(sendOTP(signupData.email,navigate))}>Resend otp</button>
+      <button onClick={() => dispatch(sendOTP(signupData.email, navigate))}>
+        Resend otp
+      </button>
     </div>
   );
 }

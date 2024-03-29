@@ -29,8 +29,6 @@ export default function SignUp() {
     });
   }
 
-
-
   const {
     firstName,
     lastName,
@@ -39,6 +37,8 @@ export default function SignUp() {
     confirmPassword,
     otp,
   } = formData;
+
+  console.log("Form Data..",formData);
 
   async function signUpHandler(event) {
     event.preventDefault();

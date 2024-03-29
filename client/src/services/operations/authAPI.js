@@ -33,7 +33,7 @@ export function sendOTP(email, navigate) {
         throw new Error(response.data.success);
       }
       toast.success("OTP Sent Successfully");
-      navigate("/verify-email");
+      navigate("/verifyEmail");
     } catch (error) {
       console.log("send auth otp error..", error);
       toast.error("Could not send otp");
@@ -51,7 +51,7 @@ export function signUp(
   password,
   confirmPassword,
   otp,
-  navigate
+  navigate  
 ) {
   return async (dispatch) => {
     const toastId = toast.loading("Loading...");
@@ -74,7 +74,7 @@ export function signUp(
       }
 
       toast.success("SignUp Successful");
-      navigate("/login");
+      navigate("/verifyEmail");
     } catch (error) {
       console.log("SignUp api error...", error);
       toast.error("SignUp failed");
