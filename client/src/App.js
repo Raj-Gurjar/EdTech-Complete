@@ -37,9 +37,11 @@ function App() {
           <Route path="/commonDashBoard" element={<CommonDashBoard />} />
 
           {/* //!Courses */}
-
           <Route path="/cart" element={<Cart />} />
           <Route path="/allCourses" element={<Courses />} />
+
+          {/* //! DashBoard */}
+          <Route path="/commonDashboard" element={<CommonDashBoard />} />
 
           <Route path="*" element={<Error404 />} />
         </Routes>

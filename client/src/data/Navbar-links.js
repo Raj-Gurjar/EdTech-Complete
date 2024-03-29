@@ -23,4 +23,8 @@ export const NavbarLinks = [
     title: "Verify Email",
     path: "/verifyEmail",
   },
+  {
+    title: "DashBoard",
+    path: "/commonDashboard",
+  },
 ];
