@@ -25,6 +25,6 @@ export const NavbarLinks = [
   },
   {
     title: "DashBoard",
-    path: "/commonDashboard",
+    path: "/dashboard",
   },
 ];

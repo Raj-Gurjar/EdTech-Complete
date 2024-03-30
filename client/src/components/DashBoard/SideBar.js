@@ -1,30 +1,48 @@
 import React from "react";
 import { SideBarLinks } from "../../data/Dashboard-links";
 import { logout } from "../../services/operations/authAPI";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as Icons from "react-icons/vsc";
-import { matchRoutes, useLocation } from "react-router-dom";
+import {
+  NavLink,
+  matchRoutes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
 export default function SideBar() {
-  const { user, loading: profileLoading } = useSelector(
-    (state) => state.profile
-  );
-  const { loading: authLoading } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  if (profileLoading || authLoading) {
-    return <div className="mt-10">Loading...</div>;
-  }
-
-  const Icon = Icons[IconName];
-//   const location = useLocation();
   return (
     <div>
-      <div className="flex min-w-[222px] flex-col border-r-[1px] border-black-700 h-[calc(100vh-3.5rem)] bg-black-400 py-10">
+      <div className=" bg-green-300 flex min-w-[222px] flex-col border-r-[1px] border-black-700 h-[calc(100vh-3.5rem)] bg-black-400 py-10">
         <div className="flex flex-col">
-          {SideBarLinks.map((link, index) => {
-            if (link.type && user?.accoutType !== link.type) return null;
-            return 
-          })}
+          <ul>
+            <li>
+              <NavLink to="/myDashboard">My DashBoard</NavLink>
+            </li>
+            <li>
+              <NavLink to="/myCourses">My Courses</NavLink>
+            </li>
+            <li>
+              <NavLink to="/myProfile">My Profile</NavLink>
+            </li>
+            <li>
+              <NavLink to="/myCart">Cart</NavLink>
+            </li>
+            <li>
+              <NavLink to="/myProfile">Settings</NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/"
+                onClick={() => dispatch(logout(navigate))}
+              >
+                Logout
+              </NavLink>
+            </li>
+          </ul>
         </div>
       </div>
     </div>

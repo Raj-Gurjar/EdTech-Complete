@@ -76,8 +76,8 @@ export function signUp(
       toast.success("SignUp Successful");
       navigate("/verifyEmail");
     } catch (error) {
-      console.log("SignUp api error...", error);
-      toast.error("SignUp failed");
+      console.log("SignUp api error...", error.response.data);
+      toast.error("SignUp failed!",error.response.data);
       navigate("/signup");
     }
     dispatch(setLoading(false));
@@ -102,8 +102,9 @@ export function login(email, password, navigate) {
       if (!response.data.success) {
         throw new Error("error res: ", response.data.message);
       }
-      toast.success("Login Successful");
-      navigate("/commonDashBoard");
+      console.log("Login data..", response.data.token);
+      toast.success("Login Successful"); 
+      navigate("/dashboard");
 
       dispatch(setToken(response.data.token));
 
@@ -112,10 +113,12 @@ export function login(email, password, navigate) {
         : `https://api.dicebear.com/7.x/initials/svg?seed=${response.data.user.firstName}${response.data.user.lastName}`;
 
       dispatch(setUser({ ...response.data.user, image: userImage }));
+      console.log('set user..', response.data.user);
       localStorage.setItem("token", JSON.stringify(response.data.token));
-    } catch (error) {
-      console.log("Login api error ...", error);
-      toast.error("Login Failed", error);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+    } catch (error) { 
+      console.log("Login api error ...", error.response.data);
+      toast.error("Login Failed", error.response.data);
     }
     dispatch(setLoading(false));
     toast.dismiss(toastId);

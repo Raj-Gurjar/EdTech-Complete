@@ -13,7 +13,13 @@ import Courses from "./pages/Courses/AllCourses";
 import VerifyEmail from "./pages/Auth/VerifyEmail";
 import ResetRequest from "./pages/Auth/ResetPassword/ResetRequest";
 import ResetPassword from "./pages/Auth/ResetPassword/ResetPassword";
-import CommonDashBoard from "./pages/Users/CommonDashBoard";
+import DashBoard from "./pages/Users/DashBoard";
+import MyDashBoard from "./components/DashBoard/MyDashBoard";
+import MyProfile from "./components/DashBoard/MyProfile";
+import MyCourses from "./components/DashBoard/MyCourses";
+import Settings from "./components/DashBoard/Settings";
+import MyCart from "./components/DashBoard/MyCart";
+
 
 function App() {
   return (
@@ -34,14 +40,18 @@ function App() {
           <Route path="/resetPassword" element={<ResetPassword />} />
 
           {/* //!Users */}
-          <Route path="/commonDashBoard" element={<CommonDashBoard />} />
+          <Route path="/dashboard" element={<DashBoard />} />
+          <Route path="/myDashboard" element={<MyDashBoard />} />
+          <Route path="/myProfile" element={<MyProfile />} />
+          <Route path="/myCourses" element={<MyCourses />} />
+          <Route path="/myCart" element={<MyCart />} />
+          <Route path="/settings" element={<Settings />} />
 
           {/* //!Courses */}
           <Route path="/cart" element={<Cart />} />
           <Route path="/allCourses" element={<Courses />} />
 
-          {/* //! DashBoard */}
-          <Route path="/commonDashboard" element={<CommonDashBoard />} />
+     
 
           <Route path="*" element={<Error404 />} />
         </Routes>

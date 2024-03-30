@@ -82,7 +82,7 @@ exports.signUp = async (req, res) => {
             password,
             confirmPassword,
             accountType,
-            otp,
+            // otp,
         } = req.body;
 
         //! User Validation
@@ -93,8 +93,8 @@ exports.signUp = async (req, res) => {
             !lastName ||
             !email ||
             !password ||
-            !confirmPassword ||
-            !otp
+            !confirmPassword 
+            // !otp
         ) {
             return res.status(400).json({
                 success: false,
