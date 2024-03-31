@@ -2,6 +2,7 @@ const Profile_Model = require("../models/Profile.model");
 const User_Model = require("../models/User.model");
 const Course_Model = require("../models/Course.model");
 const CourseProgress_Model = require("../models/CourseProgress.model");
+const { uploadImageToCloudinary } = require("../utils/imageUploader");
 
 //! Since while creating SignUp we have already stored null in Profile's data,
 //! so we do not need to create it, we will just to update the null values.
@@ -68,11 +69,10 @@ exports.getAllUserDetails = async (req, res) => {
             .populate(["additionalDetails", "courses", "courseProgress"])
             .exec();
 
-        if(!userDetails)
-        {
+        if (!userDetails) {
             return res.status(400).json({
-            success: false,
-            message: "User not found." 
+                success: false,
+                message: "User not found.",
             });
         }
         //return
@@ -96,9 +96,9 @@ exports.deleteUserAccount = async (req, res) => {
         const userId = req.user.id;
 
         //validate
-        const userDetails = await User_Model.findById(id);
+        const userDetails = await User_Model.findById({ _id: id });
         if (!userDetails) {
-            return res.status(400).json({
+            return res.status(404).json({
                 success: false,
                 message: "User Not Found",
             });
@@ -128,6 +128,63 @@ exports.deleteUserAccount = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error in Deleting account",
+        });
+    }
+};
+
+exports.updateDisplayPicture = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const displayPicture = req.files.displayPicture;
+        const image = await uploadImageToCloudinary(
+            displayPicture,
+            process.env.FOLDER_NAME_CLOUDINARY,
+            1000,
+            1000
+        );
+        console.log("image..", image);
+
+        const updateProfile = await User_Model.findByIdAndUpdate(
+            { _id: userId },
+            { image: image.secure_url },
+            { new: true }
+        );
+
+        res.send({
+            success:true,
+            message:"Image Updates Successfully."
+        })
+    } catch (error) {
+        return res.status(500).json({
+        success: false,
+        message: "Error in updating the Image." 
+        });
+    }
+};
+
+exports.getEnrolledCourses = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const userDetails = await User_Model.findOne({ _id: userId })
+            .populate("courses")
+            .exec();
+
+        if (!userDetails) {
+            return res.status(400).json({
+                success: false,
+                message: `Could not find user with id: ${userDetails}`,
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: "Enrolled Courses Details fetched successfully",
+            userDetails,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in finding Enrolled Courses",
         });
     }
 };

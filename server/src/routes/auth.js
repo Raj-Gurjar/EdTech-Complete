@@ -21,6 +21,7 @@ router.post("/login", logIn);
 router.post("/sendOTP", sendOTP);
 router.post("/changePassword", changePassword);
 
+
 //! Reset Password
 
 //for generating reset password link

@@ -35,7 +35,7 @@ export function sendOTP(email, navigate) {
       toast.success("OTP Sent Successfully");
       navigate("/verifyEmail");
     } catch (error) {
-      console.log("send auth otp error..", error);
+      console.log("send auth otp error..", error.response.data);
       toast.error("Could not send otp");
     }
     dispatch(setLoading(false));
@@ -188,3 +188,5 @@ export function resetPassword(password, confPassword, token) {
     dispatch(setLoading(false));
   };
 }
+
+
