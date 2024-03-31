@@ -16,35 +16,31 @@ export default function SideBar() {
 
   return (
     <div>
-      <div className=" bg-green-300 flex min-w-[222px] flex-col border-r-[1px] border-black-700 h-[calc(100vh-3.5rem)] bg-black-400 py-10">
-        <div className="flex flex-col">
-          <ul>
-            <li>
-              <NavLink to="/myDashboard">My DashBoard</NavLink>
-            </li>
-            <li>
-              <NavLink to="/myCourses">My Courses</NavLink>
-            </li>
-            <li>
-              <NavLink to="/myProfile">My Profile</NavLink>
-            </li>
-            <li>
-              <NavLink to="/myCart">Cart</NavLink>
-            </li>
-            <li>
-              <NavLink to="/myProfile">Settings</NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/"
-                onClick={() => dispatch(logout(navigate))}
-              >
-                Logout
-              </NavLink>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <ul className="bg-yellow-100 p-3">
+        <li>
+          <NavLink to="myDashboard">My DashBoard</NavLink>
+        </li>
+        <li>
+          <NavLink to="myCourses">My Courses</NavLink>
+        </li>
+        <li>
+          <NavLink to="myProfile">My Profile</NavLink>
+        </li>
+        <li>
+          <NavLink to="myCart">Cart</NavLink>
+        </li>
+        <li>
+          <NavLink to="myPurchases">My Purchases</NavLink>
+        </li>
+        <li>
+          <NavLink to="settings">Settings</NavLink>
+        </li>
+        <li>
+          <NavLink to="/" onClick={() => dispatch(logout(navigate))}>
+            Logout
+          </NavLink>
+        </li>
+      </ul>
     </div>
   );
 }

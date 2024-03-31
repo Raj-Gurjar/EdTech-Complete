@@ -1,7 +1,6 @@
-import React from 'react'
+import React from "react";
 
 export default function MyDashBoard() {
-  return (
-    <div>MyDashBoard</div>
-  )
+  return <div className="bg-pink-500">
+  </div>;
 }

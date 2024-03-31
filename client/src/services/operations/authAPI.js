@@ -104,7 +104,7 @@ export function login(email, password, navigate) {
       }
       console.log("Login data..", response.data.token);
       toast.success("Login Successful"); 
-      navigate("/dashboard");
+      navigate("/dashboard/myDashboard");
 
       dispatch(setToken(response.data.token));
 

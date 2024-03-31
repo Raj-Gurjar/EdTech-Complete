@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 import "./App.scss";
 
 import Home from "./pages/Home/Home";
@@ -19,6 +19,8 @@ import MyProfile from "./components/DashBoard/MyProfile";
 import MyCourses from "./components/DashBoard/MyCourses";
 import Settings from "./components/DashBoard/Settings";
 import MyCart from "./components/DashBoard/MyCart";
+import ProtectedRoute from "./components/ProtectedRoute";
+import MyPurchases from "./components/DashBoard/MyPurchases";
 
 
 function App() {
@@ -40,18 +42,26 @@ function App() {
           <Route path="/resetPassword" element={<ResetPassword />} />
 
           {/* //!Users */}
-          <Route path="/dashboard" element={<DashBoard />} />
-          <Route path="/myDashboard" element={<MyDashBoard />} />
-          <Route path="/myProfile" element={<MyProfile />} />
-          <Route path="/myCourses" element={<MyCourses />} />
-          <Route path="/myCart" element={<MyCart />} />
-          <Route path="/settings" element={<Settings />} />
+
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashBoard />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="myDashboard" element={<MyDashBoard />} />
+            <Route path="myProfile" element={<MyProfile />} />
+            <Route path="myCourses" element={<MyCourses />} />
+            <Route path="myCart" element={<MyCart />} />
+            <Route path="myPurchases" element={<MyPurchases />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
 
           {/* //!Courses */}
           <Route path="/cart" element={<Cart />} />
           <Route path="/allCourses" element={<Courses />} />
-
-     
 
           <Route path="*" element={<Error404 />} />
         </Routes>
