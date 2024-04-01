@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getUserEnrolledCourses } from "../../services/operations/profileAPI";
+import { getUserEnrolledCourses } from "../../../services/operations/profileAPI";
 import ProgressBar from "@ramonak/react-progress-bar";
 
 export default function MyCourses() {

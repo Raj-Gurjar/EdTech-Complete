@@ -20,8 +20,8 @@ export default function Navbar() {
         <nav>
           <ul className="flex gap-x-6">
             {NavbarLinks.map((link, index) => (
-              <NavLink to={link?.path}>
-                <li key={index}>
+              <NavLink to={link?.path} key={index}>
+                <li>
                   {link.title === "Catalogs" ? (
                     <div></div>
                   ) : (
