@@ -96,7 +96,7 @@ exports.deleteUserAccount = async (req, res) => {
         const userId = req.user.id;
 
         //validate
-        const userDetails = await User_Model.findById({ _id: id });
+        const userDetails = await User_Model.findById({ _id: userId });
         if (!userDetails) {
             return res.status(404).json({
                 success: false,
@@ -164,11 +164,12 @@ exports.updateDisplayPicture = async (req, res) => {
 
 exports.getEnrolledCourses = async (req, res) => {
     try {
+        console.log("Entering get Enrolled C id");
         const userId = req.user.id;
         const userDetails = await User_Model.findOne({ _id: userId })
             .populate("courses")
             .exec();
-
+         console.log("user details:", userDetails);
         if (!userDetails) {
             return res.status(400).json({
                 success: false,

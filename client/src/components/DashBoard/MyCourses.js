@@ -9,8 +9,12 @@ export default function MyCourses() {
 
   const getEnrolledCourses = async () => {
     try {
+      console.log("Calling getEnroll cor API connector");
       const response = await getUserEnrolledCourses(token);
       setEnrolledCourses(response);
+
+      console.log("response inside myCourse...",response);
+
     } catch (error) {
       console.log("Unable to fetch Enrolled Courses:", error);
     }
@@ -23,7 +27,7 @@ export default function MyCourses() {
   return (
     <div>
       <h1>Enrolled Courses</h1>
-
+      
       {!enrolledCourses ? (
         <div>Loading....</div>
       ) : enrolledCourses.length === 0 ? (

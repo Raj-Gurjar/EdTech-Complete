@@ -7,6 +7,6 @@ const { auth } = require("../middlewares/auth");
 
 //!Routes for get enrolled Courses
 
-router.get("/getEnrolledCourses", getEnrolledCourses);
+router.get("/getEnrolledCourses", auth, getEnrolledCourses);
 
 module.exports = router;
