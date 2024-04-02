@@ -53,7 +53,10 @@ export default function SideBar() {
         </li>
 
         <li>
-          <NavLink to="createCourses">Create Course</NavLink>
+          <NavLink to="createCourse">Create Course</NavLink>
+        </li>
+        <li>
+          <NavLink to="myCourses-Instructor">My Courses Inst</NavLink>
         </li>
       </ul>
     </div>
