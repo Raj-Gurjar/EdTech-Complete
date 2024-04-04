@@ -273,14 +273,12 @@ export const deleteSubSection = async (data, token) => {
 };
 
 //! ......... incomplete 7.01 24th video
-export const fetchInstructorCourses = async (courseId) => {
+export const fetchInstructorCourses = async (token) => {
   const toastId = toast.loading("Loading");
   let result = [];
 
   try {
-    const response = await apiConnector("POST", COURSE_DETAILS_API, {
-      courseId,
-    });
+    const response = await apiConnector("GET", GET_ALL_INSTRUCTOR_COURSES_API);
     console.log("Course detail..", response);
 
     if (!response?.data?.success) {
