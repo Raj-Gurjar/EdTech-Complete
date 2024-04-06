@@ -29,7 +29,9 @@ export default function SideBar() {
         <li>
           <NavLink to="settings">Settings</NavLink>
         </li>
-
+        <li>
+          <NavLink to="showCategory">Show Categories</NavLink>
+        </li>
         <li>
           <NavLink to="/" onClick={() => dispatch(logout(navigate))}>
             Logout
@@ -58,6 +60,14 @@ export default function SideBar() {
         <li>
           <NavLink to="myCourses-Instructor">My Courses Inst</NavLink>
         </li>
+
+        <li>
+          <h1 className="bg-red-600">--- for Admin ---</h1>
+        </li>
+        <li>
+          <NavLink to="createCategory">Create Category</NavLink>
+        </li>
+
       </ul>
     </div>
   );

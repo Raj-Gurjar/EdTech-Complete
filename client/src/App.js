@@ -25,6 +25,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import MyPurchases from "./components/DashBoard/Student/MyPurchases";
 import CreateCourses from "./components/DashBoard/Instructor/CreateCourse";
 import ShowCourses from "./components/DashBoard/Instructor/ShowCourses";
+import ShowCategories from "./components/DashBoard/Admin/ShowCategories";
+import CreateCategory from "./components/DashBoard/Admin/CreateCategory";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
@@ -58,6 +60,7 @@ function App() {
             <Route path="myDashboard" element={<MyDashBoard />} />
             <Route path="myProfile" element={<MyProfile />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="showCategory" element={<ShowCategories />} />
 
             {user?.accountType === ACCOUNT_TYPE.STUDENT && (
               <>
@@ -68,8 +71,14 @@ function App() {
             )}
             {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
               <>
-                <Route path="createCourse" element={<CreateCourses/>} />
-                <Route path="myCourses-Instructor" element={<ShowCourses/>} />
+                <Route path="createCourse" element={<CreateCourses />} />
+                <Route path="myCourses-Instructor" element={<ShowCourses />} />
+              </>
+            )}
+
+            {user?.accountType === ACCOUNT_TYPE.ADMIN && (
+              <>
+                <Route path="createCategory" element={<CreateCategory />} />
               </>
             )}
           </Route>

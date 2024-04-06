@@ -24,7 +24,7 @@ export const studentEndpoints = {
 };
 
 //! COURSE ENDPOINTS
-export const courseEndpoints = { 
+export const courseEndpoints = {
   GET_ALL_COURSE_API: BASE_URL + "/course/getAllCourses",
   COURSE_DETAILS_API: BASE_URL + "/course/getCourseDetails",
   EDIT_COURSE_API: BASE_URL + "/course/editCourse",
@@ -52,6 +52,8 @@ export const reviewEndpoints = {
 //! CATEGORY ENDPOINTS
 export const categoryEndpoints = {
   CATEGORY_PAGE_DATA_API: BASE_URL + "/course/getCategoryPageDetails",
+  GET_ALL_CATEGORIES_API: BASE_URL + "/category/showAllCategories",
+  CREATE_CATEGORY_API: BASE_URL + "/category/createCategory",
 };
 
 //! CONTACT ENDPOINT
