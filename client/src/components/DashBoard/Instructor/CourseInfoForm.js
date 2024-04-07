@@ -3,6 +3,10 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCourseCategory } from "../../../services/operations/courseDetailsAPI";
 import { FaRupeeSign } from "react-icons/fa";
+import { showAllCategories } from "../../../services/operations/category";
+import CreateTags from "./CreateTags";
+import UploadThumbnail from "./UploadThumbnail";
+import RequirementField from "./RequirementField";
 
 export default function CourseInfoForm() {
   const {
@@ -21,26 +25,26 @@ export default function CourseInfoForm() {
 
   const getCategories = async () => {
     setLoading(true);
-    const categories = await fetchCourseCategory();
+    const categories = await showAllCategories();
 
     if (categories.length > 0) {
       setCourseCategories(categories);
     }
     setLoading(false);
   };
-  //   useEffect(() => {
-  //     if (editCourse) {
-  //       setValue("courseTitle", course.courseName);
-  //       setValue("courseShortDescription", course.courseDescription);
-  //       setValue("coursePrice", course.price);
-  //       setValue("courseTags", course.tag);
-  //       setValue("courseBenefits", course.whatYouWillLearn);
-  //       setValue("courseCategory", course.category);
-  //       setValue("courseRequirement", course.instruction);
-  //       setValue("courseImage", course.thumbnail);
-  //     }
-  //     getCategories();
-  //   }, []);
+  useEffect(() => {
+    if (editCourse) {
+      setValue("courseTitle", course.courseName);
+      setValue("courseShortDescription", course.courseDescription);
+      setValue("coursePrice", course.price);
+      setValue("courseTags", course.tag);
+      setValue("courseBenefits", course.whatYouWillLearn);
+      setValue("courseCategory", course.category);
+      setValue("courseRequirements", course.instruction);
+      setValue("courseImage", course.thumbnail);
+    }
+    getCategories();
+  }, []);
 
   const onSubmit = async (data) => {};
   return (
@@ -62,7 +66,6 @@ export default function CourseInfoForm() {
           />
           {errors.courseTitle && <span>Course Title is Required </span>}
         </div>
-
         <div>
           <label htmlFor="courseShortDescription">
             Course Short Description
@@ -77,7 +80,6 @@ export default function CourseInfoForm() {
             <span>Course Description is Required </span>
           )}
         </div>
-
         <div>
           <label htmlFor="coursePrice">Course Price</label>
           <FaRupeeSign />
@@ -93,7 +95,6 @@ export default function CourseInfoForm() {
           />
           {errors.coursePrice && <span>Course Price is Required </span>}
         </div>
-
         <div>
           <label htmlFor="courseCategory">Course Category</label>
           <select
@@ -116,16 +117,41 @@ export default function CourseInfoForm() {
 
           {errors.courseCategory && <span>Course Category is Required </span>}
         </div>
+        <label htmlFor="courseTags">Course Tag</label>
+        {/* //TODO: Create Tags Component vid 56 min mfe9 */}
+        <div>
+          <CreateTags />
+        </div>
+        {/* //TODO: Upload Thumbnail Component vid 56 min mfe9 */}
+        <label htmlFor="CourseImage">Course Thumbnail</label>
+        <div>
+          <UploadThumbnail />
+        </div>
+        <div>
+          <label htmlFor="courseBenefits">Course Benefits</label>
+          <textarea
+            id="courseBenefits"
+            placeholder="Enter the Course Benefits"
+            className="w-full"
+            {...register("courseBenefits", { required: true })}
+          />
+          {errors.courseBenefits && <span>Course Benefits are required.</span>}
+        </div>
 
-      
-        <label htmlFor="">Course Tag</label>
-        <label htmlFor="">Course Thumbnail</label>
-        <label htmlFor="">Course Req/Instructions</label>
+        <div>
+          <RequirementField
+          name = "courseRequirements"
+          label = "Requirements/Instructions"
+          register={register}
+          errors= {errors}
+          setValue = {setValue}
+          getValues = {getValues}/>
+        </div>
+
         <button type="submit" className="bg-red-500">
-          Add
+          Sub
         </button>
       </form>
     </div>
   );
 }
- 

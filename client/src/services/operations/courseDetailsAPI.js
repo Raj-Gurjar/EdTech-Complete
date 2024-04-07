@@ -7,7 +7,6 @@ const {
   GET_ALL_COURSE_API,
   COURSE_DETAILS_API,
   EDIT_COURSE_API,
-  COURSE_CATEGORIES_API,
   CREATE_COURSE_API,
   CREATE_SECTION_API,
   CREATE_SUBSECTION_API,
@@ -65,26 +64,7 @@ export const fetchCourseDetails = async (courseId) => {
   return result;
 };
 
-export const fetchCourseCategory = async () => {
-  const toastId = toast.loading("Loading");
-  let result = [];
 
-  try {
-    const response = await apiConnector("GET", COURSE_CATEGORIES_API);
-    console.log("Course category detail..", response);
-
-    if (!response?.data?.success) {
-      throw new Error("Could not fetch Course Category");
-    }
-    toast.success("Course Category details fetched");
-    result = response?.data?.data;
-  } catch (error) {
-    console.log("course category api error...", error);
-    toast.error(error.response.message);
-  }
-  toast.dismiss(toastId);
-  return result;
-};
 
 export const addCourseDetails = async (data, token) => {
   const toastId = toast.loading("Loading");

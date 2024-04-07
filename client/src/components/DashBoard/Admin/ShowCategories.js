@@ -2,25 +2,21 @@ import React, { useEffect, useState } from "react";
 import { showAllCategories } from "../../../services/operations/category";
 import { apiConnector } from "../../../services/apiConnector";
 import { categoryEndpoints } from "../../../services/api";
-import toast from "react-hot-toast";
 
 export default function ShowCategories() {
   const [courseCategories, setCourseCategories] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const getCategories = async () => {
+    setLoading(true);
+    const categories = await showAllCategories();
+    if (categories.length > 0) {
+      setCourseCategories(categories);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
-
-    const getCategories = async () => {
-        toast.success("getCat");
-        setLoading(true);
-        const categories = await showAllCategories();
-        if (categories.length > 0) {
-          setCourseCategories(categories);
-        }
-        setLoading(false);
-      };
-    
     getCategories();
   }, []);
 
@@ -29,7 +25,7 @@ export default function ShowCategories() {
   return (
     <div>
       <h1 className="text-2xl">Show Categories</h1>
-      {/* {loading ? (
+      {loading ? (
         <p>Loading...</p>
       ) : (
         <ul>
@@ -40,7 +36,7 @@ export default function ShowCategories() {
             </div>
           ))}
         </ul>
-      )} */}
+      )}
     </div>
   );
 }

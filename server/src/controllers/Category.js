@@ -24,7 +24,7 @@ exports.createCategory = async (req, res) => {
             description: description,
         });
 
-        console.log("category Details:", categoryDetails);
+        // console.log("category Details:", categoryDetails);
 
         //return res
 
