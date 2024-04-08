@@ -67,6 +67,7 @@ export const fetchCourseDetails = async (courseId) => {
 
 
 export const addCourseDetails = async (data, token) => {
+  console.log("add course api entered data: ",data);
   const toastId = toast.loading("Loading");
   let result = null;
 
@@ -82,9 +83,10 @@ export const addCourseDetails = async (data, token) => {
     }
     toast.success("Course Details added Successfully");
     result = response?.data?.data;
+    console.log("result in addCourse",result);
   } catch (error) {
-    console.log("add course api error...", error);
-    toast.error(error.response.message);
+    console.log("add course api error...",error.response.data.message);
+    toast.error(error.response.data.message);
   }
   toast.dismiss(toastId);
   return result;

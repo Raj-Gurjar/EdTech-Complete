@@ -49,7 +49,7 @@ exports.showAllCategories = async (req, res) => {
             { name: true, description: true }
         );
 
-        console.log("all categories: ", allCategories);
+        // console.log("all categories: ", allCategories);
 
         return res.status(200).json({
             success: true,

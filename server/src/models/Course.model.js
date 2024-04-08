@@ -14,10 +14,12 @@ const Course_Schema = new mongoose.Schema({
         ref: "User_Model",
         required: true,
     },
-    whatYouWillLearn: {
-        type: String,
-        trim: true,
-    },
+    whatYouWillLearn: [
+        {
+            type: String,
+            trim: true,
+        },
+    ],
     courseContent: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -52,12 +54,13 @@ const Course_Schema = new mongoose.Schema({
             required: true,
         },
     ],
-    instructors: {
+    instructions: {
         type: [String],
     },
     status: {
         type: String,
         enum: ["Draft", "Published"],
+        default: "Draft",
     },
 });
 

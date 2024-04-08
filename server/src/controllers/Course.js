@@ -15,18 +15,23 @@ exports.createCourse = async (req, res) => {
             whatYouWillLearn,
             price,
             category,
+
+            instruction,
+            // tag
         } = req.body;
+        let { status } = req.body;
 
         // const thumbnail = req.file.thumbnailImage;
-   
+
         //* validation
-         console.log("create course data fetched");
+        console.log("create course data fetched",req.body);
         if (
             !courseName ||
             !courseDescription ||
             !whatYouWillLearn ||
             !price ||
-            !category 
+            !category
+            // !tag ||
             // !thumbnail
         ) {
             return res.status(400).json({
@@ -35,12 +40,17 @@ exports.createCourse = async (req, res) => {
             });
         }
         //get instructor data bcs instructor is in db
-
+        if (!status || status === undefined) {
+            status = "Draft";
+        }
+        console.log("cp1");
         //TODO: check userID and instructorDetail are equal or not
         const userId = req.user.id;
         console.log("usedId: ", userId);
 
-        const instructorDetails = await User_Model.findById(userId);
+        const instructorDetails = await User_Model.findById(userId, {
+            accountType: "Instructor",
+        });
         console.log("Instructor details: ", instructorDetails);
 
         if (!instructorDetails) {
@@ -51,6 +61,7 @@ exports.createCourse = async (req, res) => {
         }
         //* Add course in that Category
         const categoryDetail = await Category_Model.findById(category);
+        console.log("category Details : ", categoryDetail);
 
         if (!categoryDetail) {
             return res.status(404).json({
@@ -58,13 +69,14 @@ exports.createCourse = async (req, res) => {
                 message: "Category not found",
             });
         }
+        console.log("cp2");
 
         //* Upload thumbnail to cloudinary
 
-        const thumbnailImage = await uploadImageToCloudinary(
-            thumbnail,
-            process.env.FOLDER_NAME_CLOUDINARY
-        );
+        // const thumbnailImage = await uploadImageToCloudinary(
+        //     thumbnail,
+        //     process.env.FOLDER_NAME_CLOUDINARY
+        // );
 
         //* Create course entry in db
 
@@ -73,9 +85,12 @@ exports.createCourse = async (req, res) => {
             courseDescription,
             instructor: instructorDetails._id, //to give reference to instructor obj
             whatYouWillLearn,
+            // tag:tag,
             price,
             category: categoryDetail._id,
-            thumbnail: thumbnailImage.secure_url,
+            status: status,
+            instruction: instruction,
+            // thumbnail: thumbnailImage.secure_url,
         });
 
         //* Add course in user schema of instructor
@@ -92,7 +107,7 @@ exports.createCourse = async (req, res) => {
         //TODO: this was h.w.
         //* Add course in Category schema
         await Category_Model.findByIdAndUpdate(
-            { _id: categoryDetail._id },
+            { _id: category },
             {
                 $push: {
                     course: newCourse._id,
@@ -109,6 +124,7 @@ exports.createCourse = async (req, res) => {
             newCourse,
         });
     } catch (error) {
+        console.log("Error in creating course", error);
         return res.status(500).json({
             success: false,
             message: "Error in Creating Course.",

@@ -36,6 +36,7 @@ exports.auth = async (req, res, next) => {
 
         } catch (error) {
             //validation issue
+            console.log("Error in auth middleware", error);
             return res.status(401).json({
                 success: false,
                 message: "Token is invalid",
