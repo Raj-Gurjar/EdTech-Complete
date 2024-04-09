@@ -31,25 +31,25 @@ export default function CourseInfoForm() {
 
   const [courseCategories, setCourseCategories] = useState([]);
 
-  const getCategories = async () => {
-    setLoading(true);
-    const categories = await showAllCategories();
-
-    if (categories.length > 0) {
-      setCourseCategories(categories);
-    }
-    setLoading(false);
-  };
   useEffect(() => {
+    const getCategories = async () => {
+      setLoading(true);
+      const categories = await showAllCategories();
+
+      if (categories.length > 0) {
+        setCourseCategories(categories);
+      }
+      setLoading(false);
+    };
     if (editCourse) {
       setValue("courseTitle", course.courseName);
       setValue("courseShortDescription", course.courseDescription);
       setValue("coursePrice", course.price);
-      setValue("courseTags", course.tag);
+      // setValue("courseTags", course.tag);
       setValue("courseBenefits", course.whatYouWillLearn);
       setValue("courseCategory", course.category);
       setValue("courseRequirements", course.instruction);
-      setValue("courseImage", course.thumbnail);
+      // setValue("courseImage", course.thumbnail);
     }
     getCategories();
   }, []);
@@ -69,14 +69,17 @@ export default function CourseInfoForm() {
         course.instruction.toString()
     ) {
       return true;
-    } else return false;
+    } else {
+      return false;
+    }
   };
 
   //handle next button
-  const onSubmit = async (data) => {
+  const onSubmit = async (data) => { 
     if (editCourse) {
-      if (isFormUpdated) {
+      if (isFormUpdated()) {
         const currentValues = getValues();
+        console.log("current values: ", currentValues);
         const formData = new FormData();
 
         formData.append("courseId", course._id);
@@ -128,11 +131,11 @@ export default function CourseInfoForm() {
     //! create a new course
     
     console.log("createCourse cp1");
-    console.log("data",data);
-    let formData = new FormData();
+    console.log("data", data);
+    const formData = new FormData();
 
-    formData.append("courseName", JSON.stringify(data.courseTitle));
-    console.log("formData01: ",formData,"courseTitle: ",data.courseTitle);
+    // formData.append("courseName", data.courseTitle);
+    console.log("formData01: ", formData, "courseTitle: ", data.courseTitle);
     formData.append("courseDescription", data.courseShortDescription);
     formData.append("price", data.coursePrice);
     formData.append("whatYouWillLearn", data.courseBenefits);
@@ -159,7 +162,6 @@ export default function CourseInfoForm() {
       <h1>Create Info Form</h1>
 
       <form
-        action=""
         className="bg-[#4baca6] flex flex-col gap-5 w-10/12 m-auto"
         onSubmit={handleSubmit(onSubmit)}
       >
@@ -263,7 +265,9 @@ export default function CourseInfoForm() {
             </button>
           )}
 
-          <button type="submit" className="bg-blue-400">{!editCourse ? "Next" : "Save Changes"}</button>
+          <button type="submit" className="bg-blue-400">
+            {!editCourse ? "Next" : "Save Changes"}
+          </button>
         </div>
       </form>
     </div>

@@ -85,7 +85,7 @@ export const addCourseDetails = async (data, token) => {
     result = response?.data?.data;
     console.log("result in addCourse",result);
   } catch (error) {
-    console.log("add course api error...",error.response.data.message);
+    console.log("add course api error...",error);
     toast.error(error.response.data.message);
   }
   toast.dismiss(toastId);

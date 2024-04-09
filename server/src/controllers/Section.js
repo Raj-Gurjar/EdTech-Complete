@@ -28,7 +28,7 @@ exports.createSection = async (req, res) => {
             },
             { new: true }
         )
-            .populate({})
+            .populate("courseContent")
             .exec();
 
         //TODO: use populate to replace section as well as subsection in updatedCourseDetails
@@ -61,7 +61,7 @@ exports.updateSection = async (req, res) => {
             });
         }
         //section db update
-        const updateSectionData = await Section_Model.findById(
+        const updateSectionData = await Section_Model.findByIdAndUpdate(
             sectionId,
             { sectionName },
             { new: true }
@@ -75,6 +75,7 @@ exports.updateSection = async (req, res) => {
             updateSectionData,
         });
     } catch (error) {
+        console.log("Error in updating course controller", error);
         return res.status(500).json({
             success: false,
             message: "Error in updating Section Data",

@@ -15,7 +15,7 @@ exports.createCourse = async (req, res) => {
             whatYouWillLearn,
             price,
             category,
-
+            // status,
             instruction,
             // tag
         } = req.body;
@@ -36,7 +36,7 @@ exports.createCourse = async (req, res) => {
         ) {
             return res.status(400).json({
                 success: false,
-                message: "All Fields are required.",
+                message: "All Fields are required!.",
             });
         }
         //get instructor data bcs instructor is in db
