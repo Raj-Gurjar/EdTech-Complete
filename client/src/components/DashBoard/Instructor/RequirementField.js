@@ -34,7 +34,7 @@ export default function RequirementField({
     setRequirementList(updateReqList);
   };
 
-  console.log("requirementList", requirementList);
+  // console.log("requirementList", requirementList);
   return (
     <div>
       <label htmlFor={name}>{label}</label>

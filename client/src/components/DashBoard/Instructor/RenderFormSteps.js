@@ -49,7 +49,7 @@ export default function RenderFormSteps() {
 
       {step === 1 && <CourseInfoForm />}
       {step === 2 && <CourseBuilder />}
-      {step === 3 && <CoursePublish />}
+      {/* {step === 3 && <CoursePublish />} */}
     </div>
   );
 }

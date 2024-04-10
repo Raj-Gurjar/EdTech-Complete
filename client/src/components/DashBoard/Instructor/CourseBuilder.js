@@ -88,6 +88,12 @@ export default function CourseBuilder() {
     setLoading(false);
   };
 
+  const handleChangeEditSecName = (sectionId,sectionName) =>
+  {
+    setEditSectionName(sectionId);
+    setValue("sectionName",sectionName)
+  }
+
   return (
     <div>
       <h1 className="text-2xl">Course Builder</h1>

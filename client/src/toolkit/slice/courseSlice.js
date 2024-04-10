@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  step: 2,
+  step: 1,
   course: null,
   editCourse: false,
   paymentLoading: false,
@@ -13,9 +13,11 @@ const courseSlice = createSlice({
   reducers: {
     setStep: (state, action) => {
       state.step = action.payload;
+      console.log("step: ", state.step);
     },
     setCourse: (state, action) => {
       state.course = action.payload;
+      console.log("course state", state.course);
     },
     setEditCourse: (state, action) => {
       state.editCourse = action.payload;

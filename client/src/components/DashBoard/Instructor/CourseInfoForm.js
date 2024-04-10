@@ -35,6 +35,7 @@ export default function CourseInfoForm() {
     const getCategories = async () => {
       setLoading(true);
       const categories = await showAllCategories();
+      // console.log("categories inside courseInfo", categories);
 
       if (categories.length > 0) {
         setCourseCategories(categories);
@@ -75,7 +76,7 @@ export default function CourseInfoForm() {
   };
 
   //handle next button
-  const onSubmit = async (data) => { 
+  const onSubmit = async (data) => {
     if (editCourse) {
       if (isFormUpdated()) {
         const currentValues = getValues();
@@ -107,7 +108,7 @@ export default function CourseInfoForm() {
         // }
         if (
           currentValues.courseRequirements.toString() !==
-          course.instruction.toString()
+          course.instructions.toString()
         ) {
           formData.append(
             "instruction",
@@ -129,31 +130,33 @@ export default function CourseInfoForm() {
     }
 
     //! create a new course
-    
-    console.log("createCourse cp1");
+
+    // console.log("createCourse cp1");
     console.log("data", data);
     const formData = new FormData();
 
-    // formData.append("courseName", data.courseTitle);
-    console.log("formData01: ", formData, "courseTitle: ", data.courseTitle);
+    // console.log("category id:", data.courseCategory._id);
+    // console.log("category", data.courseCategory);
+    formData.append("courseName", data.courseTitle);
     formData.append("courseDescription", data.courseShortDescription);
     formData.append("price", data.coursePrice);
     formData.append("whatYouWillLearn", data.courseBenefits);
     formData.append("category", data.courseCategory);
-    formData.append("instruction", JSON.stringify(data.courseRequirements));
+    formData.append("instructions", JSON.stringify(data.courseRequirements));
     // formData.append("tag", data.courseTags);
     // formData.append("thumbnail", data.courseImage);
     formData.append("status", COURSE_STATUS.DRAFT);
 
-    console.log("formData1", formData);
+    // console.log("form2", formData);
     setLoading(true);
     const result = await addCourseDetails(formData, token);
+    console.log("result2", result);
     if (result) {
-      setStep(2);
+      console.log("going inside result");
+      dispatch(setStep(2));
       dispatch(setCourse(result));
     }
     setLoading(false);
-    console.log("formData2", formData);
     console.log("result", result);
   };
 
@@ -218,7 +221,7 @@ export default function CourseInfoForm() {
 
             {!loading &&
               courseCategories.map((category, index) => (
-                <option key={index} value={category?.id}>
+                <option key={index} value={category?._id}>
                   {category?.name}
                 </option>
               ))}

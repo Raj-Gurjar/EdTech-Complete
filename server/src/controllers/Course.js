@@ -16,7 +16,7 @@ exports.createCourse = async (req, res) => {
             price,
             category,
             // status,
-            instruction,
+            instructions,
             // tag
         } = req.body;
         let { status } = req.body;
@@ -24,7 +24,8 @@ exports.createCourse = async (req, res) => {
         // const thumbnail = req.file.thumbnailImage;
 
         //* validation
-        console.log("create course data fetched",req.body);
+        // console.log("course id" , category);
+        // console.log("create course data fetched",req.body);
         if (
             !courseName ||
             !courseDescription ||
@@ -43,15 +44,15 @@ exports.createCourse = async (req, res) => {
         if (!status || status === undefined) {
             status = "Draft";
         }
-        console.log("cp1");
+        // console.log("cp1");
         //TODO: check userID and instructorDetail are equal or not
         const userId = req.user.id;
-        console.log("usedId: ", userId);
+        // console.log("usedId: ", userId);
 
         const instructorDetails = await User_Model.findById(userId, {
             accountType: "Instructor",
         });
-        console.log("Instructor details: ", instructorDetails);
+        // console.log("Instructor details: ", instructorDetails);
 
         if (!instructorDetails) {
             return res.status(404).json({
@@ -61,7 +62,7 @@ exports.createCourse = async (req, res) => {
         }
         //* Add course in that Category
         const categoryDetail = await Category_Model.findById(category);
-        console.log("category Details : ", categoryDetail);
+        // console.log("category Details : ", categoryDetail);
 
         if (!categoryDetail) {
             return res.status(404).json({
@@ -69,7 +70,6 @@ exports.createCourse = async (req, res) => {
                 message: "Category not found",
             });
         }
-        console.log("cp2");
 
         //* Upload thumbnail to cloudinary
 
@@ -89,7 +89,7 @@ exports.createCourse = async (req, res) => {
             price,
             category: categoryDetail._id,
             status: status,
-            instruction: instruction,
+            instructions: instructions,
             // thumbnail: thumbnailImage.secure_url,
         });
 
@@ -117,7 +117,7 @@ exports.createCourse = async (req, res) => {
         );
 
         //* return res
-
+        console.log("newCourse create : ", newCourse);
         return res.status(200).json({
             success: true,
             message: "New Course Created Successfully.",
@@ -129,6 +129,7 @@ exports.createCourse = async (req, res) => {
             success: false,
             message: "Error in Creating Course.",
             // data:newCourse,
+            error: error.message,
         });
     }
 };
