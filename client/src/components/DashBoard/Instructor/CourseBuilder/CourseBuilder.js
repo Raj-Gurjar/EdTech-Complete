@@ -90,7 +90,7 @@ export default function CourseBuilder() {
     setLoading(false);
   };
 
-  const handleChangeEditSecName = (sectionId, sectionName) => {
+  const handleEditSecName = (sectionId, sectionName) => {
     if (editSectionName === sectionId) {
       cancelEdit();
       return;
@@ -131,7 +131,7 @@ export default function CourseBuilder() {
 
       {course.courseContent.length > 0 && (
         
-        <SectionDetails handleChangeEditSecName={handleChangeEditSecName} />
+        <SectionDetails handleChangeEditSecName={handleEditSecName} />
       )}
 
       <div className="flex gap-x-5">

@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { RxDropdownMenu } from "react-icons/rx";
 import { FaRegEdit } from "react-icons/fa";
 import { AiTwotoneDelete } from "react-icons/ai";
+import { IoIosArrowDropdownCircle } from "react-icons/io";
 
-export default function SectionDetails({ handleChangeEditSecName }) {
+export default function SectionDetails({ handleEditSecName }) {
   const { course } = useSelector((state) => state.course);
   const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -12,7 +13,12 @@ export default function SectionDetails({ handleChangeEditSecName }) {
   const [addSubSection, setAddSubSection] = useState(null);
   const [viewSubSection, setViewSubSection] = useState(null);
   const [editSubSection, setEditSubSection] = useState(null);
+  const [modal, setModal] = useState(null);
+
   console.log("inside section details");
+
+  function handleDeleteSection(sectionId) {}
+  function handleDeleteSubSection(subSectionId, sectionId) {}
   return (
     <div>
       <h1 className="text-2xl">Section Details</h1>
@@ -24,26 +30,82 @@ export default function SectionDetails({ handleChangeEditSecName }) {
               <div className="flex bg-red-300 gap-4">
                 <RxDropdownMenu />
                 <p>{section.sectionName}</p>
-                <div>
-                  {/* <button
-                    onClick={handleChangeEditSecName(
-                      section._id,
-                      section.sectionName
-                    )}
+                <div className="flex gap-x-5 bg-slate-400">
+                  <button
+                    onClick={() =>
+                      handleEditSecName(section._id, section.sectionName)
+                    }
                   >
                     <FaRegEdit />
-                  </button> */}
+                  </button>
 
                   <button
-                  onClick={() =>
-                  {
-                    
-                  }}>
+                    onClick={() => {
+                      setModal({
+                        text1: "Are You Sure?",
+                        text2:
+                          "All the lectures will be deleted of this section",
+                        btn1Text: "Delete Section",
+                        btn2Text: "Cancel",
+                        btn1Handler: () => handleDeleteSection(section._id),
+                        btn2Handler: () => setModal(null),
+                      });
+                    }}
+                  >
                     <AiTwotoneDelete />
                   </button>
+
+                  <span>|</span>
+                  <div>
+                    <IoIosArrowDropdownCircle />
+                  </div>
                 </div>
               </div>
             </summary>
+
+            <div>
+              {section.subSection.map((data) => (
+                <div
+                  key={data?._id}
+                  onClick={() => setViewSubSection(data)}
+                  className="flex item-center gap-x-3 border-b-2 border-black"
+                >
+                  <div>
+                    <RxDropdownMenu />
+                    <p>{data.title}</p>
+                  </div>
+                  <div className="flex gap-x-5 bg-slate-400">
+                    <button
+                      onClick={() => setEditSubSection(...data, section._id)}
+                    >
+                      <FaRegEdit />
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setModal({
+                          text1: "Delete SubSection ! Are You Sure?",
+                          text2:
+                            "All the lectures will be deleted of this section",
+                          btn1Text: "Delete SubSection",
+                          btn2Text: "Cancel",
+                          btn1Handler: () =>
+                            handleDeleteSubSection(data._id, section._id),
+                          btn2Handler: () => setModal(null),
+                        });
+                      }}
+                    >
+                      <AiTwotoneDelete />
+                    </button>
+
+                    <div></div>
+                  </div>
+                </div>
+              ))}
+              <button onClick={() => setAddSubSection(section._id)}>
+                Add Lecture
+              </button>
+            </div>
           </details>
         ))}
       </div>
