@@ -4,7 +4,7 @@ require("dotenv").config();
 
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 
-exports.createSubsection = async (req, res) => {
+exports.createSubSection = async (req, res) => {
     try {
         //get data
         const { sectionId, title, timeDuration, description, additionalUrl } =

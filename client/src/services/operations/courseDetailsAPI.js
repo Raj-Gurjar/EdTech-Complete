@@ -64,10 +64,8 @@ export const fetchCourseDetails = async (courseId) => {
   return result;
 };
 
-
-
 export const addCourseDetails = async (data, token) => {
-  console.log("add course api entered data: ",data.getAll("category"));
+  console.log("add course api entered data: ", data.getAll("category"));
   const toastId = toast.loading("Loading");
   let result = null;
 
@@ -83,9 +81,9 @@ export const addCourseDetails = async (data, token) => {
     }
     toast.success("Course Details added Successfully");
     result = response?.data?.newCourse;
-    console.log("result in addCourse",result);
+    console.log("result in addCourse", result);
   } catch (error) {
-    console.log("add course api error...",error);
+    console.log("add course api error...", error);
     toast.error(error.response.data.message);
   }
   toast.dismiss(toastId);
@@ -117,8 +115,11 @@ export const editCourseDetails = async (data, token) => {
 };
 
 export const createSection = async (data, token) => {
+
+  console.log("entering createSection", data);
   const toastId = toast.loading("Loading");
   let result = null;
+
 
   try {
     const response = await apiConnector("POST", CREATE_SECTION_API, data, {
@@ -135,6 +136,7 @@ export const createSection = async (data, token) => {
     console.log("create section api error...", error);
     toast.error(error.response.message);
   }
+  console.log("Result: ", result);
   toast.dismiss(toastId);
   return result;
 };
@@ -256,20 +258,27 @@ export const deleteSubSection = async (data, token) => {
 
 //! ......... incomplete 7.01 24th video
 export const fetchInstructorCourses = async (token) => {
-  const toastId = toast.loading("Loading");
+  const toastId = toast.loading("Loading..");
   let result = [];
 
   try {
-    const response = await apiConnector("GET", GET_ALL_INSTRUCTOR_COURSES_API);
-    console.log("Course detail..", response);
+    const response = await apiConnector(
+      "GET",
+      GET_ALL_INSTRUCTOR_COURSES_API,
+      null,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+    console.log("Instructor courses detail..", response);
 
     if (!response?.data?.success) {
-      throw new Error(response.data.message);
+      throw new Error("Could not fetch Instructor Courses");
     }
-    toast.success("A Course details fetched successfully");
+    toast.success("Course Instructors fetched successfully");
     result = response?.data;
   } catch (error) {
-    console.log("course details api error...", error);
+    console.log("Course Instructor api error...", error);
     toast.error(error.response.message);
     result = error.response.data;
   }

@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
-
 const app = express();
 
 const PORT = process.env.PORT || 4003;
@@ -19,18 +18,18 @@ app.use("*", cors());
 // ));
 
 app.use("/api/v1/auth", require("./routes/auth"));
-app.use("/api/v1/category", require("./routes/category"))
-app.use("/api/v1/course", require("./routes/course"))
-app.use("/api/v1/profile", require("./routes/profile"))
-
-
+app.use("/api/v1/category", require("./routes/category"));
+app.use("/api/v1/course", require("./routes/course"));
+app.use("/api/v1/profile", require("./routes/profile"));
+app.use("/api/v1/course", require("./routes/section"));
+app.use("/api/v1/course", require("./routes/subSection"));
 
 app.listen(PORT, () => {
-  console.log("Server is listening on port " + PORT);
+    console.log("Server is listening on port " + PORT);
 });
 
-app.get('/', (req, res) => {
-  res.send('Welcome to EdTech Server');
+app.get("/", (req, res) => {
+    res.send("Welcome to EdTech Server");
 });
 
 const dbConnect = require("./config/database");

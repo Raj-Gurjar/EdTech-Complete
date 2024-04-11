@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { SideBarLinks } from "../../data/Dashboard-links";
 import { logout } from "../../services/operations/authAPI";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,10 +9,13 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import Modal from "../Modal";
 
 export default function SideBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [modal, setModal] = useState(null);
 
   const { user } = useSelector((state) => state.profile);
 
@@ -33,9 +36,22 @@ export default function SideBar() {
           <NavLink to="showCategory">Show Categories</NavLink>
         </li>
         <li>
-          <NavLink to="/" onClick={() => dispatch(logout(navigate))}>
+          {/* <NavLink to="/"> */}
+          <button
+            onClick={() => {
+              setModal({
+                text1: "Are You Sure ?",
+                text2: "You will be logged out",
+                btn1Text: "LogOut",
+                btn2Text: "Cancel",
+                btn1Handler: () => dispatch(logout(navigate)),
+                btn2Handler: () => setModal(null),
+              });
+            }}
+          >
             Logout
-          </NavLink>
+          </button>
+          {/* </NavLink> */}
         </li>
         <li>
           <h1 className="bg-red-600">--- for students ---</h1>
@@ -67,8 +83,9 @@ export default function SideBar() {
         <li>
           <NavLink to="createCategory">Create Category</NavLink>
         </li>
-
       </ul>
+
+      {modal && <Modal modalData={modal} />}
     </div>
   );
 }

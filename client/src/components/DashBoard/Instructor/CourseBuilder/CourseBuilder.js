@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import SectionDetails from "./SectionDetails";
-import { setCourse, setEditCourse, setStep } from "../../../toolkit/slice/courseSlice";
+import {
+  setCourse,
+  setEditCourse,
+  setStep,
+} from "../../../../toolkit/slice/courseSlice";
 import toast from "react-hot-toast";
 import {
   updateSection,
   createSection,
-} from "../../../services/operations/courseDetailsAPI";
-
+} from "../../../../services/operations/courseDetailsAPI";
 
 export default function CourseBuilder() {
   const {
@@ -35,16 +38,16 @@ export default function CourseBuilder() {
     dispatch(setEditCourse(true));
   }
   function goToNext() {
-    // if (course.courseContent.length === 0) {
-    //   toast.error("Please add atleast one Section.");
-    //   return;
-    // }
-    // if (
-    //   course.courseContent.some((section) => section.subSection.length === 0)
-    // ) {
-    //   toast.error("Please add atleast one Lecture in each section");
-    //   return;
-    // }
+    if (course.courseContent.length === 0) {
+      toast.error("Please add atleast one Section.");
+      return;
+    }
+    if (
+      course.courseContent.some((section) => section.subSection.length === 0)
+    ) {
+      toast.error("Please add atleast one Lecture in each section");
+      return;
+    }
 
     //if every thing is ok
     dispatch(setStep(3));
@@ -77,23 +80,26 @@ export default function CourseBuilder() {
       );
     }
 
-    //update values 
-     if(result)
-     {
-      dispatch(setCourse(result))
+    //update values
+    if (result) {
+      dispatch(setCourse(result));
       setEditSectionName(null);
-      setValue("sectionName","")
-     }
+      setValue("sectionName", "");
+    }
 
     setLoading(false);
   };
 
-  const handleChangeEditSecName = (sectionId,sectionName) =>
-  {
+  const handleChangeEditSecName = (sectionId, sectionName) => {
+    if (editSectionName === sectionId) {
+      cancelEdit();
+      return;
+    }
     setEditSectionName(sectionId);
-    setValue("sectionName",sectionName)
-  }
+    setValue("sectionName", sectionName);
+  };
 
+  console.log("course details", course);
   return (
     <div>
       <h1 className="text-2xl">Course Builder</h1>
@@ -123,12 +129,11 @@ export default function CourseBuilder() {
         </div>
       </form>
 
-      {/* {
-        course.courseContent.length > 0 && (
-       
-        )
-      } */}
-      <SectionDetails />
+      {course.courseContent.length > 0 && (
+        
+        <SectionDetails handleChangeEditSecName={handleChangeEditSecName} />
+      )}
+
       <div className="flex gap-x-5">
         <button onClick={goBack}>Back</button>
         <button onClick={goToNext}>Next</button>

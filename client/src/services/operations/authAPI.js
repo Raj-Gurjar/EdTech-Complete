@@ -134,7 +134,7 @@ export function logout(navigate) {
     localStorage.removeItem("user");
     toast.success("Logged Out");
     console.log("Log out calling");
-    navigate("/home");
+    navigate("/");
     console.log("nav calling");
   };
 }
