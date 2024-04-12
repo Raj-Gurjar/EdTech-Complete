@@ -5,7 +5,7 @@ const { createSection,updateSection,deleteSection } = require("../controllers/Se
 const { auth } = require("../middlewares/auth");
 
 router.post("/addSection",auth, createSection);
-router.get("/updateSection",auth, updateSection);
-router.get("/deleteSection",auth, deleteSection);
+router.put("/updateSection",auth, updateSection);
+router.delete("/deleteSection",auth, deleteSection);
 
 module.exports = router;

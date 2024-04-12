@@ -4,6 +4,13 @@ import { RxDropdownMenu } from "react-icons/rx";
 import { FaRegEdit } from "react-icons/fa";
 import { AiTwotoneDelete } from "react-icons/ai";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
+import SubSectionModal from "./SubSectionModal";
+import Modal from "../../../Modal";
+import {
+  deleteSection,
+  deleteSubSection,
+} from "../../../../services/operations/courseDetailsAPI";
+import { setCourse } from "../../../../toolkit/slice/courseSlice";
 
 export default function SectionDetails({ handleEditSecName }) {
   const { course } = useSelector((state) => state.course);
@@ -15,13 +22,29 @@ export default function SectionDetails({ handleEditSecName }) {
   const [editSubSection, setEditSubSection] = useState(null);
   const [modal, setModal] = useState(null);
 
-  console.log("inside section details");
+  const handleDeleteSection = async (sectionId) => {
+    const result = await deleteSection({
+      sectionId,
+      courseId: course._id,
+      token,
+    });
 
-  function handleDeleteSection(sectionId) {}
-  function handleDeleteSubSection(subSectionId, sectionId) {}
+    if (result) {
+      dispatch(setCourse(result));
+    }
+    setModal(null);
+  };
+  const handleDeleteSubSection = async (subSectionId, sectionId) => {
+    const result = await deleteSubSection({ subSectionId, sectionId, token });
+    if (result) {
+      //TODO: something we can add here
+      dispatch(setCourse(result));
+    }
+    setModal(null);
+  };
   return (
-    <div>
-      <h1 className="text-2xl">Section Details</h1>
+    <div className="my-6">
+      <h1 className="text-2xl ">Section Details</h1>
 
       <div>
         {course?.courseContent?.map((section) => (
@@ -64,7 +87,7 @@ export default function SectionDetails({ handleEditSecName }) {
             </summary>
 
             <div>
-              {section.subSection.map((data) => (
+              {section.subSections.map((data) => (
                 <div
                   key={data?._id}
                   onClick={() => setViewSubSection(data)}
@@ -109,6 +132,30 @@ export default function SectionDetails({ handleEditSecName }) {
           </details>
         ))}
       </div>
+
+      {addSubSection ? (
+        <SubSectionModal
+          modalData={addSubSection}
+          setModalData={setAddSubSection}
+          add={true}
+        />
+      ) : viewSubSection ? (
+        <SubSectionModal
+          modalData={viewSubSection}
+          setModalData={setViewSubSection}
+          view={true}
+        />
+      ) : editSubSection ? (
+        <SubSectionModal
+          modalData={editSubSection}
+          setModalData={setEditSubSection}
+          edit={true}
+        />
+      ) : (
+        <div></div>
+      )}
+
+      {modal && <Modal modalData={modal} />}
     </div>
   );
 }

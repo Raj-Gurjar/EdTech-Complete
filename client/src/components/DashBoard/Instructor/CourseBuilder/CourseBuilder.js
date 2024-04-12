@@ -91,6 +91,7 @@ export default function CourseBuilder() {
   };
 
   const handleEditSecName = (sectionId, sectionName) => {
+    console.log("Edit Sec Name called");
     if (editSectionName === sectionId) {
       cancelEdit();
       return;
@@ -99,7 +100,7 @@ export default function CourseBuilder() {
     setValue("sectionName", sectionName);
   };
 
-  console.log("course details", course);
+  // console.log("course details", course);
   return (
     <div>
       <h1 className="text-2xl">Course Builder</h1>
@@ -130,8 +131,7 @@ export default function CourseBuilder() {
       </form>
 
       {course.courseContent.length > 0 && (
-        
-        <SectionDetails handleChangeEditSecName={handleEditSecName} />
+        <SectionDetails handleEditSecName={handleEditSecName} />
       )}
 
       <div className="flex gap-x-5">

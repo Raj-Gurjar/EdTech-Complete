@@ -48,8 +48,10 @@ exports.createSection = async (req, res) => {
 };
 
 exports.updateSection = async (req, res) => {
+    console.log("Going inside update section");
     try {
         //*get data
+        console.log("Inside update Section controller");
 
         const { sectionName, sectionId } = req.body;
 
@@ -72,10 +74,10 @@ exports.updateSection = async (req, res) => {
         return res.status(200).json({
             success: false,
             message: "Section Updated Successfully.",
-            updateSectionData,
+            data: updateSectionData,
         });
     } catch (error) {
-        console.log("Error in updating course controller", error);
+        console.log("Error in updating section controller", error);
         return res.status(500).json({
             success: false,
             message: "Error in updating Section Data",
@@ -84,6 +86,7 @@ exports.updateSection = async (req, res) => {
 };
 
 exports.deleteSection = async (req, res) => {
+    console.log("Entering in delete section controller");
     try {
         //get data
         const { sectionId } = req.params;
@@ -91,6 +94,7 @@ exports.deleteSection = async (req, res) => {
         // delete from db
         const deletedSection = await Section_Model.findByIdAndDelete(sectionId);
         //TODO:Do we need to delete the section from course data also?
+
         //return
         return res.status(200).json({
             success: true,

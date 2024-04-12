@@ -9,7 +9,7 @@ const {
 const { auth } = require("../middlewares/auth");
 
 router.post("/addSubSection", auth, createSubSection);
-router.get("/updateSubSection", auth, updateSubSection);
-router.get("/deleteSubSection", auth, deleteSubSection);
+router.put("/updateSubSection", auth, updateSubSection);
+router.delete("/deleteSubSection", auth, deleteSubSection);
 
 module.exports = router;
