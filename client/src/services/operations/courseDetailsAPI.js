@@ -148,6 +148,8 @@ export const createSubSection = async (data, token) => {
   try {
     const response = await apiConnector("POST", CREATE_SUBSECTION_API, data, {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+
     });
     console.log("create sub-section api response..", response);
 
@@ -158,7 +160,7 @@ export const createSubSection = async (data, token) => {
     result = response?.data?.data;
   } catch (error) {
     console.log("create sub-section api error...", error);
-    toast.error(error.response.message);
+    toast.error(error.response.data.message);
   }
   toast.dismiss(toastId);
   return result;

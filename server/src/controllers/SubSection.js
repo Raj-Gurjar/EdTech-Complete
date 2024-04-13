@@ -7,19 +7,19 @@ const { uploadImageToCloudinary } = require("../utils/imageUploader");
 exports.createSubSection = async (req, res) => {
     try {
         //get data
-        const { sectionId, title, timeDuration, description, additionalUrl } =
+        const { sectionId, title, description, additionalUrl } =
             req.body;
         //get video file
-        const { video } = req.files.videoFile;
+        // const { video } = req.files.videoFile;
 
         //validate
         if (
             !sectionId ||
             !title ||
-            !timeDuration ||
-            !description ||
-            !additionalUrl ||
-            !video
+            // !timeDuration ||
+            !description 
+            // !additionalUrl 
+            // !video
         ) {
             return res.status(400).json({
                 success: false,
@@ -28,17 +28,17 @@ exports.createSubSection = async (req, res) => {
         }
 
         //upload video to cloudinary
-        const uploadVideo = await uploadImageToCloudinary(
-            video,
-            process.env.FOLDER_NAME
-        );
+        // const uploadVideo = await uploadImageToCloudinary(
+        //     video,
+        //     process.env.FOLDER_NAME
+        // );
 
         //insert in subsection db
         const subSectionDetails = await SubSection_Model.create({
             title: title,
-            timeDuration: timeDuration,
+            // timeDuration: timeDuration,
             description: description,
-            videoUrl: uploadVideo.secure_url,
+            // videoUrl: uploadVideo.secure_url,
         });
 
         //insert subsection id in section db

@@ -33,7 +33,7 @@ export default function SubSectionModal({
     if (view || edit) {
       setValue("lectureTitle", modalData.title);
       setValue("lectureDesc", modalData.description);
-      setValue("lectureVideo", modalData.videoUrl);
+      // setValue("lectureVideo", modalData.videoUrl);
     }
   }, []);
 
@@ -41,8 +41,8 @@ export default function SubSectionModal({
     const currentValues = getValues();
     if (
       currentValues.lectureTitle !== modalData.title ||
-      currentValues.lectureDesc !== modalData.description ||
-      currentValues.lectureVideo !== modalData.videoUrl
+      currentValues.lectureDesc !== modalData.description
+      // currentValues.lectureVideo !== modalData.videoUrl
     ) {
       return true;
     } else {
@@ -64,9 +64,9 @@ export default function SubSectionModal({
     if (currentValues.lectureDesc !== modalData.description) {
       formData.append("description", currentValues.lectureDesc);
     }
-    if (currentValues.lectureVideo !== modalData.videoUrl) {
-      formData.append("video", currentValues.lectureVideo);
-    }
+    // if (currentValues.lectureVideo !== modalData.videoUrl) {
+    //   formData.append("video", currentValues.lectureVideo);
+    // }
 
     setLoading(true);
     //!API call
@@ -101,7 +101,7 @@ export default function SubSectionModal({
     formData.append("sectionId", modalData);
     formData.append("title", data.lectureTitle);
     formData.append("description", data.lectureDesc);
-    formData.append("video", data.lectureVideo);
+    // formData.append("video", data.lectureVideo);
 
     setLoading(true);
 
@@ -117,9 +117,12 @@ export default function SubSectionModal({
     setModalData(null);
     setLoading(false);
   };
+  useEffect(() => {
+    onSubmit();
+  }, []);
   return (
     <div className="bg-orange-300 absolute top-[10%] left-[50%] p-[10px]">
-      <div className="flex bg-slate-400">
+      <div className="flex bg-slate-400 justify-between">
         {/* <h1>Sub-section</h1> */}
 
         <h2>
@@ -153,7 +156,7 @@ export default function SubSectionModal({
           {errors.lectureDesc && <span>Lecture Description is required</span>}
         </div>
 
-        <Upload
+        {/* <Upload
           name="lectureVideo"
           label="lecture Video"
           register={register}
@@ -162,10 +165,18 @@ export default function SubSectionModal({
           video={true}
           viewData={view ? modalData.videoUrl : null}
           editData={edit ? modalData.videoUrl : null}
-        />
+        /> */}
+
+        {/* {!view && (
+          <div>
+            <button>
+              {loading ? "Loading..." : edit ? "Save Changes" : "Save"}
+            </button>
+          </div>
+        )} */}
 
         <button>
-          {!loading ? (
+          {loading ? (
             "Loading.."
           ) : (
             <>

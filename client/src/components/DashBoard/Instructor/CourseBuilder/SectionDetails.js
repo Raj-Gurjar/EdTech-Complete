@@ -42,6 +42,8 @@ export default function SectionDetails({ handleEditSecName }) {
     }
     setModal(null);
   };
+
+  console.log("viewSubSection: ", viewSubSection);
   return (
     <div className="my-6">
       <h1 className="text-2xl ">Section Details</h1>
@@ -93,9 +95,9 @@ export default function SectionDetails({ handleEditSecName }) {
                   onClick={() => setViewSubSection(data)}
                   className="flex item-center gap-x-3 border-b-2 border-black"
                 >
+                  <p className="bg-red-500">{data.title}</p>
                   <div>
                     <RxDropdownMenu />
-                    <p>{data.title}</p>
                   </div>
                   <div className="flex gap-x-5 bg-slate-400">
                     <button
