@@ -16,6 +16,7 @@ export default function SubSectionModal({
   view = false,
   edit = false,
 }) {
+  console.log("modalData: ",modalData);
   const {
     register,
     handleSubmit,
@@ -26,7 +27,7 @@ export default function SubSectionModal({
   const { course } = useSelector((state) => state.course);
   const { token } = useSelector((state) => state.auth);
 
-  const dispatch = useDispatch;
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -38,6 +39,7 @@ export default function SubSectionModal({
   }, []);
 
   const isFormUpdated = () => {
+  
     const currentValues = getValues();
     if (
       currentValues.lectureTitle !== modalData.title ||
@@ -74,7 +76,7 @@ export default function SubSectionModal({
     const result = await updateSubSection(formData, token);
 
     if (result) {
-       // // TODO check to add extra
+      // // TODO check to add extra
       const updatedCourseContent = course.courseContent.map((section) =>
         section._id === modalData.sectionId ? result : section
       );
@@ -99,30 +101,35 @@ export default function SubSectionModal({
       return;
     }
 
-    //create subSection
+    // //create subSection
     const formData = new FormData();
 
     formData.append("sectionId", modalData);
     formData.append("title", data.lectureTitle);
     formData.append("description", data.lectureDesc);
-    // formData.append("video", data.lectureVideo);
+    // // formData.append("video", data.lectureVideo);
 
     setLoading(true);
 
-    //!API call
+    // //!API call
     const result = await createSubSection(formData, token);
 
     if (result) {
       // // TODO: check to add something else
+      console.log("inside result :", result);
       const updatedCourseContent = course.courseContent.map((section) =>
         section._id === modalData ? result : section
       );
       const updatedCourse = { ...course, courseContent: updatedCourseContent };
+
+      console.log("before setCourse", updatedCourse);
       dispatch(setCourse(updatedCourse));
+      console.log("after setCourse", updatedCourse);
     }
 
     setModalData(null);
     setLoading(false);
+    console.log("inside onsub");
   };
 
   return (
@@ -133,7 +140,7 @@ export default function SubSectionModal({
         <h2>
           {view && "Viewing"} {add && "Adding"} {edit && "Edit"} Lecture
         </h2>
-        <button onClick={() => (!loading ? setModalData(null) : {})}>X</button>
+        <button onClick={() => setModalData(null)}>X</button>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -172,23 +179,9 @@ export default function SubSectionModal({
           editData={edit ? modalData.videoUrl : null}
         /> */}
 
-        {/* {!view && (
-          <div>
-            <button>
-              {loading ? "Loading..." : edit ? "Save Changes" : "Save"}
-            </button>
-          </div>
-        )} */}
-
         <button>
-          {loading ? (
-            "Loading.."
-          ) : (
-            <>
-              {edit && "Save Edit"}
-              {add && "Add Lecture"}
-            </>
-          )}
+          {edit && "Save Edit"}
+          {add && "Add Lecture"}
         </button>
       </form>
     </div>

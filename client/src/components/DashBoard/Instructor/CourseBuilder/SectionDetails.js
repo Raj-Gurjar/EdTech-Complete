@@ -22,6 +22,7 @@ export default function SectionDetails({ handleEditSecName }) {
   const [editSubSection, setEditSubSection] = useState(null);
   const [modal, setModal] = useState(null);
 
+  console.log("editSubSection :", editSubSection);
   const handleDeleteSection = async (sectionId) => {
     const result = await deleteSection({
       sectionId,
@@ -94,20 +95,26 @@ export default function SectionDetails({ handleEditSecName }) {
               </div>
             </summary>
 
-            <div>
+            <div className="bg-pink-300 flex flex-col justify-between">
               {section.subSections.map((data) => (
                 <div
                   key={data?._id}
                   onClick={() => setViewSubSection(data)}
-                  className="flex item-center gap-x-3 border-b-2 border-black"
+                  className="flex item-center  justify-between gap-x-3 border-b-2 border-black"
                 >
-                  {/* <p className="bg-red-500">{data.title}</p> */}
                   <div>
-                    <RxDropdownMenu />
+                    {/* <RxDropdownMenu /> */}
+                    <p>{data.title}</p>
                   </div>
-                  <div className="flex gap-x-5 bg-slate-400">
+
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex gap-x-5 bg-slate-400"
+                  >
                     <button
-                      onClick={() => setEditSubSection(...data, section._id)}
+                      onClick={() =>
+                        setEditSubSection({ ...data, sectionId: section._id })
+                      }
                     >
                       <FaRegEdit />
                     </button>

@@ -7,7 +7,7 @@ const { uploadImageToCloudinary } = require("../utils/imageUploader");
 exports.createSubSection = async (req, res) => {
     try {
         //get data
-        const { sectionId, title, description, additionalUrl } = req.body;
+        const { sectionId, title, description } = req.body;
         //get video file
         // const { video } = req.files.videoFile;
 
@@ -60,7 +60,7 @@ exports.createSubSection = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Subsection created Successfully.",
-            data:updatedSection,
+            data: updatedSection,
         });
     } catch (error) {
         return res.status(500).json({
@@ -74,17 +74,19 @@ exports.createSubSection = async (req, res) => {
 exports.updateSubSection = async (req, res) => {
     try {
         //get data
+        console.log("entering update sub sec controller");
         const {
             sectionId,
+            subSectionId,
             title,
             description,
             // additionalUrl,
         } = req.body;
         //get video file
         // const { video } = req.files.videoFile;
-
+        console.log("sub sec controller body:", req.body);
         //update subsection
-        const subSection = await SubSection_Model.findById(sectionId);
+        const subSection = await SubSection_Model.findById(subSectionId);
 
         if (!subSection) {
             return res.status(404).json({
@@ -110,8 +112,9 @@ exports.updateSubSection = async (req, res) => {
         // }
         await subSection.save();
 
-        const updatedSubSection =
-            await Section_Model.findById(sectionId).populate("subSection");
+        const updatedSubSection = await Section_Model.findById(sectionId)
+            .populate("subSections")
+            .exec();
 
         //return
         return res.status(200).json({
@@ -120,6 +123,7 @@ exports.updateSubSection = async (req, res) => {
             data: updatedSubSection,
         });
     } catch (error) {
+        console.log("Error in updating sub-sec: ", error);
         return res.status(500).json({
             success: false,
             message: "Error in updating subsection",
@@ -128,9 +132,11 @@ exports.updateSubSection = async (req, res) => {
 };
 
 exports.deleteSubSection = async (req, res) => {
+    console.log("inside delete sub sec controller");
     try {
         //get the id
         const { subSectionId, sectionId } = req.body;
+        console.log(req.body);
 
         //delete it from section
         await Section_Model.findByIdAndUpdate(
@@ -141,20 +147,22 @@ exports.deleteSubSection = async (req, res) => {
                 },
             }
         );
-
+        console.log("cp1");
         const deletedSubSection = await SubSection_Model.findByIdAndDelete({
             _id: subSectionId,
         });
+        console.log("cp2");
 
-        if (!deletedSubSection) {
-            return res.status(404).json({
-                success: false,
-                message: "SubSection not found",
-            });
-        }
-
-        const updatedSubSection =
-            await Section_Model.findById(sectionId).populate("subSection");
+        // if (!deletedSubSection) {
+        //     return res.status(404).json({
+        //         success: false,
+        //         message: "SubSection not found",
+        //     });
+        // }
+        console.log("cp3");
+        const updatedSubSection = await Section_Model.findById(sectionId)
+            .populate("subSections")
+            .exec();
         //return
         return res.status(200).json({
             success: true,
@@ -162,6 +170,7 @@ exports.deleteSubSection = async (req, res) => {
             data: updatedSubSection,
         });
     } catch (error) {
+        console.log("Error in delete sub-sec: ", error);
         return res.status(500).json({
             success: false,
             message: "Error in deleting Subsection",

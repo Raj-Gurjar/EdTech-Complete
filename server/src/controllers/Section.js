@@ -53,8 +53,10 @@ exports.updateSection = async (req, res) => {
     try {
         //*get data
 
-        const { sectionName, sectionId ,courseId} = req.body;
- 
+        const { sectionName, sectionId, courseId } = req.body;
+        
+        console.log("sec update ", req.body);
+
         //section db update
         const updateSectionData = await Section_Model.findByIdAndUpdate(
             sectionId,

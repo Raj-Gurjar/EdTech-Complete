@@ -167,7 +167,7 @@ export const updateSection = async (data, token) => {
   console.log("inside update section");
   const toastId = toast.loading("Loading");
   let result = null;
-
+  console.log("sec update api data: ", data);
   try {
     const response = await apiConnector("PUT", UPDATE_SECTION_API, data, {
       Authorization: `Bearer ${token}`,
@@ -188,11 +188,13 @@ export const updateSection = async (data, token) => {
 };
 
 export const updateSubSection = async (data, token) => {
+  console.log("entering updateSubSec api call:", data);
   const toastId = toast.loading("Loading");
   let result = null;
 
   try {
     const response = await apiConnector("PUT", UPDATE_SUBSECTION_API, data, {
+      // "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     });
     console.log("update sub-section api response..", response);
@@ -211,6 +213,7 @@ export const updateSubSection = async (data, token) => {
 };
 
 export const deleteSection = async (data, token) => {
+  console.log("entering updateSubSec api call:", data);
   const toastId = toast.loading("Loading");
   let result = null;
 
