@@ -74,8 +74,12 @@ export default function SubSectionModal({
     const result = await updateSubSection(formData, token);
 
     if (result) {
-      //TODO check to add extra
-      dispatch(setCourse(result));
+       // // TODO check to add extra
+      const updatedCourseContent = course.courseContent.map((section) =>
+        section._id === modalData.sectionId ? result : section
+      );
+      const updatedCourse = { ...course, courseContent: updatedCourseContent };
+      dispatch(setCourse(updatedCourse));
     }
     setModalData(null);
     setLoading(false);
@@ -109,17 +113,18 @@ export default function SubSectionModal({
     const result = await createSubSection(formData, token);
 
     if (result) {
-      //TODO: check to add something else
-
-      dispatch(setCourse(result));
+      // // TODO: check to add something else
+      const updatedCourseContent = course.courseContent.map((section) =>
+        section._id === modalData ? result : section
+      );
+      const updatedCourse = { ...course, courseContent: updatedCourseContent };
+      dispatch(setCourse(updatedCourse));
     }
 
     setModalData(null);
     setLoading(false);
   };
-  useEffect(() => {
-    onSubmit();
-  }, []);
+
   return (
     <div className="bg-orange-300 absolute top-[10%] left-[50%] p-[10px]">
       <div className="flex bg-slate-400 justify-between">
@@ -131,7 +136,7 @@ export default function SubSectionModal({
         <button onClick={() => (!loading ? setModalData(null) : {})}>X</button>
       </div>
 
-      <form onClick={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="lectureTitle">Lecture Title</label>
           <input

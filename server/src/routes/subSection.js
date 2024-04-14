@@ -6,10 +6,10 @@ const {
     deleteSubSection,
     updateSubSection,
 } = require("../controllers/SubSection");
-const { auth } = require("../middlewares/auth");
+const { auth, isInstructor } = require("../middlewares/auth");
 
-router.post("/addSubSection", auth, createSubSection);
-router.put("/updateSubSection", auth, updateSubSection);
-router.delete("/deleteSubSection", auth, deleteSubSection);
+router.post("/addSubSection", auth, isInstructor, createSubSection);
+router.put("/updateSubSection", auth, isInstructor, updateSubSection);
+router.delete("/deleteSubSection", auth, isInstructor, deleteSubSection);
 
 module.exports = router;

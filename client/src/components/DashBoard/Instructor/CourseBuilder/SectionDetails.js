@@ -28,7 +28,7 @@ export default function SectionDetails({ handleEditSecName }) {
       courseId: course._id,
       token,
     });
-
+    console.log("sec delete result: ", result);
     if (result) {
       dispatch(setCourse(result));
     }
@@ -36,9 +36,15 @@ export default function SectionDetails({ handleEditSecName }) {
   };
   const handleDeleteSubSection = async (subSectionId, sectionId) => {
     const result = await deleteSubSection({ subSectionId, sectionId, token });
+    console.log("sub sec delete result: ", result);
     if (result) {
-      //TODO: something we can add here
-      dispatch(setCourse(result));
+      // // TODO: something we can add here
+      const updatedCourseContent = course.courseContent.map((section) =>
+        section._id === sectionId ? result : section
+      );
+      const updatedCourse = { ...course, courseContent: updatedCourseContent };
+
+      dispatch(setCourse(updatedCourse));
     }
     setModal(null);
   };
@@ -95,7 +101,7 @@ export default function SectionDetails({ handleEditSecName }) {
                   onClick={() => setViewSubSection(data)}
                   className="flex item-center gap-x-3 border-b-2 border-black"
                 >
-                  <p className="bg-red-500">{data.title}</p>
+                  {/* <p className="bg-red-500">{data.title}</p> */}
                   <div>
                     <RxDropdownMenu />
                   </div>

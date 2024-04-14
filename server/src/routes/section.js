@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const { createSection,updateSection,deleteSection } = require("../controllers/Section");
-const { auth } = require("../middlewares/auth");
+const { auth,isInstructor} = require("../middlewares/auth");
 
-router.post("/addSection",auth, createSection);
-router.put("/updateSection",auth, updateSection);
-router.delete("/deleteSection",auth, deleteSection);
+router.post("/addSection",auth,isInstructor, createSection);
+router.put("/updateSection",auth, isInstructor, updateSection);
+router.delete("/deleteSection",auth,isInstructor, deleteSection);
 
 module.exports = router;

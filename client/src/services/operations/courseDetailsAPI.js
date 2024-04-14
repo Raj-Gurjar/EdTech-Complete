@@ -115,11 +115,9 @@ export const editCourseDetails = async (data, token) => {
 };
 
 export const createSection = async (data, token) => {
-
   console.log("entering createSection", data);
   const toastId = toast.loading("Loading");
   let result = null;
-
 
   try {
     const response = await apiConnector("POST", CREATE_SECTION_API, data, {
@@ -149,7 +147,6 @@ export const createSubSection = async (data, token) => {
     const response = await apiConnector("POST", CREATE_SUBSECTION_API, data, {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
-
     });
     console.log("create sub-section api response..", response);
 
@@ -217,6 +214,7 @@ export const deleteSection = async (data, token) => {
   const toastId = toast.loading("Loading");
   let result = null;
 
+  console.log("delete sub sec data : ", data);
   try {
     const response = await apiConnector("DELETE", DELETE_SECTION_API, data, {
       Authorization: `Bearer ${token}`,

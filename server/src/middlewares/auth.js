@@ -74,7 +74,7 @@ exports.isStudent = async (req, res, next) => {
 
 //! Check Instructor
 
-exports.isStudent = async (req, res, next) => {
+exports.isInstructor = async (req, res, next) => {
     try {
         const role = req.user.accountType;
 
@@ -95,7 +95,7 @@ exports.isStudent = async (req, res, next) => {
 
 //! Check Admin
 
-exports.isStudent = async (req, res, next) => {
+exports.isAdmin = async (req, res, next) => {
     try {
         const role = req.user.accountType;
 

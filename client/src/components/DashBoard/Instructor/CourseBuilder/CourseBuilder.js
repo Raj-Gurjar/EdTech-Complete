@@ -38,12 +38,12 @@ export default function CourseBuilder() {
     dispatch(setEditCourse(true));
   }
   function goToNext() {
-    if (course.courseContent.length === 0) {
+    if (course?.courseContent?.length === 0) {
       toast.error("Please add atleast one Section.");
       return;
     }
     if (
-      course.courseContent.some((section) => section.subSection.length === 0)
+      course.courseContent.some((section) => section?.subSection?.length === 0)
     ) {
       toast.error("Please add atleast one Lecture in each section");
       return;
@@ -130,7 +130,7 @@ export default function CourseBuilder() {
         </div>
       </form>
 
-      {course.courseContent.length > 0 && (
+      {course?.courseContent?.length > 0 && (
         <SectionDetails handleEditSecName={handleEditSecName} />
       )}
 

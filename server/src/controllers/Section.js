@@ -1,5 +1,6 @@
 const Section_Model = require("../models/Section.model");
 const Course_Model = require("../models/Course.model");
+const SubSection_Model = require("../models/SubSection.model");
 
 exports.createSection = async (req, res) => {
     try {
@@ -51,17 +52,9 @@ exports.updateSection = async (req, res) => {
     console.log("Going inside update section");
     try {
         //*get data
-        console.log("Inside update Section controller");
 
-        const { sectionName, sectionId } = req.body;
-
-        //validation
-        if (!sectionName || !sectionId) {
-            return res.status(401).json({
-                success: false,
-                message: "Data not found.",
-            });
-        }
+        const { sectionName, sectionId ,courseId} = req.body;
+ 
         //section db update
         const updateSectionData = await Section_Model.findByIdAndUpdate(
             sectionId,
@@ -69,12 +62,21 @@ exports.updateSection = async (req, res) => {
             { new: true }
         );
 
+        const updatedCourse = await Course_Model.findById(courseId)
+            .populate({
+                path: "courseContent",
+                populate: {
+                    path: "subSections",
+                },
+            })
+            .exec();
+
         //return
 
         return res.status(200).json({
-            success: false,
+            success: true,
             message: "Section Updated Successfully.",
-            data: updateSectionData,
+            data: updatedCourse,
         });
     } catch (error) {
         console.log("Error in updating section controller", error);
@@ -89,17 +91,48 @@ exports.deleteSection = async (req, res) => {
     console.log("Entering in delete section controller");
     try {
         //get data
-        const { sectionId } = req.params;
-
+        const { sectionId, courseId } = req.body;
+        console.log("section ID:", sectionId, ", courseId: ", courseId);
         // delete from db
-        const deletedSection = await Section_Model.findByIdAndDelete(sectionId);
-        //TODO:Do we need to delete the section from course data also?
 
+        //remove section form course and update it
+        await Course_Model.findByIdAndUpdate(courseId, {
+            $pull: {
+                courseContent: sectionId,
+            },
+        });
+
+        const section = await Section_Model.findById(sectionId);
+
+        if (!section) {
+            return res.status(404).json({
+                success: false,
+                message: "Section not found",
+            });
+        }
+        //delete all first subsections
+        await SubSection_Model.deleteMany({
+            _id: { $in: section.subSections },
+        });
+
+        await Section_Model.findByIdAndDelete(sectionId);
+
+        //find the updated course and return
+        const updatedCourse = await Course_Model.findById(courseId)
+            .populate({
+                path: "courseContent",
+                populate: {
+                    path: "subSections",
+                },
+            })
+            .exec();
+
+        console.log(" Sec controller deleted Successfully");
         //return
         return res.status(200).json({
             success: true,
             message: "Section deleted Successfully.",
-            deletedSection,
+            data: updatedCourse,
         });
     } catch (error) {
         return res.status(500).json({
