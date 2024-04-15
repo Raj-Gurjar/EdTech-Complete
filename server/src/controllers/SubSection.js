@@ -138,36 +138,32 @@ exports.deleteSubSection = async (req, res) => {
         const { subSectionId, sectionId } = req.body;
         console.log(req.body);
 
+        console.log("dcp1");
         //delete it from section
         await Section_Model.findByIdAndUpdate(
             { _id: sectionId },
             {
                 $pull: {
-                    subSection: subSectionId,
+                    subSections: subSectionId,
                 },
             }
         );
-        console.log("cp1");
-        const deletedSubSection = await SubSection_Model.findByIdAndDelete({
+        console.log("dcp1");
+        await SubSection_Model.findByIdAndDelete({
             _id: subSectionId,
         });
-        console.log("cp2");
+        console.log("dcp3");
 
-        // if (!deletedSubSection) {
-        //     return res.status(404).json({
-        //         success: false,
-        //         message: "SubSection not found",
-        //     });
-        // }
-        console.log("cp3");
-        const updatedSubSection = await Section_Model.findById(sectionId)
+        const updatedSection = await Section_Model.findById(sectionId)
             .populate("subSections")
             .exec();
+
+        console.log("dcp4", updatedSection);
         //return
         return res.status(200).json({
             success: true,
             message: "Subsection Deleted Successfully",
-            data: updatedSubSection,
+            data: updatedSection,
         });
     } catch (error) {
         console.log("Error in delete sub-sec: ", error);
