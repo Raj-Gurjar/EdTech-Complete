@@ -12,7 +12,7 @@ export const showAllCategories = async () => {
 
   try {
     const response = await apiConnector("GET", GET_ALL_CATEGORIES_API);
-    console.log("Course category detail..", response);
+    // console.log("Course category detail..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not fetch Course Category");

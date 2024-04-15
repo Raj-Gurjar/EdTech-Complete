@@ -20,7 +20,7 @@ export default function ShowCategories() {
     getCategories();
   }, []);
 
-  console.log("courseCategory", courseCategories);
+  // console.log("courseCategory", courseCategories);
 
   return (
     <div>

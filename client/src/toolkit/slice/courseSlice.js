@@ -33,6 +33,11 @@ const courseSlice = createSlice({
   },
 });
 
-export const { setStep, setPaymentLoading, setEditCourse, setCourse } =
-  courseSlice.actions;
+export const {
+  setStep,
+  setPaymentLoading,
+  setEditCourse,
+  setCourse,
+  resetCourseState,
+} = courseSlice.actions;
 export default courseSlice.reducer;

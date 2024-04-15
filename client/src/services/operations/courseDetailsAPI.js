@@ -164,7 +164,7 @@ export const createSubSection = async (data, token) => {
 };
 
 export const updateSection = async (data, token) => {
-  console.log("inside update section");
+  // console.log("inside update section");
   const toastId = toast.loading("Loading");
   let result = null;
   console.log("sec update api data: ", data);
@@ -188,7 +188,7 @@ export const updateSection = async (data, token) => {
 };
 
 export const updateSubSection = async (data, token) => {
-  console.log("entering updateSubSec api call:", data.getAll("title"));
+ 
   const toastId = toast.loading("Loading");
   let result = null;
 
@@ -213,7 +213,7 @@ export const updateSubSection = async (data, token) => {
 };
 
 export const deleteSection = async (data, token) => {
-  console.log("entering updateSubSec api call:", data);
+  // console.log("entering updateSubSec api call:", data);
   const toastId = toast.loading("Loading");
   let result = null;
 
