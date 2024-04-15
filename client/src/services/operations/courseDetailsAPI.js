@@ -188,14 +188,14 @@ export const updateSection = async (data, token) => {
 };
 
 export const updateSubSection = async (data, token) => {
-  console.log("entering updateSubSec api call:", data);
+  console.log("entering updateSubSec api call:", data.getAll("title"));
   const toastId = toast.loading("Loading");
   let result = null;
 
   try {
     const response = await apiConnector("PUT", UPDATE_SUBSECTION_API, data, {
-      // "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     });
     console.log("update sub-section api response..", response);
 
@@ -206,7 +206,7 @@ export const updateSubSection = async (data, token) => {
     result = response?.data?.data;
   } catch (error) {
     console.log("update sub-section api error...", error);
-    toast.error(error.response.message);
+    toast.error(error.response.data.message);
   }
   toast.dismiss(toastId);
   return result;

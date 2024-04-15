@@ -22,14 +22,14 @@ export default function SectionDetails({ handleEditSecName }) {
   const [editSubSection, setEditSubSection] = useState(null);
   const [modal, setModal] = useState(null);
 
-  console.log("editSubSection :", editSubSection);
+  // console.log("editSubSection :", editSubSection);
   const handleDeleteSection = async (sectionId) => {
     const result = await deleteSection({
       sectionId,
       courseId: course._id,
       token,
     });
-    console.log("sec delete result: ", result);
+    // console.log("sec delete result: ", result);
     if (result) {
       dispatch(setCourse(result));
     }
@@ -37,7 +37,7 @@ export default function SectionDetails({ handleEditSecName }) {
   };
   const handleDeleteSubSection = async (subSectionId, sectionId) => {
     const result = await deleteSubSection({ subSectionId, sectionId, token });
-    console.log("sub sec delete result: ", result);
+    // console.log("sub sec delete result: ", result);
     if (result) {
       // // TODO: something we can add here
       const updatedCourseContent = course.courseContent.map((section) =>
@@ -50,7 +50,7 @@ export default function SectionDetails({ handleEditSecName }) {
     setModal(null);
   };
 
-  console.log("viewSubSection: ", viewSubSection);
+  // console.log("viewSubSection: ", viewSubSection);
   return (
     <div className="my-6">
       <h1 className="text-2xl ">Section Details</h1>

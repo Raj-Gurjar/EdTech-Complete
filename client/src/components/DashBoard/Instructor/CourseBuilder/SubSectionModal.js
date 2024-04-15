@@ -16,7 +16,7 @@ export default function SubSectionModal({
   view = false,
   edit = false,
 }) {
-  console.log("modalData: ",modalData);
+  // console.log("modalData: ", modalData);
   const {
     register,
     handleSubmit,
@@ -39,7 +39,6 @@ export default function SubSectionModal({
   }, []);
 
   const isFormUpdated = () => {
-  
     const currentValues = getValues();
     if (
       currentValues.lectureTitle !== modalData.title ||
@@ -53,12 +52,19 @@ export default function SubSectionModal({
   };
 
   const handleEditSubSection = async () => {
+    console.log("1.inside edit sub handler");
+    console.log("2.inside edit sub modal data", modalData);
+
     const currentValues = getValues();
+
+    console.log("3. inside edit sub current values data", currentValues);
 
     const formData = new FormData();
 
     formData.append("sectionId", modalData.sectionId);
     formData.append("subSectionId", modalData._id);
+
+    console.log("4. form data", formData);
 
     if (currentValues.lectureTitle !== modalData.title) {
       formData.append("title", currentValues.lectureTitle);
@@ -70,11 +76,13 @@ export default function SubSectionModal({
     //   formData.append("video", currentValues.lectureVideo);
     // }
 
+    console.log("5. form data", formData.getAll("title"));
     setLoading(true);
     //!API call
 
     const result = await updateSubSection(formData, token);
 
+    console.log("5. result", result);
     if (result) {
       // // TODO check to add extra
       const updatedCourseContent = course.courseContent.map((section) =>
@@ -83,6 +91,7 @@ export default function SubSectionModal({
       const updatedCourse = { ...course, courseContent: updatedCourseContent };
       dispatch(setCourse(updatedCourse));
     }
+
     setModalData(null);
     setLoading(false);
   };
