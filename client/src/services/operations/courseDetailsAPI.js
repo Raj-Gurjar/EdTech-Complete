@@ -96,7 +96,7 @@ export const editCourseDetails = async (data, token) => {
 
   try {
     const response = await apiConnector("POST", EDIT_COURSE_API, data, {
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     });
     console.log("edit course detail..", response);

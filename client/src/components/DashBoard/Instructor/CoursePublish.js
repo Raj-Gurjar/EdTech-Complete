@@ -28,20 +28,22 @@ export default function CoursePublish() {
   });
   const goToCourses = () => {
     dispatch(resetCourseState());
-    navigate("/myCourses-Instructor");
+    // navigate("/dashboard/myCourses-Instructor");
   };
 
   const handleCoursePublish = async () => {
     if (
       (course?.status === COURSE_STATUS.PUBLISHED &&
         getValues("public") === true) ||
-      (course.status === COURSE_STATUS.DRAFT && getValues("public") === false)
+      (course?.status === COURSE_STATUS.DRAFT && getValues("public") === false)
     ) {
       //no updating in form then no need to make api call
+      console.log("inside if");
       goToCourses();
       return;
     }
-
+      
+    console.log("inside else");
     //if form is updated
 
     const formData = new FormData();
@@ -56,7 +58,8 @@ export default function CoursePublish() {
     setLoading(true);
 
     const result = await editCourseDetails(formData, token);
-
+    
+    // console.log("result: ",result);
     if (result) {
       goToCourses();
     }
@@ -71,7 +74,7 @@ export default function CoursePublish() {
     <div className="bg-slate-400 my-5">
       <h1> Publish Course</h1>
 
-      <form action={onSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="public">
             <input
@@ -85,7 +88,7 @@ export default function CoursePublish() {
         </div>
 
         <div className="flex gap-x-5 my-6">
-          <button disabled={loading} type="button" onClick={() => goBack}>
+          <button disabled={loading} type="button" onClick={goBack}>
             Back
           </button>
           <button disabled={loading}>Save Changes</button>
