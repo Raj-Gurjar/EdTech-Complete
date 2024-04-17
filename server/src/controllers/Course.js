@@ -391,11 +391,6 @@ exports.getInstructorCourses = async (req, res) => {
 };
 
 exports.deleteCourse = async (req, res) => {
-    try {
-    } catch (error) {}
-};
-
-exports.deleteSection = async (req, res) => {
     console.log("Entering in delete section controller");
     try {
         //get data
@@ -426,8 +421,9 @@ exports.deleteSection = async (req, res) => {
 
         for (const sectionId of courseSections) {
             //delete subsection of the section
+            console.log("cp0", sectionId);
             const section = await Section_Model.findById(sectionId);
-
+            console.log("cp11", section);
             if (section) {
                 const subSections = section.subSections;
                 for (const subSectionId of subSections) {
@@ -437,22 +433,23 @@ exports.deleteSection = async (req, res) => {
 
             await Section_Model.findByIdAndDelete(sectionId);
         }
-        await Section_Model.findByIdAndDelete(sectionId);
-
+        // console.log("cp1");
+        console.log("cp2");
         //Delete the course
 
         await Course_Model.findByIdAndDelete(courseId);
-       
+
         //return
         return res.status(200).json({
             success: true,
-            message: "Section deleted Successfully.",
-            data: updatedCourse,
+            message: "Course deleted Successfully.",
+           
         });
     } catch (error) {
+        console.log("Error in deleting the course :", error);
         return res.status(500).json({
             success: false,
-            message: "Error in Deleting Section",
+            message: "Error in Deleting Course",
         });
     }
 };
