@@ -188,7 +188,6 @@ export const updateSection = async (data, token) => {
 };
 
 export const updateSubSection = async (data, token) => {
- 
   const toastId = toast.loading("Loading");
   let result = null;
 
@@ -280,11 +279,37 @@ export const fetchInstructorCourses = async (token) => {
       throw new Error("Could not fetch Instructor Courses");
     }
     toast.success("Course Instructors fetched successfully");
-    result = response?.data;
+    result = response?.data?.data;
+    // console.log("type of result", typeof result);
   } catch (error) {
     console.log("Course Instructor api error...", error);
     toast.error(error.response.message);
     result = error.response.data;
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
+export const deleteCourse = async (data, token) => {
+  // console.log("entering updateSubSec api call:", data);
+  const toastId = toast.loading("Loading");
+  let result = null;
+
+  console.log("delete course data : ", data);
+  try {
+    const response = await apiConnector("DELETE", DELETE_COURSE_API, data, {
+      Authorization: `Bearer ${token}`,
+    });
+    console.log("delete course api response..", response);
+
+    if (!response?.data?.success) {
+      throw new Error("Could not delete course");
+    }
+    toast.success("Course deleted Successfully");
+    result = response?.data?.data;
+  } catch (error) {
+    console.log("delete course api error...", error);
+    toast.error(error.response.message);
   }
   toast.dismiss(toastId);
   return result;

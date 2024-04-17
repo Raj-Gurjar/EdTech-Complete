@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { FaRupeeSign } from "react-icons/fa";
-import { showAllCategories } from "../../../../services/operations/category";
+import { showAllCategories } from "../../../../../services/operations/category";
 import CreateTags from "./CreateTags";
 import UploadThumbnail from "./UploadThumbnail";
 import RequirementField from "./RequirementField";
-import { setCourse, setStep } from "../../../../toolkit/slice/courseSlice";
+import { setCourse, setStep } from "../../../../../toolkit/slice/courseSlice";
 import {
   addCourseDetails,
   editCourseDetails,
-} from "../../../../services/operations/courseDetailsAPI";
+} from "../../../../../services/operations/courseDetailsAPI";
 import toast from "react-hot-toast";
-import { COURSE_STATUS } from "../../../../utils/constants";
+import { COURSE_STATUS } from "../../../../../utils/constants";
 
 export default function CourseInfoForm() {
   const {

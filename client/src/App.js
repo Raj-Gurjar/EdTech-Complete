@@ -23,8 +23,8 @@ import Settings from "./components/DashBoard/Settings";
 import MyCart from "./components/DashBoard/Student/MyCart";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MyPurchases from "./components/DashBoard/Student/MyPurchases";
-import CreateCourses from "./components/DashBoard/Instructor/CreateCourse";
-import ShowCourses from "./components/DashBoard/Instructor/ShowCourses";
+import CreateCourses from "./components/DashBoard/Instructor/Create Course/CreateCourse";
+import ShowCourses from "./components/DashBoard/Instructor/My Courses/ShowCourses";
 import ShowCategories from "./components/DashBoard/Admin/ShowCategories";
 import CreateCategory from "./components/DashBoard/Admin/CreateCategory";
 

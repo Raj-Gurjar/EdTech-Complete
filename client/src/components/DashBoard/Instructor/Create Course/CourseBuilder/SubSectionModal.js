@@ -5,9 +5,9 @@ import { toast } from "react-hot-toast";
 import {
   createSubSection,
   updateSubSection,
-} from "../../../../services/operations/courseDetailsAPI";
-import { setCourse } from "../../../../toolkit/slice/courseSlice";
-import Upload from "../Upload";
+} from "../../../../../services/operations/courseDetailsAPI";
+import { setCourse } from "../../../../../toolkit/slice/courseSlice";
+import Upload from "../../Upload";
 
 export default function SubSectionModal({
   modalData,

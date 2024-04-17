@@ -6,6 +6,8 @@ const {
     getAllCourse,
     getCourseById,
     editCourse,
+    getInstructorCourses,
+    deleteCourse,
 } = require("../controllers/Course");
 
 const {
@@ -19,6 +21,8 @@ const { auth, isInstructor, isStudent } = require("../middlewares/auth");
 //!Routes for creating , getting all and getting by id of instructor course
 router.post("/createCourse", auth, isInstructor, createCourse);
 router.post("/editCourse", auth, isInstructor, editCourse);
+router.get("/getInstructorCourses", auth, isInstructor, getInstructorCourses);
+router.get("/deleteCourse", auth, isInstructor, deleteCourse);
 
 //!Rating
 router.post("/createRating", auth, isStudent, createRatingNReview);

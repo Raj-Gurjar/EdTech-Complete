@@ -6,12 +6,12 @@ import {
   setCourse,
   setEditCourse,
   setStep,
-} from "../../../../toolkit/slice/courseSlice";
+} from "../../../../../toolkit/slice/courseSlice";
 import toast from "react-hot-toast";
 import {
   updateSection,
   createSection,
-} from "../../../../services/operations/courseDetailsAPI";
+} from "../../../../../services/operations/courseDetailsAPI";
 
 export default function CourseBuilder() {
   const {

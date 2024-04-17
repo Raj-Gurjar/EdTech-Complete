@@ -5,6 +5,9 @@ const CourseProgress_Model = require("../models/CourseProgress.model");
 
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 
+const SubSection_Model = require("../models/SubSection.model");
+
+const Section_Model = require("../models/Section.model");
 //! Create Course
 exports.createCourse = async (req, res) => {
     try {
@@ -372,7 +375,7 @@ exports.getInstructorCourses = async (req, res) => {
 
         //return
         return res.status(200).json({
-            success: false,
+            success: true,
             message: "Instructor's Courses fetched successfully",
             data: instructorCourses,
         });
@@ -383,6 +386,73 @@ exports.getInstructorCourses = async (req, res) => {
             success: false,
             message: "Failed to retrieve instructor courses",
             error: error.message,
+        });
+    }
+};
+
+exports.deleteCourse = async (req, res) => {
+    try {
+    } catch (error) {}
+};
+
+exports.deleteSection = async (req, res) => {
+    console.log("Entering in delete section controller");
+    try {
+        //get data
+        const { courseId } = req.body;
+        console.log("courseId: ", courseId);
+        // delete from db
+
+        const course = await Course_Model.findById(courseId);
+
+        if (!course) {
+            return res.status(404).json({
+                success: false,
+                message: "Course not found",
+            });
+        }
+
+        //unenroll students
+
+        const studentsEnrolled = course.studentsEnrolled;
+        for (const studentId of studentsEnrolled) {
+            await User_Model.findByIdAndUpdate(studentId, {
+                $pull: { courses: courseId },
+            });
+        }
+
+        //delete section and sub-sections
+        const courseSections = course.courseContent;
+
+        for (const sectionId of courseSections) {
+            //delete subsection of the section
+            const section = await Section_Model.findById(sectionId);
+
+            if (section) {
+                const subSections = section.subSections;
+                for (const subSectionId of subSections) {
+                    await SubSection_Model.findByIdAndDelete(subSectionId);
+                }
+            }
+
+            await Section_Model.findByIdAndDelete(sectionId);
+        }
+        await Section_Model.findByIdAndDelete(sectionId);
+
+        //Delete the course
+
+        await Course_Model.findByIdAndDelete(courseId);
+       
+        //return
+        return res.status(200).json({
+            success: true,
+            message: "Section deleted Successfully.",
+            data: updatedCourse,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error in Deleting Section",
         });
     }
 };

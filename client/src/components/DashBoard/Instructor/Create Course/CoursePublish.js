@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { resetCourseState, setStep } from "../../../toolkit/slice/courseSlice";
+import { resetCourseState, setStep } from "../../../../toolkit/slice/courseSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { COURSE_STATUS } from "../../../utils/constants";
+import { COURSE_STATUS } from "../../../../utils/constants";
 import { useNavigate } from "react-router-dom";
-import { editCourseDetails } from "../../../services/operations/courseDetailsAPI";
+import { editCourseDetails } from "../../../../services/operations/courseDetailsAPI";
 
 export default function CoursePublish() {
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ export default function CoursePublish() {
       (course?.status === COURSE_STATUS.DRAFT && getValues("public") === false)
     ) {
       //no updating in form then no need to make api call
-      console.log("inside if");
+   
       goToCourses();
       return;
     }
