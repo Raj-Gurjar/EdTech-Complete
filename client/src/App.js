@@ -27,6 +27,7 @@ import CreateCourses from "./components/DashBoard/Instructor/Create Course/Creat
 import ShowCourses from "./components/DashBoard/Instructor/My Courses/ShowCourses";
 import ShowCategories from "./components/DashBoard/Admin/ShowCategories";
 import CreateCategory from "./components/DashBoard/Admin/CreateCategory";
+import EditCourse from "./components/DashBoard/Instructor/My Courses/EditCourse";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
@@ -73,6 +74,7 @@ function App() {
               <>
                 <Route path="createCourse" element={<CreateCourses />} />
                 <Route path="myCourses-Instructor" element={<ShowCourses />} />
+                <Route path="edit-course/:courseId" element={<EditCourse />} />
               </>
             )}
 

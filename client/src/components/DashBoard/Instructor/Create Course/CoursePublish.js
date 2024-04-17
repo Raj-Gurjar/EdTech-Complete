@@ -28,7 +28,7 @@ export default function CoursePublish() {
   });
   const goToCourses = () => {
     dispatch(resetCourseState());
-    // navigate("/dashboard/myCourses-Instructor");
+    navigate("/dashboard/myCourses-Instructor");
   };
 
   const handleCoursePublish = async () => {

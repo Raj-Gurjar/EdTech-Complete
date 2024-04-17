@@ -314,3 +314,33 @@ export const deleteCourse = async (data, token) => {
   toast.dismiss(toastId);
   return result;
 };
+
+export const getFullDetailsOfCourse = async (data, token) => {
+  const toastId = toast.loading("Loading..");
+  let result = [];
+
+  try {
+    const response = await apiConnector(
+      "GET",
+      GET_FULL_COURSE_DETAILS_AUTHENTICATED,
+      null,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+    console.log("Full courses detail..", response);
+
+    if (!response?.data?.success) {
+      throw new Error("Could not fetch Full Course Details");
+    }
+    toast.success("Full Course fetched successfully");
+    result = response?.data?.data;
+    // console.log("type of result", typeof result);
+  } catch (error) {
+    console.log("Full Course api error...", error);
+    toast.error(error.response.message);
+    result = error.response.data;
+  }
+  toast.dismiss(toastId);
+  return result;
+};

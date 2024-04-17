@@ -2,13 +2,15 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteCourse, fetchInstructorCourses } from "../../../../services/operations/courseDetailsAPI";
+import {
+  deleteCourse,
+  fetchInstructorCourses,
+} from "../../../../services/operations/courseDetailsAPI";
 import { Table, Thead, Tr, Th, Tbody, Td } from "react-super-responsive-table";
 import { COURSE_STATUS } from "../../../../utils/constants";
 import Modal from "../../../Modal";
 import { setCourse } from "../../../../toolkit/slice/courseSlice";
-import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
-
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 export default function CoursesTable({ instCourses, setInstCourses }) {
   const dispatch = useDispatch();
@@ -83,7 +85,13 @@ export default function CoursesTable({ instCourses, setInstCourses }) {
                   <Td>2hr 30min</Td>
                   <Td>Price : Rs.{course?.price}</Td>
                   <Td className="">
-                    <button className="mr-5" disabled={loading} onClick={() => {}}>
+                    <button
+                      className="mr-5"
+                      disabled={loading}
+                      onClick={() => {
+                        navigate(`/dashboard/edit-course/${course._id}`);
+                      }}
+                    >
                       Edit
                     </button>
                     <button

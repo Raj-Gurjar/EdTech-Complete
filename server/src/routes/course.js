@@ -22,6 +22,7 @@ const { auth, isInstructor, isStudent } = require("../middlewares/auth");
 router.post("/createCourse", auth, isInstructor, createCourse);
 router.post("/editCourse", auth, isInstructor, editCourse);
 router.get("/getInstructorCourses", auth, isInstructor, getInstructorCourses);
+router.get("/getFullCourseDetails", auth, isInstructor, getCourseById);
 router.delete("/deleteCourse", auth, isInstructor, deleteCourse);
 
 //!Rating

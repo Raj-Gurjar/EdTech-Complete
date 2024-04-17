@@ -31,3 +31,7 @@ This is the complete Edtech plateform
 502 Bad Gateway: The server received an invalid response from the upstream server.
 503 Service Unavailable: The server is currently unable to handle the request due to temporary overload or maintenance.
 These status codes are crucial for understanding the outcome of HTTP requests and troubleshooting issues in web development and networking.
+
+
+## TODOs : 
+-> Add delete all options in sections courses subsection by adding controllers

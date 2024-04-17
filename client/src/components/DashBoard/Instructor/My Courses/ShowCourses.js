@@ -23,7 +23,7 @@ export default function ShowCourse() {
     fetchCourses();
   }, []);
 
-  console.log("instCourse: ", instCourses);
+  // console.log("instCourse: ", instCourses);
   return (
     <div>
       <h1>My Courses Inst</h1>
