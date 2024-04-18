@@ -28,6 +28,7 @@ export default function Navbar() {
                     <p className="text-yellow-900">{link.title}</p>
                   )}
                 </li>
+                
               </NavLink>
             ))}
           </ul>

@@ -32,9 +32,7 @@ export default function SideBar() {
         <li>
           <NavLink to="settings">Settings</NavLink>
         </li>
-        <li>
-          <NavLink to="showCategory">Show Categories</NavLink>
-        </li>
+      
         <li>
           {/* <NavLink to="/"> */}
           <button
