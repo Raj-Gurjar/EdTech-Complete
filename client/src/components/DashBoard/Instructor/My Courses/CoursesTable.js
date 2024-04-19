@@ -84,6 +84,7 @@ export default function CoursesTable({ instCourses, setInstCourses }) {
 
                   <Td>2hr 30min</Td>
                   <Td>Price : Rs.{course?.price}</Td>
+                  <Td>Category: {course?.category}</Td>
                   <Td className="">
                     <button
                       className="mr-5"

@@ -27,5 +27,4 @@ export const NavbarLinks = [
     title: "DashBoard",
     path: "/dashboard",
   },
-
 ];

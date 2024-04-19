@@ -395,7 +395,7 @@ exports.deleteCourse = async (req, res) => {
     try {
         //get data
         const { courseId } = req.body;
-        console.log("courseId: ", courseId);
+        console.log("courseId: ", req.body);
         // delete from db
 
         const course = await Course_Model.findById(courseId);
@@ -408,13 +408,29 @@ exports.deleteCourse = async (req, res) => {
         }
 
         //unenroll students
-
         const studentsEnrolled = course.studentsEnrolled;
         for (const studentId of studentsEnrolled) {
             await User_Model.findByIdAndUpdate(studentId, {
                 $pull: { courses: courseId },
             });
         }
+
+        //unenroll instructors
+        const instructorId = course.instructor;
+
+        await User_Model.findByIdAndUpdate(instructorId, {
+            $pull: { courses: courseId },
+        });
+
+        // delete course from categoryDB
+        const categoryId = course.category;
+        console.log("cp1");
+        await Category_Model.findByIdAndUpdate(categoryId, {
+            $pull: { courses: courseId },
+        });
+        console.log("Deleted from category");
+
+        //TODO: delete course from ratingAndReview schema
 
         //delete section and sub-sections
         const courseSections = course.courseContent;
@@ -443,7 +459,6 @@ exports.deleteCourse = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Course deleted Successfully.",
-           
         });
     } catch (error) {
         console.log("Error in deleting the course :", error);

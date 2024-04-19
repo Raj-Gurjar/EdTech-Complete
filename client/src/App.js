@@ -28,6 +28,7 @@ import ShowCourses from "./components/DashBoard/Instructor/My Courses/ShowCourse
 import CreateCategory from "./components/DashBoard/Admin/CreateCategory";
 import EditCourse from "./components/DashBoard/Instructor/My Courses/EditCourse";
 import AllCourses from "./pages/Courses/AllCourses";
+import SingleCategory from "./pages/Courses/SingleCategory";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
@@ -40,13 +41,19 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
 
-          {/* //!auth */}
+          {/* //!open routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
           <Route path="/verifyEmail" element={<VerifyEmail />} />
           <Route path="/resetPasswordRequest" element={<ResetRequest />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
+
+          <Route path="allCourses" element={<AllCourses />} />
+          <Route
+            path="allCourses/category/:categoryName"
+            element={<SingleCategory />}
+          />
 
           {/* //!Users */}
 
@@ -61,7 +68,6 @@ function App() {
             <Route path="myDashboard" element={<MyDashBoard />} />
             <Route path="myProfile" element={<MyProfile />} />
             <Route path="settings" element={<Settings />} />
-            <Route path="allCourses" element={<AllCourses />} />
 
             {user?.accountType === ACCOUNT_TYPE.STUDENT && (
               <>

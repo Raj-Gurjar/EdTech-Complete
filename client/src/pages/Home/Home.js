@@ -7,6 +7,7 @@ import "./Home.scss";
 import home_img_1 from "../../assets/images/home-img-1.jpg";
 //!-- icons
 import { FaLongArrowAltRight } from "react-icons/fa";
+import Footer from "../../components/Footer/Footer";
 
 export default function Home() {
   return (
@@ -88,6 +89,7 @@ export default function Home() {
         {/* //!--- Section 6  */}
 
       {/* //!--- Section Footer */}
+      <Footer/>
     </div>
   );
 }

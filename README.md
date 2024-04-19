@@ -32,6 +32,8 @@ This is the complete Edtech plateform
 503 Service Unavailable: The server is currently unable to handle the request due to temporary overload or maintenance.
 These status codes are crucial for understanding the outcome of HTTP requests and troubleshooting issues in web development and networking.
 
+## TODOs :
 
-## TODOs : 
 -> Add delete all options in sections courses subsection by adding controllers
+-> Delete Courses from categories also.
+-> Show category name in frontend in inst or all courses instead of category id
