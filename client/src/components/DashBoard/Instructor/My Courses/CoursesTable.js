@@ -9,7 +9,6 @@ import {
 import { Table, Thead, Tr, Th, Tbody, Td } from "react-super-responsive-table";
 import { COURSE_STATUS } from "../../../../utils/constants";
 import Modal from "../../../Modal";
-import { setCourse } from "../../../../toolkit/slice/courseSlice";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 export default function CoursesTable({ instCourses, setInstCourses }) {
@@ -84,7 +83,7 @@ export default function CoursesTable({ instCourses, setInstCourses }) {
 
                   <Td>2hr 30min</Td>
                   <Td>Price : Rs.{course?.price}</Td>
-                  <Td>Category: {course?.category}</Td>
+                  <Td>Category: {course?.category?.name}</Td>
                   <Td className="">
                     <button
                       className="mr-5"

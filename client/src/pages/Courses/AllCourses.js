@@ -41,7 +41,7 @@ export default function AllCourses() {
                 .toLowerCase()}`}
               key={index}
             >
-              <div key={index} className="bg-yellow-100 flex gap-10 m-5">
+              <div key={index} className="bg-yellow-100 flex gap-10 m-5 ">
                 <p className="text-blue-700">{category.name}</p>
                 <p>{category.description}</p>
               </div>

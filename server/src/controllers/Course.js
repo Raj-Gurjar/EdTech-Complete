@@ -371,7 +371,10 @@ exports.getInstructorCourses = async (req, res) => {
         //find all the courses belonging to instructor
         const instructorCourses = await Course_Model.find({
             instructor: instructorId,
-        }).sort({ createdAt: -1 });
+        })
+            .sort({ createdAt: -1 })
+            .populate("category")
+            .exec();
 
         //return
         return res.status(200).json({
