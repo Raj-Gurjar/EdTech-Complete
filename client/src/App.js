@@ -29,6 +29,7 @@ import CreateCategory from "./components/DashBoard/Admin/CreateCategory";
 import EditCourse from "./components/DashBoard/Instructor/My Courses/EditCourse";
 import AllCourses from "./pages/Courses/AllCourses";
 import SingleCategory from "./pages/Courses/SingleCategory";
+import CourseDetails from "./pages/Courses/CourseDetails";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
@@ -54,6 +55,8 @@ function App() {
             path="allCourses/category/:categoryName"
             element={<SingleCategory />}
           />
+
+          <Route path="/allCourses/:courseId" element={<CourseDetails />} />
 
           {/* //!Users */}
 

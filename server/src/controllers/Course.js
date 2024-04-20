@@ -174,9 +174,11 @@ exports.getAllCourse = async (req, res) => {
 
 //! Get Course by Id
 exports.getCourseById = async (req, res) => {
+    console.log("entering id controller");
     try {
         const { courseId } = req.body;
-
+          
+        console.log(courseId);
         const courseDetails = await Course_Model.findById(courseId)
             .populate({
                 path: "instructor",
@@ -185,7 +187,7 @@ exports.getCourseById = async (req, res) => {
                 },
             })
             .populate("category")
-            .populate("ratingAndReview")
+            .populate("ratingAndReviews")
             .populate({
                 path: "courseContent",
                 populate: {
@@ -206,9 +208,10 @@ exports.getCourseById = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Course Data fetched Successfully.",
-            courseDetails,
+            data: courseDetails,
         });
     } catch (error) {
+        console.log("Error in fetching course details", error);
         return res.status(500).json({
             success: false,
             message: "Error in fetching this course data.",

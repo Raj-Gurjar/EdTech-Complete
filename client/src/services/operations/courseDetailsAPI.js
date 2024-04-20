@@ -17,6 +17,7 @@ const {
   DELETE_SUBSECTION_API,
   DELETE_COURSE_API,
   GET_FULL_COURSE_DETAILS_AUTHENTICATED,
+  GET_COURSE_DETAILS,
   LECTURE_COMPLETION_API,
   CREATE_RATING_API,
 } = courseEndpoints;
@@ -340,6 +341,31 @@ export const getFullDetailsOfCourse = async (data, token) => {
     console.log("Full Course api error...", error);
     toast.error(error.response.message);
     result = error.response.data;
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
+export const getCourseDetails = async (courseId) => {
+  console.log("inside course by id");
+  const toastId = toast.loading("Loading");
+  let result = [];
+
+  try {
+    const response = await apiConnector("POST", GET_COURSE_DETAILS, {
+      courseId: courseId,
+    });
+    console.log("Course detail page..", response);
+
+    if (!response?.data?.success) {
+      throw new Error("Could not fetch this Course  Data");
+    }
+    // toast.success("Course Category details fetched");
+    result = response?.data;
+  } catch (error) {
+    console.log("course details page api error...", error);
+    toast.error(error.response.message);
+    result = error.response?.data;
   }
   toast.dismiss(toastId);
   return result;

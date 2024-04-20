@@ -102,11 +102,11 @@ export function login(email, password, navigate) {
       if (!response.data.success) {
         throw new Error("error res: ", response.data.message);
       }
-      console.log("Login data..", response.data.token);
+      console.log("Login data..", response?.data?.token);
       toast.success("Login Successful"); 
       navigate("/dashboard/myDashboard");
 
-      dispatch(setToken(response.data.token));
+      dispatch(setToken(response?.data?.token));
 
       const userImage = response.data?.user?.image
         ? response.data.user.image
@@ -117,8 +117,8 @@ export function login(email, password, navigate) {
       localStorage.setItem("token", JSON.stringify(response.data.token));
       localStorage.setItem("user", JSON.stringify(response.data.user));
     } catch (error) { 
-      console.log("Login api error ...", error.response.data);
-      toast.error("Login Failed", error.response.data);
+      console.log("Login api error ...", error?.response?.data);
+      toast.error("Login Failed", error?.response?.data);
     }
     dispatch(setLoading(false));
     toast.dismiss(toastId);

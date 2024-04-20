@@ -72,9 +72,8 @@ exports.categoryPageDetails = async (req, res) => {
 
     try {
         //get the data
-        console.log("Entering cat page controller");
+        // console.log("Entering cat page controller");
         const { categoryId } = req.body;
-        console.log("cp1");
         //get top selling courses
         const selectedCategory = await Category_Model.findById(categoryId)
             .populate({
@@ -86,7 +85,7 @@ exports.categoryPageDetails = async (req, res) => {
                 },
             })
             .exec();
-        console.log("selected course:", selectedCategory);
+        // console.log("selected course:", selectedCategory);
         //validate
         if (!selectedCategory) {
             return res.status(404).json({
@@ -103,14 +102,13 @@ exports.categoryPageDetails = async (req, res) => {
             });
         }
 
-        console.log("cp2");
 
         //get courses for different category if searched category not found
         const notSelectedCategories = await Category_Model.find({
             _id: { $ne: categoryId },
         });
 
-        console.log("not Selected Cat: ", notSelectedCategories);
+        // console.log("not Selected Cat: ", notSelectedCategories);
         let differentCategory = await Category_Model.findOne(
             notSelectedCategories[getRandomInt(notSelectedCategories.length)]
                 ._id

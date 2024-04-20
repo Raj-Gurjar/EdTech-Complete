@@ -12,7 +12,7 @@ export default function CourseCard({ course }) {
   }, [course]);
   return (
     <div>
-      <Link to={`/courses/${course._id}`}>
+      <Link to={`/allCourses/${course._id}`}>
         <div className="bg-[#6287d8] rounded p-2">
           <div>
             <img
