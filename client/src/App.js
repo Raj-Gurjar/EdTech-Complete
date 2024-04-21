@@ -30,6 +30,8 @@ import EditCourse from "./components/DashBoard/Instructor/My Courses/EditCourse"
 import AllCourses from "./pages/Courses/AllCourses";
 import SingleCategory from "./pages/Courses/SingleCategory";
 import CourseDetails from "./pages/Courses/CourseDetails";
+import ShowDetails from "./pages/Courses/ShowSectionDetails";
+import ShowSectionDetails from "./pages/Courses/ShowSectionDetails";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
@@ -57,6 +59,7 @@ function App() {
           />
 
           <Route path="/allCourses/:courseId" element={<CourseDetails />} />
+          <Route path="/sections/:sectionId" element={<ShowSectionDetails />} />
 
           {/* //!Users */}
 

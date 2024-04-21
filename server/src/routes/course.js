@@ -3,7 +3,7 @@ const router = express.Router();
 
 const {
     createCourse,
-    getAllCourse,
+    getAllCourses,
     getCourseById,
     editCourse,
     getInstructorCourses,
@@ -19,10 +19,11 @@ const {
 const { auth, isInstructor, isStudent } = require("../middlewares/auth");
 
 //!Routes for creating , getting all and getting by id of instructor course
+router.get("/getAllCourses", getAllCourses);
 router.post("/createCourse", auth, isInstructor, createCourse);
 router.post("/editCourse", auth, isInstructor, editCourse);
 router.get("/getInstructorCourses", auth, isInstructor, getInstructorCourses);
-router.get("/getCourse/:id",  getCourseById);
+router.post("/getCourse", getCourseById);
 router.delete("/deleteCourse", auth, isInstructor, deleteCourse);
 
 //!Rating

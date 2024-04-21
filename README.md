@@ -37,3 +37,5 @@ These status codes are crucial for understanding the outcome of HTTP requests an
 -> Add delete all options in sections courses subsection by adding controllers
 -> Delete Courses from categories also.
 -> Show category name in frontend in inst or all courses instead of category id
+-> Add filtering for the courses where courses are shown
+-> make nested routes for the links or urls properly like allCourse/courseId/sectionId/subSectionId ... like this

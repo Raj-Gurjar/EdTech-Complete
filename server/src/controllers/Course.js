@@ -12,12 +12,13 @@ const Section_Model = require("../models/Section.model");
 exports.createCourse = async (req, res) => {
     try {
         //*get the data
-        console.log("entering createCourse");
+        // console.log("entering createCourse");
         const {
             courseName,
             courseDescription,
             whatYouWillLearn,
             price,
+            language,
             category,
             // status,
             instructions,
@@ -35,6 +36,7 @@ exports.createCourse = async (req, res) => {
             !courseDescription ||
             !whatYouWillLearn ||
             !price ||
+            !language ||
             !category
             // !tag ||
             // !thumbnail
@@ -90,7 +92,8 @@ exports.createCourse = async (req, res) => {
             instructor: instructorDetails._id, //to give reference to instructor obj
             whatYouWillLearn,
             // tag:tag,
-            price,
+            price, 
+            language,
             category: categoryDetail._id,
             status: status,
             instructions: instructions,
@@ -139,7 +142,7 @@ exports.createCourse = async (req, res) => {
 };
 
 //! Get all Course
-exports.getAllCourse = async (req, res) => {
+exports.getAllCourses = async (req, res) => {
     try {
         const allCourse = await Course_Model.find(
             { status: "Published" },
@@ -174,11 +177,9 @@ exports.getAllCourse = async (req, res) => {
 
 //! Get Course by Id
 exports.getCourseById = async (req, res) => {
-    console.log("entering id controller");
     try {
-        const { courseId } = req.body;
-          
-        console.log(courseId);
+        const { courseId } = req.body.id;
+
         const courseDetails = await Course_Model.findById(courseId)
             .populate({
                 path: "instructor",
@@ -195,7 +196,7 @@ exports.getCourseById = async (req, res) => {
                 },
             })
             .exec();
-
+        // console.log("course details", courseDetails);
         //valid
         if (!courseDetails) {
             return res.status(400).json({
@@ -203,7 +204,7 @@ exports.getCourseById = async (req, res) => {
                 message: `Could not find the Course with ${courseId}`,
             });
         }
-        console.log("Course Details:", courseDetails);
+        // console.log("Course Details:", courseDetails);
         //return
         return res.status(200).json({
             success: true,

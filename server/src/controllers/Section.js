@@ -5,7 +5,11 @@ const SubSection_Model = require("../models/SubSection.model");
 exports.createSection = async (req, res) => {
     try {
         //get the data
-        const { sectionName, courseId } = req.body;
+        const {
+            sectionName,
+
+            courseId,
+        } = req.body;
 
         //data validation
         if (!sectionName || !courseId) {
@@ -54,7 +58,7 @@ exports.updateSection = async (req, res) => {
         //*get data
 
         const { sectionName, sectionId, courseId } = req.body;
-        
+
         console.log("sec update ", req.body);
 
         //section db update
@@ -140,6 +144,38 @@ exports.deleteSection = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error in Deleting Section",
+        });
+    }
+};
+
+exports.sectionById = async (req, res) => {
+    console.log("Section Details");
+    try {
+        const { sectionId } = req.body.id;
+
+        const sectionDetails = await Section_Model.findById(sectionId)
+            .populate("subSections")
+            .exec();
+        // console.log("course details", courseDetails);
+        //valid
+        if (!sectionDetails) {
+            return res.status(400).json({
+                success: false,
+                message: `Could not find the Section with ${sectionId}`,
+            });
+        }
+        // console.log("Course Details:", courseDetails);
+        //return
+        return res.status(200).json({
+            success: true,
+            message: "Section Data fetched Successfully.",
+            data: sectionDetails,
+        });
+    } catch (error) {
+        console.log("Error in fetching section details", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in fetching this section data.",
         });
     }
 };

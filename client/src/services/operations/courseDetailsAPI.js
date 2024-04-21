@@ -4,7 +4,7 @@ import { apiConnector } from "../apiConnector";
 import { courseEndpoints } from "../api";
 
 const {
-  GET_ALL_COURSE_API,
+  GET_ALL_COURSES_API,
   COURSE_DETAILS_API,
   EDIT_COURSE_API,
   CREATE_COURSE_API,
@@ -18,16 +18,17 @@ const {
   DELETE_COURSE_API,
   GET_FULL_COURSE_DETAILS_AUTHENTICATED,
   GET_COURSE_DETAILS,
+  GET_SECTION_DETAILS,
   LECTURE_COMPLETION_API,
   CREATE_RATING_API,
 } = courseEndpoints;
 
-export const getAllCourse = async () => {
+export const getAllCourses = async () => {
   const toastId = toast.loading("Loading");
   let result = [];
 
   try {
-    const response = await apiConnector("GET", GET_ALL_COURSE_API);
+    const response = await apiConnector("GET", GET_ALL_COURSES_API);
     if (!response?.data?.success) {
       throw new Error("Could not fetch Courses");
     }
@@ -353,7 +354,7 @@ export const getCourseDetails = async (courseId) => {
 
   try {
     const response = await apiConnector("POST", GET_COURSE_DETAILS, {
-      courseId: courseId,
+      id: courseId,
     });
     console.log("Course detail page..", response);
 
@@ -364,7 +365,32 @@ export const getCourseDetails = async (courseId) => {
     result = response?.data;
   } catch (error) {
     console.log("course details page api error...", error);
-    toast.error(error.response.message);
+    toast.error(error?.response?.data?.message);
+    result = error.response?.data;
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
+export const getSectionDetails = async (sectionId) => {
+  console.log("inside section by id");
+  const toastId = toast.loading("Loading");
+  let result = [];
+
+  try {
+    const response = await apiConnector("POST", GET_SECTION_DETAILS, {
+      id: sectionId,
+    });
+    console.log("Course detail page..", response);
+
+    if (!response?.data?.success) {
+      throw new Error("Could not fetch this section Data");
+    }
+    // toast.success("Course Category details fetched");
+    result = response?.data;
+  } catch (error) {
+    console.log("section details page api error...", error);
+    toast.error(error?.response?.data?.message);
     result = error.response?.data;
   }
   toast.dismiss(toastId);

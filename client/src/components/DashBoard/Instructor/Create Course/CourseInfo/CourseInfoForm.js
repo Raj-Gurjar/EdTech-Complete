@@ -46,6 +46,7 @@ export default function CourseInfoForm() {
       setValue("courseTitle", course.courseName);
       setValue("courseShortDescription", course.courseDescription);
       setValue("coursePrice", course.price);
+      setValue("courseLanguage", course.language);
       // setValue("courseTags", course.tag);
       setValue("courseBenefits", course.whatYouWillLearn);
       setValue("courseCategory", course.category);
@@ -62,6 +63,7 @@ export default function CourseInfoForm() {
       currentValues.courseTitle !== course.courseName ||
       currentValues.courseShortDescription !== course.courseDescription ||
       currentValues.coursePrice !== course.price ||
+      currentValues.courseLanguage !== course.language ||
       // currentValues.courseTags !== course.tag ||
       currentValues.courseBenefits !== course.whatYouWillLearn ||
       currentValues.courseCategory !== course.category._id ||
@@ -93,6 +95,9 @@ export default function CourseInfoForm() {
         }
         if (currentValues.coursePrice !== course.price) {
           formData.append("price", data.coursePrice);
+        }
+        if (currentValues.courseLanguage !== course.language) {
+          formData.append("language", data.courseLanguage);
         }
         // if ( currentValues.courseTags !== course.tag) {
         //   formData.append("tag", data.courseTags);
@@ -140,6 +145,7 @@ export default function CourseInfoForm() {
     formData.append("courseName", data.courseTitle);
     formData.append("courseDescription", data.courseShortDescription);
     formData.append("price", data.coursePrice);
+    formData.append("language", data.courseLanguage);
     formData.append("whatYouWillLearn", data.courseBenefits);
     formData.append("category", data.courseCategory);
     formData.append("instructions", JSON.stringify(data.courseRequirements));
@@ -228,6 +234,16 @@ export default function CourseInfoForm() {
           </select>
 
           {errors.courseCategory && <span>Course Category is Required </span>}
+        </div>
+        <div>
+          <label htmlFor="courseLanguage">Course Language</label>
+          <input
+            className="w-full"
+            id="courseLanguage"
+            placeholder="Enter Course Language"
+            {...register("courseLanguage", { required: true })}
+          />
+          {errors.courseLanguage && <span>Course Language is Required </span>}
         </div>
         <label htmlFor="courseTags">Course Tag</label>
         {/* //TODO: Create Tags Component vid 56 min mfe9 */}

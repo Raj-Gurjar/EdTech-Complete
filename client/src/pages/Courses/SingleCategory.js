@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
 import CourseSlider from "../../components/Course-Catalog/CourseSlider";
 import {
@@ -17,6 +17,7 @@ export default function SingleCategory() {
 
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(false);
+
   const getCategoriesId = async () => {
     setLoading(true);
     const result = await showAllCategories();
@@ -58,7 +59,8 @@ export default function SingleCategory() {
     <div>
       <div className="bg-blue-300 my-5">
         <p>
-          Route data : Home / AllCourses /{" "}
+          Route data :<Link to="/">Home </Link>/
+          <Link to="/allCourses">AllCourses</Link>/
           {categoryPageData?.selectedCategory?.name}{" "}
         </p>
         <p>Category Name : {categoryPageData?.selectedCategory?.name}</p>

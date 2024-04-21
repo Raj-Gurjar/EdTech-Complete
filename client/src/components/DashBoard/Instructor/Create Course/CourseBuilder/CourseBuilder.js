@@ -118,6 +118,30 @@ export default function CourseBuilder() {
           {errors.sectionName && <span>section name is required</span>}
         </div>
 
+        <div>
+          <label htmlFor="shortDescription">Section's Brief Description</label>
+          <input
+            type="text"
+            id="shortDescription"
+            placeholder="Enter section's brief description"
+            {...register("shortDescription", { required: true })}
+            className="w-full"
+          />
+          {errors.shortDescription && (
+            <span>section's brief description is required</span>
+          )}
+        </div>
+        <div>
+          <label htmlFor="longDescription">Section's details Description</label>
+          <textarea
+            type="text"
+            id="longDescription"
+            placeholder="Enter section's detail description"
+            {...register("longDescription")}
+            className="w-full"
+          />
+        </div>
+
         <div className="my-5">
           <button type="submit" className="bg-blue-500">
             {!editSectionName ? "Create Section" : "Edit Section Name"}
