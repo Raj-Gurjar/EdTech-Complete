@@ -33,6 +33,8 @@ export default function ShowSectionDetails() {
         <p>Section name: {sectionData?.sectionName}</p>
         <p>Short desc: {sectionData?.shortDescription}</p>
         <p>long desc: {sectionData?.longDescription}</p>
+        <p>created at: {sectionData?.createdAt}</p>
+        <p>last updated : {sectionData?.updatedAt}</p>
       </div>
 
       <div className="bg-pink-300">

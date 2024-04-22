@@ -354,7 +354,7 @@ export const getCourseDetails = async (courseId) => {
 
   try {
     const response = await apiConnector("POST", GET_COURSE_DETAILS, {
-      id: courseId,
+      courseId,
     });
     console.log("Course detail page..", response);
 

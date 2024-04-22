@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { getCourseDetails } from "../../services/operations/courseDetailsAPI";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { buyCourse } from "../../services/operations/paymentApi";
+
 
 export default function CourseDetails() {
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const courseId = useParams();
+  const {courseId} = useParams();
+  const { user } = useSelector((state) => state.profile);
+  const { token } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+
   const showCourse = async () => {
     setLoading(true);
     const course = await getCourseDetails(courseId);
@@ -24,6 +33,13 @@ export default function CourseDetails() {
   }, []);
 
   console.log("courseData :", courseData);
+
+  const handleBuyCourse = () => {
+    if (token) {
+      buyCourse(token, [courseId], user, navigate, dispatch);
+      return;
+    }
+  };
 
   return (
     <div>
@@ -67,7 +83,7 @@ export default function CourseDetails() {
           />
           <p>Price: {courseData?.price}</p>
           <div className="flex gap-x-4 my-5">
-            <button>Buy Now</button>
+            <button onClick={() => handleBuyCourse()}>Buy Now</button>
             <button>Add to Cart</button>
           </div>
         </div>

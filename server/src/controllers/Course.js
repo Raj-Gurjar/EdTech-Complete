@@ -92,7 +92,7 @@ exports.createCourse = async (req, res) => {
             instructor: instructorDetails._id, //to give reference to instructor obj
             whatYouWillLearn,
             // tag:tag,
-            price, 
+            price,
             language,
             category: categoryDetail._id,
             status: status,
@@ -178,7 +178,7 @@ exports.getAllCourses = async (req, res) => {
 //! Get Course by Id
 exports.getCourseById = async (req, res) => {
     try {
-        const { courseId } = req.body.id;
+        const { courseId } = req.body;
 
         const courseDetails = await Course_Model.findById(courseId)
             .populate({

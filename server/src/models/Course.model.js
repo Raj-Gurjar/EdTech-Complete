@@ -46,7 +46,7 @@ const Course_Schema = new mongoose.Schema(
             type: String,
         },
         tag: {
-            type: String,
+            type: [String],
         },
         category: {
             type: mongoose.Schema.Types.ObjectId,
