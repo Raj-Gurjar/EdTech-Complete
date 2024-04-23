@@ -50,12 +50,14 @@ export function signUp(
   email,
   password,
   confirmPassword,
-  otp,
-  navigate  
+  // otp,
+  navigate
 ) {
   return async (dispatch) => {
     const toastId = toast.loading("Loading...");
     dispatch(setLoading(true));
+
+    console.log("inside signup");
 
     try {
       const response = await apiConnector("POST", SIGN_UP_API, {
@@ -65,7 +67,7 @@ export function signUp(
         email,
         password,
         confirmPassword,
-        otp,
+        // otp,
       });
       console.log("Sign up api response...", response);
 
@@ -76,8 +78,8 @@ export function signUp(
       toast.success("SignUp Successful");
       navigate("/verifyEmail");
     } catch (error) {
-      console.log("SignUp api error...", error.response.data);
-      toast.error("SignUp failed!",error.response.data);
+      console.log("SignUp api error...", error.response);
+      toast.error("SignUp failed!", error.response);
       navigate("/signup");
     }
     dispatch(setLoading(false));
@@ -103,7 +105,7 @@ export function login(email, password, navigate) {
         throw new Error("error res: ", response.data.message);
       }
       console.log("Login data..", response?.data?.token);
-      toast.success("Login Successful"); 
+      toast.success("Login Successful");
       navigate("/dashboard/myDashboard");
 
       dispatch(setToken(response?.data?.token));
@@ -113,11 +115,11 @@ export function login(email, password, navigate) {
         : `https://api.dicebear.com/7.x/initials/svg?seed=${response.data.user.firstName}${response.data.user.lastName}`;
 
       dispatch(setUser({ ...response.data.user, image: userImage }));
-      console.log('set user..', response.data.user);
+      console.log("set user..", response.data.user);
       localStorage.setItem("token", JSON.stringify(response.data.token));
       localStorage.setItem("user", JSON.stringify(response.data.user));
-    } catch (error) { 
-      console.log("Login api error ...", error?.response?.data);
+    } catch (error) {
+      console.log("Login api error ...", error);
       toast.error("Login Failed", error?.response?.data);
     }
     dispatch(setLoading(false));
@@ -180,7 +182,6 @@ export function resetPassword(password, confPassword, token) {
         throw new Error(response.data.message);
       }
       toast.success("Reset Password Successfully");
-     
     } catch (error) {
       console.log("Reset password  error");
       toast.error("Failed to reset your password");
@@ -188,5 +189,3 @@ export function resetPassword(password, confPassword, token) {
     dispatch(setLoading(false));
   };
 }
-
-

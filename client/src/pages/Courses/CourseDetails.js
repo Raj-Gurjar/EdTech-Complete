@@ -4,17 +4,15 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { buyCourse } from "../../services/operations/paymentApi";
 
-
 export default function CourseDetails() {
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const {courseId} = useParams();
+  const { courseId } = useParams();
   const { user } = useSelector((state) => state.profile);
   const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
 
   const showCourse = async () => {
     setLoading(true);
@@ -32,7 +30,7 @@ export default function CourseDetails() {
     }
   }, []);
 
-  console.log("courseData :", courseData);
+  // console.log("courseData :", courseData);
 
   const handleBuyCourse = () => {
     if (token) {
@@ -98,11 +96,13 @@ export default function CourseDetails() {
           </div>
 
           {courseData?.courseContent.map((section, index) => (
-            <Link to={`/sections/${section?._id}`}>
-              <div key={index} className="bg-slate-300 my-2">
-                <p>Section name : {section?.sectionName}</p>
-              </div>
-            </Link>
+            <div key={index}>
+              <Link to={`/sections/${section?._id}`}>
+                <div className="bg-slate-300 my-2">
+                  <p>Section name : {section?.sectionName}</p>
+                </div>
+              </Link>
+            </div>
           ))}
         </div>
       </div>

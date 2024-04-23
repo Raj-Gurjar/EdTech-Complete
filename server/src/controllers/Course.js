@@ -216,6 +216,7 @@ exports.getCourseById = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error in fetching this course data.",
+            error: error.message,
         });
     }
 };

@@ -5,13 +5,16 @@ const Course_Model = require("../models/Course.model");
 const mailSender = require("../utils/mailSender");
 const { courseEnrollmentEmail } = require("../mail/courseEnrollmentEmail");
 const { default: mongoose } = require("mongoose");
+const crypto = require("crypto");
+const { paymentSuccessEmail } = require("../mail/paymentSuccessEmail");
 
 exports.capturePayment = async (req, res) => {
     //fetch all courses id and user id
+    console.log("inside cap pay cnt");
     const { courses } = req.body;
 
     const userId = req.user.id;
-    console.log("userId :", userId);
+    // console.log("userId :", userId);
 
     if (courses.length === 0) {
         return res.status(400).json({
@@ -25,7 +28,7 @@ exports.capturePayment = async (req, res) => {
         let course;
         try {
             //check course is valid
-           
+
             course = await Course_Model.findById(course_id);
 
             if (!course) {
@@ -40,7 +43,7 @@ exports.capturePayment = async (req, res) => {
             const uId = new mongoose.Types.ObjectId(userId);
 
             if (course.studentsEnrolled.includes(uId)) {
-                return res.status().json({
+                return res.status(400).json({
                     success: false,
                     message: "User is already Enrolled in this course",
                 });
@@ -48,7 +51,7 @@ exports.capturePayment = async (req, res) => {
 
             totalAmount += course.price;
         } catch (error) {
-            console.log("Error in capture payment", error);
+            console.log("Error in capture payment..", error);
             return res.status(500).json({
                 success: false,
                 message: "Error in capture payment",
@@ -157,16 +160,10 @@ const enrollStudents = async (courses, userId, res) => {
                 { new: true }
             );
 
-            // if (!enrollStudent) {
-            //     return res.status(404).json({
-            //         success: false,
-            //         message: "Student not found",
-            //     });
-            // }
 
             //send mail to student
             const emailResponse = await mailSender(
-                enrollStudents.email,
+                enrolledStudent.email,
                 `Successfully Enrolled into the course ${enrolledCourse.courseName}`,
                 courseEnrollmentEmail(
                     enrolledCourse.courseName,
@@ -199,11 +196,13 @@ exports.sendPaymentMail = async (req, res) => {
     try {
         //find student
 
-        const enrolledStudent = await User.findById(userId);
+        console.log("Inside mail sender");
+
+        const enrolledStudent = await User_Model.findById(userId);
 
         //send mail
 
-        await mailSender(
+        const emailResponse = await mailSender(
             enrolledStudent.email,
             `Payment Successful`,
             paymentSuccessEmail(
@@ -213,6 +212,8 @@ exports.sendPaymentMail = async (req, res) => {
                 paymentId
             )
         );
+
+        console.log("Mail response", emailResponse);
     } catch (error) {
         console.log("Error in sending mail", error);
         return res.status(500).json({

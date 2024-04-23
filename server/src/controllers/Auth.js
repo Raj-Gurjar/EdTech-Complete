@@ -75,6 +75,7 @@ exports.sendOTP = async (req, res) => {
 exports.signUp = async (req, res) => {
     try {
         //* Extract data
+        console.log("in c");
         const {
             firstName,
             lastName,

@@ -11,24 +11,6 @@ const {
   SEND_PAYMENT_SUCCESS_EMAIL_API,
 } = studentPaymentEndpoints;
 
-function loadScript(src) {
-  return new Promise((resolve) => {
-    const script = document.createElement("script");
-
-    script.src = src;
-
-    script.onload = () => {
-      resolve(true);
-    };
-
-    script.onerror = () => {
-      resolve(false);
-    };
-
-    document.body.appendChild(script);
-  });
-}
-
 export async function buyCourse(
   token,
   courses,
@@ -39,18 +21,8 @@ export async function buyCourse(
   const toastId = toast.loading("Loading...");
 
   try {
-    //load script
-    const res = await loadScript(
-      "https://checkout.razorpay.com/v1/checkout.js"
-    );
-
-    if (!res) {
-      toast.error("RazorPay SDK failed to load.");
-      return;
-    }
-
     //initiate the order
-
+    console.log("inside buy course");
     const orderResponse = await apiConnector(
       "POST",
       COURSE_PAYMENT_API,
@@ -60,7 +32,10 @@ export async function buyCourse(
       { Authorization: `Bearer ${token}` }
     );
 
-    if (!orderResponse.data.success) {
+    console.log("OrderResponse :", orderResponse);
+    
+    if (!orderResponse?.data?.success) {
+      toast.error(orderResponse.data.message);
       throw new Error(orderResponse.data.messages);
     }
 
@@ -92,15 +67,6 @@ export async function buyCourse(
       theme: {
         color: "#3399cc",
       },
-
-    //   checkout: {
-    //     method: {
-    //       netbanking: 1,
-    //       card: 1,
-    //       upi: 1,
-    //       wallet: 1,
-    //     },
-    //   },
     };
 
     const paymentObject = new window.Razorpay(options);
@@ -113,7 +79,7 @@ export async function buyCourse(
     });
   } catch (error) {
     console.log("PAYMENT error Api...", error);
-    toast.error("Could not make the Payment");
+    toast.error("Could not make the Payment", error.message);
   }
   toast.dismiss(toastId);
 }
@@ -155,7 +121,7 @@ async function verifyPayment(bodyData, token, navigate, dispatch) {
     dispatch(resetCart());
   } catch (error) {
     console.log("Payment Verify error..", error);
-    toast.error("Could not verify Payment");
+    toast.error("Could not verify Payment", error);
   }
   toast.dismiss(toastId);
   dispatch(setPaymentLoading(false));

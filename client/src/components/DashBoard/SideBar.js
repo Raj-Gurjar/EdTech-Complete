@@ -32,7 +32,7 @@ export default function SideBar() {
         <li>
           <NavLink to="settings">Settings</NavLink>
         </li>
-      
+
         <li>
           {/* <NavLink to="/"> */}
           <button
@@ -58,7 +58,7 @@ export default function SideBar() {
           <NavLink to="myCart">Cart</NavLink>
         </li>
         <li>
-          <NavLink to="myCourses">My Courses</NavLink>
+          <NavLink to="enrolledCourses">Enrolled Courses</NavLink>
         </li>
         <li>
           <NavLink to="myPurchases">My Purchases</NavLink>

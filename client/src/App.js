@@ -18,7 +18,7 @@ import ResetPassword from "./pages/Auth/ResetPassword/ResetPassword";
 import DashBoard from "./pages/Users/DashBoard";
 import MyDashBoard from "./components/DashBoard/MyDashBoard";
 import MyProfile from "./components/DashBoard/MyProfile";
-import MyCourses from "./components/DashBoard/Student/MyCourses";
+import EnrolledCourses from "./components/DashBoard/Student/EnrolledCourses";
 import Settings from "./components/DashBoard/Settings";
 import MyCart from "./components/DashBoard/Student/MyCart";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -77,7 +77,7 @@ function App() {
 
             {user?.accountType === ACCOUNT_TYPE.STUDENT && (
               <>
-                <Route path="myCourses-Student" element={<MyCourses />} />
+                <Route path="enrolledCourses" element={<EnrolledCourses />} />
                 <Route path="myCart" element={<MyCart />} />
                 <Route path="myPurchases" element={<MyPurchases />} />
               </>

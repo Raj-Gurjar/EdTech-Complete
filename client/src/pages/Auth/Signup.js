@@ -15,7 +15,7 @@ export default function SignUp() {
     lastName: "",
     email: "",
     password: "",
-    confPassword: "",
+    confirmPassword: "",
   });
 
   function changeHandler(event) {
@@ -29,16 +29,9 @@ export default function SignUp() {
     });
   }
 
-  const {
-    firstName,
-    lastName,
-    email,
-    password,
-    confirmPassword,
-    otp,
-  } = formData;
+  const { firstName, lastName, email, password, confirmPassword } = formData;
 
-  console.log("Form Data..",formData);
+  console.log("Form Data..", formData);
 
   async function signUpHandler(event) {
     event.preventDefault();
@@ -50,7 +43,7 @@ export default function SignUp() {
         email,
         password,
         confirmPassword,
-        otp,
+        // otp,
         navigate
       )
     );
@@ -67,9 +60,26 @@ export default function SignUp() {
         <div className="my-5">
           Sign Up as {accountType}
           <div className="flex gap-x-5">
-            <button onClick={()=>setAccountType("Student")} className={`${accountType === "Student" ? "bg-blue-400" : ""} `}>Student</button>
-            <button onClick={()=>setAccountType("Instructor")} className={`${accountType === "Instructor" ? "bg-blue-400" : ""} `}>Instructor</button>
-            <button onClick={()=>setAccountType("Admin")} className={`${accountType === "Admin" ? "bg-blue-400" : ""} `}>Admin</button>
+            <button
+              onClick={() => setAccountType("Student")}
+              className={`${accountType === "Student" ? "bg-blue-400" : ""} `}
+            >
+              Student
+            </button>
+            <button
+              onClick={() => setAccountType("Instructor")}
+              className={`${
+                accountType === "Instructor" ? "bg-blue-400" : ""
+              } `}
+            >
+              Instructor
+            </button>
+            <button
+              onClick={() => setAccountType("Admin")}
+              className={`${accountType === "Admin" ? "bg-blue-400" : ""} `}
+            >
+              Admin
+            </button>
           </div>
         </div>
 
@@ -133,7 +143,7 @@ export default function SignUp() {
         <div>
           <h5>Already Signed Up?</h5>
           <Link to="/login">
-            <btn className="btn">Login</btn>
+            <span className="btn">Login</span>
           </Link>
         </div>
       </form>

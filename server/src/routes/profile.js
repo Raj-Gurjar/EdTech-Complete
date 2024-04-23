@@ -3,10 +3,10 @@ const router = express.Router();
 
 const { getEnrolledCourses } = require("../controllers/Profile");
 
-const { auth } = require("../middlewares/auth");
+const { auth, isStudent } = require("../middlewares/auth");
 
 //!Routes for get enrolled Courses
 
-router.get("/getEnrolledCourses", auth, getEnrolledCourses);
+router.get("/getEnrolledCourses", auth, isStudent, getEnrolledCourses);
 
 module.exports = router;
