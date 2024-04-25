@@ -50,8 +50,8 @@ exports.paymentSuccessEmail = (name, amount, orderId, paymentId) => {
             </div>
             <div class="content">
                 <p class="message">Dear ${name},</p>
-                <p class="message">Thank you for your payment of $${amount.toFixed(2)}.</p>
-                <p class="message">Your order ID is <span class="order-info">${orderId}</span> and payment ID is <span class="order-info">${paymentId}</span>.</p>
+                <p class="message">Thank you for your payment of Rs.${amount.toFixed(2)}.</p>
+                <p class="message">Your order ID is <span class="order-info">${orderId}</span> <br>and payment ID is <span class="order-info">${paymentId}</span>.</p>
                 <p class="message">We appreciate your business and hope you enjoy your purchase.</p>
             </div>
             <div class="footer">

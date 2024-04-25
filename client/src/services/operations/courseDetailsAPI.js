@@ -67,7 +67,7 @@ export const fetchCourseDetails = async (courseId) => {
 };
 
 export const addCourseDetails = async (data, token) => {
-  console.log("add course api entered data: ", data.getAll("category"));
+  // console.log("add course api entered data: ", data.getAll("category"));
   const toastId = toast.loading("Loading");
   let result = null;
 
@@ -76,14 +76,14 @@ export const addCourseDetails = async (data, token) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     });
-    console.log("add course detail..", response);
+    // console.log("add course detail..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not add details in Course");
     }
     toast.success("Course Details added Successfully");
     result = response?.data?.newCourse;
-    console.log("result in addCourse", result);
+    // console.log("result in addCourse", result);
   } catch (error) {
     console.log("add course api error...", error);
     toast.error(error.response.data.message);
@@ -330,7 +330,7 @@ export const getFullDetailsOfCourse = async (data, token) => {
         Authorization: `Bearer ${token}`,
       }
     );
-    console.log("Full courses detail..", response);
+    // console.log("Full courses detail..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not fetch Full Course Details");
@@ -348,7 +348,7 @@ export const getFullDetailsOfCourse = async (data, token) => {
 };
 
 export const getCourseDetails = async (courseId) => {
-  console.log("inside course by id");
+  // console.log("inside course by id");
   const toastId = toast.loading("Loading");
   let result = [];
 
@@ -356,7 +356,7 @@ export const getCourseDetails = async (courseId) => {
     const response = await apiConnector("POST", GET_COURSE_DETAILS, {
       courseId,
     });
-    console.log("Course detail page..", response);
+    // console.log("Course detail page..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not fetch this Course  Data");
@@ -373,7 +373,7 @@ export const getCourseDetails = async (courseId) => {
 };
 
 export const getSectionDetails = async (sectionId) => {
-  console.log("inside section by id");
+  // console.log("inside section by id");
   const toastId = toast.loading("Loading");
   let result = [];
 
@@ -381,7 +381,7 @@ export const getSectionDetails = async (sectionId) => {
     const response = await apiConnector("POST", GET_SECTION_DETAILS, {
       id: sectionId,
     });
-    console.log("Course detail page..", response);
+    // console.log("Course detail page..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not fetch this section Data");

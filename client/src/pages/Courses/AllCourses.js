@@ -14,7 +14,7 @@ export default function AllCourses() {
   const getCategories = async () => {
     setLoading(true);
     const categories = await showAllCategories();
-    console.log("cat:", categories);
+    // console.log("cat:", categories);
     if (categories.length > 0) {
       setCourseCategories(categories);
     }
@@ -24,7 +24,7 @@ export default function AllCourses() {
   const showAllCourses = async () => {
     setLoading(true);
     const courses = await getAllCourses();
-    console.log("courses:", courses);
+    // console.log("courses:", courses);
     if (courses.length > 0) {
       setCoursesData(courses);
     }

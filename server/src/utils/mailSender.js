@@ -1,6 +1,6 @@
 const nodeMailer = require("nodemailer");
 
-const mailSender = async (email, title, body) => {
+module.exports = async function mailSender(email, title, body) {
     try {
         let Transporter = nodeMailer.createTransport({
             host: process.env.MAIL_HOST,
@@ -20,6 +20,6 @@ const mailSender = async (email, title, body) => {
         console.log("Mail Info", info);
         return info;
     } catch (error) {
-        console.log("Error in mailSender Util",error.message);
+        console.log("Error in mailSender Util", error.message);
     }
 };

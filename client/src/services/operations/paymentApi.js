@@ -11,6 +11,24 @@ const {
   SEND_PAYMENT_SUCCESS_EMAIL_API,
 } = studentPaymentEndpoints;
 
+function loadScript(src) {
+  return new Promise((resolve) => {
+    const script = document.createElement("script");
+
+    script.src = src;
+
+    script.onload = () => {
+      resolve(true);
+    };
+
+    script.onerror = () => {
+      resolve(false);
+    };
+
+    document.body.appendChild(script);
+  });
+}
+
 export async function buyCourse(
   token,
   courses,
@@ -21,8 +39,18 @@ export async function buyCourse(
   const toastId = toast.loading("Loading...");
 
   try {
+    //load script
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
+
+    if (!res) {
+      toast.error("RazorPay SDK failed to load.");
+      return;
+    }
+
     //initiate the order
-    console.log("inside buy course");
+
     const orderResponse = await apiConnector(
       "POST",
       COURSE_PAYMENT_API,
@@ -32,10 +60,7 @@ export async function buyCourse(
       { Authorization: `Bearer ${token}` }
     );
 
-    console.log("OrderResponse :", orderResponse);
-    
-    if (!orderResponse?.data?.success) {
-      toast.error(orderResponse.data.message);
+    if (!orderResponse.data.success) {
       throw new Error(orderResponse.data.messages);
     }
 
@@ -79,7 +104,7 @@ export async function buyCourse(
     });
   } catch (error) {
     console.log("PAYMENT error Api...", error);
-    toast.error("Could not make the Payment", error.message);
+    toast.error(error.data.message);
   }
   toast.dismiss(toastId);
 }
@@ -117,11 +142,11 @@ async function verifyPayment(bodyData, token, navigate, dispatch) {
     }
 
     toast.success("Payment Successful, you are added to the course");
-    navigate("/dashboard/enrolled-courses");
+    navigate("/dashboard/enrolledCourses");
     dispatch(resetCart());
   } catch (error) {
     console.log("Payment Verify error..", error);
-    toast.error("Could not verify Payment", error);
+    toast.error("Could not verify Payment");
   }
   toast.dismiss(toastId);
   dispatch(setPaymentLoading(false));
