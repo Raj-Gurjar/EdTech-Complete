@@ -50,7 +50,7 @@ export async function buyCourse(
     }
 
     //initiate the order
-
+    console.log("be");
     const orderResponse = await apiConnector(
       "POST",
       COURSE_PAYMENT_API,
@@ -59,8 +59,10 @@ export async function buyCourse(
       },
       { Authorization: `Bearer ${token}` }
     );
+    console.log("OrderResponse :", orderResponse);
 
     if (!orderResponse.data.success) {
+      console.log("ds");
       throw new Error(orderResponse.data.messages);
     }
 
@@ -104,7 +106,7 @@ export async function buyCourse(
     });
   } catch (error) {
     console.log("PAYMENT error Api...", error);
-    toast.error(error.data.message);
+    toast.error(error?.response?.data?.message);
   }
   toast.dismiss(toastId);
 }

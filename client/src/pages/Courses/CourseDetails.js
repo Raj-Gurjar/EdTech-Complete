@@ -3,16 +3,29 @@ import { getCourseDetails } from "../../services/operations/courseDetailsAPI";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { buyCourse } from "../../services/operations/paymentApi";
+import Modal from "../../components/Modal";
+import avgRating from "../../utils/avgRating";
+import RatingStars from "../../components/RatingStars";
+import { formateDate } from "../../utils/formatDate";
 
 export default function CourseDetails() {
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [avgRatingCount, setAvgRatingCount] = useState(0);
+  const [modal, setModal] = useState(null);
 
+  const { paymentLoading } = useSelector((state) => state.course);
   const { courseId } = useParams();
   const { user } = useSelector((state) => state.profile);
   const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  console.log("user", user);
+  useEffect(() => {
+    const count = avgRating(courseData?.ratingAndReviews);
+    setAvgRatingCount(count);
+  }, [courseData]);
 
   const showCourse = async () => {
     setLoading(true);
@@ -21,6 +34,7 @@ export default function CourseDetails() {
     if (course) {
       setCourseData(course?.data);
     }
+
     setLoading(false);
   };
 
@@ -37,6 +51,27 @@ export default function CourseDetails() {
       buyCourse(token, [courseId], user, navigate, dispatch);
       return;
     }
+    setModal({
+      text1: "You are not Logged in",
+      text2: "Please Login to buy a course",
+      btn1Text: "Login",
+      btn2Text: "Cancel",
+      btn1Handler: () => navigate("/login"),
+      btn2Handler: () => setModal(null),
+    });
+  };
+  const handleAddToCart = () => {
+    if (token) {
+      console.log("dd");
+    }
+    setModal({
+      text1: "You are not Logged in",
+      text2: "Please Login to add the course in your cart",
+      btn1Text: "Login",
+      btn2Text: "Cancel",
+      btn1Handler: () => navigate("/login"),
+      btn2Handler: () => setModal(null),
+    });
   };
 
   return (
@@ -56,11 +91,15 @@ export default function CourseDetails() {
         </p>
 
         <p>Rating No: {courseData?.ratingAndReviews?.length}</p>
-        <p>Rating Stars: </p>
-        <p>Avg Rating : </p>
+        <p>
+          Rating Stars:{" "}
+          <RatingStars Review_Count={avgRatingCount} Star_Size={24} />{" "}
+        </p>
+        <p>Avg Rating : {avgRatingCount}</p>
         <p>Student Enrolled : {courseData?.studentsEnrolled?.length} </p>
         <p>Course Desc : {courseData?.courseDescription}</p>
-        <p>Created at :{courseData?.createdAt} </p>
+        <p>Created at : {formateDate(courseData?.createdAt)} </p>
+        <p>Last Updated at : {formateDate(courseData?.updatedAt)} </p>
         <p>Language: {courseData?.language}</p>
       </div>
 
@@ -81,8 +120,13 @@ export default function CourseDetails() {
           />
           <p>Price: {courseData?.price}</p>
           <div className="flex gap-x-4 my-5">
-            <button onClick={() => handleBuyCourse()}>Buy Now</button>
-            <button>Add to Cart</button>
+            {user && courseData?.studentsEnrolled?.includes(user?._id) ? (
+              <button onClick={() => navigate("/dashboard/enrolledCourses")}> Go To Course </button>
+            ) : (
+              <button onClick={() => handleBuyCourse()}> Buy Now </button>
+            )}
+
+            <button onClick={() => handleAddToCart()}>Add to Cart</button>
           </div>
         </div>
       </div>
@@ -106,6 +150,8 @@ export default function CourseDetails() {
           ))}
         </div>
       </div>
+
+      {modal && <Modal modalData={modal} />}
     </div>
   );
 }

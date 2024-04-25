@@ -160,7 +160,6 @@ const enrollStudents = async (courses, userId, res) => {
                 { new: true }
             );
 
-
             //send mail to student
             const emailResponse = await mailSender(
                 enrolledStudent.email,
