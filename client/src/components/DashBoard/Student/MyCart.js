@@ -13,8 +13,9 @@ export default function MyCart() {
     const courses = cart.map((course) => course._id);
     console.log("Bought these Courses:", courses);
 
-    //TODO : API integrate for payment gateway 
+    //TODO : API integrate for payment gateway
   };
+  console.log("cc ", cart);
   return (
     <div>
       <h1 className="text-2xl">Your Cart</h1>
@@ -28,13 +29,17 @@ export default function MyCart() {
         </div>
       ) : (
         <div>
-          <section>
+          <section className="bg-pink-200">
             {/* //!Courses display section */}
             {cart.map((course, index) => (
               <div key={index}>
                 <div>
                   Course Image:
-                  <img src={course?.thumbnail} alt="course-thumbnail" />
+                  <img
+                    src={course?.thumbnail}
+                    alt="course-thumbnail"
+                    className="h-[100px] w-[200px] bg-slate-100"
+                  />
                 </div>
 
                 <div>
@@ -45,15 +50,15 @@ export default function MyCart() {
                 <div>
                   {/* //! Here to get average rating through backend */}
                   <ReactStars
-                    count={5}
+                    count={1}
                     // onChange={ratingChanged}
                     size={24}
                     edit={false}
                     actionColor="ffd700"
-                    emptyIcon={<FaRegStar />}
+                    emptyIcon={<FaStar />}
                     fullIcon={<FaRegStar />}
                   />
-                  <span>Ratings : 4.8 //hardCoded</span>
+                  <span>Ratings : </span>
                   <span>Rating No. : {course?.ratingAndReviews?.length}</span>
                 </div>
                 <div>

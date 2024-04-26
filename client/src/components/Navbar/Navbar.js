@@ -28,7 +28,6 @@ export default function Navbar() {
                     <p className="text-yellow-900">{link.title}</p>
                   )}
                 </li>
-                
               </NavLink>
             ))}
           </ul>
@@ -53,10 +52,14 @@ export default function Navbar() {
               {user && (
                 // user?.accountType === "Student"
 
-                <Link to="/dashboard/cart" className="relative flex">
+                <Link to="/dashboard/myCart" className="relative flex">
                   <BsCart3 className="text-xl" />
 
-                  {totalItems > 0 && <span className="bg-white rounded-full px-[3px] py-[1px]">{totalItems}</span>}
+                  {totalItems > 0 && (
+                    <span className="bg-white rounded-full px-[3px] py-[1px]">
+                      {totalItems}
+                    </span>
+                  )}
                 </Link>
               )}
               <ProfileDropDown />

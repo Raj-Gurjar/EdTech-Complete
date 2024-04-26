@@ -7,6 +7,10 @@ import Modal from "../../components/Modal";
 import avgRating from "../../utils/avgRating";
 import RatingStars from "../../components/RatingStars";
 import { formateDate } from "../../utils/formatDate";
+import copy from "copy-to-clipboard";
+import toast from "react-hot-toast";
+import { ACCOUNT_TYPE } from "../../utils/constants";
+import { addToCart } from "../../toolkit/slice/cartSlice";
 
 export default function CourseDetails() {
   const [courseData, setCourseData] = useState(null);
@@ -44,7 +48,7 @@ export default function CourseDetails() {
     }
   }, []);
 
-  // console.log("courseData :", courseData);
+  console.log("courseData :", courseData);
 
   const handleBuyCourse = () => {
     if (token) {
@@ -61,8 +65,17 @@ export default function CourseDetails() {
     });
   };
   const handleAddToCart = () => {
+    if (
+      user?.accountType === ACCOUNT_TYPE.INSTRUCTOR ||
+      user?.accountType === ACCOUNT_TYPE.ADMIN
+    ) {
+      toast.error("Only a Student Account can buy a course");
+    }
+
     if (token) {
-      console.log("dd");
+      console.log("Add to cart...");
+      dispatch(addToCart(courseData));
+      return;
     }
     setModal({
       text1: "You are not Logged in",
@@ -72,6 +85,11 @@ export default function CourseDetails() {
       btn1Handler: () => navigate("/login"),
       btn2Handler: () => setModal(null),
     });
+  };
+
+  const handleShare = () => {
+    copy(window.location.href);
+    toast.success("Link Copied");
   };
 
   return (
@@ -121,20 +139,38 @@ export default function CourseDetails() {
           <p>Price: {courseData?.price}</p>
           <div className="flex gap-x-4 my-5">
             {user && courseData?.studentsEnrolled?.includes(user?._id) ? (
-              <button onClick={() => navigate("/dashboard/enrolledCourses")}> Go To Course </button>
+              <button onClick={() => navigate("/dashboard/enrolledCourses")}>
+                {" "}
+                Go To Course{" "}
+              </button>
             ) : (
               <button onClick={() => handleBuyCourse()}> Buy Now </button>
             )}
 
-            <button onClick={() => handleAddToCart()}>Add to Cart</button>
+            {user && !courseData?.studentsEnrolled?.includes(user?._id) && (
+              <button onClick={() => handleAddToCart()}>Add to Cart</button>
+            )}
           </div>
         </div>
+
+        <button onClick={handleShare}>Copy Link and Share Course</button>
       </div>
 
       <div className="bg-green-300 m-5">
         <div>
           <h1 className="text-2xl">Course Content</h1>
 
+          <div>
+            <p>Instructions</p>
+
+            <div>
+              {courseData?.instructions.map((item, index) => (
+                <div>
+                  <p>{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
           <div className="flex">
             <p>Total Lessons: {courseData?.courseContent?.length}</p>
           </div>
