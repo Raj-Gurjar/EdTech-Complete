@@ -3,19 +3,27 @@ import { useDispatch, useSelector } from "react-redux";
 import ReactStars from "react-stars";
 import { FaRegStar } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
-import removeFromCart from "../../../toolkit/slice/cartSlice";
+import { removeFromCart } from "../../../toolkit/slice/cartSlice";
+import { buyCourse } from "../../../services/operations/paymentApi";
+import { useNavigate } from "react-router-dom";
 
 export default function MyCart() {
   const dispatch = useDispatch();
-  const { totalAmount, totalItems, cart } = useSelector((state) => state.cart);
+  const navigate = useNavigate();
+  const { cart } = useSelector((state) => state.cart);
+  const { token } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.profile);
+  
+  let totalAmount = localStorage.getItem("totalAmount");
+  let totalItems = localStorage.getItem("totalItem");
 
   const handleBuyCourse = () => {
     const courses = cart.map((course) => course._id);
     console.log("Bought these Courses:", courses);
-
+    buyCourse(token, courses, user, navigate, dispatch);
     //TODO : API integrate for payment gateway
   };
-  console.log("cc ", cart);
+  console.log("cc ", cart[1]);
   return (
     <div>
       <h1 className="text-2xl">Your Cart</h1>

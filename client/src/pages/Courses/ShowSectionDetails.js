@@ -46,6 +46,7 @@ export default function ShowSectionDetails() {
             <p>subSec title: {subSection?.title}</p>
             <p>Des: {subSection?.description}</p>
             <p>Lec video:</p>
+            <p>Duration : {subSection?.timeDuration}</p>
           </div>
         ))}
       </div>

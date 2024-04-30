@@ -11,13 +11,18 @@ import copy from "copy-to-clipboard";
 import toast from "react-hot-toast";
 import { ACCOUNT_TYPE } from "../../utils/constants";
 import { addToCart } from "../../toolkit/slice/cartSlice";
+import { IoIosArrowUp } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
+import { isAction } from "@reduxjs/toolkit";
 
 export default function CourseDetails() {
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [avgRatingCount, setAvgRatingCount] = useState(0);
   const [modal, setModal] = useState(null);
+  const [openSection, setOpenSection] = useState(Array(0));
 
+  const cart = localStorage.getItem("cart");
   const { paymentLoading } = useSelector((state) => state.course);
   const { courseId } = useParams();
   const { user } = useSelector((state) => state.profile);
@@ -25,7 +30,17 @@ export default function CourseDetails() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  console.log("cart", cart);
   console.log("user", user);
+
+  const handelToggleSection = (id) => {
+    setOpenSection(
+      !openSection.includes(id)
+        ? openSection.concat(id)
+        : openSection.filter((e) => e !== id)
+    );
+  };
+
   useEffect(() => {
     const count = avgRating(courseData?.ratingAndReviews);
     setAvgRatingCount(count);
@@ -107,6 +122,10 @@ export default function CourseDetails() {
           Instructor: {courseData?.instructor?.firstName}{" "}
           {courseData?.instructor?.lastName}
         </p>
+        <p>Instructor img :
+          <img src={courseData?.instructor?.image} alt="instructor Img"
+          className="h-[50px] w-[50px] rounded" />
+        </p>
 
         <p>Rating No: {courseData?.ratingAndReviews?.length}</p>
         <p>
@@ -148,6 +167,7 @@ export default function CourseDetails() {
             )}
 
             {user && !courseData?.studentsEnrolled?.includes(user?._id) && (
+              // !cart.includes(courseData)
               <button onClick={() => handleAddToCart()}>Add to Cart</button>
             )}
           </div>
@@ -171,17 +191,44 @@ export default function CourseDetails() {
               ))}
             </div>
           </div>
-          <div className="flex">
+          <div className="flex bg-yellow-100 justify-between mx-5 ">
             <p>Total Lessons: {courseData?.courseContent?.length}</p>
+            <p
+              onClick={() => setOpenSection(Array(0))}
+              className="bg-red-400 cursor-pointer"
+            >
+              Collapse All
+            </p>
           </div>
 
           {courseData?.courseContent.map((section, index) => (
-            <div key={index}>
-              <Link to={`/sections/${section?._id}`}>
-                <div className="bg-slate-300 my-2">
+            <div key={index} onClick={() => handelToggleSection(section._id)}>
+              <div className="bg-slate-300  m-5">
+                <div className="flex justify-between bg-red-400">
+                  <icon>
+                    <IoIosArrowDown
+                      className={`cursor-pointer bg-blue-400 ${
+                        !openSection.includes(section._id)
+                          ? "rotate-180 ease-in-out duration-300"
+                          : "ease-in-out duration-300"
+                      }`}
+                    />
+                  </icon>
+
                   <p>Section name : {section?.sectionName}</p>
+
+                  <p className="bg-yellow-300">
+                    <Link to={`/sections/${section?._id}`}>View Section</Link>
+                  </p>
                 </div>
-              </Link>
+
+                {openSection.includes(section._id) && (
+                  <div>
+                    <p>Section Short Details : {section?.shortDescription}</p>
+                    <p>No of lectures : {section?.subSections.length}</p>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
