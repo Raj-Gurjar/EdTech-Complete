@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getUserEnrolledCourses } from "../../../services/operations/profileAPI";
 import ProgressBar from "@ramonak/react-progress-bar";
+import { Link } from "react-router-dom";
 
 export default function EnrolledCourses() {
   const { token } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.profile);
+  console.log("user", user);
   const [enrolledCourses, setEnrolledCourses] = useState(null);
 
   const getEnrolledCourses = async () => {
@@ -23,6 +26,7 @@ export default function EnrolledCourses() {
     getEnrolledCourses();
   }, []);
 
+  // console.log("enro: ",enrolledCourses);
   return (
     <div>
       <h1>Enrolled Courses</h1>
@@ -44,31 +48,38 @@ export default function EnrolledCourses() {
               <p>Not enrolled in any course yet</p>
             ) : (
               enrolledCourses.map((course, index) => (
-                <div key={index} className="bg-slate-300 m-5 flex gap-x-5 p-2">
-                  <div>
-                    <img
-                      src={course.thumbnail}
-                      alt="course-thumbnail"
-                      className="h-[100px] w-[150px] bg-pink-300"
-                    />
+                <Link
+                  to={`/courseMenu/${course?._id}/section/${course.courseContent?.[0]?._id}/subSection/${course.courseContent?.[0]?.subSections?.[0]?._id}`}
+                >
+                  <div
+                    key={index}
+                    className="bg-slate-300 m-5 flex gap-x-5 p-2"
+                  >
+                    <div>
+                      <img
+                        src={course.thumbnail}
+                        alt="course-thumbnail"
+                        className="h-[100px] w-[150px] bg-pink-300"
+                      />
+                    </div>
+                    <div>
+                      <p>Name: {course.courseName}</p>
+                      <p>Desc: {course.courseDescription}</p>
+                    </div>
+                    <div>Duration: {course?.totalDuration}</div>
+                    <div>
+                      <p>Progress: {course.progressPercentage || 0}</p>
+                      <ProgressBar
+                        completed={course.progressPercentage || 0}
+                        maxCompleted={100}
+                        height="8px"
+                        width="60px"
+                        isLabelVisible={false}
+                        className="bg-red-500 p-2"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <p>Name: {course.courseName}</p>
-                    <p>Desc: {course.courseDescription}</p>
-                  </div>
-                  <div>Duration: {course?.totalDuration}</div>
-                  <div>
-                    <p>Progress: {course.progressPercentage || 0}</p>
-                    <ProgressBar
-                      completed={course.progressPercentage || 0}
-                      maxCompleted={100}
-                      height="8px"
-                      width="60px"
-                      isLabelVisible={false}
-                      className="bg-red-500 p-2"
-                    />
-                  </div>
-                </div>
+                </Link>
               ))
             )}
           </div>

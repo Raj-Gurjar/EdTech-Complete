@@ -3,6 +3,7 @@ const User_Model = require("../models/User.model");
 const Course_Model = require("../models/Course.model");
 const CourseProgress_Model = require("../models/CourseProgress.model");
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
+const { populate } = require("../models/ContactUs.model");
 
 //! Since while creating SignUp we have already stored null in Profile's data,
 //! so we do not need to create it, we will just to update the null values.
@@ -151,13 +152,13 @@ exports.updateDisplayPicture = async (req, res) => {
         );
 
         res.send({
-            success:true,
-            message:"Image Updates Successfully."
-        })
+            success: true,
+            message: "Image Updates Successfully.",
+        });
     } catch (error) {
         return res.status(500).json({
-        success: false,
-        message: "Error in updating the Image." 
+            success: false,
+            message: "Error in updating the Image.",
         });
     }
 };
@@ -166,10 +167,17 @@ exports.getEnrolledCourses = async (req, res) => {
     try {
         console.log("Entering get Enrolled C id");
         const userId = req.user.id;
-        const userDetails = await User_Model.findOne({ _id: userId })
-            .populate("courses")
-            .exec();
-         console.log("user details:", userDetails);
+        console.log("userId", userId);
+        const userDetails = await User_Model.findOne({ _id: userId }).populate({
+            path: "courses",
+            populate: {
+                path: "courseContent",
+                populate: {
+                    path: "subSections",
+                },
+            },
+        });
+        console.log("user details:", userDetails);
         if (!userDetails) {
             return res.status(400).json({
                 success: false,

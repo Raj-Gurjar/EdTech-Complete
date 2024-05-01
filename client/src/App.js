@@ -32,6 +32,7 @@ import SingleCategory from "./pages/Courses/SingleCategory";
 import CourseDetails from "./pages/Courses/CourseDetails";
 import ShowDetails from "./pages/Courses/ShowSectionDetails";
 import ShowSectionDetails from "./pages/Courses/ShowSectionDetails";
+import CourseMenu from "./pages/StudyCourse/CourseMenu";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
@@ -60,7 +61,10 @@ function App() {
 
           <Route path="/allCourses/:courseId" element={<CourseDetails />} />
           <Route path="/sections/:sectionId" element={<ShowSectionDetails />} />
-
+          <Route
+            path="/courseMenu/:courseId/section/:sectionId/subSection/:subSectionId"
+            element={<CourseMenu />}
+          /> 
           {/* //!Users */}
 
           <Route
