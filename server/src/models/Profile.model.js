@@ -4,16 +4,20 @@ const Profile_Schema = new mongoose.Schema(
     {
         gender: {
             type: String,
+            enum: ["Male", "Female", "Other"],
         },
         dateOfBirth: {
-            type: String,
+            type: Date,
+            default: new Date("1990-01-01"),
         },
         about: {
             type: String,
+            default: "Not Mentioned",
             trim: true,
         },
         contactNumber: {
-            type: Number,
+            type: String, 
+            default: "0000000000", 
             trim: true,
         },
     },

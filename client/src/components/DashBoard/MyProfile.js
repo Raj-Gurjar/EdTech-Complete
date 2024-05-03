@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function MyProfile() {
   const { user } = useSelector((state) => state.profile);
-  const navigate = useNavigate;
+  const navigate = useNavigate();
+  const [editProfile, setEditProfile] = useState(false);
 
   console.log("user data", user);
   return (
@@ -26,8 +27,7 @@ export default function MyProfile() {
           <p>Name : {user?.firstName + " " + user?.lastName}</p>
           <p>Email : {user?.email}</p>
         </div>
-
-        <button>Edit</button>
+        <button onClick={() => navigate("/dashboard/editProfile")}>Edit</button>
       </section>
 
       {/* //! section 2 */}
@@ -38,8 +38,6 @@ export default function MyProfile() {
           {user?.additionalDetails?.about ??
             "Write something about Yourselves.btn-row"}
         </p>
-
-        <button>Edit</button>
       </section>
 
       {/* //! section 3 */}
@@ -47,10 +45,10 @@ export default function MyProfile() {
         <h1 className="text-2xl">Other Details</h1>
 
         <p>Gender :{user?.additionalDetails?.gender ?? "Add Gender"}</p>
-        <p>Contact No. :{user?.additionalDetails?.contactNumber ?? "Add Contact"}</p>
+        <p>
+          Contact No. :{user?.additionalDetails?.contactNumber ?? "Add Contact"}
+        </p>
         <p>DOB :{user?.additionalDetails?.dateOfBirth ?? "Add DOB"}</p>
-        
-        <button>Edit</button>
       </section>
     </div>
   );

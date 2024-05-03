@@ -9,48 +9,104 @@ const { populate } = require("../models/ContactUs.model");
 //! so we do not need to create it, we will just to update the null values.
 
 exports.updateProfile = async (req, res) => {
+    //TODO : check email exists or not before updating
+    console.log("Inside update profile");
     try {
-        //get data
+        // Get data from request body
         const {
             gender,
-            dateOfBirth = "",
-            about = "",
+            dateOfBirth,
+            about,
             contactNumber,
+            firstName,
+            lastName,
+            email,
         } = req.body;
 
-        // get the user id
-
+        // Get the user id
         const userId = req.user.id;
 
-        //validate
+        // Validate user id
         if (!userId) {
             return res.status(400).json({
                 success: false,
                 message: "User Profile not found",
             });
         }
-        //TODO; validation on req is not needed bcs it is not mandatory data
 
-        //from user id get the profile id
+        // Get user's profile details
         const userDetails = await User_Model.findById(userId);
+
+        if (!userDetails) {
+            return res.status(400).json({
+                success: false,
+                message: "User details not found",
+            });
+        }
+
         const profileId = userDetails.additionalDetails;
         const profileDetails = await Profile_Model.findById(profileId);
 
-        //update date in Profile
-        (profileDetails.dateOfBirth = dateOfBirth),
-            (profileDetails.gender = gender),
-            (profileDetails.about = about),
-            (profileDetails.contactNumber = contactNumber);
+        if (!profileDetails) {
+            return res.status(400).json({
+                success: false,
+                message: "Profile details not found",
+            });
+        }
 
-        await profileDetails.save();
+        // Update profile details
+        await Profile_Model.updateOne(
+            { _id: profileId },
+            {
+                $set: {
+                    dateOfBirth: dateOfBirth,
+                    gender: gender,
+                    about: about,
+                    contactNumber: contactNumber,
+                },
+            }
+        );
+        await Profile_Model.updateOne(
+            { _id: profileId },
+            {
+                $set: {
+                    dateOfBirth: dateOfBirth,
+                    gender: gender,
+                    about: about,
+                    contactNumber: contactNumber,
+                },
+            }
+        );
+        await User_Model.updateOne(
+            { _id: userId },
+            {
+                $set: {
+                    firstName,
+                    lastName,
+                    email,
+                },
+            }
+        );
 
-        //return
+        // Fetch updated profile details
+        const updatedProfile = await Profile_Model.findById(profileId);
+
+        userDetails.additionalDetails = updatedProfile._id;
+        await userDetails.save();
+
+        // Fetch updated user details with populated additionalDetails
+        const updatedUser =
+            await User_Model.findById(userId).populate("additionalDetails");
+        // Return success response with updated profile details
+
         return res.status(200).json({
             success: true,
             message: "User's Profile Updated Successfully",
             updatedProfile,
+            updatedUser,
         });
     } catch (error) {
+        console.error("Error while updating User Profile:", error);
         return res.status(500).json({
             success: false,
             message: "Error while updating User Profile",

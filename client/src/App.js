@@ -33,6 +33,7 @@ import CourseDetails from "./pages/Courses/CourseDetails";
 import ShowDetails from "./pages/Courses/ShowSectionDetails";
 import ShowSectionDetails from "./pages/Courses/ShowSectionDetails";
 import CourseMenu from "./pages/StudyCourse/CourseMenu";
+import EditProfile from "./components/DashBoard/EditProfile";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
@@ -64,7 +65,7 @@ function App() {
           <Route
             path="/courseMenu/:courseId/section/:sectionId/subSection/:subSectionId"
             element={<CourseMenu />}
-          /> 
+          />
           {/* //!Users */}
 
           <Route
@@ -77,6 +78,7 @@ function App() {
           >
             <Route path="myDashboard" element={<MyDashBoard />} />
             <Route path="myProfile" element={<MyProfile />} />
+            <Route path="editProfile" element={<EditProfile />} />
             <Route path="settings" element={<Settings />} />
 
             {user?.accountType === ACCOUNT_TYPE.STUDENT && (

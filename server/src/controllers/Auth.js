@@ -39,7 +39,7 @@ exports.sendOTP = async (req, res) => {
         //Check otp is Unique (check in otp model)
 
         let otpResult = await OTP_Model.findOne({ otp: otp });
-        console.log("otpResult..",otpResult);
+        console.log("otpResult..", otpResult);
 
         while (otpResult) {
             otp = otpGenerator(6, {
@@ -94,7 +94,7 @@ exports.signUp = async (req, res) => {
             !lastName ||
             !email ||
             !password ||
-            !confirmPassword 
+            !confirmPassword
             // !otp
         ) {
             return res.status(400).json({
@@ -136,7 +136,7 @@ exports.signUp = async (req, res) => {
         // if (recentOtp.length === 0) {
         //     // OTP not found
         //     return res.status(400).json({
-        //         success: false, 
+        //         success: false,
         //         message: "OTP not found/Entered",
         //     });
         // } else if (otp !== recentOtp.otp) {
@@ -152,12 +152,7 @@ exports.signUp = async (req, res) => {
 
         //! Create entry in DB
 
-        const profileDetails = await Profile_Model.create({
-            gender: null,
-            dateOfBirth: null,
-            about: null,
-            contactNumber: null,
-        });
+        const profileDetails = await Profile_Model.create({});
         const user = await User_Model.create({
             firstName,
             lastName,
