@@ -82,3 +82,29 @@ export async function updateProfile(data, token) {
   toast.dismiss(toastId);
   return result;
 }
+
+export const deleteAccount = async (data, token) => {
+  // console.log("entering updateSubSec api call:", data);
+  const toastId = toast.loading("Loading");
+  let result = null;
+
+  console.log("delete profile data : ", data);
+  try {
+    const response = await apiConnector("DELETE", DELETE_PROFILE_API, data, {
+      Authorization: `Bearer ${token}`,
+    });
+    console.log("delete account api response..", response);
+
+    if (!response?.data?.success) {
+      throw new Error("Could not delete this account");
+    }
+    toast.success("Account deleted Successfully");
+    result = response?.data?.data;
+    
+  } catch (error) {
+    console.log("delete Account api error...", error);
+    toast.error(error.response.message);
+  }
+  toast.dismiss(toastId);
+  return result;
+};

@@ -148,34 +148,56 @@ exports.getAllUserDetails = async (req, res) => {
 //TODO : In this we will have to schedule the delete account for 3 days or so not immediately delete account
 //TODO : Explore -> cronjob
 exports.deleteUserAccount = async (req, res) => {
+    console.log("in dele");
     try {
         //get the id
         const userId = req.user.id;
-
+        console.log("userId", userId);
         //validate
+
         const userDetails = await User_Model.findById({ _id: userId });
+        console.log("user de", userDetails);
         if (!userDetails) {
             return res.status(404).json({
                 success: false,
                 message: "User Not Found",
             });
         }
+        console.log("user de", userDetails);
 
         //first we will delete the additional details,course,courseProgress then user details
         await Profile_Model.findByIdAndDelete({
-            _id: userDetails.additionalDetails,
+            _id: userDetails.additionalDetails._id,
         });
+
+        console.log("c1");
 
         //TODO: similarly we have to delete it from other schemas also
-        await CourseProgress_Model.findByIdAndDelete({
-            _id: userDetails.courseProgress,
-        });
-        await Course_Model.findByIdAndDelete({
-            _id: userDetails.courses,
-        });
+        // await CourseProgress_Model?.findByIdAndDelete({
+        //     _id: userDetails.courseProgress._id,
+        // });
 
-        await User_Model.findByIdAndDelete({ _id: id });
+        // const coursesProgress = userDetails.courseProgress;
 
+        // for (const courseId of coursesProgress) {
+        //     await CourseProgress_Model.findByIdAndUpdate(courseId, {
+        //         $pull: { studentsEnrolled: userId },
+        //     });
+        // }
+        console.log("c2");
+
+        const coursesEnrolled = userDetails.courses;
+        for (const courseId of coursesEnrolled) {
+            await Course_Model.findByIdAndUpdate(courseId, {
+                $pull: { studentsEnrolled: userId },
+            });
+        }
+
+        console.log("c3");
+
+        await User_Model.findByIdAndDelete({ _id: userId });
+
+        console.log("c4");
         //return
         return res.status(200).json({
             success: true,

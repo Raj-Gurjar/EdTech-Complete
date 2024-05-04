@@ -40,6 +40,7 @@ export async function buyCourse(
 
   try {
     //load script
+ 
     const res = await loadScript(
       "https://checkout.razorpay.com/v1/checkout.js"
     );

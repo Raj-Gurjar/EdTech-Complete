@@ -1,18 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  updateAdditionalProfile,
+  deleteAccount,
   updateProfile,
 } from "../../services/operations/profileAPI";
 import { setUser } from "../../toolkit/slice/profileSlice";
+import Modal from "../Modal";
+import { logout } from "../../services/operations/authAPI";
+import { useNavigate } from "react-router-dom";
 
 export default function EditProfile() {
   const { user } = useSelector((state) => state.profile);
   const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
+  const [modal, setModal] = useState(null);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -29,6 +33,18 @@ export default function EditProfile() {
       dispatch(setUser(result));
     } else {
       toast.error("Changes can not update");
+    }
+  };
+
+  const deleteHandler = async () => {
+    console.log("in dd");
+    const result = await deleteAccount(user?._id, token);
+
+    if (result) {
+      // dispatch(setUser(null));
+      dispatch(logout(navigate));
+    } else {
+      toast.error("Can not delete Account");
     }
   };
 
@@ -148,6 +164,27 @@ export default function EditProfile() {
           </div>
         </form>
       </div>
+
+      <div className="bg-slate-300 my-5 p-5">
+        <h1 className="text-2xl">Delete Account</h1>
+
+        <button
+          onClick={() => {
+            setModal({
+              text1: "Are You Sure ?",
+              text2: "You Account will be Permanently Deleted",
+              btn1Text: "Delete Account",
+              btn2Text: "Cancel",
+              btn1Handler: () => deleteHandler(),
+              btn2Handler: () => setModal(null),
+            });
+          }}
+        >
+          Delete Account
+        </button>
+      </div>
+
+      {modal && <Modal modalData={modal} />}
     </div>
   );
 }

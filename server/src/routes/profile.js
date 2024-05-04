@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const { getEnrolledCourses, updateProfile } = require("../controllers/Profile");
+const {
+    getEnrolledCourses,
+    updateProfile,
+    deleteUserAccount,
+} = require("../controllers/Profile");
 
 const { auth, isStudent } = require("../middlewares/auth");
 
@@ -9,5 +13,6 @@ const { auth, isStudent } = require("../middlewares/auth");
 
 router.get("/getEnrolledCourses", auth, isStudent, getEnrolledCourses);
 router.put("/updateProfile", auth, updateProfile);
+router.delete("/deleteProfile", auth, deleteUserAccount);
 
 module.exports = router;
