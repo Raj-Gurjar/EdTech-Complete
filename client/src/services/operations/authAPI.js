@@ -79,7 +79,7 @@ export function signUp(
       navigate("/verifyEmail");
     } catch (error) {
       console.log("SignUp api error...", error.response);
-      toast.error("SignUp failed!", error.response);
+      toast.error(`SignUp failed! ${error.response?.data?.message} `);
       navigate("/signup");
     }
     dispatch(setLoading(false));

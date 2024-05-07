@@ -40,20 +40,34 @@ export default function EditProfile() {
   const deleteHandler = async () => {
     console.log("in dd");
     const result = await deleteAccount(user?._id, token);
-
+    console.log("del res", result);
     if (result) {
-      // dispatch(setUser(null));
       dispatch(logout(navigate));
-    } else {
-      toast.error("Can not delete Account");
     }
   };
+
+  const handleImageChange = () => {};
 
   return (
     <div>
       <h1 className="text-2xl">Edit Profile</h1>
 
       <div>Image</div>
+
+      <div className="bg-slate-500 my-5 p-5">
+        <h1 className="text-2xl">Change Profile Image</h1>
+        Current profile :
+        <img
+          src={user?.image}
+          alt="user profile img"
+          className="h-[100px] w-[100px] m-5"
+        />
+        <div className="flex gap-x-4">
+          <input type="file" accept="image/*" onChange={handleImageChange} />
+          <button>Select Image</button>
+          <button>Upload Image</button>
+        </div>
+      </div>
 
       <div className="bg-slate-400 my-5 p-5">
         <h1 className="text-2xl">Personal Info</h1>

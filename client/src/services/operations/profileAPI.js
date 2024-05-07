@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { setToken, setLoading } from "../../toolkit/slice/authSlice";
 import { setUser } from "../../toolkit/slice/profileSlice";
 import { resetCart } from "../../toolkit/slice/cartSlice";
+import { logout } from "./authAPI";
 
 const {
   GET_USER_DETAILS_API,
@@ -100,8 +101,8 @@ export const deleteAccount = async (data, token) => {
     if (!response?.data?.success) {
       throw new Error("Could not delete this account");
     }
+    result = true;
     toast.success("Account deleted Successfully");
-    result = response?.data?.data;
   } catch (error) {
     console.log("delete Account api error...", error);
     toast.error(error.response.message);

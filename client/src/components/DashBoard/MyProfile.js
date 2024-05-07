@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { formateDate } from "../../utils/formatDate";
 
 export default function MyProfile() {
   const { user } = useSelector((state) => state.profile);
@@ -48,7 +49,11 @@ export default function MyProfile() {
         <p>
           Contact No. :{user?.additionalDetails?.contactNumber ?? "Add Contact"}
         </p>
-        <p>DOB :{user?.additionalDetails?.dateOfBirth ?? "Add DOB"}</p>
+        <p>
+          DOB :
+          {formateDate(user?.additionalDetails?.dateOfBirth).split("|")[0] ??
+            "Add DOB"}
+        </p>
       </section>
     </div>
   );
