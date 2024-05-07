@@ -72,6 +72,8 @@ export async function updateProfile(data, token) {
       throw new Error(response.data.message);
     }
     result = response?.data?.updatedUser;
+
+    // localStorage.setItem("user", JSON.stringify(result));
     toast.success(response?.data?.message);
 
     // console.log("Enrolled courses data result data..", result);
@@ -100,7 +102,6 @@ export const deleteAccount = async (data, token) => {
     }
     toast.success("Account deleted Successfully");
     result = response?.data?.data;
-    
   } catch (error) {
     console.log("delete Account api error...", error);
     toast.error(error.response.message);

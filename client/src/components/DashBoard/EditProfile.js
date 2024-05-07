@@ -29,6 +29,7 @@ export default function EditProfile() {
   const onSubmit = async (data) => {
     const result = await updateProfile(data, token);
 
+    console.log("res", result);
     if (result) {
       dispatch(setUser(result));
     } else {
