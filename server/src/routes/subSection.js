@@ -7,6 +7,7 @@ const {
     updateSubSection,
 } = require("../controllers/SubSection");
 const { auth, isInstructor } = require("../middlewares/auth");
+const { fileUpload } = require("../middlewares/multer");
 
 router.post("/addSubSection", auth, isInstructor, createSubSection);
 router.put("/updateSubSection", auth, isInstructor, updateSubSection);

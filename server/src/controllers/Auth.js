@@ -153,15 +153,27 @@ exports.signUp = async (req, res) => {
         //! Create entry in DB
 
         const profileDetails = await Profile_Model.create({});
-        const user = await User_Model.create({
+        const userData = await User_Model.create({
             firstName,
             lastName,
             email,
             password: hashedPassword,
             accountType,
             additionalDetails: profileDetails._id,
-            image: `https://api.dicebear.com/7.x/initials/svg?seed=${firstName}${lastName}`,
+            profileImage: `https://api.dicebear.com/7.x/initials/svg?seed=${firstName}${lastName}`,
         });
+
+        const user = await User_Model.findById(userData?._id).select(
+            "-password"
+        );
+
+        if (!user) {
+            console.log(error);
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
 
         //return res
         return res.status(201).json({

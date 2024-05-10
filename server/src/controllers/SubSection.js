@@ -15,10 +15,10 @@ exports.createSubSection = async (req, res) => {
         if (
             !sectionId ||
             !title ||
-            // !timeDuration ||
-            !description
+            !timeDuration ||
+            !description ||
             // !additionalUrl
-            // !video
+            !video
         ) {
             return res.status(400).json({
                 success: false,

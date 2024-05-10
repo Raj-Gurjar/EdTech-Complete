@@ -63,9 +63,16 @@ export default function EditProfile() {
           className="h-[100px] w-[100px] m-5"
         />
         <div className="flex gap-x-4">
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-          <button>Select Image</button>
-          <button>Upload Image</button>
+          <form action="/upload" method="POST" encType="multipart/form-data">
+            <input
+              type="file"
+              accept="image/*"
+              id="profImg"
+              name="displayPicture"
+              onChange={handleImageChange}
+            />
+            <button>Upload Image</button>
+          </form>
         </div>
       </div>
 

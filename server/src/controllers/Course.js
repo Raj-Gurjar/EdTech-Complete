@@ -8,6 +8,9 @@ const { uploadImageToCloudinary } = require("../utils/imageUploader");
 const SubSection_Model = require("../models/SubSection.model");
 
 const Section_Model = require("../models/Section.model");
+const { uploadToCloudinary } = require("../config/cloudinary");
+const fs = require("fs");
+
 //! Create Course
 exports.createCourse = async (req, res) => {
     try {
@@ -26,7 +29,8 @@ exports.createCourse = async (req, res) => {
         } = req.body;
         let { status } = req.body;
 
-        // const thumbnail = req.file.thumbnailImage;
+        console.log("req.file :", req.file);
+        const thumbnailPath = req.file?.path;
 
         //* validation
         // console.log("course id" , category);
@@ -37,9 +41,9 @@ exports.createCourse = async (req, res) => {
             !whatYouWillLearn ||
             !price ||
             !language ||
-            !category
+            !category ||
             // !tag ||
-            // !thumbnail
+            !thumbnailPath
         ) {
             return res.status(400).json({
                 success: false,
@@ -79,10 +83,15 @@ exports.createCourse = async (req, res) => {
 
         //* Upload thumbnail to cloudinary
 
-        // const thumbnailImage = await uploadImageToCloudinary(
-        //     thumbnail,
-        //     process.env.FOLDER_NAME_CLOUDINARY
-        // );
+        const thumbnailImage = await uploadToCloudinary(thumbnailPath);
+
+        console.log("thumbnail Image:", thumbnailImage);
+        if (!thumbnailImage) {
+            return res.status(400).json({
+                success: false,
+                message: "Unable to upload thumbnail to cloudinary",
+            });
+        }
 
         //* Create course entry in db
 
@@ -97,7 +106,7 @@ exports.createCourse = async (req, res) => {
             category: categoryDetail._id,
             status: status,
             instructions: instructions,
-            // thumbnail: thumbnailImage.secure_url,
+            thumbnail: thumbnailImage?.secure_url || "",
         });
 
         //* Add course in user schema of instructor

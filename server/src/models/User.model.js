@@ -26,7 +26,7 @@ const User_Schema = new mongoose.Schema(
             enum: ["Admin", "Student", "Instructor"],
             required: true,
         },
-        image: {
+        profileImage: {
             type: String,
             required: true,
         },

@@ -4,6 +4,7 @@ const Course_Model = require("../models/Course.model");
 const CourseProgress_Model = require("../models/CourseProgress.model");
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 const { populate } = require("../models/ContactUs.model");
+const { getDataUri } = require("../utils/features");
 
 //! Since while creating SignUp we have already stored null in Profile's data,
 //! so we do not need to create it, we will just to update the null values.
@@ -213,8 +214,14 @@ exports.deleteUserAccount = async (req, res) => {
 
 exports.updateDisplayPicture = async (req, res) => {
     try {
+        console.log("inside upProfi");
         const userId = req.user.id;
+        const file = getDataUri(req.file);
+
+        console.log(userId);
+
         const displayPicture = req.files.displayPicture;
+
         const image = await uploadImageToCloudinary(
             displayPicture,
             process.env.FOLDER_NAME_CLOUDINARY,
@@ -225,7 +232,7 @@ exports.updateDisplayPicture = async (req, res) => {
 
         const updateProfile = await User_Model.findByIdAndUpdate(
             { _id: userId },
-            { image: image.secure_url },
+            { profileImage: image.secure_url },
             { new: true }
         );
 
@@ -234,6 +241,7 @@ exports.updateDisplayPicture = async (req, res) => {
             message: "Image Updates Successfully.",
         });
     } catch (error) {
+        console.log("Error in profile pic update", error);
         return res.status(500).json({
             success: false,
             message: "Error in updating the Image.",

@@ -18,11 +18,18 @@ const {
 } = require("../controllers/RatingAndReview");
 
 const { auth, isInstructor, isStudent } = require("../middlewares/auth");
+const { fileUpload } = require("../middlewares/multer");
 
 //!Routes for creating , getting all and getting by id of instructor course
 router.get("/getAllCourses", getAllCourses);
 router.post("/getFullCourseDetails", auth, isStudent, getFullCourseDetails);
-router.post("/createCourse", auth, isInstructor, createCourse);
+router.post(
+    "/createCourse",
+    auth,
+    isInstructor,
+    fileUpload.single("thumbnail"),
+    createCourse
+);
 router.post("/editCourse", auth, isInstructor, editCourse);
 router.get("/getInstructorCourses", auth, isInstructor, getInstructorCourses);
 router.post("/getCourse", getCourseById);

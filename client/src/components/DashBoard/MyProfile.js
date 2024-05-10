@@ -18,7 +18,7 @@ export default function MyProfile() {
         <h1 className="text-2xl">General Details</h1>
         <div>
           <img
-            src={user?.image}
+            src={user?.profileImage}
             alt={`profileImg-${user?.firstName}`}
             className="aspect-square w-[70px] object-cover rounded-full"
           />
