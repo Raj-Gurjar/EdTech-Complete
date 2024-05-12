@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   deleteAccount,
   updateProfile,
+  updateProfileImage,
 } from "../../services/operations/profileAPI";
 import { setUser } from "../../toolkit/slice/profileSlice";
 import Modal from "../Modal";
@@ -17,6 +18,8 @@ export default function EditProfile() {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(null);
   const navigate = useNavigate();
+  const [profileImg, setProfileImage] = useState("");
+  const [showImg, setShowImg] = useState("");
   const {
     register,
     handleSubmit,
@@ -24,7 +27,7 @@ export default function EditProfile() {
     formState: { errors },
   } = useForm();
 
-  console.log("user", user);
+  // console.log("user", user);
 
   const onSubmit = async (data) => {
     const result = await updateProfile(data, token);
@@ -38,15 +41,42 @@ export default function EditProfile() {
   };
 
   const deleteHandler = async () => {
-    console.log("in dd");
     const result = await deleteAccount(user?._id, token);
-    console.log("del res", result);
+
     if (result) {
       dispatch(logout(navigate));
     }
   };
 
-  const handleImageChange = () => {};
+  const handleImageChange = (e) => {
+    const img = e.target.files[0];
+    setProfileImage(img);
+    TransformFile(img);
+  };
+
+  const TransformFile = (file) => {
+    const reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setShowImg(reader.result);
+      };
+    } else {
+      setProfileImage("");
+      setShowImg("");
+    }
+  };
+
+  const uploadImageHandler = async () => {
+    const formData = new FormData();
+    formData.append("profileImage", profileImg);
+
+    const result = await updateProfileImage(formData, token);
+
+    if (result) {
+      dispatch(setUser(result));
+    }
+  };
 
   return (
     <div>
@@ -57,21 +87,31 @@ export default function EditProfile() {
       <div className="bg-slate-500 my-5 p-5">
         <h1 className="text-2xl">Change Profile Image</h1>
         Current profile :
-        <img
-          src={user?.image}
-          alt="user profile img"
-          className="h-[100px] w-[100px] m-5"
-        />
+        {showImg ? (
+          <img
+            src={showImg}
+            alt="user profile img"
+            className="h-[100px] w-[100px] m-5"
+          />
+        ) : (
+          <img
+            src={user?.profileImage}
+            alt="user profile img"
+            className="h-[100px] w-[100px] m-5"
+          />
+        )}
         <div className="flex gap-x-4">
-          <form action="/upload" method="POST" encType="multipart/form-data">
+          <form onSubmit={handleSubmit(uploadImageHandler)}>
             <input
               type="file"
               accept="image/*"
               id="profImg"
-              name="displayPicture"
+              // name="profileImage"
               onChange={handleImageChange}
             />
-            <button>Upload Image</button>
+            <button type="submit" className="bg-yellow-400">
+              Upload Image
+            </button>
           </form>
         </div>
       </div>

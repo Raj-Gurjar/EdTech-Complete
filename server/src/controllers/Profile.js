@@ -66,17 +66,7 @@ exports.updateProfile = async (req, res) => {
                 },
             }
         );
-        await Profile_Model.updateOne(
-            { _id: profileId },
-            {
-                $set: {
-                    dateOfBirth: dateOfBirth,
-                    gender: gender,
-                    about: about,
-                    contactNumber: contactNumber,
-                },
-            }
-        );
+
         await User_Model.updateOne(
             { _id: userId },
             {
@@ -217,7 +207,7 @@ exports.updateDisplayPicture = async (req, res) => {
         const userId = req.user.id;
 
         console.log(userId);
-
+        console.log("req.body", req.body);
         console.log("req.file :", req.file);
         const displayPicturePath = req.file?.path;
 
@@ -229,17 +219,20 @@ exports.updateDisplayPicture = async (req, res) => {
         );
         console.log("image..", displayImage);
 
-        const updatedProfile = await User_Model.findByIdAndUpdate(
+        const updateProfile = await User_Model.findByIdAndUpdate(
             { _id: userId },
             { profileImage: displayImage.secure_url },
             { new: true }
         );
+        const updatedUser =
+            await User_Model.findById(userId).populate("additionalDetails");
 
         return res.status(200).json({
             success: true,
             message: "Profile Picture Updated Successfully",
-            data: updatedProfile,
+            updatedUser,
         });
+        
     } catch (error) {
         console.log("Error in profile pic update", error);
         return res.status(500).json({

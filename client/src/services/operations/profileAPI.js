@@ -86,6 +86,40 @@ export async function updateProfile(data, token) {
   return result;
 }
 
+export async function updateProfileImage(formData, token) {
+  // console.log("data in api ", formData.get("profileImage"));
+
+  const toastId = toast.loading("Loading...");
+
+  let result = [];
+
+  try {
+    const response = await apiConnector(
+      "PUT",
+      UPDATE_DISPLAY_PICTURE_API,
+      formData,
+      {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      }
+    );
+    console.log("response inside update profile img Api", response);
+
+    if (!response.data.success) {
+      throw new Error(response?.data?.message);
+    }
+    result = response?.data?.updatedUser;
+
+    localStorage.setItem("user", JSON.stringify(result));
+    toast.success(response?.data?.message);
+  } catch (error) {
+    console.log("Error in updating profile api ...", error);
+    toast.error(error?.response?.data);
+  }
+  toast.dismiss(toastId);
+  return result;
+}
+
 export const deleteAccount = async (data, token) => {
   // console.log("entering updateSubSec api call:", data);
   const toastId = toast.loading("Loading");
