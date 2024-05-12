@@ -9,15 +9,17 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-exports.uploadToCloudinary = async (file, folder, height, quality) => {
+exports.uploadToCloudinary = async (localFilePath, folder, height, quality) => {
     try {
-        if (!file) {
+        console.log("inside cloudinary config");
+        console.log("file", localFilePath);
+        if (!localFilePath) {
             return res.status(404).json({
                 success: false,
                 message: "Could not find the file's path",
             });
         }
-
+        console.log("c1");
         const options = { folder };
 
         if (height) {
@@ -28,13 +30,19 @@ exports.uploadToCloudinary = async (file, folder, height, quality) => {
         }
         options.resource_type = "auto";
 
-        const uploadResponse = await cloudinary.uploader.upload(file, options);
+        const uploadResponse = await cloudinary.uploader.upload(
+            localFilePath,
+            options
+        );
 
-        console.log("response :", response);
+        console.log("file is uploaded on cloudinary");
+        fs.unlinkSync(localFilePath); //delete from local path
 
-        return response;
+        // console.log("response :", uploadResponse);
+
+        return uploadResponse;
     } catch (error) {
-        fs.unlinkSync(file);
+        fs.unlinkSync(localFilePath);
         console.log("cloudinary error :", error);
         return null;
     }

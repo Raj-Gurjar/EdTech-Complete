@@ -9,7 +9,7 @@ const SubSection_Model = require("../models/SubSection.model");
 
 const Section_Model = require("../models/Section.model");
 const { uploadToCloudinary } = require("../config/cloudinary");
-const fs = require("fs");
+
 
 //! Create Course
 exports.createCourse = async (req, res) => {
@@ -31,10 +31,10 @@ exports.createCourse = async (req, res) => {
 
         console.log("req.file :", req.file);
         const thumbnailPath = req.file?.path;
+        console.log("thum path", thumbnailPath);
 
         //* validation
-        // console.log("course id" , category);
-        // console.log("create course data fetched",req.body);
+
         if (
             !courseName ||
             !courseDescription ||
@@ -83,7 +83,10 @@ exports.createCourse = async (req, res) => {
 
         //* Upload thumbnail to cloudinary
 
-        const thumbnailImage = await uploadToCloudinary(thumbnailPath);
+        const thumbnailImage = await uploadToCloudinary(
+            thumbnailPath,
+            process.env.CLD_THUMBNAIL_FOLDER
+        );
 
         console.log("thumbnail Image:", thumbnailImage);
         if (!thumbnailImage) {
@@ -106,7 +109,7 @@ exports.createCourse = async (req, res) => {
             category: categoryDetail._id,
             status: status,
             instructions: instructions,
-            thumbnail: thumbnailImage?.secure_url || "",
+            thumbnail: thumbnailImage.secure_url || "",
         });
 
         //* Add course in user schema of instructor

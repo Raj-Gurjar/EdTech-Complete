@@ -2,9 +2,8 @@ const Profile_Model = require("../models/Profile.model");
 const User_Model = require("../models/User.model");
 const Course_Model = require("../models/Course.model");
 const CourseProgress_Model = require("../models/CourseProgress.model");
-const { uploadImageToCloudinary } = require("../utils/imageUploader");
 const { populate } = require("../models/ContactUs.model");
-const { getDataUri } = require("../utils/features");
+const { uploadToCloudinary } = require("../config/cloudinary");
 
 //! Since while creating SignUp we have already stored null in Profile's data,
 //! so we do not need to create it, we will just to update the null values.
@@ -216,29 +215,30 @@ exports.updateDisplayPicture = async (req, res) => {
     try {
         console.log("inside upProfi");
         const userId = req.user.id;
-        const file = getDataUri(req.file);
 
         console.log(userId);
 
-        const displayPicture = req.files.displayPicture;
+        console.log("req.file :", req.file);
+        const displayPicturePath = req.file?.path;
 
-        const image = await uploadImageToCloudinary(
-            displayPicture,
-            process.env.FOLDER_NAME_CLOUDINARY,
-            1000,
-            1000
+        console.log("disp pic path", displayPicturePath);
+
+        const displayImage = await uploadToCloudinary(
+            displayPicturePath,
+            process.env.CLD_PROFILE_PIC_FOLDER
         );
-        console.log("image..", image);
+        console.log("image..", displayImage);
 
-        const updateProfile = await User_Model.findByIdAndUpdate(
+        const updatedProfile = await User_Model.findByIdAndUpdate(
             { _id: userId },
-            { profileImage: image.secure_url },
+            { profileImage: displayImage.secure_url },
             { new: true }
         );
 
-        res.send({
+        return res.status(200).json({
             success: true,
-            message: "Image Updates Successfully.",
+            message: "Profile Picture Updated Successfully",
+            data: updatedProfile,
         });
     } catch (error) {
         console.log("Error in profile pic update", error);
