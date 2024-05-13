@@ -45,7 +45,15 @@ export default function ShowSectionDetails() {
           <div key={index} className="bg-slate-300 m-5">
             <p>subSec title: {subSection?.title}</p>
             <p>Des: {subSection?.description}</p>
-            <p>Lec video:</p>
+            <p>Lec video: </p>
+            <div>
+              <video
+                src={subSection?.videoUrl}
+                controls
+                className="h-[500px] w-[700px]"
+              />
+            </div>
+
             <p>Duration : {subSection?.timeDuration}</p>
           </div>
         ))}

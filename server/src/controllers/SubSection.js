@@ -2,23 +2,29 @@ const SubSection_Model = require("../models/SubSection.model");
 const Section_Model = require("../models/Section.model");
 require("dotenv").config();
 
-const { uploadImageToCloudinary } = require("../utils/imageUploader");
+const { uploadToCloudinary } = require("../config/cloudinary");
 
 exports.createSubSection = async (req, res) => {
     try {
+        console.log("inside subSec");
         //get data
         const { sectionId, title, description } = req.body;
         //get video file
-        // const { video } = req.files.videoFile;
+
+        console.log("req.body :", req.body);
+        console.log("req.file :", req.file);
+        const lectureVideoPath = req.file?.path;
+
+        console.log("lec path ", lectureVideoPath);
 
         //validate
         if (
             !sectionId ||
             !title ||
-            !timeDuration ||
+            // !timeDuration ||
             !description ||
             // !additionalUrl
-            !video
+            !lectureVideoPath
         ) {
             return res.status(400).json({
                 success: false,
@@ -27,17 +33,17 @@ exports.createSubSection = async (req, res) => {
         }
 
         //upload video to cloudinary
-        // const uploadVideo = await uploadImageToCloudinary(
-        //     video,
-        //     process.env.FOLDER_NAME
-        // );
+        const uploadVideo = await uploadToCloudinary(
+            lectureVideoPath,
+            process.env.CLD_LECTURES_FOLDER
+        );
 
         //insert in subsection db
         const subSectionDetails = await SubSection_Model.create({
             title: title,
             // timeDuration: timeDuration,
             description: description,
-            // videoUrl: uploadVideo.secure_url,
+            videoUrl: uploadVideo.secure_url,
         });
 
         //insert subsection id in section db

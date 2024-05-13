@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { FaRupeeSign } from "react-icons/fa";
 import { showAllCategories } from "../../../../../services/operations/category";
 import CreateTags from "./CreateTags";
-import UploadThumbnail from "./UploadThumbnail";
 import RequirementField from "./RequirementField";
 import { setCourse, setStep } from "../../../../../toolkit/slice/courseSlice";
 import {
@@ -13,6 +12,7 @@ import {
 } from "../../../../../services/operations/courseDetailsAPI";
 import toast from "react-hot-toast";
 import { COURSE_STATUS } from "../../../../../utils/constants";
+import UploadMedia from "../../../../UploadMedia";
 
 export default function CourseInfoForm() {
   const {
@@ -51,7 +51,7 @@ export default function CourseInfoForm() {
       setValue("courseBenefits", course.whatYouWillLearn);
       setValue("courseCategory", course.category);
       setValue("courseRequirements", course.instruction);
-      // setValue("courseImage", course.thumbnail);
+      setValue("courseImage", course.thumbnail);
     }
     getCategories();
   }, []);
@@ -67,7 +67,7 @@ export default function CourseInfoForm() {
       // currentValues.courseTags !== course.tag ||
       currentValues.courseBenefits !== course.whatYouWillLearn ||
       currentValues.courseCategory !== course.category._id ||
-      // currentValues.courseImage !== course.thumbnail ||
+      currentValues.courseImage !== course.thumbnail ||
       currentValues.courseRequirements.toString() !==
         course.instruction.toString()
     ) {
@@ -79,6 +79,7 @@ export default function CourseInfoForm() {
 
   //handle next button
   const onSubmit = async (data) => {
+    console.log("inside sub");
     if (editCourse) {
       if (isFormUpdated()) {
         const currentValues = getValues();
@@ -108,9 +109,9 @@ export default function CourseInfoForm() {
         if (currentValues.courseCategory !== course.category._id) {
           formData.append("category", data.courseCategory);
         }
-        // if ( currentValues.courseImage !== course.thumbnail) {
-        //   formData.append("thumbnail", data.courseImage);
-        // }
+        if (currentValues.courseImage !== course.thumbnail) {
+          formData.append("thumbnail", data.courseImage);
+        }
         if (
           currentValues.courseRequirements.toString() !==
           course.instructions.toString()
@@ -150,10 +151,11 @@ export default function CourseInfoForm() {
     formData.append("category", data.courseCategory);
     formData.append("instructions", JSON.stringify(data.courseRequirements));
     // formData.append("tag", data.courseTags);
-    // formData.append("thumbnail", data.courseImage);
+    formData.append("thumbnail", data.courseImage);
     formData.append("status", COURSE_STATUS.DRAFT);
 
-    // console.log("form2", formData);
+    console.log("thumbnail", data?.courseImage, formData.get("thumbnail"));
+
     setLoading(true);
     const result = await addCourseDetails(formData, token);
     console.log("result2", result);
@@ -251,9 +253,16 @@ export default function CourseInfoForm() {
           <CreateTags />
         </div>
         {/* //TODO: Upload Thumbnail Component vid 56 min mfe9 */}
-        <label htmlFor="CourseImage">Course Thumbnail</label>
+
         <div>
-          <UploadThumbnail />
+          <UploadMedia
+            name="courseImage"
+            register={register}
+            label="Course Thumbnail"
+            errors={errors}
+            setValue={setValue}
+            image={true}
+          />
         </div>
         <div>
           <label htmlFor="courseBenefits">Course Benefits</label>

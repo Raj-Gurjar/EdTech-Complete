@@ -73,7 +73,7 @@ export const addCourseDetails = async (data, token) => {
 
   try {
     const response = await apiConnector("POST", CREATE_COURSE_API, data, {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     });
     // console.log("add course detail..", response);
@@ -142,13 +142,14 @@ export const createSection = async (data, token) => {
 };
 
 export const createSubSection = async (data, token) => {
+  // console.log(data.);
   const toastId = toast.loading("Loading");
   let result = null;
 
   try {
     const response = await apiConnector("POST", CREATE_SUBSECTION_API, data, {
+      "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
     });
     console.log("create sub-section api response..", response);
 
@@ -320,7 +321,6 @@ export const deleteCourse = async (data, token) => {
 export const getFullDetailsOfCourse = async (courseId, token) => {
   const toastId = toast.loading("Loading..");
   let result = [];
-  
 
   try {
     const response = await apiConnector(

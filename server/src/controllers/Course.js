@@ -10,7 +10,6 @@ const SubSection_Model = require("../models/SubSection.model");
 const Section_Model = require("../models/Section.model");
 const { uploadToCloudinary } = require("../config/cloudinary");
 
-
 //! Create Course
 exports.createCourse = async (req, res) => {
     try {
@@ -29,7 +28,9 @@ exports.createCourse = async (req, res) => {
         } = req.body;
         let { status } = req.body;
 
+        console.log("req.body", req.body);
         console.log("req.file :", req.file);
+
         const thumbnailPath = req.file?.path;
         console.log("thum path", thumbnailPath);
 

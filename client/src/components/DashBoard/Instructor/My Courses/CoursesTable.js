@@ -21,7 +21,7 @@ export default function CoursesTable({ instCourses, setInstCourses }) {
   const [loading, setLoading] = useState(false);
   const [modal, setModal] = useState(null);
 
-  console.log("instCO table :", instCourses);
+  // console.log("instCO table :", instCourses);
 
   const handleDeleteCourse = async (courseId) => {
     setLoading(true);
