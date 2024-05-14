@@ -14,12 +14,19 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
   const location = useLocation();
   const { sectionId, subSectionId } = useParams();
 
-  // const {
-  //   courseSectionData,
-  //   courseEntireData,
-  //   totalNoOfLectures,
-  //   compeltedLectures,
-  // } = useSelector((state) => state.viewCourseSlice);
+  const {
+    courseSectionData,
+    courseEntireData,
+    totalNoOfLectures,
+    completedLectures,
+  } = useSelector((state) => state.viewCourse);
+
+  console.log("courseSectionData", courseSectionData);
+  console.log("courseEntireData", courseEntireData);
+
+  // useEffect(() => {
+  //   setActiveFlags();
+  // }, [courseSectionData, courseEntireData, location.pathname]);
 
   const setActiveFlags = () => {
     if (!courseSectionData?.length) {
@@ -41,9 +48,6 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
     //set current subSec
     setVideoActive(activeSubSectionId);
   };
-  useEffect(() => {
-    setActiveFlags();
-  }, [courseSectionData, courseEntireData, location.pathname]);
 
   return (
     <div>
@@ -53,10 +57,57 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
         </button>
         <button onClick={() => setReviewModal(true)}>Add Review</button>
       </div>
-      <p>My Course</p>
-      <p>1/12</p>
 
-      <div>Lectures</div>
+      <div>
+        <p>Course Name:{courseEntireData?.courseName}</p>
+        <p>
+          {completedLectures?.length}/{totalNoOfLectures}
+        </p>
+      </div>
+
+      <div>
+        <h1>Lectures</h1>
+        {courseSectionData.map((section, index) => (
+          <div onClick={() => setActiveStatus(section?._id)} key={index}>
+            {/* section */}
+            <div>
+              <p>{section?.sectionName}</p>
+              <button>V</button>
+            </div>
+
+            {/* subsections */}
+            <div>
+              {activeStatus === section?._id && (
+                <div>
+                  {section?.subSection.map((lecture, index) => (
+                    <div
+                      className={`flex gap-3 p-4 ${
+                        videoActive === lecture?._id
+                          ? "bg-yellow-200 text-black"
+                          : "bg-black text-white"
+                      }`}
+                      key={index}
+                      onClick={() => {
+                        navigate(
+                          `/courseMenu/${courseEntireData?._id}/section/${section?._id}/subSection/${lecture?._id}`
+                        );
+                        setVideoActive(lecture?._id);
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={completedLectures.includes(lecture?._id)}
+                        onChange={() => {}}
+                      />
+                      <span>{lecture?.title}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

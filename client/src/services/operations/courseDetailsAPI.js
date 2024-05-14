@@ -397,3 +397,29 @@ export const getSectionDetails = async (sectionId) => {
   toast.dismiss(toastId);
   return result;
 };
+
+export const createRating = async (data, token) => {
+  // console.log("add course api entered data: ", data.getAll("category"));
+  const toastId = toast.loading("Loading");
+  let result = null;
+
+  try {
+    const response = await apiConnector("POST", CREATE_RATING_API, data, {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    });
+    // console.log("add course detail..", response);
+
+    if (!response?.data?.success) {
+      throw new Error("Could not Create Review");
+    }
+    toast.success("Rating and Review added Successfully");
+    result = response?.data?.newCourse;
+    // console.log("result in addCourse", result);
+  } catch (error) {
+    console.log("review api error...", error);
+    toast.error(error.response.data.message);
+  }
+  toast.dismiss(toastId);
+  return result;
+};

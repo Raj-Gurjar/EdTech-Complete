@@ -35,10 +35,8 @@ export const {
   updateCompletedLectures,
   setEntireCourseData,
   setCompletedLecture,
-
-  courseEntireData,
-  completedLectures,
-  courseSectionData,
-  totalNoOfLectures,
 } = viewCourseSlice.actions;
+
+
+
 export default viewCourseSlice.reducer;

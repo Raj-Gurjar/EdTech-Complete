@@ -8,8 +8,8 @@ import {
 } from "../../../../services/operations/courseDetailsAPI";
 import { Table, Thead, Tr, Th, Tbody, Td } from "react-super-responsive-table";
 import { COURSE_STATUS } from "../../../../utils/constants";
-import Modal from "../../../Modal";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
+import Modal from "../../../Modals-Popups/Modal";
 
 export default function CoursesTable({ instCourses, setInstCourses }) {
   const dispatch = useDispatch();

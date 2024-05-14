@@ -7,7 +7,7 @@ import {
   updateSubSection,
 } from "../../../../../services/operations/courseDetailsAPI";
 import { setCourse } from "../../../../../toolkit/slice/courseSlice";
-import UploadMedia from "../../../../UploadMedia";
+import UploadMedia from "../../../../../utils/UploadMedia";
 
 export default function SubSectionModal({
   modalData,

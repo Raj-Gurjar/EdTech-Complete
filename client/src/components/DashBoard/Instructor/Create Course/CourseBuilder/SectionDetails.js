@@ -5,12 +5,14 @@ import { FaRegEdit } from "react-icons/fa";
 import { AiTwotoneDelete } from "react-icons/ai";
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import SubSectionModal from "./SubSectionModal";
-import Modal from "../../../../Modal";
+
+
 import {
   deleteSection,
   deleteSubSection,
 } from "../../../../../services/operations/courseDetailsAPI";
 import { setCourse } from "../../../../../toolkit/slice/courseSlice";
+import Modal from "../../../../Modals-Popups/Modal";
 
 export default function SectionDetails({ handleEditSecName }) {
   const { course } = useSelector((state) => state.course);

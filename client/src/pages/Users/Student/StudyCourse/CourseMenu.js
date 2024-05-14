@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useParams } from "react-router-dom";
-import VideoDetailsSideBar from "../../components/DashBoard/Student/VideoDetailsSideBar";
-import CourseReviewModal from "../../components/Modals-Popups/CourseReviewModal";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getCourseDetails,
-  getFullDetailsOfCourse,
-} from "../../services/operations/courseDetailsAPI";
+
+import VideoDetailsSideBar from "../../../../components/DashBoard/Student/VideoDetailsSideBar";
 import {
   setCompletedLecture,
   setCourseSectionData,
   setEntireCourseData,
   setTotalNoOfLectures,
-} from "../../toolkit/slice/viewCourseSlice";
+} from "../../../../toolkit/slice/viewCourseSlice";
+import {
+  getFullDetailsOfCourse,
+  getCourseDetails,
+} from "../../../../services/operations/courseDetailsAPI";
+import CourseReviewModal from "../../../../components/Modals-Popups/CourseReviewModal";
 
 export default function CourseMenu() {
   const [reviewModal, setReviewModal] = useState(false);

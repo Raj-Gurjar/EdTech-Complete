@@ -3,9 +3,9 @@ import { getCourseDetails } from "../../services/operations/courseDetailsAPI";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { buyCourse } from "../../services/operations/paymentApi";
-import Modal from "../../components/Modal";
+import Modal from "../../components/Modals-Popups/Modal";
 import avgRating from "../../utils/avgRating";
-import RatingStars from "../../components/RatingStars";
+import RatingStars from "../../utils/RatingStars";
 import { formateDate } from "../../utils/formatDate";
 import copy from "copy-to-clipboard";
 import toast from "react-hot-toast";
@@ -122,9 +122,13 @@ export default function CourseDetails() {
           Instructor: {courseData?.instructor?.firstName}{" "}
           {courseData?.instructor?.lastName}
         </p>
-        <p>Instructor img :
-          <img src={courseData?.instructor?.image} alt="instructor Img"
-          className="h-[50px] w-[50px] rounded" />
+        <p>
+          Instructor img :
+          <img
+            src={courseData?.instructor?.profileImage}
+            alt="instructor Img"
+            className="h-[50px] w-[50px] rounded"
+          />
         </p>
 
         <p>Rating No: {courseData?.ratingAndReviews?.length}</p>

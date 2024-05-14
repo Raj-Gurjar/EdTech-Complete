@@ -9,7 +9,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import Modal from "../Modal";
+import Modal from "../Modals-Popups/Modal";
 
 export default function SideBar() {
   const dispatch = useDispatch();

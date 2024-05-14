@@ -8,7 +8,7 @@ import {
   updateProfileImage,
 } from "../../services/operations/profileAPI";
 import { setUser } from "../../toolkit/slice/profileSlice";
-import Modal from "../Modal";
+import Modal from "../Modals-Popups/Modal";
 import { logout } from "../../services/operations/authAPI";
 import { useNavigate } from "react-router-dom";
 

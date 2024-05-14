@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import RatingStars from "../RatingStars";
+import RatingStars from "../../utils/RatingStars";
 import avgRating from "../../utils/avgRating";
 
 export default function CourseCard({ course }) {

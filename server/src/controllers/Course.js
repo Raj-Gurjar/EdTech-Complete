@@ -11,6 +11,15 @@ const Section_Model = require("../models/Section.model");
 const { uploadToCloudinary } = require("../config/cloudinary");
 
 //! Create Course
+
+function convertSecondsToDuration(totalSeconds) {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${hours}:${minutes}:${seconds}`;
+}
+
 exports.createCourse = async (req, res) => {
     try {
         //*get the data
@@ -341,25 +350,25 @@ exports.getFullCourseDetails = async (req, res) => {
                 message: `Could not find the Course with ${courseId}`,
             });
         }
-        // console.log("Course Details:", courseDetails);
+        console.log("Course Details:", courseDetails);
 
         let courseProgressCount = await CourseProgress_Model.findOne({
             courseID: courseId,
             userID: userId,
         });
         console.log("Course Progress Count :", courseProgressCount);
+
         console.log("ccc", courseDetails.courseContent);
-        let totalDurationInSecond = 0;
+
+        let totalDurationInSeconds = 0;
         courseDetails.courseContent?.forEach((content) => {
             content.subSection?.forEach((subSection) => {
-                const timeDurationInSeconds = parseInt(
-                    subSection.timeDurationInSeconds
-                );
-                totalDurationInSecond += timeDurationInSeconds;
+                const timeDurationInSeconds = parseInt(subSection.timeDuration);
+                totalDurationInSeconds += timeDurationInSeconds;
             });
         });
-        console.log("totalDurSec :", totalDurationInSecond);
-        const totalDuration = convertSecondsToDuration(totalDurationInSecond);
+        console.log("totalDurSec :", totalDurationInSeconds);
+        const totalDuration = convertSecondsToDuration(totalDurationInSeconds);
 
         console.log("totalDur :", totalDuration);
         //return

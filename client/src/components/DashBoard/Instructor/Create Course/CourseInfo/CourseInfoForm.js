@@ -12,7 +12,8 @@ import {
 } from "../../../../../services/operations/courseDetailsAPI";
 import toast from "react-hot-toast";
 import { COURSE_STATUS } from "../../../../../utils/constants";
-import UploadMedia from "../../../../UploadMedia";
+import UploadMedia from "../../../../../utils/UploadMedia";
+
 
 export default function CourseInfoForm() {
   const {

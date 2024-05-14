@@ -21,7 +21,6 @@ import MyProfile from "./components/DashBoard/MyProfile";
 import EnrolledCourses from "./components/DashBoard/Student/EnrolledCourses";
 import Settings from "./components/DashBoard/Settings";
 import MyCart from "./components/DashBoard/Student/MyCart";
-import ProtectedRoute from "./components/ProtectedRoute";
 import MyPurchases from "./components/DashBoard/Student/MyPurchases";
 import CreateCourses from "./components/DashBoard/Instructor/Create Course/CreateCourse";
 import ShowCourses from "./components/DashBoard/Instructor/My Courses/ShowCourses";
@@ -32,8 +31,9 @@ import SingleCategory from "./pages/Courses/SingleCategory";
 import CourseDetails from "./pages/Courses/CourseDetails";
 import ShowDetails from "./pages/Courses/ShowSectionDetails";
 import ShowSectionDetails from "./pages/Courses/ShowSectionDetails";
-import CourseMenu from "./pages/StudyCourse/CourseMenu";
 import EditProfile from "./components/DashBoard/EditProfile";
+import ProtectedRoute from "./utils/ProtectedRoute";
+import CourseMenu from "./pages/Users/Student/StudyCourse/CourseMenu";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
