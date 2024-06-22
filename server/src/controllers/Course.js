@@ -10,6 +10,9 @@ const SubSection_Model = require("../models/SubSection.model");
 const Section_Model = require("../models/Section.model");
 const { uploadToCloudinary } = require("../config/cloudinary");
 
+
+//TODO : Add courseProgress controller (lec 30 , 2.18 time)
+
 //! Create Course
 
 function convertSecondsToDuration(totalSeconds) {

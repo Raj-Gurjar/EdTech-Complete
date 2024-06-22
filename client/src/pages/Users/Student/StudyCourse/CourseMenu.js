@@ -47,6 +47,7 @@ export default function CourseMenu() {
       </div>
       <div className="h-[calc(100vh - 3.5rem)] overflow-auto bg-blue-200 mx-auto w-11/12 p-5 max-w-[1000px]">
         <Outlet />
+        
       </div>
 
       {reviewModal && <CourseReviewModal setReviewModal={setReviewModal} />}

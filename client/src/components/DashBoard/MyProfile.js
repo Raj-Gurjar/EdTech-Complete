@@ -8,7 +8,7 @@ export default function MyProfile() {
   const navigate = useNavigate();
   const [editProfile, setEditProfile] = useState(false);
 
-  // console.log("user data", user);
+  console.log("user data", user);
   return (
     <div>
       <h1 className="text-3xl">My Profile</h1>

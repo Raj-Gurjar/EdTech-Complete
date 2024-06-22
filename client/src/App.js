@@ -34,6 +34,7 @@ import ShowSectionDetails from "./pages/Courses/ShowSectionDetails";
 import EditProfile from "./components/DashBoard/EditProfile";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import CourseMenu from "./pages/Users/Student/StudyCourse/CourseMenu";
+import VideoDetails from "./pages/Users/Student/StudyCourse/VideoDetails";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
@@ -62,10 +63,7 @@ function App() {
 
           <Route path="/allCourses/:courseId" element={<CourseDetails />} />
           <Route path="/sections/:sectionId" element={<ShowSectionDetails />} />
-          <Route
-            path="/courseMenu/:courseId/section/:sectionId/subSection/:subSectionId"
-            element={<CourseMenu />}
-          />
+
           {/* //!Users */}
 
           <Route
@@ -106,6 +104,23 @@ function App() {
           {/* //!Courses */}
           {/* <Route path="/cart" element={<Cart />} /> */}
           <Route path="/allCourses" element={<Courses />} />
+
+          <Route
+            element={
+              <ProtectedRoute>
+                <CourseMenu />
+              </ProtectedRoute>
+            }
+          >
+            {user?.accountType === ACCOUNT_TYPE.STUDENT && (
+              <>
+                <Route
+                  path="/courseMenu/:courseId/section/:sectionId/subSection/:subSectionId"
+                  element={<VideoDetails />}
+                />
+              </>
+            )}
+          </Route>
 
           <Route path="*" element={<Error404 />} />
         </Routes>

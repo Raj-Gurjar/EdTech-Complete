@@ -70,21 +70,21 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
         {courseSectionData.map((section, index) => (
           <div onClick={() => setActiveStatus(section?._id)} key={index}>
             {/* section */}
-            <div>
+            <div className="flex">
               <p>{section?.sectionName}</p>
-              <button>V</button>
+              <button onClick={()=>{}}>V</button>
             </div>
 
             {/* subsections */}
             <div>
               {activeStatus === section?._id && (
                 <div>
-                  {section?.subSection.map((lecture, index) => (
+                  {section?.subSections.map((lecture, index) => (
                     <div
                       className={`flex gap-3 p-4 ${
                         videoActive === lecture?._id
                           ? "bg-yellow-200 text-black"
-                          : "bg-black text-white"
+                          : "bg-red-400 text-white"
                       }`}
                       key={index}
                       onClick={() => {

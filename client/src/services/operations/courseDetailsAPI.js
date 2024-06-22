@@ -348,6 +348,30 @@ export const getFullDetailsOfCourse = async (courseId, token) => {
   return result;
 };
 
+export const markLectureAsComplete = async (data, token) => {
+  const result = null;
+  console.log("mark comp", data);
+  const toastId = toast.loading("Loading...");
+  try {
+    const response = await apiConnector("POST", LECTURE_COMPLETION_API, data, {
+      Authorization: `Bearer ${token}`,
+    });
+    console.log("Mark Lect as comp api response....", response);
+
+    if (!response.data.message) {
+      throw new Error(response.data.error);
+    }
+    toast.success("Lecture Completed");
+    result = true;
+  } catch (error) {
+    console.log("Mark lect api error....", error);
+    toast.error(error.message);
+    result = false;
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
 export const getCourseDetails = async (courseId) => {
   // console.log("inside course by id");
   const toastId = toast.loading("Loading");

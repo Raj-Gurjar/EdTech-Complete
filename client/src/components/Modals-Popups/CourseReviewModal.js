@@ -8,7 +8,7 @@ export default function CourseReviewModal({ setReviewModal }) {
   const { user } = useSelector((state) => state.profile);
   const { courseEntireData } = useSelector((state) => state.viewCourse);
   const { token } = useSelector((state) => state.auth);
-
+   
   const {
     register,
     handleSubmit,
