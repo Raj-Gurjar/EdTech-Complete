@@ -10,6 +10,7 @@ import { Table, Thead, Tr, Th, Tbody, Td } from "react-super-responsive-table";
 import { COURSE_STATUS } from "../../../../utils/constants";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import Modal from "../../../Modals-Popups/Modal";
+import { formateDate } from "../../../../utils/formatDate";
 
 export default function CoursesTable({ instCourses, setInstCourses }) {
   const dispatch = useDispatch();
@@ -70,7 +71,7 @@ export default function CoursesTable({ instCourses, setInstCourses }) {
                     <div className="flex flex-col">
                       <p>Course Name: {course.courseName}</p>
                       <p>Desc :{course.courseDescription}</p>
-                      <p>Created at :</p>
+                      <p>Created at : {formateDate(course?.createdAt)}</p>
                       <p>
                         {course.status === COURSE_STATUS.DRAFT ? (
                           <p className="text-red-500">DRAFTED</p>
@@ -81,7 +82,7 @@ export default function CoursesTable({ instCourses, setInstCourses }) {
                     </div>
                   </Td>
 
-                  <Td>2hr 30min</Td>
+                  {/* <Td>Duration : {course?.}</Td> */}
                   <Td>Price : Rs.{course?.price}</Td>
                   <Td>Category: {course?.category?.name}</Td>
                   <Td className="">

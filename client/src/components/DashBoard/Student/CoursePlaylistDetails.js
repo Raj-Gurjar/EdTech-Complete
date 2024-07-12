@@ -8,11 +8,12 @@ import {
 } from "../../../toolkit/slice/viewCourseSlice";
 
 export default function VideoDetailsSideBar({ setReviewModal }) {
-  const [activeStatus, setActiveStatus] = useState("");
-  const [videoActive, setVideoActive] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const { sectionId, subSectionId } = useParams();
+
+  const [activeStatus, setActiveStatus] = useState("f");
+  const [videoActive, setVideoActive] = useState("");
 
   const {
     courseSectionData,
@@ -24,10 +25,11 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
   console.log("courseSectionData", courseSectionData);
   console.log("courseEntireData", courseEntireData);
 
-  // useEffect(() => {
-  //   setActiveFlags();
-  // }, [courseSectionData, courseEntireData, location.pathname]);
+  useEffect(() => {
+    setActiveFlags();
+  }, [courseSectionData, courseEntireData, location.pathname]);
 
+  console.log("active s", activeStatus);
   const setActiveFlags = () => {
     if (!courseSectionData?.length) {
       return;
@@ -37,10 +39,10 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
     );
     const currentSubSectionIndex = courseSectionData?.[
       currentSectionIndex
-    ]?.subSection.findIndex((data) => data._id === subSectionId);
+    ]?.subSections.findIndex((data) => data._id === subSectionId);
 
     const activeSubSectionId =
-      courseSectionData[currentSectionIndex]?.subSection?.[
+      courseSectionData[currentSectionIndex]?.subSections?.[
         currentSubSectionIndex
       ]?._id;
     //set current section
@@ -72,7 +74,7 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
             {/* section */}
             <div className="flex">
               <p>{section?.sectionName}</p>
-              <button onClick={()=>{}}>V</button>
+              <button onClick={() => {}}>V</button>
             </div>
 
             {/* subsections */}

@@ -4,6 +4,7 @@ const Course_Model = require("../models/Course.model");
 const CourseProgress_Model = require("../models/CourseProgress.model");
 const { populate } = require("../models/ContactUs.model");
 const { uploadToCloudinary } = require("../config/cloudinary");
+const { convertSecondsToDuration } = require("../utils/convertDuration");
 
 //! Since while creating SignUp we have already stored null in Profile's data,
 //! so we do not need to create it, we will just to update the null values.
@@ -232,7 +233,6 @@ exports.updateDisplayPicture = async (req, res) => {
             message: "Profile Picture Updated Successfully",
             updatedUser,
         });
-        
     } catch (error) {
         console.log("Error in profile pic update", error);
         return res.status(500).json({
@@ -247,15 +247,65 @@ exports.getEnrolledCourses = async (req, res) => {
         console.log("Entering get Enrolled C id");
         const userId = req.user.id;
         console.log("userId", userId);
-        const userDetails = await User_Model.findOne({ _id: userId }).populate({
-            path: "courses",
-            populate: {
-                path: "courseContent",
+        let userDetails = await User_Model.findOne({ _id: userId })
+            .populate({
+                path: "courses",
                 populate: {
-                    path: "subSections",
+                    path: "courseContent",
+                    populate: {
+                        path: "subSections",
+                    },
                 },
-            },
-        });
+            })
+            .exec();
+
+        userDetails = userDetails.toObject();
+
+        // console.log("user d", userDetails);
+        var subSectionLength = 0;
+        for (var i = 0; i < userDetails.courses.length; i++) {
+            let totalDurationInSeconds = 0;
+            subSectionLength = 0;
+
+            for (
+                var j = 0;
+                j < userDetails.courses[i].courseContent.length;
+                j++
+            ) {
+                totalDurationInSeconds += userDetails.courses[i].courseContent[
+                    j
+                ].subSections.reduce(
+                    (acc, curr) => acc + parseInt(curr.timeDuration),
+                    0
+                );
+                userDetails.courses[i].totalDuration = convertSecondsToDuration(
+                    totalDurationInSeconds
+                );
+
+                subSectionLength +=
+                    userDetails.courses[i].courseContent[j].subSections.length;
+            }
+
+            let courseProgressCount = await CourseProgress_Model.findOne({
+                courseID: userDetails.courses[i]._id,
+                userId: userId,
+            });
+            courseProgressCount = courseProgressCount?.completedVideos.length;
+
+            if (subSectionLength === 0) {
+                userDetails.courses[i].progressPercentage = 100;
+            } else {
+                //TO make it up to 2 decimal point
+                const multiplier = Math.pow(10, 2);
+                userDetails.courses[i].progressPercentage =
+                    Math.round(
+                        (courseProgressCount / subSectionLength) *
+                            100 *
+                            multiplier
+                    ) / multiplier;
+            }
+        }
+
         console.log("user details:", userDetails);
         if (!userDetails) {
             return res.status(400).json({

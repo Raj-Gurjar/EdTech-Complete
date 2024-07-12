@@ -26,7 +26,7 @@ export default function EnrolledCourses() {
     getEnrolledCourses();
   }, []);
 
-  // console.log("enro: ",enrolledCourses);
+  console.log("enro: ",enrolledCourses);
   return (
     <div>
       <h1>Enrolled Courses</h1>
@@ -50,11 +50,9 @@ export default function EnrolledCourses() {
               enrolledCourses.map((course, index) => (
                 <Link
                   to={`/courseMenu/${course?._id}/section/${course.courseContent?.[0]?._id}/subSection/${course.courseContent?.[0]?.subSections?.[0]?._id}`}
+                  key={index}
                 >
-                  <div
-                    key={index}
-                    className="bg-slate-300 m-5 flex gap-x-5 p-2"
-                  >
+                  <div className="bg-slate-300 m-5 flex gap-x-5 p-2">
                     <div>
                       <img
                         src={course.thumbnail}

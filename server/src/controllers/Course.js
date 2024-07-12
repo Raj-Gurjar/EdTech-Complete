@@ -9,19 +9,11 @@ const SubSection_Model = require("../models/SubSection.model");
 
 const Section_Model = require("../models/Section.model");
 const { uploadToCloudinary } = require("../config/cloudinary");
-
+const { convertSecondsToDuration } = require("../utils/convertDuration");
 
 //TODO : Add courseProgress controller (lec 30 , 2.18 time)
 
 //! Create Course
-
-function convertSecondsToDuration(totalSeconds) {
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-
-    return `${hours}:${minutes}:${seconds}`;
-}
 
 exports.createCourse = async (req, res) => {
     try {
@@ -203,6 +195,7 @@ exports.getAllCourses = async (req, res) => {
 //! Get Course by Id
 exports.getCourseById = async (req, res) => {
     try {
+        console.log("cccby");
         const { courseId } = req.body;
 
         const courseDetails = await Course_Model.findById(courseId)
@@ -231,10 +224,23 @@ exports.getCourseById = async (req, res) => {
         }
         // console.log("Course Details:", courseDetails);
         //return
+
+        let totalDurationInSeconds = 0;
+        courseDetails.courseContent?.forEach((content) => {
+            content.subSections?.forEach((subSection) => {
+                const timeDurationInSeconds = parseInt(subSection.timeDuration);
+                totalDurationInSeconds += timeDurationInSeconds;
+            });
+        });
+        console.log("totalDurSec :", totalDurationInSeconds);
+        const totalDuration = convertSecondsToDuration(totalDurationInSeconds);
+
+        console.log("totalDur :", totalDuration);
+
         return res.status(200).json({
             success: true,
             message: "Course Data fetched Successfully.",
-            data: courseDetails,
+            data: { courseDetails, totalDuration },
         });
     } catch (error) {
         console.log("Error in fetching course details", error);
@@ -401,22 +407,23 @@ exports.getInstructorCourses = async (req, res) => {
     try {
         const instructorId = req.user.id;
 
-        //find all the courses belonging to instructor
+        // Find all the courses belonging to instructor
         const instructorCourses = await Course_Model.find({
             instructor: instructorId,
         })
             .sort({ createdAt: -1 })
+
             .populate("category")
             .exec();
 
-        //return
+        // Return
         return res.status(200).json({
             success: true,
             message: "Instructor's Courses fetched successfully",
             data: instructorCourses,
         });
     } catch (error) {
-        console.log("instructor's courses data fetching error", error);
+        console.log("Instructor's courses data fetching error", error);
 
         return res.status(500).json({
             success: false,

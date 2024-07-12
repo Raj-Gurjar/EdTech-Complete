@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import {
@@ -16,7 +16,6 @@ export default function SubSectionModal({
   view = false,
   edit = false,
 }) {
-  // console.log("modalData: ", modalData);
   const {
     register,
     handleSubmit,
@@ -36,26 +35,21 @@ export default function SubSectionModal({
       setValue("lectureDesc", modalData.description);
       setValue("lectureVideo", modalData.videoUrl);
     }
-  }, []);
+  }, [view, edit, modalData, setValue]);
 
   const isFormUpdated = () => {
     const currentValues = getValues();
-    if (
+    return (
       currentValues.lectureTitle !== modalData.title ||
       currentValues.lectureDesc !== modalData.description ||
       currentValues.lectureVideo !== modalData.videoUrl
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    );
   };
 
   const handleEditSubSection = async () => {
     const currentValues = getValues();
 
     const formData = new FormData();
-
     formData.append("sectionId", modalData.sectionId);
     formData.append("subSectionId", modalData._id);
 
@@ -70,12 +64,9 @@ export default function SubSectionModal({
     }
 
     setLoading(true);
-    //!API call
-
     const result = await updateSubSection(formData, token);
 
     if (result) {
-      // // TODO check to add extra
       const updatedCourseContent = course.courseContent.map((section) =>
         section._id === modalData.sectionId ? result : section
       );
@@ -93,37 +84,28 @@ export default function SubSectionModal({
       return;
     }
     if (edit) {
-      if (!isFormUpdated) {
+      if (!isFormUpdated()) {
         toast.error("No changes made to the form");
       } else {
-        //edit subSection
         handleEditSubSection();
       }
       return;
     }
 
-    // //create subSection
     const formData = new FormData();
-
-    console.log("data", data);
     formData.append("sectionId", modalData);
     formData.append("title", data.lectureTitle);
     formData.append("description", data.lectureDesc);
     formData.append("videoUrl", data.lectureVideo);
 
     setLoading(true);
-
-    // //!API call
     const result = await createSubSection(formData, token);
 
     if (result) {
-      // // TODO: check to add something else
-
       const updatedCourseContent = course.courseContent.map((section) =>
         section._id === modalData ? result : section
       );
       const updatedCourse = { ...course, courseContent: updatedCourseContent };
-
       dispatch(setCourse(updatedCourse));
     }
 
@@ -134,8 +116,6 @@ export default function SubSectionModal({
   return (
     <div className="bg-orange-300 absolute top-[10%] left-[10%] p-[10px]">
       <div className="flex bg-slate-400 justify-between">
-        {/* <h1>Sub-section</h1> */}
-
         <h2>
           {view && "Viewing"} {add && "Adding"} {edit && "Edit"} Lecture
         </h2>

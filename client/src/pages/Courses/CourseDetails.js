@@ -17,6 +17,7 @@ import { isAction } from "@reduxjs/toolkit";
 
 export default function CourseDetails() {
   const [courseData, setCourseData] = useState(null);
+  const [courseDuration, setCourseDuration] = useState(null);
   const [loading, setLoading] = useState(false);
   const [avgRatingCount, setAvgRatingCount] = useState(0);
   const [modal, setModal] = useState(null);
@@ -30,8 +31,8 @@ export default function CourseDetails() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log("cart", cart);
-  console.log("user", user);
+  // console.log("cart", cart);
+  // console.log("user", user);
 
   const handelToggleSection = (id) => {
     setOpenSection(
@@ -48,10 +49,16 @@ export default function CourseDetails() {
 
   const showCourse = async () => {
     setLoading(true);
-    const course = await getCourseDetails(courseId);
+    const response = await getCourseDetails(courseId);
+    const course = response?.data?.courseDetails;
+    const courseDur = response?.data?.totalDuration;
 
     if (course) {
-      setCourseData(course?.data);
+      setCourseData(course);
+    }
+
+    if (courseDur) {
+      setCourseDuration(courseDur);
     }
 
     setLoading(false);
@@ -136,8 +143,10 @@ export default function CourseDetails() {
           Rating Stars:{" "}
           <RatingStars Review_Count={avgRatingCount} Star_Size={24} />{" "}
         </p>
+        <p>Total Duration : {courseDuration} </p>
         <p>Avg Rating : {avgRatingCount}</p>
         <p>Student Enrolled : {courseData?.studentsEnrolled?.length} </p>
+
         <p>Course Desc : {courseData?.courseDescription}</p>
         <p>Created at : {formateDate(courseData?.createdAt)} </p>
         <p>Last Updated at : {formateDate(courseData?.updatedAt)} </p>

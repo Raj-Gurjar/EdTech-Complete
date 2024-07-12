@@ -20,6 +20,8 @@ const {
 const { auth, isInstructor, isStudent } = require("../middlewares/auth");
 const { fileUpload } = require("../middlewares/multer");
 
+const { updateCourseProgress } = require("../controllers/CourseProgress");
+
 //!Routes for creating , getting all and getting by id of instructor course
 router.get("/getAllCourses", getAllCourses);
 router.post("/getFullCourseDetails", auth, isStudent, getFullCourseDetails);
@@ -39,5 +41,8 @@ router.delete("/deleteCourse", auth, isInstructor, deleteCourse);
 router.post("/createRating", auth, isStudent, createRatingNReview);
 router.get("/getAverageRating", getAverageRating);
 router.get("/getReviews", getAllRatingAndReviews);
+
+//!Course Progress
+router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);
 
 module.exports = router;

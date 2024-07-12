@@ -349,7 +349,7 @@ export const getFullDetailsOfCourse = async (courseId, token) => {
 };
 
 export const markLectureAsComplete = async (data, token) => {
-  const result = null;
+  let result = null;
   console.log("mark comp", data);
   const toastId = toast.loading("Loading...");
   try {
@@ -388,6 +388,7 @@ export const getCourseDetails = async (courseId) => {
     }
     // toast.success("Course Category details fetched");
     result = response?.data;
+    console.log("res",result);
   } catch (error) {
     console.log("course details page api error...", error);
     toast.error(error?.response?.data?.message);

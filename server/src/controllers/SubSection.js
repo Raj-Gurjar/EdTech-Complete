@@ -18,14 +18,7 @@ exports.createSubSection = async (req, res) => {
         console.log("lec path ", lectureVideoPath);
 
         //validate
-        if (
-            !sectionId ||
-            !title ||
-            // !timeDuration ||
-            !description ||
-            // !additionalUrl
-            !lectureVideoPath
-        ) {
+        if (!sectionId || !title || !description || !lectureVideoPath) {
             return res.status(400).json({
                 success: false,
                 message: "Please enter all the Fields.",
@@ -37,11 +30,11 @@ exports.createSubSection = async (req, res) => {
             lectureVideoPath,
             process.env.CLD_LECTURES_FOLDER
         );
-
+        console.log("uplfv", uploadVideo);
         //insert in subsection db
         const subSectionDetails = await SubSection_Model.create({
             title: title,
-            // timeDuration: timeDuration,
+            timeDuration: `${uploadVideo.duration}`,
             description: description,
             videoUrl: uploadVideo.secure_url,
         });
