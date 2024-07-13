@@ -8,10 +8,11 @@ import home_img_1 from "../../assets/images/home-img-1.jpg";
 //!-- icons
 import { FaLongArrowAltRight } from "react-icons/fa";
 import Footer from "../../components/Footer/Footer";
+import ReviewSlider from "../../components/Sliders/ReviewSlider";
 
 export default function Home() {
   return (
-    <div className="section-home relative mx-auto  flex  flex-col items-center text-center justify-center bg-[#323030] text-white-900">
+    <div className="pb-10 section-home relative mx-auto  text-center  bg-[#323030] text-white-900">
       {/* //!--- Section 1 */}
       <div className="home-sec-1">
         <div className="bg-red-600 p-2">
@@ -38,7 +39,7 @@ export default function Home() {
 
         <div className="video-banner w-2/4 my-10 mx-auto justify-center items-center bg-blue-500 p-5">
           {/* <video muted loop autoPlay> */}
-            {/* <source src={home_vid_1} type="video/mp4" /> */}
+          {/* <source src={home_vid_1} type="video/mp4" /> */}
           {/* </video> */}
         </div>
       </div>
@@ -70,7 +71,7 @@ export default function Home() {
       </div>
 
       {/* //!--- Section 4 add a component  */}
-      <div className="course-catalogs"> 
+      <div className="course-catalogs">
         <h1 className="text-xl">Some Tag line</h1>
         <p>some subtitle</p>
         <p>Add filters also like free,top rated,new, etc.</p>
@@ -83,13 +84,15 @@ export default function Home() {
         </button>
       </div>
 
-        {/* //!--- Section 5  */}
-        
+      {/* //!--- Section 5  */}
 
-        {/* //!--- Section 6  */}
+      {/* //!--- Section 6  */}
+      <div className="bg-green-400">
+        <ReviewSlider />
+      </div>
 
       {/* //!--- Section Footer */}
-      <Footer/>
+      {/* <Footer /> */}
     </div>
   );
 }

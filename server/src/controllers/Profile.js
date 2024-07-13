@@ -147,21 +147,21 @@ exports.deleteUserAccount = async (req, res) => {
         //validate
 
         const userDetails = await User_Model.findById({ _id: userId });
-        console.log("user de", userDetails);
+        // console.log("user de", userDetails);
         if (!userDetails) {
             return res.status(404).json({
                 success: false,
                 message: "User Not Found",
             });
         }
-        console.log("user de", userDetails);
+        // console.log("user de", userDetails);
 
         //first we will delete the additional details,course,courseProgress then user details
         await Profile_Model.findByIdAndDelete({
             _id: userDetails.additionalDetails._id,
         });
 
-        console.log("c1");
+        // console.log("c1");
 
         //TODO: similarly we have to delete it from other schemas also
         // await CourseProgress_Model?.findByIdAndDelete({
@@ -175,7 +175,7 @@ exports.deleteUserAccount = async (req, res) => {
         //         $pull: { studentsEnrolled: userId },
         //     });
         // }
-        console.log("c2");
+        // console.log("c2");
 
         const coursesEnrolled = userDetails.courses;
         for (const courseId of coursesEnrolled) {
@@ -184,11 +184,11 @@ exports.deleteUserAccount = async (req, res) => {
             });
         }
 
-        console.log("c3");
+        // console.log("c3");
 
         await User_Model.findByIdAndDelete({ _id: userId });
 
-        console.log("c4");
+        // console.log("c4");
         //return
         return res.status(200).json({
             success: true,
@@ -212,7 +212,7 @@ exports.updateDisplayPicture = async (req, res) => {
         console.log("req.file :", req.file);
         const displayPicturePath = req.file?.path;
 
-        console.log("disp pic path", displayPicturePath);
+        // console.log("disp pic path", displayPicturePath);
 
         const displayImage = await uploadToCloudinary(
             displayPicturePath,
@@ -306,7 +306,7 @@ exports.getEnrolledCourses = async (req, res) => {
             }
         }
 
-        console.log("user details:", userDetails);
+        // console.log("user details:", userDetails);
         if (!userDetails) {
             return res.status(400).json({
                 success: false,
@@ -323,6 +323,39 @@ exports.getEnrolledCourses = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error in finding Enrolled Courses",
+        });
+    }
+};
+
+exports.instructorDashboard = async (req, res) => {
+    try {
+        const { instructor } = req.user.id;
+        const courseDetails = await Course_Model.find({ instructor });
+        const courseData = courseDetails.map((course) => {
+            const totalStudentsEnrolled = course.studentsEnrolled.length;
+            const totalAmountGenerated = totalStudentsEnrolled * course.price;
+
+            //create an new object with the additional fields
+            const courseDataWithStats = {
+                _id: course._id,
+                courseName: course.courseName,
+                courseDescription: course.courseDescription,
+                totalStudentsEnrolled,
+                totalAmountGenerated,
+            };
+            // return courseDataWithStats;
+        });
+   
+        return res.status(200).json({
+            success: true,
+            message: "Instructor Stats fetched Successfully",
+            data: courseDataWithStats,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in fetching Instructor Course Data",
         });
     }
 };

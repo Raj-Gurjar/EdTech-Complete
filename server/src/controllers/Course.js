@@ -232,10 +232,10 @@ exports.getCourseById = async (req, res) => {
                 totalDurationInSeconds += timeDurationInSeconds;
             });
         });
-        console.log("totalDurSec :", totalDurationInSeconds);
+        // console.log("totalDurSec :", totalDurationInSeconds);
         const totalDuration = convertSecondsToDuration(totalDurationInSeconds);
 
-        console.log("totalDur :", totalDuration);
+        // console.log("totalDur :", totalDuration);
 
         return res.status(200).json({
             success: true,
@@ -332,7 +332,7 @@ exports.editCourse = async (req, res) => {
 exports.getFullCourseDetails = async (req, res) => {
     try {
         const { courseId } = req.body;
-        console.log("ccd", courseId);
+        // console.log("ccd", courseId);
         const userId = req.user.id;
         const courseDetails = await Course_Model.findOne({ _id: courseId })
             .populate({
@@ -352,22 +352,22 @@ exports.getFullCourseDetails = async (req, res) => {
             .exec();
 
         //valid
-        console.log("course Details", courseDetails);
+        // console.log("course Details", courseDetails);
         if (!courseDetails) {
             return res.status(400).json({
                 success: false,
                 message: `Could not find the Course with ${courseId}`,
             });
         }
-        console.log("Course Details:", courseDetails);
+        // console.log("Course Details:", courseDetails);
 
         let courseProgressCount = await CourseProgress_Model.findOne({
             courseID: courseId,
             userID: userId,
         });
-        console.log("Course Progress Count :", courseProgressCount);
+        // console.log("Course Progress Count :", courseProgressCount);
 
-        console.log("ccc", courseDetails.courseContent);
+        // console.log("ccc", courseDetails.courseContent);
 
         let totalDurationInSeconds = 0;
         courseDetails.courseContent?.forEach((content) => {
@@ -376,10 +376,10 @@ exports.getFullCourseDetails = async (req, res) => {
                 totalDurationInSeconds += timeDurationInSeconds;
             });
         });
-        console.log("totalDurSec :", totalDurationInSeconds);
+        // console.log("totalDurSec :", totalDurationInSeconds);
         const totalDuration = convertSecondsToDuration(totalDurationInSeconds);
 
-        console.log("totalDur :", totalDuration);
+        // console.log("totalDur :", totalDuration);
         //return
         return res.status(200).json({
             success: true,

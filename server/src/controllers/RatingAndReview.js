@@ -130,24 +130,26 @@ exports.getAllRatingAndReviews = async (req, res) => {
             })
             .populate({
                 path: "user",
-                select: "firstName lastName email image",
+                select: "firstName lastName email  profileImage",
             })
             .populate({
                 path: "course",
                 select: "courseName",
             })
             .exec();
-            
-        //retrun
+
+        //return
+        // console.log("rr", allReviews);
         return res.status(200).json({
             success: true,
             message: "All rating and reviews are fetched successfully",
-            allReviews,
+            data: allReviews,
         });
     } catch (error) {
         return res.status(500).json({
             success: false,
             message: "Error in getting all reviews and rating",
+            error: error.message,
         });
     }
 };

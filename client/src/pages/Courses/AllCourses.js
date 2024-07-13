@@ -3,7 +3,8 @@ import { showAllCategories } from "../../services/operations/category";
 import { NavLink, useLocation } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
 import { getAllCourses } from "../../services/operations/courseDetailsAPI";
-import CourseCard from "../../components/Course-Catalog/CourseCard";
+import CourseCard from "../../components/Cards/CourseCard";
+import CourseSlider from "../../components/Sliders/CourseSlider";
 
 export default function AllCourses() {
   const [courseCategories, setCourseCategories] = useState([]);
@@ -66,8 +67,10 @@ export default function AllCourses() {
       </div>
 
       <div>
-       
-        <h1 className="text-2xl my-10">Top Courses    //! make a slider for top courses</h1>
+        <h1 className="text-2xl my-10">
+          Top Courses //! make a slider for top courses
+        </h1>
+        <CourseSlider courses={coursesData} />
       </div>
       <div>
         <h1 className="text-2xl">All Courses</h1>

@@ -22,14 +22,14 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
     completedLectures,
   } = useSelector((state) => state.viewCourse);
 
-  console.log("courseSectionData", courseSectionData);
-  console.log("courseEntireData", courseEntireData);
+  // console.log("courseSectionData", courseSectionData);
+  // console.log("courseEntireData", courseEntireData);
 
   useEffect(() => {
     setActiveFlags();
   }, [courseSectionData, courseEntireData, location.pathname]);
 
-  console.log("active s", activeStatus);
+  // console.log("active s", activeStatus);
   const setActiveFlags = () => {
     if (!courseSectionData?.length) {
       return;

@@ -70,7 +70,7 @@ export default function CourseDetails() {
     }
   }, []);
 
-  console.log("courseData :", courseData);
+  // console.log("courseData :", courseData);
 
   const handleBuyCourse = () => {
     if (token) {

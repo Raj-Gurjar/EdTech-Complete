@@ -40,7 +40,7 @@ router.delete("/deleteCourse", auth, isInstructor, deleteCourse);
 //!Rating
 router.post("/createRating", auth, isStudent, createRatingNReview);
 router.get("/getAverageRating", getAverageRating);
-router.get("/getReviews", getAllRatingAndReviews);
+router.get("/getAllReviews", getAllRatingAndReviews);
 
 //!Course Progress
 router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);

@@ -6,10 +6,13 @@ import avgRating from "../../utils/avgRating";
 export default function CourseCard({ course }) {
   const [avgRatingCount, setAvgRatingCount] = useState(0);
 
+  // console.log("icc",course);
+
   useEffect(() => {
     const count = avgRating(course.ratingAndReviews);
     setAvgRatingCount(count);
   }, [course]);
+
   return (
     <div>
       <Link to={`/allCourses/${course._id}`}>

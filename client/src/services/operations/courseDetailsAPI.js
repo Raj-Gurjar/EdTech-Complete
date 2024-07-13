@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { updateCompletedLectures } from "../../toolkit/slice/viewCourseSlice";
 import { apiConnector } from "../apiConnector";
-import { courseEndpoints } from "../api";
+import { courseEndpoints, reviewEndpoints } from "../api";
 
 const {
   GET_ALL_COURSES_API,
@@ -22,6 +22,8 @@ const {
   LECTURE_COMPLETION_API,
   CREATE_RATING_API,
 } = courseEndpoints;
+
+const { GET_ALL_REVIEWS_API } = reviewEndpoints;
 
 export const getAllCourses = async () => {
   const toastId = toast.loading("Loading");
@@ -388,7 +390,7 @@ export const getCourseDetails = async (courseId) => {
     }
     // toast.success("Course Category details fetched");
     result = response?.data;
-    console.log("res",result);
+    console.log("res", result);
   } catch (error) {
     console.log("course details page api error...", error);
     toast.error(error?.response?.data?.message);
@@ -430,7 +432,7 @@ export const createRating = async (data, token) => {
 
   try {
     const response = await apiConnector("POST", CREATE_RATING_API, data, {
-      "Content-Type": "multipart/form-data",
+      // "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     });
     // console.log("add course detail..", response);
@@ -443,6 +445,27 @@ export const createRating = async (data, token) => {
     // console.log("result in addCourse", result);
   } catch (error) {
     console.log("review api error...", error);
+    toast.error(error.response.data.message);
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
+export const getAllReviews = async () => {
+  const toastId = toast.loading("Loading");
+  let result = [];
+
+  try {
+    const response = await apiConnector("GET", GET_ALL_REVIEWS_API);
+    // console.log("res-api", response);
+    if (!response?.data?.success) {
+      throw new Error("Could not fetch Reviews");
+    }
+    toast.success("All Reviews details fetched Successfully");
+    result = response?.data?.data;
+    // console.log("res", result);
+  } catch (error) {
+    console.log("Get all reviews api error...", error);
     toast.error(error.response.data.message);
   }
   toast.dismiss(toastId);

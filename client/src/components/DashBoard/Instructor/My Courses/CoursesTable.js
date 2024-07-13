@@ -82,7 +82,7 @@ export default function CoursesTable({ instCourses, setInstCourses }) {
                     </div>
                   </Td>
 
-                  {/* <Td>Duration : {course?.}</Td> */}
+                  <Td>Duration : {" add it "}</Td>
                   <Td>Price : Rs.{course?.price}</Td>
                   <Td>Category: {course?.category?.name}</Td>
                   <Td className="">

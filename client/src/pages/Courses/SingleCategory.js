@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
-import CourseSlider from "../../components/Course-Catalog/CourseSlider";
+import CourseSlider from "../../components/Sliders/CourseSlider";
 import {
   getCategoryPageDetails,
   showAllCategories,
 } from "../../services/operations/category";
 import SelectedCategory from "../../components/Course-Catalog/SelectedCategory";
-import CourseCard from "../../components/Course-Catalog/CourseCard";
+import CourseCard from "../../components/Cards/CourseCard";
 
 export default function SingleCategory() {
   // Destructure categoryName directly from useParams

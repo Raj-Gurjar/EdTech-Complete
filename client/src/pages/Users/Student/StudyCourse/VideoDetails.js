@@ -4,7 +4,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { markLectureAsComplete } from "../../../../services/operations/courseDetailsAPI";
 import { updateCompletedLectures } from "../../../../toolkit/slice/viewCourseSlice";
 import { Player } from "video-react";
-import "video-react/dist/video-react.css"; 
+import "video-react/dist/video-react.css";
 import { FaCirclePlay } from "react-icons/fa6";
 
 export default function VideoDetails() {
@@ -12,12 +12,15 @@ export default function VideoDetails() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+
+   //!---- playerRef has all functions of a video player
   const playerRef = useRef();
+  
   const { token } = useSelector((state) => state.auth);
   const { courseSectionData, courseEntireData, completedLectures } =
     useSelector((state) => state.viewCourse);
 
-  console.log("courseSecDat", courseSectionData);
+  // console.log("courseSecDat", courseSectionData);
 
   const [videoData, setVideoData] = useState([]);
   const [videoEnded, setVideoEnded] = useState(false);
@@ -104,8 +107,8 @@ export default function VideoDetails() {
     ].subSections.findIndex((data) => data._id === subSectionId);
 
     //same sec prev video
-    console.log("curre sec ind", currentSectionIndex);
-    console.log("curre subSec ind", currentSubSectionIndex);
+    // console.log("curre sec ind", currentSectionIndex);
+    // console.log("curre subSec ind", currentSubSectionIndex);
 
     if (currentSubSectionIndex !== 0) {
       console.log("inside sec prev");
@@ -113,7 +116,7 @@ export default function VideoDetails() {
         courseSectionData[currentSectionIndex].subSections[
           currentSectionIndex - 1
         ]._id;
-      console.log("prevSecId", prevSubSectionId);
+      // console.log("prevSecId", prevSubSectionId);
 
       navigate(
         `/courseMenu/${courseId}/section/${sectionId}/subSection/${prevSubSectionId}`
@@ -122,7 +125,7 @@ export default function VideoDetails() {
     //next section prev video
     else {
       console.log("inside other sec  prev");
-      console.log("curre sub ind", currentSectionIndex);
+      // console.log("curre sub ind", currentSectionIndex);
       const prevSectionId = courseSectionData[currentSectionIndex - 1]._id;
 
       const prevSubSectionLength =
@@ -133,7 +136,7 @@ export default function VideoDetails() {
           prevSubSectionLength - 1
         ]._id;
 
-      console.log("2prevSecId", prevSubSectionId);
+      // console.log("2prevSecId", prevSubSectionId);
 
       navigate(
         `/courseMenu/${courseId}/section/${prevSectionId}/subSection/${prevSubSectionId}`
@@ -155,6 +158,16 @@ export default function VideoDetails() {
     setLoading(false);
   };
 
+  const handleRewatch = () => {
+    //!---- playerRef has all functions of a video player
+    if (playerRef?.current) {
+      playerRef?.current?.seek(0);
+      playerRef?.current?.play();
+
+      setVideoEnded(false);
+    }
+  };
+
   useEffect(() => {
     const setVideoSpecificDetails = async () => {
       if (!courseSectionData.length) {
@@ -168,13 +181,13 @@ export default function VideoDetails() {
           (course) => course._id === sectionId
         );
 
-        console.log("filerD", filteredData);
+        // console.log("filerD", filteredData);
 
         const filteredVideoData = filteredData?.[0].subSections.filter(
           (data) => data._id === subSectionId
         );
 
-        console.log("filerVidD", filteredVideoData);
+        // console.log("filerVidD", filteredVideoData);
 
         setVideoData(filteredVideoData[0]);
         setVideoEnded(false);
@@ -208,16 +221,7 @@ export default function VideoDetails() {
                   </button>
                 )}
 
-                <button
-                  onClick={() => {
-                    if (playerRef?.current) {
-                      playerRef?.current?.seek(0);
-                      setVideoEnded(false);
-                    }
-                  }}
-                >
-                  ReWatch
-                </button>
+                <button onClick={handleRewatch}>ReWatch</button>
 
                 <div>
                   {!isFirstVideo() && (

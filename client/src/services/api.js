@@ -52,7 +52,7 @@ export const courseEndpoints = {
 
 //! REVIEWS ENDPOINTS
 export const reviewEndpoints = {
-  REVIEW_DETAILS_API: BASE_URL + "/course/getReviews",
+  GET_ALL_REVIEWS_API: BASE_URL + "/course/getAllReviews",
 };
 
 //! CATEGORY ENDPOINTS

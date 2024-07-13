@@ -22,7 +22,7 @@ exports.updateCourseProgress = async (req, res) => {
             courseID: courseId,
             userId: userId,
         });
-        console.log("c2");
+        // console.log("c2");
         if (!courseProgress) {
             return res.status(404).json({
                 success: false,
@@ -30,19 +30,19 @@ exports.updateCourseProgress = async (req, res) => {
             });
         } else {
             //check for re-completing video/subsection
-            console.log("c3");
+            // console.log("c3");
             if (courseProgress.completedVideos.includes(subSectionId)) {
                 return res.status(400).json({
                     success: false,
                     message: "SubSection already completed",
                 });
             }
-            console.log("c4");
+            // console.log("c4");
 
             //push into completed video
 
             courseProgress.completedVideos.push(subSectionId);
-            console.log("c5");
+            // console.log("c5");
         }
 
         await courseProgress.save();

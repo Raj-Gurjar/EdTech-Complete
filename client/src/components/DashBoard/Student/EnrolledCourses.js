@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 export default function EnrolledCourses() {
   const { token } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.profile);
-  console.log("user", user);
+  // console.log("user", user);
   const [enrolledCourses, setEnrolledCourses] = useState(null);
 
   const getEnrolledCourses = async () => {
@@ -26,7 +26,7 @@ export default function EnrolledCourses() {
     getEnrolledCourses();
   }, []);
 
-  console.log("enro: ",enrolledCourses);
+  // console.log("enro: ",enrolledCourses);
   return (
     <div>
       <h1>Enrolled Courses</h1>
@@ -66,7 +66,7 @@ export default function EnrolledCourses() {
                     </div>
                     <div>Duration: {course?.totalDuration}</div>
                     <div>
-                      <p>Progress: {course.progressPercentage || 0}</p>
+                      <p>Progress: {course.progressPercentage || 0}%</p>
                       <ProgressBar
                         completed={course.progressPercentage || 0}
                         maxCompleted={100}

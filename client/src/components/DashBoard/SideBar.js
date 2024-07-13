@@ -69,6 +69,9 @@ export default function SideBar() {
         </li>
 
         <li>
+          <NavLink to="instructor-D">Create Course</NavLink>
+        </li>
+        <li>
           <NavLink to="createCourse">Create Course</NavLink>
         </li>
         <li>

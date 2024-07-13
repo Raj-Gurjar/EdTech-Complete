@@ -7,9 +7,11 @@ import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import { FreeMode, Pagination, Autoplay, Navigation } from "swiper/modules";
 
-import CourseCard from "./CourseCard";
+import CourseCard from "../Cards/CourseCard";
 
 export default function CourseSlider({ courses }) {
+
+  // console.log("cc",courses);
   return (
     <div className="m-5">
       {courses?.length ? (
@@ -27,7 +29,7 @@ export default function CourseSlider({ courses }) {
           navigation={true}
           modules={[Pagination, Autoplay, Navigation]}
           breakpoints={{
-            1000: { slidesPerView: 3 },
+            1000: { slidesPerView: 1 },
             768: { slidesPerView: 2 },
           }}
           className="mySwiper"
