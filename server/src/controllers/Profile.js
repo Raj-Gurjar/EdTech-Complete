@@ -327,10 +327,15 @@ exports.getEnrolledCourses = async (req, res) => {
     }
 };
 
-exports.instructorDashboard = async (req, res) => {
+exports.instructorDashboardData = async (req, res) => {
     try {
-        const { instructor } = req.user.id;
-        const courseDetails = await Course_Model.find({ instructor });
+        console.log("ins insDash");
+        // const { instructor } = req.user.id;
+
+        const courseDetails = await Course_Model.find({
+            instructor: req.user.id,
+        });
+        console.log("ccd", courseDetails);
         const courseData = courseDetails.map((course) => {
             const totalStudentsEnrolled = course.studentsEnrolled.length;
             const totalAmountGenerated = totalStudentsEnrolled * course.price;
@@ -343,13 +348,15 @@ exports.instructorDashboard = async (req, res) => {
                 totalStudentsEnrolled,
                 totalAmountGenerated,
             };
-            // return courseDataWithStats;
+            return courseDataWithStats;
         });
-   
+
+        console.log("ccd", courseData);
+
         return res.status(200).json({
             success: true,
             message: "Instructor Stats fetched Successfully",
-            data: courseDataWithStats,
+            data: courseData,
         });
     } catch (error) {
         console.log(error);

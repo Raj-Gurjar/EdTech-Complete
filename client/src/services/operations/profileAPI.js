@@ -16,6 +16,7 @@ const {
   UPDATE_PROFILE_API,
   CHANGE_PASSWORD_API,
   DELETE_PROFILE_API,
+  GET_INSTRUCTOR_DASHBOARD_DATA_API,
 } = profileEndpoints;
 
 // export function getUserDetails(token, navigate) {}
@@ -139,6 +140,38 @@ export const deleteAccount = async (data, token) => {
     toast.success("Account deleted Successfully");
   } catch (error) {
     console.log("delete Account api error...", error);
+    toast.error(error.response.message);
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
+export const getInstructorData = async (token) => {
+  const toastId = toast.loading("Loading");
+  // console.log("tttt", token);
+  let result = [];
+
+  // console.log("delete profile data : ", data);
+  try {
+    const response = await apiConnector(
+      "GET",
+      GET_INSTRUCTOR_DASHBOARD_DATA_API,
+      null,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+    // console.log("inst dashboard data api response..", response);
+
+    if (!response?.data?.success) {
+      throw new Error("Could not get the inst data");
+    }
+    result = response?.data?.data;
+    // console.log("result", result);
+
+    toast.success("Instructor Data Fetched Successfully");
+  } catch (error) {
+    console.log("Instructor data api error...", error);
     toast.error(error.response.message);
   }
   toast.dismiss(toastId);

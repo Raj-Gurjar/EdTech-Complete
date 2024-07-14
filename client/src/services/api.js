@@ -19,6 +19,7 @@ export const profileEndpoints = {
   UPDATE_PROFILE_API: BASE_URL + "/profile/updateProfile",
   CHANGE_PASSWORD_API: BASE_URL + "/auth/changePassword",
   DELETE_PROFILE_API: BASE_URL + "/profile/deleteProfile",
+  GET_INSTRUCTOR_DASHBOARD_DATA_API: BASE_URL + "/profile/instructor-dashboard",
 };
 
 //! STUDENTS ENDPOINTS

@@ -35,6 +35,7 @@ import EditProfile from "./components/DashBoard/EditProfile";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import CourseMenu from "./pages/Users/Student/StudyCourse/CourseMenu";
 import VideoDetails from "./pages/Users/Student/StudyCourse/VideoDetails";
+import InstDashBoard from "./components/DashBoard/Instructor/InstructorDashboard/InstDashBoard";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
@@ -91,6 +92,10 @@ function App() {
                 <Route path="createCourse" element={<CreateCourses />} />
                 <Route path="myCourses-Instructor" element={<ShowCourses />} />
                 <Route path="edit-course/:courseId" element={<EditCourse />} />
+                <Route
+                  path="instructor-dashboard"
+                  element={<InstDashBoard />}
+                />
               </>
             )}
 
