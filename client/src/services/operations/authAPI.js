@@ -50,7 +50,7 @@ export function signUp(
   email,
   password,
   confirmPassword,
-  // otp,
+  otp,
   navigate
 ) {
   return async (dispatch) => {
@@ -67,7 +67,7 @@ export function signUp(
         email,
         password,
         confirmPassword,
-        // otp,
+        otp,
       });
       console.log("Sign up api response...", response);
 
@@ -76,7 +76,7 @@ export function signUp(
       }
 
       toast.success("SignUp Successful");
-      navigate("/verifyEmail");
+      navigate("/login");
     } catch (error) {
       console.log("SignUp api error...", error.response);
       toast.error(`SignUp failed! ${error.response?.data?.message} `);

@@ -1,13 +1,12 @@
-import React, { useState, useContext } from "react";
-import toast from "react-hot-toast";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { signUp } from "../../services/operations/authAPI";
+import { sendOTP } from "../../services/operations/authAPI";
+import { setSignupData } from "../../toolkit/slice/authSlice";
 
 export default function SignUp() {
   const [accountType, setAccountType] = useState("Student");
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
@@ -19,40 +18,24 @@ export default function SignUp() {
   });
 
   function changeHandler(event) {
-    const { name, value, checked, type } = event.target;
-    console.log(formData);
-    setFormData((prevFormData) => {
-      return {
-        ...prevFormData,
-        [name]: type === "checkbox" ? checked : value,
-      };
-    });
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   }
 
   const { firstName, lastName, email, password, confirmPassword } = formData;
 
-  console.log("Form Data..", formData);
-
   async function signUpHandler(event) {
     event.preventDefault();
-    dispatch(
-      signUp(
-        accountType,
-        firstName,
-        lastName,
-        email,
-        password,
-        confirmPassword,
-        // otp,
-        navigate
-      )
-    );
+    dispatch(setSignupData({ ...formData, accountType }));
+    dispatch(sendOTP(email, navigate));
   }
 
   return (
     <div className="log-container">
       <h2 className="log-heading">Sign Up</h2>
-
       <form
         className="log-form flex flex-col m-auto justify-center w-11/12"
         onSubmit={signUpHandler}
@@ -61,12 +44,14 @@ export default function SignUp() {
           Sign Up as {accountType}
           <div className="flex gap-x-5">
             <button
+              type="button"
               onClick={() => setAccountType("Student")}
               className={`${accountType === "Student" ? "bg-blue-400" : ""} `}
             >
               Student
             </button>
             <button
+              type="button"
               onClick={() => setAccountType("Instructor")}
               className={`${
                 accountType === "Instructor" ? "bg-blue-400" : ""
@@ -75,6 +60,7 @@ export default function SignUp() {
               Instructor
             </button>
             <button
+              type="button"
               onClick={() => setAccountType("Admin")}
               className={`${accountType === "Admin" ? "bg-blue-400" : ""} `}
             >

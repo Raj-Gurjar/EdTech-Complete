@@ -26,6 +26,10 @@ const User_Schema = new mongoose.Schema(
             enum: ["Admin", "Student", "Instructor"],
             required: true,
         },
+        // adminKey: {
+        //     type: String,
+        //     default: "AdminKey",
+        // },
         profileImage: {
             type: String,
         },
