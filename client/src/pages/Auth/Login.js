@@ -65,7 +65,7 @@ export default function Login() {
 
             <div className="reset-password">
               <Link to='/resetPasswordRequest'>
-                <button>Reset Password</button>
+                <button>Forgot Password</button>
               </Link>
             </div>
 

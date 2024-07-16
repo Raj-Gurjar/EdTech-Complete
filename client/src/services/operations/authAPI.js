@@ -36,7 +36,7 @@ export function sendOTP(email, navigate) {
       navigate("/verifyEmail");
     } catch (error) {
       console.log("send auth otp error..", error.response.data);
-      toast.error("Could not send otp");
+      toast.error(error.response.data.message);
     }
     dispatch(setLoading(false));
     toast.dismiss(toastId);
@@ -165,9 +165,11 @@ export function getPasswordResetToken(email, setEmailSent) {
   };
 }
 
-export function resetPassword(password, confPassword, token) {
+export function resetPassword(password, confPassword, token, navigate) {
   return async (dispatch) => {
     dispatch(setLoading(true));
+
+    // console.log("pp:", password, ", cf:", confPassword);
 
     try {
       const response = await apiConnector("POST", RESET_PASSWORD_API, {
@@ -181,10 +183,11 @@ export function resetPassword(password, confPassword, token) {
       if (!response.data.success) {
         throw new Error(response.data.message);
       }
-      toast.success("Reset Password Successfully");
+      toast.success("Password Reset Successful");
+      navigate("/login");
     } catch (error) {
-      console.log("Reset password  error");
-      toast.error("Failed to reset your password");
+      console.log("Reset password error", error);
+      toast.error(error.response.data.message);
     }
     dispatch(setLoading(false));
   };

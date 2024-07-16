@@ -28,6 +28,6 @@ router.post("/changePassword", changePassword);
 router.post("/resetPasswordToken", resetPasswordToken);
 
 //for resting user's password after verification
-router.post("/resetPassword", resetPassword);
+router.post("/reset-password", resetPassword);
 
 module.exports = router;

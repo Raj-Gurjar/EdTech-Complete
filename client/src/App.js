@@ -54,7 +54,7 @@ function App() {
 
           <Route path="/verifyEmail" element={<VerifyEmail />} />
           <Route path="/resetPasswordRequest" element={<ResetRequest />} />
-          <Route path="/resetPassword" element={<ResetPassword />} />
+          <Route path="/reset-password/:id" element={<ResetPassword />} />
 
           <Route path="allCourses" element={<AllCourses />} />
           <Route
