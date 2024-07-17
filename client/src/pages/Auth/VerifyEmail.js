@@ -16,8 +16,15 @@ export default function VerifyEmail() {
     }
   }, [signupData, navigate]);
 
-  const { accountType, firstName, lastName, email, password, confirmPassword } =
-    signupData || {};
+  const {
+    accountType,
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+    adminKey,
+  } = signupData || {};
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
@@ -30,6 +37,7 @@ export default function VerifyEmail() {
         password,
         confirmPassword,
         otp,
+        adminKey,
         navigate
       )
     );

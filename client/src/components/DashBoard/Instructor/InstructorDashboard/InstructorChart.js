@@ -5,13 +5,13 @@ import { Pie } from "react-chartjs-2";
 
 Chart.register(...registerables);
 
-export default function InstructorChart({ courses }) {
+export default function InstructorChart({ courses, totalStudents }) {
   let [currentChart, setCurrentChart] = useState("students");
 
   console.log("cc", courses);
 
-  if (!courses || courses.length === 0) {
-    return <div>No data available</div>;
+  if (!courses || courses.length === 0 || totalStudents === 0) {
+    return <div>No data available or No student Enrolled yet</div>;
   }
 
   const getRandomColors = (numColors) => {
@@ -51,6 +51,9 @@ export default function InstructorChart({ courses }) {
 
   //create options
   const options = {};
+
+  console.log("cdi", chartDataForIncome);
+  console.log("cds", chartDataForStudent);
 
   return (
     <div>

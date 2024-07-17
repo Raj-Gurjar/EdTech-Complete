@@ -51,13 +51,14 @@ export function signUp(
   password,
   confirmPassword,
   otp,
+  adminKey,
   navigate
 ) {
   return async (dispatch) => {
     const toastId = toast.loading("Loading...");
     dispatch(setLoading(true));
 
-    console.log("inside signup");
+    console.log("inside signup api", adminKey);
 
     try {
       const response = await apiConnector("POST", SIGN_UP_API, {
@@ -68,6 +69,7 @@ export function signUp(
         password,
         confirmPassword,
         otp,
+        adminKey,
       });
       console.log("Sign up api response...", response);
 

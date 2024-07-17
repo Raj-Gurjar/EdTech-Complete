@@ -12,7 +12,7 @@ const mailSender = require("../utils/mailSender");
 
 exports.sendOTP = async (req, res) => {
     try {
-        //Extract data 
+        //Extract data
         console.log("inside send OTP");
         const { email } = req.body;
 
@@ -86,10 +86,12 @@ exports.signUp = async (req, res) => {
             confirmPassword,
             accountType,
             otp,
-
+            adminKey,
         } = req.body;
 
         //! User Validation
+
+        console.log("adminkey back", adminKey);
 
         //* Check all entries
         if (
@@ -114,6 +116,16 @@ exports.signUp = async (req, res) => {
             });
         }
 
+        if (accountType === "Admin") {
+            console.log("Admin log");
+            if (adminKey !== process.env.ADMIN_SECRET_KEY) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Wrong Admin Secret Key",
+                });
+            }
+        }
+
         //TODO : Check Valid Email (@gmail, @yahoo, not temp mail)
 
         //* Check already email exist
@@ -126,7 +138,7 @@ exports.signUp = async (req, res) => {
             });
         }
 
-         //! Verify OTP
+        //! Verify OTP
 
         //* find most resent OTP for user
         const recentOtp = await OTP_Model.find({ email })

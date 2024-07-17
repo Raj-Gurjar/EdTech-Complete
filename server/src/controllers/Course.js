@@ -9,7 +9,10 @@ const SubSection_Model = require("../models/SubSection.model");
 
 const Section_Model = require("../models/Section.model");
 const { uploadToCloudinary } = require("../config/cloudinary");
-const { convertSecondsToDuration } = require("../utils/convertDuration");
+const {
+    convertSecondsToDuration,
+    calculateTotalDuration,
+} = require("../utils/convertDuration");
 
 //TODO : Add courseProgress controller (lec 30 , 2.18 time)
 
@@ -222,20 +225,10 @@ exports.getCourseById = async (req, res) => {
                 message: `Could not find the Course with ${courseId}`,
             });
         }
-        // console.log("Course Details:", courseDetails);
-        //return
 
-        let totalDurationInSeconds = 0;
-        courseDetails.courseContent?.forEach((content) => {
-            content.subSections?.forEach((subSection) => {
-                const timeDurationInSeconds = parseInt(subSection.timeDuration);
-                totalDurationInSeconds += timeDurationInSeconds;
-            });
-        });
-        // console.log("totalDurSec :", totalDurationInSeconds);
-        const totalDuration = convertSecondsToDuration(totalDurationInSeconds);
-
-        // console.log("totalDur :", totalDuration);
+        const totalDuration = calculateTotalDuration(
+            courseDetails.courseContent
+        );
 
         return res.status(200).json({
             success: true,
@@ -414,7 +407,9 @@ exports.getInstructorCourses = async (req, res) => {
             .sort({ createdAt: -1 })
 
             .populate("category")
+
             .exec();
+        console.log("inst courses", instructorCourses);
 
         // Return
         return res.status(200).json({

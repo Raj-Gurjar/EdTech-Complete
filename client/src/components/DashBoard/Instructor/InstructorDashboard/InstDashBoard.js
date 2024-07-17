@@ -51,7 +51,10 @@ export default function InstDashBoard() {
         {user?.courses?.length > 0 ? (
           <div>
             <div className="bg-red-300 m-5">
-              <InstructorChart courses={instructorData} />
+              <InstructorChart
+                courses={instructorData}
+                totalStudents={totalStudentsEnrolled}
+              />
             </div>
             <div className="bg-green-200 m-5">
               <h1>Statistics</h1>

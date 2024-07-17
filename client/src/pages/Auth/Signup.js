@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { sendOTP } from "../../services/operations/authAPI";
 import { setSignupData } from "../../toolkit/slice/authSlice";
+import { ACCOUNT_TYPE } from "../../utils/constants";
 
 export default function SignUp() {
   const [accountType, setAccountType] = useState("Student");
@@ -15,6 +16,7 @@ export default function SignUp() {
     email: "",
     password: "",
     confirmPassword: "",
+    adminKey: "",
   });
 
   function changeHandler(event) {
@@ -46,7 +48,9 @@ export default function SignUp() {
             <button
               type="button"
               onClick={() => setAccountType("Student")}
-              className={`${accountType === "Student" ? "bg-blue-400" : ""} `}
+              className={`${
+                accountType === ACCOUNT_TYPE.STUDENT ? "bg-blue-400" : ""
+              } `}
             >
               Student
             </button>
@@ -54,7 +58,7 @@ export default function SignUp() {
               type="button"
               onClick={() => setAccountType("Instructor")}
               className={`${
-                accountType === "Instructor" ? "bg-blue-400" : ""
+                accountType === ACCOUNT_TYPE.INSTRUCTOR ? "bg-blue-400" : ""
               } `}
             >
               Instructor
@@ -62,7 +66,9 @@ export default function SignUp() {
             <button
               type="button"
               onClick={() => setAccountType("Admin")}
-              className={`${accountType === "Admin" ? "bg-blue-400" : ""} `}
+              className={`${
+                accountType === ACCOUNT_TYPE.ADMIN ? "bg-blue-400" : ""
+              } `}
             >
               Admin
             </button>
@@ -121,7 +127,20 @@ export default function SignUp() {
           onChange={changeHandler}
           required
         />
-
+        {accountType === ACCOUNT_TYPE.ADMIN && (
+          <>
+            <label htmlFor="adminKey">Admin's Secret Key:</label>
+            <input
+              className="bg-black-200 border-[2px]"
+              type="password"
+              id="adminKey"
+              name="adminKey"
+              value={formData.adminKey}
+              onChange={changeHandler}
+              required
+            />
+          </>
+        )}
         <button type="submit" className="bg-red-300">
           Create Account
         </button>
