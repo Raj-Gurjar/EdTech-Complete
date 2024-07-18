@@ -61,6 +61,7 @@ export const categoryEndpoints = {
   CATEGORY_PAGE_DATA_API: BASE_URL + "/category/getCategoryPageDetails",
   GET_ALL_CATEGORIES_API: BASE_URL + "/category/showAllCategories",
   CREATE_CATEGORY_API: BASE_URL + "/category/createCategory",
+  DELETE_CATEGORY_API: BASE_URL + "/category/deleteCategory",
 };
 
 //! CONTACT ENDPOINT

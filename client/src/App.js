@@ -24,7 +24,6 @@ import MyCart from "./components/DashBoard/Student/MyCart";
 import MyPurchases from "./components/DashBoard/Student/MyPurchases";
 import CreateCourses from "./components/DashBoard/Instructor/Create Course/CreateCourse";
 import ShowCourses from "./components/DashBoard/Instructor/My Courses/ShowCourses";
-import CreateCategory from "./components/DashBoard/Admin/CreateCategory";
 import EditCourse from "./components/DashBoard/Instructor/My Courses/EditCourse";
 import AllCourses from "./pages/Courses/AllCourses";
 import SingleCategory from "./pages/Courses/SingleCategory";
@@ -36,6 +35,9 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import CourseMenu from "./pages/Users/Student/StudyCourse/CourseMenu";
 import VideoDetails from "./pages/Users/Student/StudyCourse/VideoDetails";
 import InstDashBoard from "./components/DashBoard/Instructor/InstructorDashboard/InstDashBoard";
+import CategoryMenu from "./pages/Users/Admin/CategoryMenu";
+import CreateCategory from "./pages/Users/Admin/CreateCategory";
+import AdminDashboard from "./components/DashBoard/Admin/AdminDashboard";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
@@ -101,6 +103,8 @@ function App() {
 
             {user?.accountType === ACCOUNT_TYPE.ADMIN && (
               <>
+                <Route path="admin-dashboard" element={<AdminDashboard />} />
+                <Route path="categoryMenu" element={<CategoryMenu />} />
                 <Route path="createCategory" element={<CreateCategory />} />
               </>
             )}

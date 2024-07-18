@@ -87,9 +87,9 @@ export default function Home() {
       {/* //!--- Section 5  */}
 
       {/* //!--- Section 6  */}
-      <div className="bg-green-400">
+      {/* <div className="bg-green-400">
         <ReviewSlider />
-      </div>
+      </div> */}
 
       {/* //!--- Section Footer */}
       {/* <Footer /> */}

@@ -82,7 +82,10 @@ export default function SideBar() {
           <h1 className="bg-red-600">--- for Admin ---</h1>
         </li>
         <li>
-          <NavLink to="createCategory">Create Category</NavLink>
+          <NavLink to="admin-dashboard">Admin Dashboard</NavLink>
+        </li>
+        <li>
+          <NavLink to="categoryMenu">Category Menu</NavLink>
         </li>
       </ul>
 

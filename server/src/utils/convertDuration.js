@@ -19,4 +19,4 @@ const calculateTotalDuration = (courseContent) => {
     return convertSecondsToDuration(totalDurationInSeconds);
 };
 
-module.exports = { calculateTotalDuration };
+module.exports = { calculateTotalDuration, convertSecondsToDuration };

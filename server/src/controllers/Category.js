@@ -4,14 +4,30 @@ const Category_Model = require("../models/Category.model");
 exports.createCategory = async (req, res) => {
     try {
         //get data
+        console.log("in cc");
 
-        const { name, description } = req.body;
+        const { categoryName, categoryDescription } = req.body;
+
+        console.log("rr b", req.body);
 
         //validation
-        if (!name || !description) {
+        if (!categoryName || !categoryDescription) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required.",
+            });
+        }
+
+        //check if category already present
+
+        const catPresent = await Category_Model.findOne({
+            name: categoryName,
+        });
+
+        if (catPresent) {
+            return res.status(400).json({
+                success: false,
+                message: "Category is Already Present",
             });
         }
 
@@ -20,13 +36,9 @@ exports.createCategory = async (req, res) => {
         //create entry
 
         const categoryDetails = await Category_Model.create({
-            name: name,
-            description: description,
+            name: categoryName,
+            description: categoryDescription,
         });
-
-        // console.log("category Details:", categoryDetails);
-
-        //return res
 
         return res.status(200).json({
             success: true,
@@ -44,10 +56,7 @@ exports.createCategory = async (req, res) => {
 
 exports.showAllCategories = async (req, res) => {
     try {
-        const allCategories = await Category_Model.find(
-            {},
-            { name: true, description: true }
-        );
+        const allCategories = await Category_Model.find({}, {});
 
         // console.log("all categories: ", allCategories);
 
@@ -102,7 +111,6 @@ exports.categoryPageDetails = async (req, res) => {
             });
         }
 
-
         //get courses for different category if searched category not found
         const notSelectedCategories = await Category_Model.find({
             _id: { $ne: categoryId },
@@ -155,6 +163,36 @@ exports.categoryPageDetails = async (req, res) => {
             success: false,
             message: "Error in getting page details",
             error: error.message,
+        });
+    }
+};
+
+exports.deleteCategory = async (req, res) => {
+    try {
+        console.log("inside del cat");
+
+        const { categoryId } = req.body;
+        console.log("cid", categoryId);
+
+        if (!categoryId) {
+            return res.status(400).json({
+                success: false,
+                message: "Category not found",
+            });
+        }
+        console.log("rr", req.body);
+
+        await Category_Model.findByIdAndDelete(categoryId);
+
+        return res.status(200).json({
+            success: true,
+            message: "Category Deleted Successfully",
+        });
+    } catch (error) {
+        console.log("error in category deletion:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Some error in Deleting the Category",
         });
     }
 };
