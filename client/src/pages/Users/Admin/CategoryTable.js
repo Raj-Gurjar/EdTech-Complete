@@ -10,10 +10,10 @@ export default function CategoryTable({ getCategories, courseCategories }) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const { token } = useSelector((state) => state.auth);
-  console.log("coursec", courseCategories);
+  // console.log("coursec", courseCategories);
 
   const handleDeleteCategory = async (categoryId) => {
-    console.log("cat id", categoryId);
+    // console.log("cat id", categoryId);
 
     setLoading(true);
 

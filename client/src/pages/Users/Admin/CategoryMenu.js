@@ -14,7 +14,7 @@ export default function CategoryMenu() {
   const getCategories = async () => {
     dispatch(setLoading(true));
     const categories = await showAllCategories();
-    console.log("cat:", categories);
+    // console.log("cat:", categories);
     if (categories.length > 0) {
       setCourseCategories(categories);
     }

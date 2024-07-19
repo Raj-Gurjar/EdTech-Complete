@@ -12,8 +12,7 @@ const {
 } = categoryEndpoints;
 
 export const createCategory = async (data, token) => {
-  console.log("entering createCategory", data);
-  console.log("data in api ", data);
+  // console.log("entering createCategory", data);
   const toastId = toast.loading("Loading");
   let result = null;
 
@@ -21,7 +20,7 @@ export const createCategory = async (data, token) => {
     const response = await apiConnector("POST", CREATE_CATEGORY_API, data, {
       Authorization: `Bearer ${token}`,
     });
-    console.log("create category api response..", response);
+    // console.log("create category api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not create category");
@@ -32,8 +31,9 @@ export const createCategory = async (data, token) => {
     console.log("create category api error...", error);
     toast.error(error.response.data.message);
   }
-  console.log("Result: ", result);
+  // console.log("Result: ", result);
   toast.dismiss(toastId);
+  result = true;
   return result;
 };
 
@@ -87,7 +87,7 @@ export const deleteCategory = async (categoryId, token) => {
   const toastId = toast.loading("Loading");
   let result = null;
 
-  console.log("Delete category data: ", categoryId);
+  // console.log("Delete category data: ", categoryId);
 
   try {
     const response = await apiConnector(
@@ -100,7 +100,7 @@ export const deleteCategory = async (categoryId, token) => {
       }
     );
 
-    console.log("Delete category api response..", response);
+    // console.log("Delete category api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not delete category");
