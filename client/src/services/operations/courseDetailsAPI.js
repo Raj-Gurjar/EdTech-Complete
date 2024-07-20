@@ -136,7 +136,7 @@ export const createSection = async (data, token) => {
     result = response?.data?.data;
   } catch (error) {
     console.log("create section api error...", error);
-    toast.error(error.response.message);
+    toast.error(error.response.data.message);
   }
   console.log("Result: ", result);
   toast.dismiss(toastId);
