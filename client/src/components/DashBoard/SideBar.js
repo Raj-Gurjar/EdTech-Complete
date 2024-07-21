@@ -85,6 +85,9 @@ export default function SideBar() {
           <NavLink to="admin-dashboard">Admin Dashboard</NavLink>
         </li>
         <li>
+          <NavLink to="courseMenu-admin">All Courses</NavLink>
+        </li>
+        <li>
           <NavLink to="categoryMenu">Category Menu</NavLink>
         </li>
       </ul>

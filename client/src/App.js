@@ -35,9 +35,11 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import CourseMenu from "./pages/Users/Student/StudyCourse/CourseMenu";
 import VideoDetails from "./pages/Users/Student/StudyCourse/VideoDetails";
 import InstDashBoard from "./components/DashBoard/Instructor/InstructorDashboard/InstDashBoard";
-import CategoryMenu from "./pages/Users/Admin/CategoryMenu";
-import CreateCategory from "./pages/Users/Admin/CreateCategory";
 import AdminDashboard from "./components/DashBoard/Admin/AdminDashboard";
+import CategoryMenuAdmin from "./pages/Users/Admin/CategoryAdmin/CategoryMenuAdmin";
+import CreateCategory from "./pages/Users/Admin/CategoryAdmin/CreateCategory";
+import CourseMenuAdmin from "./pages/Users/Admin/CoursesAdmin/CoursesMenuAdmin";
+import CourseDetailsAdmin from "./pages/Users/Admin/CoursesAdmin/CourseDetailsAdmin";
 
 function App() {
   const { user } = useSelector((state) => state.profile);
@@ -104,8 +106,13 @@ function App() {
             {user?.accountType === ACCOUNT_TYPE.ADMIN && (
               <>
                 <Route path="admin-dashboard" element={<AdminDashboard />} />
-                <Route path="categoryMenu" element={<CategoryMenu />} />
+                <Route path="categoryMenu" element={<CategoryMenuAdmin />} />
                 <Route path="createCategory" element={<CreateCategory />} />
+                <Route path="courseMenu-admin" element={<CourseMenuAdmin />} />
+                <Route
+                  path="courseMenu-admin/:courseId"
+                  element={<CourseDetailsAdmin />}
+                />
               </>
             )}
           </Route>

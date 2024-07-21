@@ -4,7 +4,8 @@ import { apiConnector } from "../apiConnector";
 import { courseEndpoints, reviewEndpoints } from "../api";
 
 const {
-  GET_ALL_COURSES_API,
+  GET_ALL_COURSES_PUBLIC_API,
+
   COURSE_DETAILS_API,
   EDIT_COURSE_API,
   CREATE_COURSE_API,
@@ -21,16 +22,20 @@ const {
   GET_SECTION_DETAILS,
   LECTURE_COMPLETION_API,
   CREATE_RATING_API,
+
+  GET_ALL_COURSES_ADMIN_API,
+  PUBLISH_COURSE_ADMIN_API,
+  GET_COURSE_DETAILS_ADMIN_API,
 } = courseEndpoints;
 
 const { GET_ALL_REVIEWS_API } = reviewEndpoints;
 
-export const getAllCourses = async () => {
+export const getAllCoursesPublic = async () => {
   const toastId = toast.loading("Loading");
   let result = [];
 
   try {
-    const response = await apiConnector("GET", GET_ALL_COURSES_API);
+    const response = await apiConnector("GET", GET_ALL_COURSES_PUBLIC_API);
     if (!response?.data?.success) {
       throw new Error("Could not fetch Courses");
     }
@@ -40,6 +45,57 @@ export const getAllCourses = async () => {
     console.log("Get all courses api error...", error);
     toast.error(error.response.message);
   }
+  toast.dismiss(toastId);
+  return result;
+};
+
+export const getAllCoursesAdmin = async () => {
+  const toastId = toast.loading("Loading");
+  let result = [];
+
+  try {
+    const response = await apiConnector("GET", GET_ALL_COURSES_ADMIN_API);
+    if (!response?.data?.success) {
+      throw new Error("Could not fetch Courses");
+    }
+    toast.success("All courses details fetched Successfully");
+    result = response?.data?.data;
+  } catch (error) {
+    console.log("Get all courses api error...", error);
+    toast.error(error.response.message);
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
+export const publishCourseAdmin = async (courseId, token) => {
+  const toastId = toast.loading("Publishing Course...");
+  let result = null;
+
+  try {
+    const response = await apiConnector(
+      "POST",
+      PUBLISH_COURSE_ADMIN_API,
+      { courseId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response?.data?.success) {
+      throw new Error("Could not publish the Course");
+    }
+    toast.success("Course Published Successfully");
+    result = response?.data?.data;
+  } catch (error) {
+    console.log("Publish course api error...", error);
+    toast.error(
+      error.response?.data?.message || "Error in publishing the course"
+    );
+  }
+
   toast.dismiss(toastId);
   return result;
 };
@@ -467,6 +523,35 @@ export const getAllReviews = async () => {
   } catch (error) {
     console.log("Get all reviews api error...", error);
     toast.error(error.response.data.message);
+  }
+  toast.dismiss(toastId);
+  return result;
+};
+
+export const getCourseDetailsAdmin = async (courseId, token) => {
+  // console.log("inside course by id admin", courseId, " ", token);
+  const toastId = toast.loading("Loading");
+  let result = [];
+
+  try {
+    const response = await apiConnector(
+      "POST",
+      GET_COURSE_DETAILS_ADMIN_API,
+      courseId,
+      { Authorization: `Bearer ${token}` }
+    );
+    // console.log("Course detail admin page..", response);
+
+    if (!response?.data?.success) {
+      throw new Error("Could not fetch this Course Data");
+    }
+    // toast.success("Course Category details fetched");
+    result = response?.data;
+    // console.log("res", result);
+  } catch (error) {
+    console.log("course details admin page api error...", error);
+    toast.error(error?.response?.data?.message);
+    result = error.response?.data;
   }
   toast.dismiss(toastId);
   return result;

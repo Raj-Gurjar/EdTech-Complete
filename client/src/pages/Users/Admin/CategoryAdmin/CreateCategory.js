@@ -1,8 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { setLoading } from "../../../toolkit/slice/authSlice";
-import { createCategory } from "../../../services/operations/category";
+import { setLoading } from "../../../../toolkit/slice/authSlice";
+import { createCategory } from "../../../../services/operations/category";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateCategory() {

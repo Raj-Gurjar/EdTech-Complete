@@ -3,12 +3,15 @@ const router = express.Router();
 
 const {
     createCourse,
-    getAllCourses,
+    getAllPublishedCourses,
+    getAllCoursesAdmin,
     getCourseById,
     editCourse,
     getInstructorCourses,
     deleteCourse,
     getFullCourseDetails,
+    publishCourse,
+    getCourseByIdAdmin,
 } = require("../controllers/Course");
 
 const {
@@ -23,7 +26,8 @@ const { fileUpload } = require("../middlewares/multer");
 const { updateCourseProgress } = require("../controllers/CourseProgress");
 
 //!Routes for creating , getting all and getting by id of instructor course
-router.get("/getAllCourses", getAllCourses);
+router.get("/getAllCourses-published", getAllPublishedCourses);
+
 router.post("/getFullCourseDetails", auth, isStudent, getFullCourseDetails);
 router.post(
     "/createCourse",
@@ -41,6 +45,11 @@ router.delete("/deleteCourse", auth, isInstructor, deleteCourse);
 router.post("/createRating", auth, isStudent, createRatingNReview);
 router.get("/getAverageRating", getAverageRating);
 router.get("/getAllReviews", getAllRatingAndReviews);
+
+//!Admin
+router.get("/getAllCourses-admin", getAllCoursesAdmin);
+router.post("/courseDetails-admin", getCourseByIdAdmin);
+router.post("/publishCourse-admin", publishCourse);
 
 //!Course Progress
 router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);

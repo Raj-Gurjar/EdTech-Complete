@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { showAllCategories } from "../../services/operations/category";
 import { NavLink, useLocation } from "react-router-dom";
-import Footer from "../../components/Footer/Footer";
-import { getAllCoursesPublic } from "../../services/operations/courseDetailsAPI";
-import CourseCard from "../../components/Cards/CourseCard";
-import CourseSlider from "../../components/Sliders/CourseSlider";
+// import Footer from "../../components/Footer/Footer";
+import { getAllCoursesAdmin } from "../../../../services/operations/courseDetailsAPI";
+import { showAllCategories } from "../../../../services/operations/category";
+import AllCoursesAdmin from "./AllCoursesAdmin";
 
-export default function AllCourses() {
+export default function CourseMenuAdmin() {
   const [courseCategories, setCourseCategories] = useState([]);
   const [coursesData, setCoursesData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -24,8 +23,8 @@ export default function AllCourses() {
 
   const showAllCourses = async () => {
     setLoading(true);
-    const courses = await getAllCoursesPublic();
-    // console.log("courses:", courses);
+    const courses = await getAllCoursesAdmin();
+    console.log("courses:", courses);
     if (courses.length > 0) {
       setCoursesData(courses);
     }
@@ -58,7 +57,6 @@ export default function AllCourses() {
               >
                 <div key={index} className="bg-yellow-100 flex gap-10 m-5 ">
                   <p className="text-blue-700">{category.name}</p>
-                  {/* <p>{category.description}</p> */}
                 </div>
               </NavLink>
             ))}
@@ -66,24 +64,14 @@ export default function AllCourses() {
         )}
       </div>
 
-      <div>
+      {/* <div>
         <h1 className="text-2xl my-10">
           Top Courses //! make a slider for top courses
         </h1>
         <CourseSlider courses={coursesData} />
-      </div>
+      </div> */}
       <div>
-        <h1 className="text-2xl">All Courses</h1>
-
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 m-5">
-            {coursesData?.map((course) => (
-              <CourseCard course={course} key={course._id} />
-            ))}
-          </div>
-        )}
+        <AllCoursesAdmin coursesData={coursesData} />
       </div>
 
       {/* <Footer /> */}

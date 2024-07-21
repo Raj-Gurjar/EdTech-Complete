@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "../../../toolkit/slice/authSlice";
+import { setLoading } from "../../../../toolkit/slice/authSlice";
 import {
   deleteCategory,
   showAllCategories,
-} from "../../../services/operations/category";
+} from "../../../../services/operations/category";
 
 export default function CategoryTable({ getCategories, courseCategories }) {
   const dispatch = useDispatch();

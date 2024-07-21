@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import CategoryTable from "./CategoryTable";
 import CreateCategory from "./CreateCategory";
 import { useDispatch } from "react-redux";
-import { setLoading } from "../../../toolkit/slice/authSlice";
-import { showAllCategories } from "../../../services/operations/category";
+import { setLoading } from "../../../../toolkit/slice/authSlice";
+import { showAllCategories } from "../../../../services/operations/category";
 import { Link } from "react-router-dom";
 
-export default function CategoryMenu() {
+export default function CategoryMenuAdmin() {
   const dispatch = useDispatch();
   const [courseCategories, setCourseCategories] = useState([]);
   // const [loading, setLoading] = useState(false);

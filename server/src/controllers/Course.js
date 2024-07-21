@@ -16,8 +16,167 @@ const {
 
 //TODO : Add courseProgress controller (lec 30 , 2.18 time)
 
-//! Create Course
+exports.getAllPublishedCourses = async (req, res) => {
+    try {
+        const allCourse = await Course_Model.find(
+            { status: "Published" },
+            {
+                courseName: true,
+                price: true,
+                courseDescription: true,
+                instructor: true,
+                thumbnail: true,
+                ratingAndReviews: true,
+                studentsEnrolled: true,
+            }
+        )
+            .populate("instructor")
+            .exec();
 
+        //* return res
+        return res.status(200).json({
+            success: true,
+            message: "Data of All Courses Fetched Successfully.",
+            data: allCourse,
+        });
+    } catch (error) {
+        console.log("Get course Error : ", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in getting all the Courses",
+            error: error.message,
+        });
+    }
+};
+
+// Get Course by Id
+exports.getCourseById = async (req, res) => {
+    console.log("in gg");
+    try {
+        console.log("cccby");
+        const { courseId } = req.body;
+
+        const courseDetails = await Course_Model.findById(courseId)
+            .populate({
+                path: "instructor",
+                populate: {
+                    path: "additionalDetails",
+                },
+            })
+            .populate("category")
+            .populate("ratingAndReviews")
+            .populate({
+                path: "courseContent",
+                populate: {
+                    path: "subSections",
+                },
+            })
+            .exec();
+        // console.log("course details", courseDetails);
+        //valid
+        if (!courseDetails) {
+            return res.status(400).json({
+                success: false,
+                message: `Could not find the Course with ${courseId}`,
+            });
+        }
+
+        const totalDuration = calculateTotalDuration(
+            courseDetails.courseContent
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Course Data fetched Successfully.",
+            data: { courseDetails, totalDuration },
+        });
+    } catch (error) {
+        console.log("Error in fetching course details", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in fetching this course data.",
+            error: error.message,
+        });
+    }
+};
+
+// get full course Details
+exports.getFullCourseDetails = async (req, res) => {
+    try {
+        const { courseId } = req.body;
+        // console.log("ccd", courseId);
+        const userId = req.user.id;
+        const courseDetails = await Course_Model.findOne({ _id: courseId })
+            .populate({
+                path: "instructor",
+                populate: {
+                    path: "additionalDetails",
+                },
+            })
+            .populate("category")
+            .populate("ratingAndReviews")
+            .populate({
+                path: "courseContent",
+                populate: {
+                    path: "subSections",
+                },
+            })
+            .exec();
+
+        //valid
+        // console.log("course Details", courseDetails);
+        if (!courseDetails) {
+            return res.status(400).json({
+                success: false,
+                message: `Could not find the Course with ${courseId}`,
+            });
+        }
+        // console.log("Course Details:", courseDetails);
+
+        let courseProgressCount = await CourseProgress_Model.findOne({
+            courseID: courseId,
+            userID: userId,
+        });
+        // console.log("Course Progress Count :", courseProgressCount);
+
+        // console.log("ccc", courseDetails.courseContent);
+
+        let totalDurationInSeconds = 0;
+        courseDetails.courseContent?.forEach((content) => {
+            content.subSection?.forEach((subSection) => {
+                const timeDurationInSeconds = parseInt(subSection.timeDuration);
+                totalDurationInSeconds += timeDurationInSeconds;
+            });
+        });
+        // console.log("totalDurSec :", totalDurationInSeconds);
+        const totalDuration = convertSecondsToDuration(totalDurationInSeconds);
+
+        // console.log("totalDur :", totalDuration);
+        //return
+        return res.status(200).json({
+            success: true,
+            data: {
+                courseDetails,
+                totalDuration,
+                completedVideos: courseProgressCount?.completedVideos
+                    ? courseProgressCount?.completedVideos
+                    : [],
+            },
+            message: "All course details fetched",
+        });
+    } catch (error) {
+        console.log("Error in whole course details fetching :", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in fetching whole course details",
+            error: error.message,
+        });
+    }
+};
+
+//! ######### Student Specific ##########
+
+//! ######### Instructor Specific ##########
 exports.createCourse = async (req, res) => {
     try {
         //*get the data
@@ -161,92 +320,7 @@ exports.createCourse = async (req, res) => {
     }
 };
 
-//! Get all Course
-exports.getAllCourses = async (req, res) => {
-    try {
-        const allCourse = await Course_Model.find(
-            { status: "Published" },
-            {
-                courseName: true,
-                price: true,
-                courseDescription: true,
-                instructor: true,
-                thumbnail: true,
-                ratingAndReviews: true,
-                studentsEnrolled: true,
-            }
-        )
-            .populate("instructor")
-            .exec();
-
-        //* return res
-        return res.status(200).json({
-            success: true,
-            message: "Data of All Courses Fetched Successfully.",
-            data: allCourse,
-        });
-    } catch (error) {
-        console.log("Get course Error : ", error);
-        return res.status(500).json({
-            success: false,
-            message: "Error in getting all the Courses",
-            error: error.message,
-        });
-    }
-};
-
-//! Get Course by Id
-exports.getCourseById = async (req, res) => {
-    try {
-        console.log("cccby");
-        const { courseId } = req.body;
-
-        const courseDetails = await Course_Model.findById(courseId)
-            .populate({
-                path: "instructor",
-                populate: {
-                    path: "additionalDetails",
-                },
-            })
-            .populate("category")
-            .populate("ratingAndReviews")
-            .populate({
-                path: "courseContent",
-                populate: {
-                    path: "subSections",
-                },
-            })
-            .exec();
-        // console.log("course details", courseDetails);
-        //valid
-        if (!courseDetails) {
-            return res.status(400).json({
-                success: false,
-                message: `Could not find the Course with ${courseId}`,
-            });
-        }
-
-        const totalDuration = calculateTotalDuration(
-            courseDetails.courseContent
-        );
-
-        return res.status(200).json({
-            success: true,
-            message: "Course Data fetched Successfully.",
-            data: { courseDetails, totalDuration },
-        });
-    } catch (error) {
-        console.log("Error in fetching course details", error);
-        return res.status(500).json({
-            success: false,
-            message: "Error in fetching this course data.",
-            error: error.message,
-        });
-    }
-};
-
-//!edit Course  (vid. 26, near 1:00hr)
-
+//edit Course  (vid. 26, near 1:00hr)
 exports.editCourse = async (req, res) => {
     try {
         const { courseId } = req.body;
@@ -319,115 +393,6 @@ exports.editCourse = async (req, res) => {
         });
     }
 };
-
-//! get full course Details
-
-exports.getFullCourseDetails = async (req, res) => {
-    try {
-        const { courseId } = req.body;
-        // console.log("ccd", courseId);
-        const userId = req.user.id;
-        const courseDetails = await Course_Model.findOne({ _id: courseId })
-            .populate({
-                path: "instructor",
-                populate: {
-                    path: "additionalDetails",
-                },
-            })
-            .populate("category")
-            .populate("ratingAndReviews")
-            .populate({
-                path: "courseContent",
-                populate: {
-                    path: "subSections",
-                },
-            })
-            .exec();
-
-        //valid
-        // console.log("course Details", courseDetails);
-        if (!courseDetails) {
-            return res.status(400).json({
-                success: false,
-                message: `Could not find the Course with ${courseId}`,
-            });
-        }
-        // console.log("Course Details:", courseDetails);
-
-        let courseProgressCount = await CourseProgress_Model.findOne({
-            courseID: courseId,
-            userID: userId,
-        });
-        // console.log("Course Progress Count :", courseProgressCount);
-
-        // console.log("ccc", courseDetails.courseContent);
-
-        let totalDurationInSeconds = 0;
-        courseDetails.courseContent?.forEach((content) => {
-            content.subSection?.forEach((subSection) => {
-                const timeDurationInSeconds = parseInt(subSection.timeDuration);
-                totalDurationInSeconds += timeDurationInSeconds;
-            });
-        });
-        // console.log("totalDurSec :", totalDurationInSeconds);
-        const totalDuration = convertSecondsToDuration(totalDurationInSeconds);
-
-        // console.log("totalDur :", totalDuration);
-        //return
-        return res.status(200).json({
-            success: true,
-            data: {
-                courseDetails,
-                totalDuration,
-                completedVideos: courseProgressCount?.completedVideos
-                    ? courseProgressCount?.completedVideos
-                    : [],
-            },
-            message: "All course details fetched",
-        });
-    } catch (error) {
-        console.log("Error in whole course details fetching :", error);
-        return res.status(500).json({
-            success: false,
-            message: "Error in fetching whole course details",
-            error: error.message,
-        });
-    }
-};
-
-//! list of course by Instructor
-exports.getInstructorCourses = async (req, res) => {
-    try {
-        const instructorId = req.user.id;
-
-        // Find all the courses belonging to instructor
-        const instructorCourses = await Course_Model.find({
-            instructor: instructorId,
-        })
-            .sort({ createdAt: -1 })
-
-            .populate("category")
-
-            .exec();
-        console.log("inst courses", instructorCourses);
-
-        // Return
-        return res.status(200).json({
-            success: true,
-            message: "Instructor's Courses fetched successfully",
-            data: instructorCourses,
-        });
-    } catch (error) {
-        console.log("Instructor's courses data fetching error", error);
-
-        return res.status(500).json({
-            success: false,
-            message: "Failed to retrieve instructor courses",
-            error: error.message,
-        });
-    }
-};
-
 exports.deleteCourse = async (req, res) => {
     console.log("Entering in delete section controller");
     try {
@@ -503,6 +468,155 @@ exports.deleteCourse = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error in Deleting Course",
+        });
+    }
+};
+
+// list of course by Instructor
+exports.getInstructorCourses = async (req, res) => {
+    try {
+        const instructorId = req.user.id;
+
+        // Find all the courses belonging to instructor
+        const instructorCourses = await Course_Model.find({
+            instructor: instructorId,
+        })
+            .sort({ createdAt: -1 })
+
+            .populate("category")
+
+            .exec();
+        console.log("inst courses", instructorCourses);
+
+        // Return
+        return res.status(200).json({
+            success: true,
+            message: "Instructor's Courses fetched successfully",
+            data: instructorCourses,
+        });
+    } catch (error) {
+        console.log("Instructor's courses data fetching error", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Failed to retrieve instructor courses",
+            error: error.message,
+        });
+    }
+};
+
+//! ######### Admin Specific ##########
+exports.getAllCoursesAdmin = async (req, res) => {
+    try {
+        const allCourse = await Course_Model.find({}, {})
+            .populate("instructor")
+            .populate("courseContent")
+            .exec();
+
+        //* return res
+        return res.status(200).json({
+            success: true,
+            message: "Data of All Courses Fetched Successfully.",
+            data: allCourse,
+        });
+    } catch (error) {
+        console.log("Get course Error : ", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in getting all the Courses",
+            error: error.message,
+        });
+    }
+};
+
+exports.publishCourse = async (req, res) => {
+    try {
+        const { courseId } = req.body;
+        // console.log("ccd", courseId);
+
+        const courseDetails = await Course_Model.findOne({ _id: courseId });
+
+        // Check if the course exists
+        if (!courseDetails) {
+            return res.status(400).json({
+                success: false,
+                message: `Could not find the Course with ${courseId}`,
+            });
+        }
+
+        // console.log("course Details", courseDetails);
+
+        // If the course status is "Draft", update it to "Publish"
+        if (courseDetails.status === "Draft") {
+            await Course_Model.findByIdAndUpdate(
+                courseId,
+                { $set: { status: "Published" } },
+                { new: true }
+            );
+        }
+
+        //* return res
+        return res.status(200).json({
+            success: true,
+            message: "Course Published Successfully.",
+        });
+    } catch (error) {
+        console.log("course publish Error: ", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in publishing the Course",
+            error: error.message,
+        });
+    }
+};
+
+exports.getCourseByIdAdmin = async (req, res) => {
+    try {
+        // console.log("insd get cadmin");
+        const { courseId } = req.body;
+
+        // console.log("courseid ", req.body);
+
+        const courseDetails = await Course_Model.findById(courseId)
+            .populate({
+                path: "instructor",
+                populate: {
+                    path: "additionalDetails",
+                },
+            })
+            .populate("category")
+            .populate("ratingAndReviews")
+            .populate({
+                path: "courseContent",
+                populate: {
+                    path: "subSections",
+                },
+            })
+            .exec();
+        // console.log("course details", courseDetails);
+        //valid
+        if (!courseDetails) {
+            return res.status(400).json({
+                success: false,
+                message: `Could not find the Course with ${courseId}`,
+            });
+        }
+
+        const totalDuration = calculateTotalDuration(
+            courseDetails.courseContent
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Course Data fetched Successfully.",
+            data: { courseDetails, totalDuration },
+        });
+    } catch (error) {
+        console.log("Error in fetching course details", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in fetching this course data.",
+            error: error.message,
         });
     }
 };

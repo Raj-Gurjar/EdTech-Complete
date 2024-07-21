@@ -154,7 +154,7 @@ export default function SubSectionModal({
           setValue={setValue}
           errors={errors}
           video={true}
-          image={true}
+          // image={true}
           viewData={view ? modalData.videoUrl : null}
           editData={edit ? modalData.videoUrl : null}
         />

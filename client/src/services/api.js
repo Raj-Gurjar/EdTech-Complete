@@ -31,7 +31,8 @@ export const studentPaymentEndpoints = {
 
 //! COURSE ENDPOINTS
 export const courseEndpoints = {
-  GET_ALL_COURSES_API: BASE_URL + "/course/getAllCourses",
+  GET_ALL_COURSES_PUBLIC_API: BASE_URL + "/course/getAllCourses-published",
+
   COURSE_DETAILS_API: BASE_URL + "/course/getCourseDetails",
   EDIT_COURSE_API: BASE_URL + "/course/editCourse",
   CREATE_COURSE_API: BASE_URL + "/course/createCourse",
@@ -49,6 +50,10 @@ export const courseEndpoints = {
   GET_SECTION_DETAILS: BASE_URL + "/course/getSection",
   LECTURE_COMPLETION_API: BASE_URL + "/course/updateCourseProgress",
   CREATE_RATING_API: BASE_URL + "/course/createRating",
+
+  GET_ALL_COURSES_ADMIN_API: BASE_URL + "/course/getAllCourses-admin",
+  GET_COURSE_DETAILS_ADMIN_API: BASE_URL + "/course/courseDetails-admin",
+  PUBLISH_COURSE_ADMIN_API: BASE_URL + "/course/publishCourse-admin",
 };
 
 //! REVIEWS ENDPOINTS

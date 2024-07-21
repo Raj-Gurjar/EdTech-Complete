@@ -11,7 +11,10 @@ const calculateTotalDuration = (courseContent) => {
 
     courseContent?.forEach((content) => {
         content.subSections?.forEach((subSection) => {
-            const timeDurationInSeconds = parseInt(subSection.timeDuration);
+            let timeDurationInSeconds = parseInt(subSection.timeDuration, 10);
+            if (isNaN(timeDurationInSeconds)) {
+                timeDurationInSeconds = 0;
+            }
             totalDurationInSeconds += timeDurationInSeconds;
         });
     });
