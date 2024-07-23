@@ -7,9 +7,15 @@ const {
     deleteUserAccount,
     updateDisplayPicture,
     instructorDashboardData,
+    adminDashboardData,
 } = require("../controllers/Profile");
 
-const { auth, isStudent, isInstructor } = require("../middlewares/auth");
+const {
+    auth,
+    isStudent,
+    isInstructor,
+    isAdmin,
+} = require("../middlewares/auth");
 const { fileUpload } = require("../middlewares/multer");
 
 //!Routes for get enrolled Courses
@@ -29,5 +35,6 @@ router.get(
     isInstructor,
     instructorDashboardData
 );
+router.get("/admin-dashboard", auth, isAdmin, adminDashboardData);
 
 module.exports = router;

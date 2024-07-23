@@ -20,7 +20,12 @@ const {
     createRatingNReview,
 } = require("../controllers/RatingAndReview");
 
-const { auth, isInstructor, isStudent } = require("../middlewares/auth");
+const {
+    auth,
+    isInstructor,
+    isStudent,
+    isAdmin,
+} = require("../middlewares/auth");
 const { fileUpload } = require("../middlewares/multer");
 
 const { updateCourseProgress } = require("../controllers/CourseProgress");
@@ -47,9 +52,9 @@ router.get("/getAverageRating", getAverageRating);
 router.get("/getAllReviews", getAllRatingAndReviews);
 
 //!Admin
-router.get("/getAllCourses-admin", getAllCoursesAdmin);
-router.post("/courseDetails-admin", getCourseByIdAdmin);
-router.post("/publishCourse-admin", publishCourse);
+router.get("/getAllCourses-admin", auth, isAdmin, getAllCoursesAdmin);
+router.post("/courseDetails-admin", auth, isAdmin, getCourseByIdAdmin);
+router.post("/publishCourse-admin", auth, isAdmin, publishCourse);
 
 //!Course Progress
 router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);

@@ -5,6 +5,7 @@ const CourseProgress_Model = require("../models/CourseProgress.model");
 const { populate } = require("../models/ContactUs.model");
 const { uploadToCloudinary } = require("../config/cloudinary");
 const { convertSecondsToDuration } = require("../utils/convertDuration");
+const Category_Model = require("../models/Category.model");
 
 //! Since while creating SignUp we have already stored null in Profile's data,
 //! so we do not need to create it, we will just to update the null values.
@@ -363,6 +364,107 @@ exports.instructorDashboardData = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Error in fetching Instructor Course Data",
+        });
+    }
+};
+
+exports.adminDashboardData = async (req, res) => {
+    try {
+        console.log("ins adminDash");
+
+        // Aggregate user data
+        const userAggregation = User_Model.aggregate([
+            {
+                $facet: {
+                    totalUsers: [{ $count: "count" }],
+                    totalStudents: [
+                        { $match: { accountType: "Student" } },
+                        { $count: "count" },
+                    ],
+                    totalInstructors: [
+                        { $match: { accountType: "Instructor" } },
+                        { $count: "count" },
+                    ],
+                    totalActiveStudents: [
+                        {
+                            $match: {
+                                accountType: "Student",
+                                courses: { $ne: [] },
+                            },
+                        },
+                        { $count: "count" },
+                    ],
+                    totalActiveInstructors: [
+                        {
+                            $match: {
+                                accountType: "Instructor",
+                                courses: { $ne: [] },
+                            },
+                        },
+                        { $count: "count" },
+                    ],
+                },
+            },
+        ]);
+
+        console.log("userAggregation", userAggregation);
+
+        // Aggregate course and category data
+        const [userResults, totalCategories] = await Promise.all([
+            userAggregation,
+            Category_Model.countDocuments(),
+        ]);
+        console.log("userResults", userResults);
+
+        const userStats = userResults[0];
+        const totalUsers = userStats.totalUsers[0]?.count || 0;
+        const totalStudents = userStats.totalStudents[0]?.count || 0;
+        const totalInstructors = userStats.totalInstructors[0]?.count || 0;
+        const totalActiveStudents =
+            userStats.totalActiveStudents[0]?.count || 0;
+        const totalActiveInstructors =
+            userStats.totalActiveInstructors[0]?.count || 0;
+
+        // Calculate total earnings
+        const courseDetails = await Course_Model.find(
+            {},
+            "studentsEnrolled price"
+        );
+        let totalCourses = 0;
+
+        const totalEarningAdmin = courseDetails.reduce((total, course) => {
+            totalCourses += 1;
+            return total + course.studentsEnrolled.length * course.price * 0.25;
+        }, 0);
+
+        // console.log("totalUsers", totalUsers);
+        // console.log("totalStudents", totalStudents);
+        // console.log("totalInstructors", totalInstructors);
+        // console.log("totalCourses", totalCourses);
+        // console.log("totalCategories", totalCategories);
+        // console.log("totalActiveStudents", totalActiveStudents);
+        // console.log("totalActiveInstructors", totalActiveInstructors);
+        // console.log("totalEarning", totalEarningAdmin.toFixed(2));
+
+        return res.status(200).json({
+            success: true,
+            message: "Admin Data fetched Successfully",
+            data: {
+                totalUsers,
+                totalStudents,
+                totalInstructors,
+                totalCourses,
+                totalCategories,
+                totalActiveStudents,
+                totalActiveInstructors,
+                totalEarningAdmin: totalEarningAdmin.toFixed(2),
+            },
+        });
+    } catch (error) {
+        console.log("Error in admin dashboard data: ", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in fetching Data for Admin",
         });
     }
 };

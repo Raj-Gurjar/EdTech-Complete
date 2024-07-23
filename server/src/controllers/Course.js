@@ -507,6 +507,7 @@ exports.getInstructorCourses = async (req, res) => {
 
 //! ######### Admin Specific ##########
 exports.getAllCoursesAdmin = async (req, res) => {
+    console.log("inside all admin cour");
     try {
         const allCourse = await Course_Model.find({}, {})
             .populate("instructor")

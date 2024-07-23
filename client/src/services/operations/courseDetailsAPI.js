@@ -49,12 +49,19 @@ export const getAllCoursesPublic = async () => {
   return result;
 };
 
-export const getAllCoursesAdmin = async () => {
+export const getAllCoursesAdmin = async (token) => {
   const toastId = toast.loading("Loading");
   let result = [];
 
   try {
-    const response = await apiConnector("GET", GET_ALL_COURSES_ADMIN_API);
+    const response = await apiConnector(
+      "GET",
+      GET_ALL_COURSES_ADMIN_API,
+      null,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
     if (!response?.data?.success) {
       throw new Error("Could not fetch Courses");
     }
@@ -78,9 +85,7 @@ export const publishCourseAdmin = async (courseId, token) => {
       PUBLISH_COURSE_ADMIN_API,
       { courseId },
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        Authorization: `Bearer ${token}`,
       }
     );
 

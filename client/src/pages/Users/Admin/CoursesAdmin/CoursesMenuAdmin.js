@@ -4,12 +4,14 @@ import { NavLink, useLocation } from "react-router-dom";
 import { getAllCoursesAdmin } from "../../../../services/operations/courseDetailsAPI";
 import { showAllCategories } from "../../../../services/operations/category";
 import AllCoursesAdmin from "./AllCoursesAdmin";
+import { useSelector } from "react-redux";
 
 export default function CourseMenuAdmin() {
   const [courseCategories, setCourseCategories] = useState([]);
   const [coursesData, setCoursesData] = useState([]);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
+  const { token } = useSelector((state) => state.auth);
 
   const getCategories = async () => {
     setLoading(true);
@@ -23,7 +25,7 @@ export default function CourseMenuAdmin() {
 
   const showAllCourses = async () => {
     setLoading(true);
-    const courses = await getAllCoursesAdmin();
+    const courses = await getAllCoursesAdmin(token);
     console.log("courses:", courses);
     if (courses.length > 0) {
       setCoursesData(courses);

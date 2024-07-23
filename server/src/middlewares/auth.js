@@ -9,7 +9,7 @@ const User_Model = require("../models/User.model");
 exports.auth = async (req, res, next) => {
     try {
         //extract token
-        console.log("Entering middleware auth");
+        console.log("Entering auth middleware");
 
         const token =
             req.body.token ||
@@ -26,14 +26,12 @@ exports.auth = async (req, res, next) => {
 
         //verify the token
         try {
-
             // console.log("Entering payload");
             const decodePayload = jwt.verify(token, process.env.JWT_SECRET);
 
             // console.log("Decode payload: ", decodePayload);
 
             req.user = decodePayload;
-
         } catch (error) {
             //validation issue
             console.log("Error in auth middleware", error);
@@ -44,6 +42,7 @@ exports.auth = async (req, res, next) => {
         }
         next();
     } catch (error) {
+        console.log("Error in auth middleware", error);
         return res.status(401).json({
             success: false,
             message: "Something went wrong while validating Token.",
@@ -97,6 +96,7 @@ exports.isInstructor = async (req, res, next) => {
 
 exports.isAdmin = async (req, res, next) => {
     try {
+        console.log("inside admin middlew");
         const role = req.user.accountType;
 
         if (role !== "Admin") {
