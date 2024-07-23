@@ -190,7 +190,7 @@ exports.createCourse = async (req, res) => {
             category,
             // status,
             instructions,
-            // tag
+            tag
         } = req.body;
         let { status } = req.body;
 
@@ -209,7 +209,7 @@ exports.createCourse = async (req, res) => {
             !price ||
             !language ||
             !category ||
-            // !tag ||
+            !tag ||
             !thumbnailPath
         ) {
             return res.status(400).json({
@@ -270,7 +270,7 @@ exports.createCourse = async (req, res) => {
             courseDescription,
             instructor: instructorDetails._id, //to give reference to instructor obj
             whatYouWillLearn,
-            // tag:tag,
+            tags:tag,
             price,
             language,
             category: categoryDetail._id,

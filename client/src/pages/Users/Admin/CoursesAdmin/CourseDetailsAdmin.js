@@ -170,6 +170,18 @@ export default function CourseDetailsAdmin() {
               ))}
             </div>
           </div>
+
+          <div>
+            <p>Tags</p>
+
+            <div>
+              {courseData?.tags.map((item, index) => (
+                <div key={index}>
+                  <p>{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
           <div className="flex bg-yellow-100 justify-between mx-5">
             <p>Total Lessons: {courseData?.courseContent?.length}</p>
             <p

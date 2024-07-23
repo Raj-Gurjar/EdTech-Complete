@@ -14,7 +14,6 @@ import toast from "react-hot-toast";
 import { COURSE_STATUS } from "../../../../../utils/constants";
 import UploadMedia from "../../../../../utils/UploadMedia";
 
-
 export default function CourseInfoForm() {
   const {
     register,
@@ -48,7 +47,7 @@ export default function CourseInfoForm() {
       setValue("courseShortDescription", course.courseDescription);
       setValue("coursePrice", course.price);
       setValue("courseLanguage", course.language);
-      // setValue("courseTags", course.tag);
+      setValue("courseTags", course.tag);
       setValue("courseBenefits", course.whatYouWillLearn);
       setValue("courseCategory", course.category);
       setValue("courseRequirements", course.instruction);
@@ -65,12 +64,11 @@ export default function CourseInfoForm() {
       currentValues.courseShortDescription !== course.courseDescription ||
       currentValues.coursePrice !== course.price ||
       currentValues.courseLanguage !== course.language ||
-      // currentValues.courseTags !== course.tag ||
+      currentValues.courseTags !== course.tag ||
       currentValues.courseBenefits !== course.whatYouWillLearn ||
       currentValues.courseCategory !== course.category._id ||
       currentValues.courseImage !== course.thumbnail ||
-      currentValues.courseRequirements.toString() !==
-        course.instruction.toString()
+      currentValues.courseRequirements !== course.instruction
     ) {
       return true;
     } else {
@@ -101,9 +99,9 @@ export default function CourseInfoForm() {
         if (currentValues.courseLanguage !== course.language) {
           formData.append("language", data.courseLanguage);
         }
-        // if ( currentValues.courseTags !== course.tag) {
-        //   formData.append("tag", data.courseTags);
-        // }
+        if (currentValues.courseTags !== course.tag) {
+          formData.append("tag", data.courseTags);
+        }
         if (currentValues.courseBenefits !== course.whatYouWillLearn) {
           formData.append("whatWillYouLearn", data.courseBenefits);
         }
@@ -113,14 +111,8 @@ export default function CourseInfoForm() {
         if (currentValues.courseImage !== course.thumbnail) {
           formData.append("thumbnail", data.courseImage);
         }
-        if (
-          currentValues.courseRequirements.toString() !==
-          course.instructions.toString()
-        ) {
-          formData.append(
-            "instruction",
-            JSON.stringify(data.courseRequirements)
-          );
+        if (currentValues.courseRequirements !== course.instructions) {
+          formData.append("instruction", data.courseRequirements);
         }
 
         setLoading(true);
@@ -150,8 +142,8 @@ export default function CourseInfoForm() {
     formData.append("language", data.courseLanguage);
     formData.append("whatYouWillLearn", data.courseBenefits);
     formData.append("category", data.courseCategory);
-    formData.append("instructions", JSON.stringify(data.courseRequirements));
-    // formData.append("tag", data.courseTags);
+    formData.append("instructions", data.courseRequirements);
+    formData.append("tag", data.courseTags);
     formData.append("thumbnail", data.courseImage);
     formData.append("status", COURSE_STATUS.DRAFT);
 
@@ -248,11 +240,7 @@ export default function CourseInfoForm() {
           />
           {errors.courseLanguage && <span>Course Language is Required </span>}
         </div>
-        <label htmlFor="courseTags">Course Tag</label>
-        {/* //TODO: Create Tags Component vid 56 min mfe9 */}
-        <div>
-          <CreateTags />
-        </div>
+
         {/* //TODO: Upload Thumbnail Component vid 56 min mfe9 */}
 
         <div>
@@ -280,6 +268,18 @@ export default function CourseInfoForm() {
           <RequirementField
             name="courseRequirements"
             label="Requirements/Instructions"
+            register={register}
+            errors={errors}
+            setValue={setValue}
+            getValues={getValues}
+          />
+        </div>
+        {/* <label htmlFor="courseTags">Course Tag</label>
+        //TODO: Create Tags Component vid 56 min mfe9 */}
+        <div>
+          <RequirementField
+            name="courseTags"
+            label="Tags"
             register={register}
             errors={errors}
             setValue={setValue}
