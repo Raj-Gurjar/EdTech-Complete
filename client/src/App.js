@@ -46,7 +46,7 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      <div className="pt-14">
+      <div className="pt-14 w-screen min-h-screen text-white flex flex-col bg-black3 font-inter">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />

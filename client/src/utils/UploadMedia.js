@@ -8,51 +8,55 @@ export default function UploadMedia({
   errors,
   video,
   image,
+  previewMedia,
 }) {
-  const [file, setFile] = useState("");
-  const [previewFile, setPreviewFile] = useState("");
+  // console.log("set val", setValue);
+  const [media, setMedia] = useState({
+    file: "",
+    preview: previewMedia || "",
+  });
 
   useEffect(() => {
     register(name);
-  }, []);
+    setValue(name, media.file);
+  }, [register, name, setValue, media.file]);
 
   useEffect(() => {
-    setValue(name, file);
-  }, [name, file, setValue]);
+    if (previewMedia) {
+      setMedia((prev) => ({ ...prev, preview: previewMedia }));
+    }
+  }, [previewMedia]);
 
   const handleFileChange = (e) => {
     const uploadedFile = e.target.files[0];
-    setFile(uploadedFile);
-    TransformFile(uploadedFile);
+    if (uploadedFile) {
+      const reader = new FileReader();
+      reader.readAsDataURL(uploadedFile);
+      reader.onloadend = () => {
+        setMedia({ file: uploadedFile, preview: reader.result });
+      };
+    }
   };
 
-  const TransformFile = (file) => {
-    const reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setPreviewFile(reader.result);
-      };
-    } else {
-      setPreviewFile("");
-    }
+  const handleReset = () => {
+    setMedia({ file: "", preview: previewMedia || "" });
   };
 
   return (
     <div>
       <h1>{label}</h1>
       <div className="bg-slate-500 my-5 p-5">
-        {file && (video || image) ? (
+        {media.preview && (video || image) ? (
           video ? (
             <video
-              src={previewFile}
+              src={media.preview}
               alt={label}
               controls
               className="h-[300px] w-[500px] m-5"
             />
           ) : (
             <img
-              src={previewFile}
+              src={media.preview}
               alt={label}
               className="h-[300px] w-[500px] m-5"
             />
@@ -66,11 +70,11 @@ export default function UploadMedia({
             onChange={handleFileChange}
             accept={image ? "image/*" : video ? "video/*" : ""}
           />
-          {file && (
+          {media.file && (
             <button
               type="reset"
               className="bg-yellow-400"
-              onClick={() => setFile("")}
+              onClick={handleReset}
             >
               Cancel
             </button>

@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { FaRupeeSign } from "react-icons/fa";
 import { showAllCategories } from "../../../../../services/operations/category";
-import CreateTags from "./CreateTags";
-import RequirementField from "./RequirementField";
-import { setCourse, setStep } from "../../../../../toolkit/slice/courseSlice";
+import {
+  resetCourseState,
+  setCourse,
+  setStep,
+} from "../../../../../toolkit/slice/courseSlice";
 import {
   addCourseDetails,
   editCourseDetails,
@@ -13,6 +15,7 @@ import {
 import toast from "react-hot-toast";
 import { COURSE_STATUS } from "../../../../../utils/constants";
 import UploadMedia from "../../../../../utils/UploadMedia";
+import ChipInput from "./ChipInput";
 
 export default function CourseInfoForm() {
   const {
@@ -25,23 +28,24 @@ export default function CourseInfoForm() {
 
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-
   const { course, editCourse } = useSelector((state) => state.course);
   const [loading, setLoading] = useState(false);
-
   const [courseCategories, setCourseCategories] = useState([]);
+
+  const clearFormHandler = () => {
+    dispatch(resetCourseState());
+  };
 
   useEffect(() => {
     const getCategories = async () => {
       setLoading(true);
       const categories = await showAllCategories();
-      // console.log("categories inside courseInfo", categories);
-
       if (categories.length > 0) {
         setCourseCategories(categories);
       }
       setLoading(false);
     };
+
     if (editCourse) {
       setValue("courseTitle", course.courseName);
       setValue("courseShortDescription", course.courseDescription);
@@ -53,13 +57,13 @@ export default function CourseInfoForm() {
       setValue("courseRequirements", course.instruction);
       setValue("courseImage", course.thumbnail);
     }
+
     getCategories();
-  }, []);
+  }, [editCourse, course, setValue]);
 
   const isFormUpdated = () => {
-    console.log("inside isFormUpdated");
     const currentValues = getValues();
-    if (
+    return (
       currentValues.courseTitle !== course.courseName ||
       currentValues.courseShortDescription !== course.courseDescription ||
       currentValues.coursePrice !== course.price ||
@@ -69,24 +73,16 @@ export default function CourseInfoForm() {
       currentValues.courseCategory !== course.category._id ||
       currentValues.courseImage !== course.thumbnail ||
       currentValues.courseRequirements !== course.instruction
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    );
   };
 
-  //handle next button
   const onSubmit = async (data) => {
-    console.log("inside sub");
     if (editCourse) {
       if (isFormUpdated()) {
-        const currentValues = getValues();
-        console.log("current values: ", currentValues);
         const formData = new FormData();
+        const currentValues = getValues();
 
         formData.append("courseId", course._id);
-
         if (currentValues.courseTitle !== course.courseName) {
           formData.append("courseName", data.courseTitle);
         }
@@ -118,9 +114,10 @@ export default function CourseInfoForm() {
         setLoading(true);
         const result = await editCourseDetails(formData, token);
         setLoading(false);
+
         if (result) {
-          setStep(2);
           dispatch(setCourse(result));
+          dispatch(setStep(2));
         }
       } else {
         toast.error("No changes made to the form");
@@ -128,14 +125,7 @@ export default function CourseInfoForm() {
       return;
     }
 
-    //! create a new course
-
-    // console.log("createCourse cp1");
-    console.log("data", data);
     const formData = new FormData();
-
-    // console.log("category id:", data.courseCategory._id);
-    // console.log("category", data.courseCategory);
     formData.append("courseName", data.courseTitle);
     formData.append("courseDescription", data.courseShortDescription);
     formData.append("price", data.coursePrice);
@@ -147,24 +137,19 @@ export default function CourseInfoForm() {
     formData.append("thumbnail", data.courseImage);
     formData.append("status", COURSE_STATUS.DRAFT);
 
-    console.log("thumbnail", data?.courseImage, formData.get("thumbnail"));
-
     setLoading(true);
     const result = await addCourseDetails(formData, token);
-    console.log("result2", result);
-    if (result) {
-      console.log("going inside result");
-      dispatch(setStep(2));
-      dispatch(setCourse(result));
-    }
     setLoading(false);
-    console.log("result", result);
+
+    if (result) {
+      dispatch(setCourse(result));
+      dispatch(setStep(2));
+    }
   };
 
   return (
     <div className="createCourse">
       <h1>Create Info Form</h1>
-
       <form
         className="bg-[#4baca6] flex flex-col gap-5 w-10/12 m-auto"
         onSubmit={handleSubmit(onSubmit)}
@@ -219,7 +204,6 @@ export default function CourseInfoForm() {
             <option value="" disabled>
               Choose a Category
             </option>
-
             {!loading &&
               courseCategories.map((category, index) => (
                 <option key={index} value={category?._id}>
@@ -227,7 +211,6 @@ export default function CourseInfoForm() {
                 </option>
               ))}
           </select>
-
           {errors.courseCategory && <span>Course Category is Required </span>}
         </div>
         <div>
@@ -240,9 +223,6 @@ export default function CourseInfoForm() {
           />
           {errors.courseLanguage && <span>Course Language is Required </span>}
         </div>
-
-        {/* //TODO: Upload Thumbnail Component vid 56 min mfe9 */}
-
         <div>
           <UploadMedia
             name="courseImage"
@@ -251,6 +231,7 @@ export default function CourseInfoForm() {
             errors={errors}
             setValue={setValue}
             image={true}
+            previewMedia={editCourse ? course.thumbnail : ""}
           />
         </div>
         <div>
@@ -263,39 +244,43 @@ export default function CourseInfoForm() {
           />
           {errors.courseBenefits && <span>Course Benefits are required.</span>}
         </div>
-
         <div>
-          <RequirementField
+          <ChipInput
             name="courseRequirements"
             label="Requirements/Instructions"
             register={register}
             errors={errors}
             setValue={setValue}
             getValues={getValues}
+            chipValues={editCourse ? course.instructions : ""}
           />
         </div>
-        {/* <label htmlFor="courseTags">Course Tag</label>
-        //TODO: Create Tags Component vid 56 min mfe9 */}
         <div>
-          <RequirementField
+          <ChipInput
             name="courseTags"
             label="Tags"
             register={register}
             errors={errors}
             setValue={setValue}
             getValues={getValues}
+            chipValues={editCourse ? course.tags : ""}
           />
         </div>
-
         <div>
           {editCourse && (
-            <button onClick={() => dispatch(setStep(2))} className="bg-red-500">
+            <button
+              type="button"
+              onClick={() => dispatch(setStep(2))}
+              className="bg-red-500"
+            >
               Continue without Saving
             </button>
           )}
-
           <button type="submit" className="bg-blue-400">
             {!editCourse ? "Next" : "Save Changes"}
+          </button>
+          <button type="reset" onClick={clearFormHandler}>
+            Clear All
           </button>
         </div>
       </form>

@@ -9,6 +9,8 @@ export default function MyProfile() {
   const [editProfile, setEditProfile] = useState(false);
 
   console.log("user data", user);
+
+  console.table("cct ", [user.accountType, user.email]);
   return (
     <div>
       <h1 className="text-3xl">My Profile</h1>

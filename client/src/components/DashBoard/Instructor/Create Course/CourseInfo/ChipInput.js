@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 
-export default function RequirementField({
+export default function ChipInput({
   name,
   label,
   register,
   errors,
   setValue,
   getValues,
+  chipValues,
 }) {
-  const [requirement, setRequirement] = useState("");
-  const [requirementList, setRequirementList] = useState([]);
+  console.log("chip val", chipValues);
+  const [chipInput, setChipInput] = useState("");
+  const [chipInputList, setChipInputList] = useState(chipValues || []);
 
   useEffect(() => {
     register(name, {
@@ -19,22 +21,22 @@ export default function RequirementField({
   }, []);
 
   useEffect(() => {
-    setValue(name, requirementList);
-  }, [name, requirementList, setValue]);
+    setValue(name, chipInputList);
+  }, [name, chipInputList, setValue]);
 
   const addReqHandler = () => {
-    if (requirement) {
-      setRequirementList([...requirementList, requirement ]);
-      setRequirement("");
+    if (chipInput) {
+      setChipInputList([...chipInputList, chipInput]);
+      setChipInput("");
     }
   };
   const removeReqHandler = (index) => {
-    const updateReqList = [...requirementList];
+    const updateReqList = [...chipInputList];
     updateReqList.splice(index, 1);
-    setRequirementList(updateReqList);
+    setChipInputList(updateReqList);
   };
 
-  // console.log("requirementList", requirementList);
+  // console.log("chipInputList", chipInputList);
   return (
     <div>
       <label htmlFor={name}>{label}</label>
@@ -42,8 +44,8 @@ export default function RequirementField({
         <input
           type="text"
           id={name}
-          value={requirement}
-          onChange={(e) => setRequirement(e.target.value)}
+          value={chipInput}
+          onChange={(e) => setChipInput(e.target.value)}
           className="w-full"
         />
       </div>
@@ -56,12 +58,12 @@ export default function RequirementField({
         Add
       </button>
       <div className="bg-blue-200">
-        {requirementList.length === 0 && <span>Add Requirements</span>}
-        {requirementList.length > 0 && (
+        {chipInputList.length === 0 && <span>Add {label}</span>}
+        {chipInputList.length > 0 && (
           <ul>
-            {requirementList.map((requirement, index) => (
+            {chipInputList.map((chipInput, index) => (
               <li key={index} className="flex items-center bg-cyan-300">
-                <span className="bg-red-400">{requirement}</span>
+                <span className="bg-red-400">{chipInput}</span>
                 <button
                   type="button"
                   onClick={() => removeReqHandler(index)}
@@ -74,7 +76,7 @@ export default function RequirementField({
           </ul>
         )}
       </div>
-      {errors[name] && <span>{label} is required</span>}
+      {/* {errors[name] && <span>{label} is required</span>} */}
     </div>
   );
 }

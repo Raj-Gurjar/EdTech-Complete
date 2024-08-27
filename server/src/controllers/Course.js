@@ -190,7 +190,7 @@ exports.createCourse = async (req, res) => {
             category,
             // status,
             instructions,
-            tag
+            tag,
         } = req.body;
         let { status } = req.body;
 
@@ -270,7 +270,7 @@ exports.createCourse = async (req, res) => {
             courseDescription,
             instructor: instructorDetails._id, //to give reference to instructor obj
             whatYouWillLearn,
-            tags:tag,
+            tags: tag,
             price,
             language,
             category: categoryDetail._id,
@@ -323,9 +323,11 @@ exports.createCourse = async (req, res) => {
 //edit Course  (vid. 26, near 1:00hr)
 exports.editCourse = async (req, res) => {
     try {
+        console.log("inside edit course controller");
         const { courseId } = req.body;
         const updates = req.body;
 
+        console.log("updated", req.body);
         // console.log("entering edit controller", req.body);
 
         const course = await Course_Model.findById(courseId);
@@ -350,7 +352,7 @@ exports.editCourse = async (req, res) => {
         for (const key in updates) {
             if (updates.hasOwnProperty(key)) {
                 if (key === "tag" || key === "instructors") {
-                    course[key] = JSON.parse(updates[key]);
+                    course[key] = (updates[key]);
                 } else {
                     course[key] = updates[key];
                 }
