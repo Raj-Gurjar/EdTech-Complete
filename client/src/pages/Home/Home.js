@@ -3,23 +3,20 @@ import { Link } from "react-router-dom";
 import "./Home.scss";
 
 //!-- assets
-import home_vid_1 from "../../assets/videos/home-vid-1.mp4";
-import home_img_1 from "../../assets/images/home-img-1.jpg";
+
 //!-- icons
 import { FaLongArrowAltRight } from "react-icons/fa";
 import Footer from "../../components/Footer/Footer";
 import ReviewSlider from "../../components/Sliders/ReviewSlider";
-import HighlightText from "../../user interfaces/HighlightText";
-import SideButtons from "../../user interfaces/Button";
-import Button from "../../user interfaces/Button";
-import CodeSection1 from "../../components/Home/CodeBlock";
+
 import CodeBlock from "../../components/Home/CodeBlock";
 import HomeWhiteSection from "../../components/Home/HomeWhiteSection";
 import BecomeInstructor from "../../components/Home/BecomeInstructor";
+import HomeHeadingSec from "../../components/Home/HomeHeadingSec";
 
 export default function Home() {
   return (
-    <div className="pb-10 relative mx-auto    items-center text-center justify-between text-white">
+    <div className=" relative mx-auto    items-center text-center justify-between text-white">
       {/* //!--- Section 1 */}
       <div>
         <Link to="/signup">
@@ -35,38 +32,7 @@ export default function Home() {
       </div>
 
       {/* //!--- Section 2  */}
-      <div className="mt-10">
-        <div className="brand-texts">
-          <h1 className="text-3xl font-bold">
-            Empower Your Future with{" "}
-            <HighlightText textSize={"text-3xl"} text={"Coding Skills"} />
-          </h1>
-          <div className="w-[60%] my-4 mx-auto text-black8">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse porro
-            adipisci cumque soluta neque cupiditate fugit similique quo animi
-            aspernatur.
-          </div>
-        </div>
-
-        <div className="mx-auto flex justify-center gap-10 w-[50%]">
-          <Button
-            btn_name={"Learn More"}
-            btn_link={"/about"}
-            btn_color={"bg-yellow9"}
-          />
-          <Button
-            btn_name={"Book a Demo"}
-            btn_link={"/"}
-            btn_color={"bg-black6"}
-          />
-        </div>
-
-        <div className="w-2/4 my-10 mx-auto justify-center items-center shadow-[10px_10px_10px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)]">
-          <video muted loop autoPlay>
-            <source src={home_vid_1} type="video/mp4" />
-          </video>
-        </div>
-      </div>
+      <HomeHeadingSec />
 
       {/* //!--- Section 3  */}
       <div className="w-11/12 mx-auto">
@@ -124,12 +90,12 @@ export default function Home() {
       </div>
 
       {/* //!--- Section 6  */}
-      {/* <div className="bg-green-400">
+      <div className="bg-green-400">
         <ReviewSlider />
-      </div> */}
+      </div>
 
       {/* //!--- Section Footer */}
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }

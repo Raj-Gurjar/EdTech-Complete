@@ -9,6 +9,7 @@ import { FreeMode, Pagination, Autoplay, Navigation } from "swiper/modules";
 
 import { getAllReviews } from "../../services/operations/courseDetailsAPI";
 import ReviewCard from "../Cards/ReviewCard";
+import HighlightText from "../../user interfaces/HighlightText";
 // import ReactStars from "rea ct-stars";
 
 export default function ReviewSlider({ reviewData }) {
@@ -34,8 +35,12 @@ export default function ReviewSlider({ reviewData }) {
   // console.log("rdd", reviewsData);
 
   return (
-    <div className="m-5">
-      {reviewsData?.length ? (
+    <div className="mx-auto m-11/12 mt-[100px]">
+
+      <div>
+        <h1 className="text-3xl font-bold">Reviews from our <HighlightText text={"Learners"}/></h1>
+      </div>
+      {/* {reviewsData?.length ? (
         <Swiper
           loop={true}
           slidesPerView={1}
@@ -62,8 +67,8 @@ export default function ReviewSlider({ reviewData }) {
           ))}
         </Swiper>
       ) : (
-        <p>No Reviews Found</p>
-      )}
+        <p className="text-xl mt-10">No Reviews Found</p>
+      )} */}
     </div>
   );
 }
