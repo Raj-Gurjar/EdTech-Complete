@@ -15,6 +15,7 @@ import Button from "../../user interfaces/Button";
 import CodeSection1 from "../../components/Home/CodeBlock";
 import CodeBlock from "../../components/Home/CodeBlock";
 import HomeWhiteSection from "../../components/Home/HomeWhiteSection";
+import BecomeInstructor from "../../components/Home/BecomeInstructor";
 
 export default function Home() {
   return (
@@ -37,7 +38,8 @@ export default function Home() {
       <div className="mt-10">
         <div className="brand-texts">
           <h1 className="text-3xl font-bold">
-            Empower Your Future with <HighlightText textSize = {"text-3xl"} text={"Coding Skills"} />
+            Empower Your Future with{" "}
+            <HighlightText textSize={"text-3xl"} text={"Coding Skills"} />
           </h1>
           <div className="w-[60%] my-4 mx-auto text-black8">
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse porro
@@ -114,10 +116,12 @@ export default function Home() {
 
       {/* //!--- Section 4 add a component  */}
 
-      <HomeWhiteSection/>
-   
+      <HomeWhiteSection />
 
       {/* //!--- Section 5  */}
+      <div>
+        <BecomeInstructor />
+      </div>
 
       {/* //!--- Section 6  */}
       {/* <div className="bg-green-400">

@@ -1,10 +1,12 @@
 import React from "react";
 import Button from "../../user interfaces/Button";
 import HighlightText from "../../user interfaces/HighlightText";
+import HomeTimeLineSection from "./HomeTimeLineSection";
+import HomeRandomImgSection from "./HomeRandomImgSection";
 
 export default function HomeWhiteSection() {
   return (
-    <div className="bg-white text-black">
+    <div className="bg-white text-black py-5 my-4">
       <div className="homepage_grid_bg">
         <div className="w-11/12 max-w-maxContent flex items-center justify-center gap-5 mx-auto">
           <div className="my-10  mb-[100px] flex flex-row gap-10 justify-center text-white">
@@ -47,6 +49,14 @@ export default function HomeWhiteSection() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="w-11/12 mx-auto">
+        <HomeTimeLineSection />
+      </div>
+
+      <div>
+        <HomeRandomImgSection/>
       </div>
     </div>
   );
