@@ -6,6 +6,7 @@ import { login } from "../../services/operations/authAPI";
 import Loader from "../../components/Loader/Loader";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import InputBox from "../../user interfaces/InputBox";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -34,49 +35,36 @@ export default function LoginForm() {
   }
   return (
     <div className="">
-     
       {loading ? (
         <Loader />
       ) : (
         <form onSubmit={loginHandler} className="flex flex-col">
           <div className="flex flex-col w-full gap-y-5 mt-6">
             <div className="flex-col flex gap-y-1">
-              <label htmlFor="email" className="w-full text-[15px]">
-                Email <span className="text-red5">*</span>
-              </label>
-              <input
-                className="bg-black5 rounded-[0.5rem] border-b-[1px] text-[14px] p-[8px]"
-                type="email"
-                id="email"
-                name="email"
+              <InputBox
+                label={"Email"}
+                placeholder={"Enter Email Id"}
+                type={"email"}
+                id={"email"}
+                name={"email"}
+                required={true}
                 value={formData.email}
-                onChange={changeHandler}
-                placeholder="Enter your Email id"
-                required
+                changeHandler={changeHandler}
               />
             </div>
 
             <div className="flex flex-col  gap-y-1 relative z-1">
-              <label htmlFor="password" className="w-full text-[15px]">
-                Password <span className="text-red5">*</span>
-              </label>
-              <input
-                className="bg-black5 rounded-[0.5rem] border-b-[1px] text-[14px] p-[8px]"
+              <InputBox
+                label={"Password"}
+                placeholder={"Enter First Name"}
                 type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
+                id={"password"}
+                name={"password"}
+                required={true}
                 value={formData.password}
-                onChange={changeHandler}
-                placeholder="Enter Your Password"
-                required
+                changeHandler={changeHandler}
+                isPassword={true}
               />
-
-              <span
-                className="absolute cursor-pointer z-2 right-3 top-[37px]"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {!showPassword ? <FaEye /> : <FaEyeSlash />}
-              </span>
 
               <div className="text-[12px] text-blue6 cursor-pointer relative flex justify-end">
                 <Link to="/resetPasswordRequest">
@@ -91,8 +79,6 @@ export default function LoginForm() {
             >
               Log in
             </button>
-
-         
           </div>
         </form>
       )}

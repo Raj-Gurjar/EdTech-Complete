@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { sendOTP } from "../../services/operations/authAPI";
 import { setSignupData } from "../../toolkit/slice/authSlice";
 import { ACCOUNT_TYPE } from "../../utils/constants";
+import InputBox from "../../user interfaces/InputBox";
 
 export default function SignForm() {
   const [accountType, setAccountType] = useState("Student");
@@ -39,13 +40,17 @@ export default function SignForm() {
     <div className="">
       <form className="flex flex-col" onSubmit={signUpHandler}>
         <div className="my-5">
-          Sign Up as {accountType}
-          <div className="flex gap-x-5">
+          <p>Sign Up as {accountType}</p>
+
+          <div className="flex gap-x-1 bg-black5 p-1  my-3 rounded-full max-w-max shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]">
             <button
               type="button"
               onClick={() => setAccountType("Student")}
               className={`${
-                accountType === ACCOUNT_TYPE.STUDENT ? "bg-blue-400" : ""
+                accountType === ACCOUNT_TYPE.STUDENT
+                  ? "bg-black2"
+                  : "bg-transparent text-white3"
+              } py-1 px-5 rounded-full transition-all duration-200"
               } `}
             >
               Student
@@ -54,8 +59,11 @@ export default function SignForm() {
               type="button"
               onClick={() => setAccountType("Instructor")}
               className={`${
-                accountType === ACCOUNT_TYPE.INSTRUCTOR ? "bg-blue-400" : ""
-              } `}
+                accountType === ACCOUNT_TYPE.INSTRUCTOR
+                  ? "bg-black2"
+                  : "bg-transparent text-white3"
+              } py-2 px-5 rounded-full transition-all duration-200"
+            } `}
             >
               Instructor
             </button>
@@ -63,8 +71,11 @@ export default function SignForm() {
               type="button"
               onClick={() => setAccountType("Admin")}
               className={`${
-                accountType === ACCOUNT_TYPE.ADMIN ? "bg-blue-400" : ""
-              } `}
+                accountType === ACCOUNT_TYPE.ADMIN
+                  ? "bg-black2"
+                  : "bg-transparent text-white3"
+              } py-2 px-5 rounded-full transition-all duration-200"
+            } `}
             >
               Admin
             </button>
@@ -72,89 +83,82 @@ export default function SignForm() {
         </div>
 
         <div className="flex flex-col w-full gap-y-5 mt-6">
-          <div className="flex-col flex gap-y-1">
-            <label htmlFor="firstName" className="w-full text-[15px]">
-              First Name <span className="text-red5">*</span>
-            </label>
-            <input
-              className="bg-black5 rounded-[0.5rem] border-b-[1px] text-[14px] p-[8px]"
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              onChange={changeHandler}
-              required
-            />
+          <div className="flex flex-row gap-5">
+            <div className="w-1/2">
+           
+              <InputBox
+                label="First Name"
+                placeholder={"Enter First Name"}
+                type="text"
+                id="firstName"
+                name="firstName"
+                required={true}
+                value={formData.firstName}
+                changeHandler={changeHandler}
+              />
+            </div>
+
+            <div className="w-1/2">
+              <InputBox
+                label="Last Name"
+                placeholder="Enter Last Name"
+                type="text"
+                id="lastName"
+                name="lastName"
+                required={true}
+                value={formData.lastName}
+                changeHandler={changeHandler}
+              />
+            </div>
           </div>
 
-          <div>
-            <label htmlFor="lastName">Last Name:</label>
-            <input
-              className="bg-black5 rounded-[0.5rem] border-b-[1px] text-[14px] p-[8px]"
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
-              onChange={changeHandler}
-              required
-            />
-          </div>
+          <InputBox
+            label="Email"
+            placeholder="Enter Email"
+            type="email"
+            id="email"
+            name="email"
+            required={true}
+            value={formData.email}
+            changeHandler={changeHandler}
+          />
 
-          <div>
-            <label htmlFor="email">Email:</label>
-            <input
-              className="bg-black5 rounded-[0.5rem] border-b-[1px] text-[14px] p-[8px]"
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={changeHandler}
-              required
-            />
-          </div>
+          <InputBox
+            label="Password"
+            placeholder="Enter Password"
+            type="password"
+            id="password"
+            name="password"
+            required={true}
+            isPassword={true}
+            value={formData.password}
+            changeHandler={changeHandler}
+          />
 
-          <div>
-            <label htmlFor="password">Password:</label>
-            <input
-              className="bg-black5 rounded-[0.5rem] border-b-[1px] text-[14px] p-[8px]"
+          <InputBox
+            label="Confirm Password"
+            placeholder="Confirm Password"
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            required={true}
+            isPassword={true}
+            value={formData.confirmPassword}
+            changeHandler={changeHandler}
+          />
+
+          {accountType === ACCOUNT_TYPE.ADMIN && (
+            <InputBox
+              label="Admin's Secret Key"
+              placeholder="Enter Admin's Secret Key"
               type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={changeHandler}
-              required
+              id="adminKey"
+              name="adminKey"
+              required={true}
+              value={formData.adminKey}
+              changeHandler={changeHandler}
             />
-          </div>
-
-          <div>
-            <label htmlFor="confirmPassword">Confirm Password:</label>
-            <input
-              className="bg-black5 rounded-[0.5rem] border-b-[1px] text-[14px] p-[8px]"
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={changeHandler}
-              required
-            />
-          </div>
-
-          <div>
-            {accountType === ACCOUNT_TYPE.ADMIN && (
-              <>
-                <label htmlFor="adminKey">Admin's Secret Key:</label>
-                <input
-                  className="bg-black5 rounded-[0.5rem] border-b-[1px] text-[14px] p-[8px]"
-                  type="password"
-                  id="adminKey"
-                  name="adminKey"
-                  value={formData.adminKey}
-                  onChange={changeHandler}
-                  required
-                />
-              </>
-            )}
-          </div>
+          )}
 
           <button
             type="submit"

@@ -14,7 +14,7 @@ export default function AuthTemplate({
 }) {
   return (
     <div className="w-9/12 flex justify-between mx-auto mx-w-maxContent pt-[5%] gap-9 p-5">
-      <div className="w-[45%]">
+      <div className="w-[50%]">
         <h1 className="text-white font-semibold text-[1.875rem] leading-[1.3rem]">
           {title}
         </h1>
@@ -75,8 +75,7 @@ export default function AuthTemplate({
         <img
           src={sideImg}
           alt="auth-img1"
-          width={558}
-          height={490}
+          className="h-[500px] w-[auto]"
           loading="lazy"
           //   className="absolute -top-4 right-4"
         />
