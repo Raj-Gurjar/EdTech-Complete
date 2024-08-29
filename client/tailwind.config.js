@@ -109,6 +109,15 @@ module.exports = {
       grey8: "#666666",
       grey9: "#525252",
       grey10: "#3d3d3d",
+
+      //other colors
+
+      // 5 shades of red (light to dark)
+      red1: "#FF0000",
+      red2: "#FF6666",
+      red3: "#FF4C4C",
+      red4: "#FF3232",
+      red5: "#E60000",
     },
 
     extend: {
