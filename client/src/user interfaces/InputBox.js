@@ -10,18 +10,19 @@ export default function InputBox({
   value,
   changeHandler,
   placeholder,
-  isPassword, // New prop to identify if the field is a password
+  isPassword,
+  errors,
+  register,
 }) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="flex-col flex gap-y-1 relative z-1">
       <label htmlFor={id} className="w-full text-[15px]">
-        {label}{" "}
-        <span className={`${required ? "text-red5" : "disabled"}`}>*</span>
+        {label} {required && <span className="text-red5">*</span>}
       </label>
       <input
-        className="bg-black4 rounded-[0.5rem] border-b-[1px] text-[14px] p-[6px] text-white text-semibold"
+        className="bg-black4 rounded-md border-b-[1px] text-[14px] p-[6px] text-white text-semibold"
         type={isPassword && showPassword ? "text" : type} // Toggle type based on showPassword
         id={id}
         name={name}
@@ -29,6 +30,7 @@ export default function InputBox({
         onChange={changeHandler}
         required={required}
         placeholder={placeholder}
+        {...register}
       />
       {isPassword && (
         <span
@@ -38,6 +40,7 @@ export default function InputBox({
           {!showPassword ? <FaEye /> : <FaEyeSlash />}
         </span>
       )}
+      {errors && <span className="text-red-500">{errors.message}</span>}
     </div>
   );
 }

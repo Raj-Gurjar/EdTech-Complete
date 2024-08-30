@@ -38,13 +38,13 @@ export default function HomeTimeLineSection() {
           />
         </div>
 
-        <div className="bg-caribbeanGreen9 shadow-[rgba(0,_0,_0,_0.2)_0px_20px_10px_-7px] flex text-white uppercase py-7 justify-around w-[80%] mx-auto bottom-[-12%] left-[50%] translate-x-[-50%] absolute">
-          <div className="flex gap-3  items-center">
+        <div className="bg-caribbeanGreen9  flex justify-between py-5  px-3 gap-3 text-white uppercase  w-[80%] bottom-[-12%] left-[50%] translate-x-[-50%] absolute shadow-[rgba(0,_0,_0,_0.2)_0px_20px_10px_-7px]">
+          <div className="flex items-center">
             <h1 className="text-3xl font-bold">10</h1>
             <p className="text-white4 text-sm">Years of Experience</p>
           </div>
-          <div className="border-r-2 border-white6"></div>
-          <div className="flex gap-3  items-center">
+          <div className="border-[1px] border-white6 "></div>
+          <div className="flex  items-center pl-2">
             <h1 className="text-3xl font-bold">250</h1>
             <p className="text-white4 text-sm">Type of Courses</p>
           </div>

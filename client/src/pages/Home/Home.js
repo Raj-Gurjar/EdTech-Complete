@@ -16,7 +16,7 @@ import HomeHeadingSec from "../../components/Home/HomeHeadingSec";
 
 export default function Home() {
   return (
-    <div className=" relative mx-auto    items-center text-center justify-between text-white">
+    <div className=" relative mx-auto max-w-maxContent   items-center text-center justify-between text-white">
       {/* //!--- Section 1 */}
       <div>
         <Link to="/signup">

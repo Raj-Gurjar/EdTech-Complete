@@ -24,8 +24,9 @@ export default function AuthTemplate({
           <span className="text-blue7 italic">{desc2}</span>
         </p>
 
-        <h2 className="text-xl font-semibold mt-3">{
-            formType === "login" ? "Log In" :"Sign Up"}</h2>
+        <h2 className="text-xl font-semibold mt-3">
+          {formType === "login" && "Log In"}
+        </h2>
 
         {formType === "signup" ? (
           <SignupForm setIsLoggedIn={setIsLoggedIn} />

@@ -6,6 +6,7 @@ import { sendOTP } from "../../services/operations/authAPI";
 import { setSignupData } from "../../toolkit/slice/authSlice";
 import { ACCOUNT_TYPE } from "../../utils/constants";
 import InputBox from "../../user interfaces/InputBox";
+import HighlightText from "../../user interfaces/HighlightText";
 
 export default function SignForm() {
   const [accountType, setAccountType] = useState("Student");
@@ -39,10 +40,10 @@ export default function SignForm() {
   return (
     <div className="">
       <form className="flex flex-col" onSubmit={signUpHandler}>
-        <div className="my-5">
-          <p>Sign Up as {accountType}</p>
+        <div className="my-1">
+          <p className="text-xl font-semibold">Sign Up as <HighlightText text={accountType} /></p>
 
-          <div className="flex gap-x-1 bg-black5 p-1  my-3 rounded-full max-w-max shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]">
+          <div className="flex gap-x-1 bg-black5 p-1  my-3 text-[13px] rounded-full max-w-max shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]">
             <button
               type="button"
               onClick={() => setAccountType("Student")}
