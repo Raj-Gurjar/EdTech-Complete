@@ -18,7 +18,7 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="flex flex-col w-[90%] text-white justify-center m-auto border-[2px] border-white6 p-4 rounded-md ">
+    <div className="flex flex-col w-[90%] text-white justify-center m-auto border-[1.5px] border-white8 p-4 rounded-md ">
       <h2 className="text-2xl font-semibold mt-4">
         Share Your Thoughts or Queries with us
       </h2>

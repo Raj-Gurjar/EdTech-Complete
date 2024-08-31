@@ -4,27 +4,15 @@ export const NavbarLinks = [
     path: "/",
   },
   {
-    title: "All Courses",
+    title: "Courses",
     path: "/allCourses",
   },
   {
-    title: "About",
+    title: "About Us",
     path: "/about",
   },
   {
-    title: "Contact",
+    title: "Contact Us",
     path: "/contact",
-  },
-  {
-    title: "Reset Password",
-    path: "/resetPassword",
-  },
-  {
-    title: "Verify Email",
-    path: "/verifyEmail",
-  },
-  {
-    title: "DashBoard",
-    path: "/dashboard",
   },
 ];

@@ -2,23 +2,28 @@ import React, { useState } from "react";
 import { RxAvatar } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { logout } from "../../services/operations/authAPI";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function ProfileDropDown() {
   const [profile, toggleProfile] = useState(false);
 
+  const { user } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   function logOutHandler() {
     dispatch(logout(navigate));
   }
+
+  console.log("User", user);
   return (
     <div>
       <div className="profile-pic">
-        <RxAvatar
-          className="text-xl cursor-pointer hover:bg-green-200"
+        <img
+          src={user?.profileImage}
+          alt="profile-pic"
+          className="h-[30px] w-[30px] rounded-full cursor-pointer hover:bg-green-200"
           onClick={() => toggleProfile(!profile)}
         />
       </div>

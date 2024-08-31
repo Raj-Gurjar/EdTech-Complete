@@ -1,69 +1,68 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getPasswordResetToken } from "../../../services/operations/authAPI";
+import InputBox from "../../../user interfaces/InputBox";
+import { SideArrowButton } from "../../../user interfaces/Button";
 
 export default function ResetRequest() {
   const [emailSent, setEmailSent] = useState(false);
   const [email, setEmail] = useState("");
   const { loading } = useSelector((state) => state.auth);
-  
+
   const dispatch = useDispatch();
 
   function handleOnSubmit(e) {
     e.preventDefault();
-    // setEmailSent(true);
     dispatch(getPasswordResetToken(email, setEmailSent));
   }
 
-  console.log("emailSent...", emailSent);
   return (
-    <div className="flex flex-col m-auto justify-center">
+    <div className="flex border-[1px] bg-black2 border-white flex-col my-auto w-[35%] self-center p-6 rounded-md">
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <div>
-          {emailSent === false ? (
-            <div className="flex flex-col bg-green-100 m-auto justify-center w-11/12">
-              <h3>Enter Your Email to reset Password</h3>
+        <div className="flex flex-col justify-center">
+          <h1 className="text-2xl font-bold mb-2">
+            {emailSent ? "Check Your Email" : "Reset Your Password"}
+          </h1>
+          <h3 className="text-[13px] text-white3 mb-5">
+            {emailSent
+              ? `We have sent you a reset link to your email at ${email}.`
+              : "Have no fear, we will send you a reset password link to your registered email."}
+          </h3>
 
-              <form onSubmit={handleOnSubmit} className="flex flex-col gap-5">
-                <label htmlFor="email">Email</label>
-                <input
-                  required
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your Email"
-                  className="bg-black-100 border-red-800 border-2"
-                />
-                <button type="submit" className="bg-red-400">
-                  Reset Password
-                </button>
-              </form>
-
-              <Link to="/login"> --- Back to Login</Link>
-            </div>
-          ) : (
-            <div className="flex flex-col bg-green-100 m-auto justify-center w-11/12">
-              <h3>Check Your Email</h3>
-              <p>
-                We have sent you a resent link on your email at
-                <span className="text-2xl bg-blue-300">{email}</span>
-              </p>
-
+          {!emailSent ? (
+            <form onSubmit={handleOnSubmit} className="flex flex-col gap-y-8">
+              <InputBox
+                name="email"
+                type="email"
+                required={true}
+                id="email"
+                label={"Enter Email Address"}
+                value={email}
+                changeHandler={(e) => setEmail(e.target.value)}
+                placeholder="Enter your Email"
+              />
               <button
-                className="bg-red-300"
+                type="submit"
+                className="bg-yellow8 text-black rounded font-semibold py-1"
+              >
+                Reset Password
+              </button>
+            </form>
+          ) : (
+            <div className="flex flex-col">
+              <button
+                className="bg-yellow8 text-black rounded font-semibold py-1 mt-3"
                 onClick={() => setEmailSent(false)}
               >
                 Resend Link or Edit Email
               </button>
-
-              <Link to="/login"> --- Back to Login</Link>
             </div>
           )}
+
+          <SideArrowButton btn_link={"/login"} btn_text={"Back to Login"} />
         </div>
       )}
     </div>
