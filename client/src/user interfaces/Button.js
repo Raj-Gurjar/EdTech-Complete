@@ -9,7 +9,7 @@ export default function Button({
   btn_color,
   px = "px-6",
   py = "py-3",
-  text_color = "text-white",
+  text_color = "text-black",
   text_size = "13px",
 }) {
   return (
