@@ -34,7 +34,7 @@ export default function ContactForm() {
             <InputBox
               label="First Name"
               id="firstName"
-              type="text"
+              type={"text"}
               required={true}
               placeholder="Enter your first name"
               register={register("firstName", {
@@ -48,7 +48,7 @@ export default function ContactForm() {
             <InputBox
               label="Last Name"
               id="lastName"
-              type="text"
+              type={"text"}
               required={true}
               placeholder="Enter your last name"
               register={register("lastName", {
@@ -62,7 +62,7 @@ export default function ContactForm() {
         <InputBox
           label="Email Address"
           id="email"
-          type="email"
+          type={"email"}
           required={true}
           placeholder="Enter your email address"
           register={register("email", {
@@ -80,11 +80,11 @@ export default function ContactForm() {
             Contact Number
           </label>
 
-          <div className="flex items-end">
-            <div className=" w-[20%]">
+          <div className="flex gap-2 items-end">
+          
               <select
                 {...register("countryCode", {})}
-                className="bg-black4 w-[70%] h-[32px] p-[1px] rounded-md border-b-[1px] text-[14px]"
+                className="bg-black4 w-[80px] h-[32px] rounded-md border-b-[1px] text-[14px]"
               >
                 {countryCode.map((country, index) => (
                   <option key={index} value={country.code}>
@@ -92,12 +92,12 @@ export default function ContactForm() {
                   </option>
                 ))}
               </select>
-            </div>
+         
 
-            <div className="w-full ">
+            <div className="w-[calc(100%-90px)]">
               <InputBox
                 id="contactNo"
-                type="tel"
+                type={"number"}
                 placeholder="Enter your contact number"
                 required={false}
                 register={register("contactNo", {

@@ -13,9 +13,10 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
     "Droid Sans", "Helvetica Neue", sans-serif;
   overflow-x: hidden;
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  max-width: 1580px;
-  margin: auto;
+  max-width: 1920px;
+  margin: auto; */
+  
   background-color: #333333;
 }
