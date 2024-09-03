@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "../../services/operations/authAPI";
 import Modal from "../Modals-Popups/Modal";
+import { FaSignOutAlt } from "react-icons/fa"; // Importing specific icon
+import { ACCOUNT_TYPE } from "../../utils/constants";
+import { navItems } from "../../data/SideBarData";
 
 export default function SideBar() {
   const dispatch = useDispatch();
@@ -21,47 +24,35 @@ export default function SideBar() {
     });
   };
 
-  const navItems = [
-    { label: "My DashBoard", path: "myDashboard" },
-    { label: "My Profile", path: "myProfile" },
-    { label: "Settings", path: "settings" },
-    { label: "--- for students ---", isHeader: true },
-    { label: "Cart", path: "myCart" },
-    { label: "Enrolled Courses", path: "enrolledCourses" },
-    { label: "My Purchases", path: "myPurchases" },
-    { label: "--- for Instructors ---", isHeader: true },
-    { label: "Instr-Dashboard", path: "instructor-DashBoard" },
-    { label: "Create Course", path: "createCourse" },
-    { label: "My Courses Inst", path: "myCourses-Instructor" },
-    { label: "--- for Admin ---", isHeader: true },
-    { label: "Admin Dashboard", path: "admin-dashboard" },
-    { label: "All Courses", path: "courseMenu-admin" },
-    { label: "Category Menu", path: "categoryMenu" },
-  ];
+  // Filter navItems based on user account type
+  const filteredNavItems = navItems.filter((item) =>
+    item.roles.includes(user?.accountType)
+  );
 
   return (
-    <div>
-      <ul className="bg-yellow-100 p-3 w-full">
-        {navItems.map((item, index) =>
-          item.isHeader ? (
-            <li key={index} className="bg-red-600">
+    <div className="">
+      <ul className="w-full flex gap-y-2 flex-col justify-center min-w-[222px]">
+        {filteredNavItems.map((item, index) => (
+          <li key={index} className="">
+            <NavLink
+              to={item.path}
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-yellow8 py-1 text-black2 font-bold flex items-center px-5"
+                  : "flex items-center px-5 py-1"
+              }
+            >
+              <span className="mr-2">{item.icon}</span>
               {item.label}
-            </li>
-          ) : (
-            <li key={index}>
-              <NavLink
-                to={item.path}
-                className={({ isActive }) =>
-                  isActive ? "bg-yellow5 text-black2 font-bold w-full" : ""
-                }
-              >
-                {item.label}
-              </NavLink>
-            </li>
-          )
-        )}
+            </NavLink>
+          </li>
+        ))}
         <li>
-          <button onClick={handleLogout} className="w-full text-left">
+          <button
+            onClick={handleLogout}
+            className="w-full text-left flex items-center px-5"
+          >
+            <FaSignOutAlt className="mr-2" />
             Logout
           </button>
         </li>
