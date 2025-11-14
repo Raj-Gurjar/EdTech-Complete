@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { showAllCategories } from "../../services/operations/category";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
 import { getAllCoursesPublic } from "../../services/operations/courseDetailsAPI";
 import CourseCard from "../../components/Cards/CourseCard";
 import CourseSlider from "../../components/Sliders/CourseSlider";
+import { IoSearch, IoClose } from "react-icons/io5";
+import { BsFilter } from "react-icons/bs";
 
 export default function AllCourses() {
   const [courseCategories, setCourseCategories] = useState([]);
   const [coursesData, setCoursesData] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState([]);
   const [loading, setLoading] = useState(false);
-  const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [showFilters, setShowFilters] = useState(false);
 
   const getCategories = async () => {
     setLoading(true);
     const categories = await showAllCategories();
-    // console.log("cat:", categories);
     if (categories.length > 0) {
       setCourseCategories(categories);
     }
@@ -25,68 +29,198 @@ export default function AllCourses() {
   const showAllCourses = async () => {
     setLoading(true);
     const courses = await getAllCoursesPublic();
-    // console.log("courses:", courses);
     if (courses.length > 0) {
       setCoursesData(courses);
+      setFilteredCourses(courses);
     }
     setLoading(false);
   };
 
+  // Filter courses based on search and category
   useEffect(() => {
-    getCategories();
-  }, []);
+    let filtered = [...coursesData];
+
+    // Filter by search query
+    if (searchQuery.trim()) {
+      filtered = filtered.filter(
+        (course) =>
+          course.courseName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          course.instructor?.firstName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          course.instructor?.lastName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          course.courseDescription?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Filter by category
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter(
+        (course) => course.category?.name === selectedCategory
+      );
+    }
+
+    setFilteredCourses(filtered);
+  }, [searchQuery, selectedCategory, coursesData]);
 
   useEffect(() => {
+    getCategories();
     showAllCourses();
   }, []);
 
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("all");
+  };
+
   return (
-    <div className="p-2">
-      <div>
-        <h1 className="text-2xl">Show Categories</h1>
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <ul className="flex">
-            {courseCategories.map((category, index) => (
-              <NavLink
-                to={`category/${category.name
-                  .split(" ")
-                  .join("-")
-                  .toLowerCase()}`}
-                key={index}
-              >
-                <div key={index} className="bg-yellow-100 flex gap-10 m-5 ">
-                  <p className="text-blue-700">{category.name}</p>
-                  {/* <p>{category.description}</p> */}
-                </div>
-              </NavLink>
-            ))}
-          </ul>
-        )}
-      </div>
+    <div className="min-h-screen bg-black3">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-black2 to-black4 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-maxContent mx-auto text-center">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
+            Explore Our Courses
+          </h1>
+          <p className="text-base sm:text-lg text-black8 max-w-2xl mx-auto mb-8">
+            Discover thousands of courses designed to help you achieve your goals.
+            Learn from industry experts and advance your career.
+          </p>
 
-      <div>
-        <h1 className="text-2xl my-10">
-          Top Courses //! make a slider for top courses
-        </h1>
-        <CourseSlider courses={coursesData} />
-      </div>
-      <div>
-        <h1 className="text-2xl">All Courses</h1>
-
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 m-5">
-            {coursesData?.map((course) => (
-              <CourseCard course={course} key={course._id} />
-            ))}
+          {/* Search Bar */}
+          <div className="max-w-2xl mx-auto mb-6">
+            <div className="relative">
+              <IoSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-black7 text-xl" />
+              <input
+                type="text"
+                placeholder="Search for courses, instructors, or topics..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 sm:py-4 rounded-lg bg-black2 border border-black5 text-white placeholder-black7 focus:outline-none focus:border-yellow8 focus:ring-2 focus:ring-yellow8/20"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-black7 hover:text-white transition-colors"
+                >
+                  <IoClose className="text-xl" />
+                </button>
+              )}
+            </div>
           </div>
-        )}
-      </div>
 
-      {/* <Footer /> */}
+          {/* Category Filter */}
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+            <button
+              onClick={() => setSelectedCategory("all")}
+              className={`px-4 sm:px-6 py-2 rounded-full text-sm sm:text-base font-medium transition-all duration-300 ${
+                selectedCategory === "all"
+                  ? "bg-yellow8 text-black font-semibold shadow-lg"
+                  : "bg-black2 text-white border border-black5 hover:border-yellow8/50"
+              }`}
+            >
+              All Courses
+            </button>
+            {loading ? (
+              <div className="text-black7">Loading categories...</div>
+            ) : (
+              courseCategories.map((category, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedCategory(category.name)}
+                  className={`px-4 sm:px-6 py-2 rounded-full text-sm sm:text-base font-medium transition-all duration-300 ${
+                    selectedCategory === category.name
+                      ? "bg-yellow8 text-black font-semibold shadow-lg"
+                      : "bg-black2 text-white border border-black5 hover:border-yellow8/50"
+                  }`}
+                >
+                  {category.name}
+                </button>
+              ))
+            )}
+          </div>
+
+          {/* Active Filters Display */}
+          {(searchQuery || selectedCategory !== "all") && (
+            <div className="mt-4 flex flex-wrap justify-center gap-2 items-center">
+              <span className="text-sm text-black7">Active filters:</span>
+              {searchQuery && (
+                <span className="px-3 py-1 bg-black2 rounded-full text-sm text-white border border-black5">
+                  Search: {searchQuery}
+                </span>
+              )}
+              {selectedCategory !== "all" && (
+                <span className="px-3 py-1 bg-black2 rounded-full text-sm text-white border border-black5">
+                  Category: {selectedCategory}
+                </span>
+              )}
+              <button
+                onClick={clearFilters}
+                className="px-3 py-1 bg-red1/20 hover:bg-red1/30 text-red1 rounded-full text-sm transition-colors"
+              >
+                Clear All
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Top Courses Slider */}
+      {coursesData.length > 0 && (
+        <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-maxContent mx-auto">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6 sm:mb-8">
+              Featured Courses
+            </h2>
+            <CourseSlider courses={coursesData.slice(0, 10)} />
+          </div>
+        </section>
+      )}
+
+      {/* All Courses Grid */}
+      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-maxContent mx-auto">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">
+            <div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
+                {selectedCategory === "all" ? "All Courses" : selectedCategory}
+              </h2>
+              <p className="text-black7 text-sm sm:text-base">
+                {filteredCourses.length} {filteredCourses.length === 1 ? "course" : "courses"} found
+              </p>
+            </div>
+          </div>
+
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow8"></div>
+            </div>
+          ) : filteredCourses.length === 0 ? (
+            <div className="text-center py-20">
+              <div className="text-6xl mb-4">📚</div>
+              <h3 className="text-2xl font-bold text-white mb-2">No courses found</h3>
+              <p className="text-black7 mb-6">
+                {searchQuery || selectedCategory !== "all"
+                  ? "Try adjusting your search or filters"
+                  : "No courses available at the moment"}
+              </p>
+              {(searchQuery || selectedCategory !== "all") && (
+                <button
+                  onClick={clearFilters}
+                  className="px-6 py-3 bg-yellow8 text-black font-semibold rounded-lg hover:bg-yellow9 transition-colors"
+                >
+                  Clear Filters
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+              {filteredCourses.map((course) => (
+                <CourseCard course={course} key={course._id} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { Outlet, Route, Routes } from "react-router-dom";
-import "./App.scss";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ACCOUNT_TYPE } from "./utils/constants";
@@ -46,7 +45,7 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      <div className="max-w-maxContent pt-14 w-screen min-h-screen  text-white flex flex-col bg-black3 font-inter">
+      <div className="pt-14 w-screen min-h-screen  text-white flex flex-col bg-black3 font-inter">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />

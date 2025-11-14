@@ -40,14 +40,17 @@ export default function CourseMenu() {
   }, []);
 
   return (
-    <div className="relative flex min-h-[calc(100vh-3.5rem)]">
-      <div className=" bg-green-300 flex min-w-[150px] flex-col border-r-[1px] border-black-700 h-[calc(100vh-3.5rem)] bg-black-400 py-5">
-        <h1>Course Menu</h1>
+    <div className="relative flex min-h-[calc(100vh-3.5rem)] bg-black3">
+      {/* Sidebar */}
+      <div className="hidden lg:flex min-w-[350px] max-w-[400px] flex-col border-r border-black6 h-[calc(100vh-3.5rem)] bg-black4 overflow-y-auto">
         <CoursePlaylistDetails setReviewModal={setReviewModal} />
       </div>
-      <div className="h-[calc(100vh - 3.5rem)] overflow-auto bg-blue-200 mx-auto w-11/12 p-5 max-w-[1000px]">
-        <Outlet />
-        
+      
+      {/* Main Content Area */}
+      <div className="flex-1 h-[calc(100vh - 3.5rem)] overflow-auto">
+        <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+          <Outlet />
+        </div>
       </div>
 
       {reviewModal && <CourseReviewModal setReviewModal={setReviewModal} />}

@@ -4,7 +4,7 @@ export default function Modal({ modalData }) {
   console.log("modal called");
   return (
     <div>
-      <div className="flex flex-col p-4 bg-[#0000005d] absolute m-auto top-[50%] left-[50%] translate-[50%] ">
+      <div className="flex flex-col p-4 bg-red3 z-77 absolute m-auto top-[50%] left-[50%] translate-[50%] ">
         <p>{modalData.text1}</p>
         <p>{modalData.text2}</p>
 

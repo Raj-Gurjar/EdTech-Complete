@@ -11,6 +11,18 @@ import { setUser } from "../../toolkit/slice/profileSlice";
 import Modal from "../Modals-Popups/Modal";
 import { logout } from "../../services/operations/authAPI";
 import { useNavigate } from "react-router-dom";
+import HighlightText from "../../user interfaces/HighlightText";
+import { 
+  FaUser,
+  FaCamera,
+  FaUserCircle,
+  FaTrash,
+  FaSave,
+  FaTimes,
+  FaIdCard,
+  FaArrowLeft
+} from "react-icons/fa";
+import { MdEmail, MdPhone, MdCake, MdTransgender, MdDescription } from "react-icons/md";
 
 export default function EditProfile() {
   const { user } = useSelector((state) => state.profile);
@@ -20,23 +32,22 @@ export default function EditProfile() {
   const navigate = useNavigate();
   const [profileImg, setProfileImage] = useState("");
   const [showImg, setShowImg] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm();
-
-  // console.log("user", user);
 
   const onSubmit = async (data) => {
     const result = await updateProfile(data, token);
 
-    console.log("res", result);
     if (result) {
       dispatch(setUser(result));
+      toast.success("Profile updated successfully!");
+      navigate("/dashboard/myProfile");
     } else {
-      toast.error("Changes can not update");
+      toast.error("Failed to update profile");
     }
   };
 
@@ -50,8 +61,10 @@ export default function EditProfile() {
 
   const handleImageChange = (e) => {
     const img = e.target.files[0];
-    setProfileImage(img);
-    TransformFile(img);
+    if (img) {
+      setProfileImage(img);
+      TransformFile(img);
+    }
   };
 
   const TransformFile = (file) => {
@@ -67,7 +80,14 @@ export default function EditProfile() {
     }
   };
 
-  const uploadImageHandler = async () => {
+  const uploadImageHandler = async (e) => {
+    e.preventDefault();
+    if (!profileImg) {
+      toast.error("Please select an image first");
+      return;
+    }
+
+    setIsUploading(true);
     const formData = new FormData();
     formData.append("profileImage", profileImg);
 
@@ -75,174 +95,372 @@ export default function EditProfile() {
 
     if (result) {
       dispatch(setUser(result));
+      setProfileImage("");
+      setShowImg("");
+      toast.success("Profile image updated successfully!");
     }
+    setIsUploading(false);
   };
 
   return (
-    <div>
-      <h1 className="text-2xl">Edit Profile</h1>
+    <div className="w-11/12 max-w-6xl mx-auto py-6 sm:py-8">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/dashboard/myProfile")}
+        className="flex items-center gap-2 text-black7 hover:text-white transition-colors mb-6 group"
+      >
+        <FaArrowLeft className="text-lg group-hover:-translate-x-1 transition-transform" />
+        <span className="text-sm font-medium">Back to Profile</span>
+      </button>
 
-      <div>Image</div>
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-4xl sm:text-5xl font-bold mb-2">
+          <HighlightText text={"Edit Profile"} />
+        </h1>
+        <p className="text-black6 text-sm sm:text-base">Update your personal information and preferences</p>
+      </div>
 
-      <div className="bg-slate-500 my-5 p-5">
-        <h1 className="text-2xl">Change Profile Image</h1>
-        Current profile :
-        {showImg ? (
-          <img
-            src={showImg}
-            alt="user profile img"
-            className="h-[100px] w-[100px] m-5"
-          />
-        ) : (
-          <img
-            src={user?.profileImage}
-            alt="user profile img"
-            className="h-[100px] w-[100px] m-5"
-          />
-        )}
-        <div className="flex gap-x-4">
-          <form onSubmit={handleSubmit(uploadImageHandler)}>
-            <input
-              type="file"
-              accept="image/*"
-              id="profImg"
-              // name="profileImage"
-              onChange={handleImageChange}
-            />
-            <button type="submit" className="bg-yellow-400">
-              Upload Image
-            </button>
+      {/* Profile Image Upload Card */}
+      <div className="bg-black4 rounded-xl shadow-lg p-6 sm:p-8 mb-6 border border-black6">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="bg-blue6 bg-opacity-20 p-3 rounded-lg">
+            <FaCamera className="text-blue5 text-xl" />
+          </div>
+          <h2 className="text-2xl font-semibold text-white">Profile Picture</h2>
+        </div>
+
+        <form onSubmit={uploadImageHandler} className="flex flex-col sm:flex-row items-center gap-6">
+          {/* Image Preview */}
+          <div className="relative">
+            <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-4 border-yellow8 shadow-lg">
+              {showImg ? (
+                <img
+                  src={showImg}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                />
+              ) : user?.profileImage ? (
+                <img
+                  src={user.profileImage}
+                  alt="Current profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-black6 flex items-center justify-center">
+                  <FaUserCircle className="text-6xl text-white4" />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Upload Controls */}
+          <div className="flex-1 w-full sm:w-auto">
+            <label
+              htmlFor="profImg"
+              className="block mb-3 cursor-pointer"
+            >
+              <div className="bg-black5 hover:bg-black6 border-2 border-dashed border-black7 rounded-lg p-4 text-center transition-colors">
+                <FaCamera className="text-yellow8 text-2xl mx-auto mb-2" />
+                <p className="text-white text-sm font-medium mb-1">Choose Image</p>
+                <p className="text-black7 text-xs">PNG, JPG, GIF up to 10MB</p>
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                id="profImg"
+                onChange={handleImageChange}
+                className="hidden"
+              />
+            </label>
+            {showImg && (
+              <button
+                type="submit"
+                disabled={isUploading}
+                className="w-full sm:w-auto bg-yellow8 hover:bg-yellow9 text-black font-semibold px-6 py-2 rounded-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isUploading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black"></div>
+                    <span>Uploading...</span>
+                  </>
+                ) : (
+                  <>
+                    <FaSave />
+                    <span>Upload Image</span>
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+
+      {/* Forms Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Personal Information Card */}
+        <div className="bg-black4 rounded-xl shadow-lg p-6 border border-black6">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="bg-blue6 bg-opacity-20 p-3 rounded-lg">
+              <FaIdCard className="text-blue5 text-xl" />
+            </div>
+            <h2 className="text-2xl font-semibold text-white">Personal Information</h2>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+              <label htmlFor="firstName" className="block text-sm font-medium text-black7 mb-2">
+                First Name
+              </label>
+              <div className="relative">
+                <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black6 text-lg" />
+                <input
+                  type="text"
+                  id="firstName"
+                  defaultValue={user?.firstName}
+                  {...register("firstName", { required: "First name is required" })}
+                  className="w-full pl-10 pr-4 py-3 bg-black5 border border-black6 rounded-lg text-white placeholder-black7 focus:outline-none focus:ring-2 focus:ring-yellow8 focus:border-transparent transition-all"
+                  placeholder="Enter your first name"
+                />
+              </div>
+              {errors.firstName && (
+                <p className="text-red3 text-xs mt-1">{errors.firstName.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="lastName" className="block text-sm font-medium text-black7 mb-2">
+                Last Name
+              </label>
+              <div className="relative">
+                <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black6 text-lg" />
+                <input
+                  type="text"
+                  id="lastName"
+                  defaultValue={user?.lastName}
+                  {...register("lastName", { required: "Last name is required" })}
+                  className="w-full pl-10 pr-4 py-3 bg-black5 border border-black6 rounded-lg text-white placeholder-black7 focus:outline-none focus:ring-2 focus:ring-yellow8 focus:border-transparent transition-all"
+                  placeholder="Enter your last name"
+                />
+              </div>
+              {errors.lastName && (
+                <p className="text-red3 text-xs mt-1">{errors.lastName.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-black7 mb-2">
+                Email Address
+              </label>
+              <div className="relative">
+                <MdEmail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black6 text-lg" />
+                <input
+                  type="email"
+                  id="email"
+                  defaultValue={user?.email}
+                  {...register("email", { 
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid email address"
+                    }
+                  })}
+                  className="w-full pl-10 pr-4 py-3 bg-black5 border border-black6 rounded-lg text-white placeholder-black7 focus:outline-none focus:ring-2 focus:ring-yellow8 focus:border-transparent transition-all"
+                  placeholder="Enter your email"
+                />
+              </div>
+              {errors.email && (
+                <p className="text-red3 text-xs mt-1">{errors.email.message}</p>
+              )}
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <button
+                type="submit"
+                className="flex-1 bg-yellow8 hover:bg-yellow9 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+              >
+                <FaSave />
+                <span>Save Changes</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate("/dashboard/myProfile")}
+                className="px-6 py-3 bg-black5 hover:bg-black6 text-white font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
+              >
+                <FaTimes />
+                <span>Cancel</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Additional Information Card */}
+        <div className="bg-black4 rounded-xl shadow-lg p-6 border border-black6">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="bg-yellow8 bg-opacity-20 p-3 rounded-lg">
+              <FaUserCircle className="text-yellow8 text-xl" />
+            </div>
+            <h2 className="text-2xl font-semibold text-white">Additional Information</h2>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+              <label htmlFor="dateOfBirth" className="block text-sm font-medium text-black7 mb-2">
+                Date of Birth
+              </label>
+              <div className="relative">
+                <MdCake className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black6 text-lg" />
+                <input
+                  type="date"
+                  id="dateOfBirth"
+                  defaultValue={user?.additionalDetails?.dateOfBirth?.slice(0, 10)}
+                  {...register("dateOfBirth")}
+                  className="w-full pl-10 pr-4 py-3 bg-black5 border border-black6 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow8 focus:border-transparent transition-all"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="gender" className="block text-sm font-medium text-black7 mb-2">
+                Gender
+              </label>
+              <div className="relative">
+                <MdTransgender className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black6 text-lg" />
+                <select
+                  id="gender"
+                  defaultValue={user?.additionalDetails?.gender || ""}
+                  {...register("gender")}
+                  className="w-full pl-10 pr-4 py-3 bg-black5 border border-black6 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow8 focus:border-transparent transition-all appearance-none cursor-pointer"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="contactNumber" className="block text-sm font-medium text-black7 mb-2">
+                Contact Number
+              </label>
+              <div className="relative">
+                <MdPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black6 text-lg" />
+                <input
+                  type="tel"
+                  id="contactNumber"
+                  defaultValue={user?.additionalDetails?.contactNumber}
+                  {...register("contactNumber", {
+                    pattern: {
+                      value: /^[0-9]{10}$/,
+                      message: "Please enter a valid 10-digit phone number"
+                    }
+                  })}
+                  className="w-full pl-10 pr-4 py-3 bg-black5 border border-black6 rounded-lg text-white placeholder-black7 focus:outline-none focus:ring-2 focus:ring-yellow8 focus:border-transparent transition-all"
+                  placeholder="Enter your contact number"
+                />
+              </div>
+              {errors.contactNumber && (
+                <p className="text-red3 text-xs mt-1">{errors.contactNumber.message}</p>
+              )}
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <button
+                type="submit"
+                className="flex-1 bg-yellow8 hover:bg-yellow9 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+              >
+                <FaSave />
+                <span>Save Changes</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate("/dashboard/myProfile")}
+                className="px-6 py-3 bg-black5 hover:bg-black6 text-white font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
+              >
+                <FaTimes />
+                <span>Cancel</span>
+              </button>
+            </div>
           </form>
         </div>
       </div>
 
-      <div className="bg-slate-400 my-5 p-5">
-        <h1 className="text-2xl">Personal Info</h1>
+      {/* About Section Card */}
+      <div className="bg-black4 rounded-xl shadow-lg p-6 border border-black6 mb-6">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="bg-caribbeanGreen6 bg-opacity-20 p-3 rounded-lg">
+            <MdDescription className="text-caribbeanGreen5 text-xl" />
+          </div>
+          <h2 className="text-2xl font-semibold text-white">About Me</h2>
+        </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <label htmlFor="firstName">First Name</label>
-            <input
-              type="text"
-              id="firstName"
-              defaultValue={user?.firstName}
-              {...register("firstName")}
-              className="w-full"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="lastName">last Name</label>
-            <input
-              type="text"
-              id="lastName"
-              defaultValue={user?.lastName}
-              {...register("lastName")}
-              className="w-full"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="email">Email </label>
-            <input
-              type="email"
-              id="email"
-              defaultValue={user?.email}
-              {...register("email")}
-              className="w-full"
-            />
-          </div>
-
-          <div className="flex gap-x-5 my-3">
-            <button type="submit" className="bg-yellow-300">
-              Save Changes
-            </button>
-
-            <button type="reset" className="bg-yellow-300">
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <div className="bg-slate-300 my-5 p-5">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <h1 className="text-2xl">Additional Info</h1>
-
-          <div>
-            <label htmlFor="dateOfBirth">Date of Birth</label>
-            <input
-              type="date"
-              id="dateOfBirth"
-              defaultValue={user?.additionalDetails?.dateOfBirth?.slice(0, 10)}
-              {...register("dateOfBirth")}
-              className="w-full"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="gender">Gender</label>
-            <select
-              id="gender"
-              defaultValue={user?.additionalDetails?.gender}
-              {...register("gender")}
-              className="w-full"
-            >
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="contactNumber">Contact Number</label>
-            <input
-              type="number"
-              id="contactNumber"
-              defaultValue={user?.additionalDetails?.contactNumber}
-              {...register("contactNumber")}
-              className="w-full"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="about">About YourSelf</label>
+          <div className="mb-4">
+            <label htmlFor="about" className="block text-sm font-medium text-black7 mb-2">
+              Tell us about yourself
+            </label>
             <textarea
-              className="w-full"
               id="about"
               defaultValue={user?.additionalDetails?.about}
               {...register("about")}
+              rows="6"
+              className="w-full px-4 py-3 bg-black5 border border-black6 rounded-lg text-white placeholder-black7 focus:outline-none focus:ring-2 focus:ring-yellow8 focus:border-transparent transition-all resize-none"
+              placeholder="Share your interests, goals, or anything you'd like others to know..."
             />
           </div>
 
-          <div className="flex gap-x-5 my-3">
-            <button type="submit" className="bg-yellow-300">
-              Save Changes
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              className="bg-yellow8 hover:bg-yellow9 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+            >
+              <FaSave />
+              <span>Save Changes</span>
             </button>
-
-            <button type="reset" className="bg-yellow-300">
-              Cancel
+            <button
+              type="button"
+              onClick={() => navigate("/dashboard/myProfile")}
+              className="px-6 py-3 bg-black5 hover:bg-black6 text-white font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              <FaTimes />
+              <span>Cancel</span>
             </button>
           </div>
         </form>
       </div>
 
-      <div className="bg-slate-300 my-5 p-5">
-        <h1 className="text-2xl">Delete Account</h1>
+      {/* Delete Account Card */}
+      <div className="bg-gradient-to-br from-red5 to-red4 rounded-xl shadow-lg p-6 border-2 border-red3">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="bg-red3 bg-opacity-30 p-3 rounded-lg">
+            <FaTrash className="text-white text-xl" />
+          </div>
+          <h2 className="text-2xl font-semibold text-white">Danger Zone</h2>
+        </div>
+
+        <div className="mb-4">
+          <p className="text-white mb-2 font-medium">Delete Account</p>
+          <p className="text-white2 text-sm">
+            Once you delete your account, there is no going back. Please be certain.
+          </p>
+        </div>
 
         <button
           onClick={() => {
             setModal({
-              text1: "Are You Sure ?",
-              text2: "You Account will be Permanently Deleted",
+              text1: "Are You Sure?",
+              text2: "Your account will be permanently deleted. This action cannot be undone.",
               btn1Text: "Delete Account",
               btn2Text: "Cancel",
               btn1Handler: () => deleteHandler(),
               btn2Handler: () => setModal(null),
             });
           }}
+          className="bg-red3 hover:bg-red2 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 flex items-center gap-2"
         >
-          Delete Account
+          <FaTrash />
+          <span>Delete My Account</span>
         </button>
       </div>
 

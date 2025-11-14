@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../../user interfaces/Button";
+import { Link } from "react-router-dom";
 import { TypeAnimation } from "react-type-animation";
 
 export default function CodeBlock({
@@ -9,41 +9,56 @@ export default function CodeBlock({
   btn1,
   btn2,
   codeText,
-  bgGradient,
+  bgGradient = "",
 }) {
-  const num = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12];
+  const num = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
   return (
-    <div className={`flex ${position} my-20 justify-between gap-10 ` }>
-      <div className="w-[50%] flex flex-col gap-8">
-        <div>{title}</div>
-        <div className="text-black6 font-bold">{text}</div>
-
-        <div className="flex gap-7 mt-7">
-          <Button btn_name={btn1} btn_link={"/"} btn_color={"bg-yellow8"} />
-          <Button btn_name={btn2} btn_link={"/"} btn_color={"bg-black8"} />
+    <div className={`flex ${position} items-center gap-6 sm:gap-8 lg:gap-12`}>
+      {/* Text Content */}
+      <div className="w-full lg:w-[50%] flex flex-col gap-4 sm:gap-6 order-2 lg:order-1">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight">
+          {title}
+        </h2>
+        <p className="text-base sm:text-lg text-black6 leading-relaxed">
+          {text}
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 mt-4">
+          <Link to="/allCourses">
+            <button className="bg-yellow8 hover:bg-yellow9 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base w-full sm:w-auto">
+              {btn1}
+            </button>
+          </Link>
+          <Link to="/about">
+            <button className="bg-black8 hover:bg-black7 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg border border-black6 text-sm sm:text-base w-full sm:w-auto">
+              {btn2}
+            </button>
+          </Link>
         </div>
       </div>
 
-      <div className={`h-fit flex flex-row text-[14px] w-[100%] py-4 lg:w-[500px] ${bgGradient}`}>
-        <div className="w-[10%]  flex flex-col text-black7 font-inter font-bold">
+      {/* Code Block */}
+      <div className={`w-full lg:w-[50%] h-fit flex flex-row text-xs sm:text-sm lg:text-base bg-black2 rounded-lg sm:rounded-xl overflow-hidden border border-black5 ${bgGradient} order-1 lg:order-2`}>
+        {/* Line Numbers */}
+        <div className="w-[10%] flex flex-col text-black7 font-inter font-bold bg-black1 px-2 sm:px-3 py-4 text-right">
           {num.map((i, ind) => (
-            <p>{i}</p>
+            <p key={ind} className="leading-6">{i}</p>
           ))}
         </div>
-        <div className={`w-[90%] text-left flex flex-col gap-2 font-bold font-mono  pr-2 `}>
+        {/* Code Content */}
+        <div className="w-[90%] text-left flex flex-col gap-2 font-mono pr-3 sm:pr-4 py-4 bg-black2">
           <TypeAnimation
-            sequence={[codeText, 500, ""]}
+            sequence={[codeText, 1000, ""]}
             repeat={Infinity}
             cursor={true}
             omitDeletionAnimation={false}
-
-            style={
-              {
-                whiteSpace : "pre-line",
-                display:"black",
-              }
-            }
+            style={{
+              whiteSpace: "pre-line",
+              display: "block",
+              color: "#ffffff",
+              lineHeight: "1.6",
+            }}
+            speed={50}
           />
         </div>
       </div>

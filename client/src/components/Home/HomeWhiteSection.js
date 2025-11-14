@@ -1,62 +1,65 @@
 import React from "react";
-import Button from "../../user interfaces/Button";
+import { Link } from "react-router-dom";
 import HighlightText from "../../user interfaces/HighlightText";
 import HomeTimeLineSection from "./HomeTimeLineSection";
 import HomeRandomImgSection from "./HomeRandomImgSection";
 
 export default function HomeWhiteSection() {
   return (
-    <div className="bg-white text-black py-5 my-4">
-      <div className="homepage_grid_bg">
-        <div className="w-11/12 max-w-maxContent flex items-center justify-center gap-5 mx-auto">
-          <div className="my-10  mb-[100px] flex flex-row gap-10 justify-center text-white">
-            <Button
-              btn_name={"Explore Courses"}
-              btn_link={"/signup"}
-              btn_color={"bg-yellow9"}
-            />
-            <Button
-              btn_name={"Learn More"}
-              btn_link={"/about"}
-              btn_color={"bg-black4"}
-            />
-          </div>
+    <div className="bg-white text-black py-8 sm:py-12 lg:py-16">
+      {/* Top CTA Section */}
+      <div className="w-full max-w-maxContent mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16 lg:mb-20">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+          <Link to="/allCourses">
+            <button className="bg-yellow9 hover:bg-yellow8 text-black font-semibold px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base w-full sm:w-auto">
+              Explore Courses
+            </button>
+          </Link>
+          <Link to="/about">
+            <button className="bg-black4 hover:bg-black5 text-white font-semibold px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base w-full sm:w-auto">
+              Learn More
+            </button>
+          </Link>
         </div>
+      </div>
 
-        <div className="flex-row  flex-wrap mx-auto text-left w-11/12 max-w-maxContent flex gap-7 ">
-          <div className="w-[45%] ">
-            <p className="text-2xl font-semibold">
+      {/* Skills Section */}
+      <div className="w-full max-w-maxContent mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16 lg:mb-20">
+        <div className="flex flex-col lg:flex-row gap-8 sm:gap-10 lg:gap-12 items-start">
+          <div className="w-full lg:w-[45%]">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 leading-tight">
               Get the Skills for{" "}
               <HighlightText
-                textSize={"text-2xl"}
-                text={"Job that is in demand"}
+                textSize={"text-2xl sm:text-3xl lg:text-4xl"}
+                text={"Jobs that are in demand"}
               />
-            </p>
+            </h2>
           </div>
 
-          <div className="flex flex-col gap-5 w-[45%] ">
-            <p className="text-[14px] font-semibold text-black3">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Repellendus ipsum laudantium id, porro explicabo quasi incidunt
-              minus soluta voluptatibus maiores?
+          <div className="w-full lg:w-[45%] flex flex-col gap-4 sm:gap-6">
+            <p className="text-base sm:text-lg text-black3 leading-relaxed">
+              Stay ahead of the curve with courses designed by industry experts. 
+              Learn the most sought-after skills that top companies are looking for in today's job market.
             </p>
             <div>
-              <Button
-                btn_name={"Learn More"}
-                btn_link={"/signup"}
-                btn_color={"bg-yellow7"}
-              />
+              <Link to="/allCourses">
+                <button className="bg-yellow7 hover:bg-yellow8 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base">
+                  Start Learning
+                </button>
+              </Link>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-11/12 mx-auto">
+      {/* Timeline Section */}
+      <div className="w-full max-w-maxContent mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16 lg:mb-20">
         <HomeTimeLineSection />
       </div>
 
-      <div>
-        <HomeRandomImgSection/>
+      {/* Features Grid Section */}
+      <div className="w-full max-w-maxContent mx-auto px-4 sm:px-6 lg:px-8">
+        <HomeRandomImgSection />
       </div>
     </div>
   );

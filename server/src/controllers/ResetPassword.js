@@ -11,7 +11,7 @@ exports.resetPasswordToken = async (req, res) => {
         console.log("reset pass");
 
         const { email } = req.body;
-
+        console.log("email", email);
         //verify email
         if (!email) {
             return res.status(400).json({

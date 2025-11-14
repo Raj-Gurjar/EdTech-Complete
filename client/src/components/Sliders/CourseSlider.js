@@ -1,48 +1,90 @@
-import React from "react";
-
+import React, { useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import "swiper/css/free-mode";
 import "swiper/css/navigation";
-import { FreeMode, Pagination, Autoplay, Navigation } from "swiper/modules";
-
 import CourseCard from "../Cards/CourseCard";
 
 export default function CourseSlider({ courses }) {
+  // Add custom styles for Swiper
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.textContent = `
+      .courseSwiper .swiper-pagination-bullet {
+        background: #ffd700 !important;
+        opacity: 0.5 !important;
+      }
+      .courseSwiper .swiper-pagination-bullet-active {
+        opacity: 1 !important;
+        background: #ffd700 !important;
+      }
+      .courseSwiper .swiper-button-next,
+      .courseSwiper .swiper-button-prev {
+        color: #ffd700 !important;
+      }
+      .courseSwiper .swiper-button-next:hover,
+      .courseSwiper .swiper-button-prev:hover {
+        color: #ffea57 !important;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
 
-  // console.log("cc",courses);
+  if (!courses || courses.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-black7">No courses available</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="m-5">
-      {courses?.length ? (
-        <Swiper
-          loop={true}
-          slidesPerView={1}
-          spaceBetween={40}
-          pagination={{
-            clickable: true,
-          }}
-          autoplay={{
-            delay: 1500,
-            disableOnInteraction: false,
-          }}
-          navigation={true}
-          modules={[Pagination, Autoplay, Navigation]}
-          breakpoints={{
-            1000: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-          }}
-          className="mySwiper"
-        >
-          {courses.map((course, index) => (
-            <SwiperSlide key={index}>
-              <CourseCard course={course} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      ) : (
-        <p>No Course Found</p>
-      )}
+    <div className="relative">
+      <Swiper
+        loop={courses.length > 3}
+        slidesPerView={1}
+        spaceBetween={20}
+        pagination={{
+          clickable: true,
+          dynamicBullets: true,
+        }}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
+        navigation={true}
+        modules={[Pagination, Autoplay, Navigation]}
+        breakpoints={{
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 24,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 24,
+          },
+          1280: {
+            slidesPerView: 4,
+            spaceBetween: 30,
+          },
+        }}
+        className="courseSwiper"
+      >
+        {courses.map((course, index) => (
+          <SwiperSlide key={course._id || index}>
+            <CourseCard course={course} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 }

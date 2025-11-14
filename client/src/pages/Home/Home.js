@@ -1,100 +1,77 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Home.scss";
-
-//!-- assets
-
-//!-- icons
-import { FaLongArrowAltRight } from "react-icons/fa";
 import Footer from "../../components/Footer/Footer";
-import ReviewSlider from "../../components/Sliders/ReviewSlider";
-
 import CodeBlock from "../../components/Home/CodeBlock";
 import HomeWhiteSection from "../../components/Home/HomeWhiteSection";
 import BecomeInstructor from "../../components/Home/BecomeInstructor";
 import HomeHeadingSec from "../../components/Home/HomeHeadingSec";
+import { FaLongArrowAltRight } from "react-icons/fa";
 
 export default function Home() {
   return (
-    <div className=" relative mx-auto max-w-maxContent   items-center text-center justify-between text-white">
-      {/* //!--- Section 1 */}
-      <div>
-        <Link to="/signup">
-          <div className="bg-black2 group rounded-full font-bold mx-auto text-black9 transition-all duration-200 hover:scale-75 w-fit mt-10 p-1">
-            <div className=" flex flex-row px-3 py-2 gap-2 items-center">
-              <p>Become an instructor</p>
-              <p className="text-xl">
-                <FaLongArrowAltRight />
-              </p>
+    <div className="relative mx-auto max-w-maxContent w-full overflow-hidden">
+      {/* Hero Section with Become Instructor CTA */}
+      <section className="relative pt-4 pb-8 sm:pt-6 sm:pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-6 sm:mb-8">
+          <Link to="/signup" className="inline-block">
+            <div className="bg-gradient-to-r from-yellow8 to-yellow7 group rounded-full font-semibold mx-auto text-black2 transition-all duration-300 hover:scale-105 hover:shadow-lg shadow-md w-fit px-4 sm:px-6 py-2 sm:py-2.5 flex items-center gap-2">
+              <span className="text-sm sm:text-base">Become an instructor</span>
+              <FaLongArrowAltRight className="text-base sm:text-lg group-hover:translate-x-1 transition-transform" />
             </div>
-          </div>
-        </Link>
-      </div>
+          </Link>
+        </div>
+        <HomeHeadingSec />
+      </section>
 
-      {/* //!--- Section 2  */}
-      <HomeHeadingSec />
+      {/* Features Section with Code Blocks */}
+      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
+        <div className="w-full mx-auto space-y-16 sm:space-y-20 lg:space-y-24">
+          <CodeBlock
+            position="flex-col lg:flex-row"
+            title="Unlock Your Coding Potential"
+            text="Master in-demand programming skills with our comprehensive courses. From beginner basics to advanced concepts, learn at your own pace with expert instructors and hands-on projects."
+            btn1="Explore Courses"
+            btn2="Watch Demo"
+            codeText={`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic HTML</title>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+</body>
+</html>`}
+          />
 
-      {/* //!--- Section 3  */}
-      <div className="w-11/12 mx-auto">
-        <CodeBlock
-          position={"flex-row"}
-          title={"Unlock Your Coding Potential"}
-          text={
-            "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi doloribus sequi amet recusandae nobis ad commodi obcaecati. Enim, repellendus nemo! Rerum ad laudantium vel aliquam dolor quas nostrum fuga dolorem!"
-          }
-          btn1={"Try Now"}
-          btn2={"Learn more"}
-          codeText={`<!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Basic HTML</title>
-        </head>
-        <body>
-            <h1>Hello, World!</h1>
-        </body>
-        </html>`}
-        />
+          <CodeBlock
+            position="flex-col lg:flex-row-reverse"
+            title="Build Real-World Projects"
+            text="Apply what you learn through practical projects. Build portfolio-worthy applications, solve real problems, and gain the confidence to tackle any coding challenge."
+            btn1="View Projects"
+            btn2="Learn More"
+            bgGradient="shadow-[0_10px_20px_rgba(240,_46,_170,_0.7)]"
+            codeText={`function greet() {
+    console.log("Welcome to EdTech!");
+    return "Start Learning Today!";
+}
 
-        <CodeBlock
-          position={"flex-row-reverse"}
-          title={"Unlock Your Coding Potential"}
-          text={
-            "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi doloribus sequi amet recusandae nobis ad commodi obcaecati. Enim, repellendus nemo! Rerum ad laudantium vel aliquam dolor quas nostrum fuga dolorem!"
-          }
-          btn1={"Try Now"}
-          btn2={"Learn more"}
-          bgGradient={"shadow-[0_10px_20px_rgba(240,_46,_170,_0.7)]"}
-          codeText={`<!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Basic HTML</title>
-        </head>
-        <body>
-            <h1>Hello, World!</h1>
-        </body>
-        </html>`}
-        />
-      </div>
+greet();`}
+          />
+        </div>
+      </section>
 
-      {/* //!--- Section 4 add a component  */}
-
+      {/* White Section with Timeline */}
       <HomeWhiteSection />
 
-      {/* //!--- Section 5  */}
-      <div>
+      {/* Become Instructor CTA Section */}
+      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
         <BecomeInstructor />
-      </div>
+      </section>
 
-      {/* //!--- Section 6  */}
-      {/* <div className="bg-green-400">
-        <ReviewSlider />
-      </div> */}
-
-      {/* //!--- Section Footer */}
+      {/* Footer */}
       <Footer />
     </div>
   );

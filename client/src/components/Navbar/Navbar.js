@@ -14,7 +14,7 @@ export default function Navbar() {
   const totalItems = localStorage.getItem("totalItem");
 
   return (
-    <div className="bg-black2 text-white fixed z-50 max-w-maxContent w-[100%] flex h-14 items-center justify-center border-b-[1px] border-b-black5">
+    <div className="bg-black2 text-white fixed z-50 w-[100%] flex h-14 items-center justify-center border-b-[1px] border-b-black5">
       <div className="flex w-11/12 max-w-maxContent items-center justify-between">
         <div className="">
           <Link to="/">Logo</Link>

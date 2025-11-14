@@ -38,7 +38,7 @@ export default function SideBar() {
               to={item.path}
               className={({ isActive }) =>
                 isActive
-                  ? "bg-yellow8 py-1 text-black2 font-bold flex items-center px-5"
+                  ? "bg-yellow8 py-1 text-black2  font-bold flex items-center px-5"
                   : "flex items-center px-5 py-1"
               }
             >

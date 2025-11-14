@@ -72,7 +72,7 @@ export async function buyCourse(
     //create options
 
     const options = {
-      key: process.env.RAZORPAY_KEY,
+      key: process.env.REACT_APP_RAZORPAY_KEY || process.env.RAZORPAY_KEY,
       amount: `${orderResponse.data.message.currency}`,
       currency: orderResponse.data.message.currency,
       name: "EdTech",

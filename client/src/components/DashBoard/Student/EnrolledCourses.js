@@ -3,22 +3,35 @@ import { useSelector } from "react-redux";
 import { getUserEnrolledCourses } from "../../../services/operations/profileAPI";
 import ProgressBar from "@ramonak/react-progress-bar";
 import { Link } from "react-router-dom";
+import HighlightText from "../../../user interfaces/HighlightText";
+import RatingStars from "../../../utils/RatingStars";
+import avgRating from "../../../utils/avgRating";
+import { 
+  FaBook, 
+  FaClock, 
+  FaPlayCircle, 
+  FaGraduationCap,
+  FaUsers,
+  FaTag,
+  FaSpinner
+} from "react-icons/fa";
+import { MdPlayArrow } from "react-icons/md";
 
 export default function EnrolledCourses() {
   const { token } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.profile);
-  // console.log("user", user);
   const [enrolledCourses, setEnrolledCourses] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getEnrolledCourses = async () => {
     try {
-      console.log("Calling getEnroll cor API connector");
+      setIsLoading(true);
       const response = await getUserEnrolledCourses(token);
       setEnrolledCourses(response);
-
-      console.log("response inside myCourse...", response);
     } catch (error) {
       console.log("Unable to fetch Enrolled Courses:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -26,63 +39,211 @@ export default function EnrolledCourses() {
     getEnrolledCourses();
   }, []);
 
-  // console.log("enro: ",enrolledCourses);
-  return (
-    <div>
-      <h1>Enrolled Courses</h1>
-
-      {!enrolledCourses ? (
-        <div>Loading....</div>
-      ) : enrolledCourses.length === 0 ? (
-        <p>You have not enrolled in any course</p>
-      ) : (
-        <div>
-          <div>
-            <p>Course Name</p>
-            <p>Duration</p>
-            <p>Progress</p>
-          </div>
-
-          <div>
-            {enrolledCourses.length === 0 ? (
-              <p>Not enrolled in any course yet</p>
-            ) : (
-              enrolledCourses.map((course, index) => (
-                <Link
-                  to={`/courseMenu/${course?._id}/section/${course.courseContent?.[0]?._id}/subSection/${course.courseContent?.[0]?.subSections?.[0]?._id}`}
-                  key={index}
-                >
-                  <div className="bg-slate-300 m-5 flex gap-x-5 p-2">
-                    <div>
-                      <img
-                        src={course.thumbnail}
-                        alt="course-thumbnail"
-                        className="h-[100px] w-[150px] bg-pink-300"
-                      />
-                    </div>
-                    <div>
-                      <p>Name: {course.courseName}</p>
-                      <p>Desc: {course.courseDescription}</p>
-                    </div>
-                    <div>Duration: {course?.totalDuration}</div>
-                    <div>
-                      <p>Progress: {course.progressPercentage || 0}%</p>
-                      <ProgressBar
-                        completed={course.progressPercentage || 0}
-                        maxCompleted={100}
-                        height="8px"
-                        width="60px"
-                        isLabelVisible={false}
-                        className="bg-red-500 p-2"
-                      />
-                    </div>
-                  </div>
-                </Link>
-              ))
-            )}
+  // Loading State
+  if (isLoading) {
+    return (
+      <div className="w-11/12 max-w-7xl mx-auto py-6 sm:py-8">
+        <div className="mb-8">
+          <h1 className="text-4xl sm:text-5xl font-bold mb-2">
+            <HighlightText text={"My Enrolled Courses"} />
+          </h1>
+          <p className="text-black6 text-sm sm:text-base">Continue your learning journey</p>
+        </div>
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center">
+            <FaSpinner className="text-6xl text-yellow8 animate-spin mx-auto mb-4" />
+            <p className="text-black7 text-lg">Loading your courses...</p>
           </div>
         </div>
-      )}
+      </div>
+    );
+  }
+
+  // Empty State
+  if (!enrolledCourses || enrolledCourses.length === 0) {
+    return (
+      <div className="w-11/12 max-w-6xl mx-auto py-6 sm:py-8">
+        <div className="mb-8">
+          <h1 className="text-4xl sm:text-5xl font-bold mb-2">
+            <HighlightText text={"My Enrolled Courses"} />
+          </h1>
+          <p className="text-black6 text-sm sm:text-base">Continue your learning journey</p>
+        </div>
+
+        <div className="bg-black4 rounded-2xl shadow-xl p-12 sm:p-16 border border-black6 text-center">
+          <div className="mb-6">
+            <FaGraduationCap className="text-8xl text-black6 mx-auto" />
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">No enrolled courses yet</h2>
+          <p className="text-black7 mb-8 max-w-md mx-auto">
+            You haven't enrolled in any courses yet. Browse our course catalog and start learning today!
+          </p>
+          <Link
+            to="/allCourses"
+            className="inline-flex items-center gap-2 bg-yellow8 hover:bg-yellow9 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:scale-105"
+          >
+            <FaBook />
+            <span>Browse Courses</span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-11/12 max-w-7xl mx-auto py-6 sm:py-8">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-4xl sm:text-5xl font-bold mb-2">
+          <HighlightText text={"My Enrolled Courses"} />
+        </h1>
+        <p className="text-black6 text-sm sm:text-base">
+          {enrolledCourses.length} {enrolledCourses.length === 1 ? "course" : "courses"} enrolled
+        </p>
+      </div>
+
+      {/* Courses Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {enrolledCourses.map((course, index) => {
+          const courseRating = avgRating(course?.ratingAndReviews || []);
+          const totalRatings = course?.ratingAndReviews?.length || 0;
+          const progress = course.progressPercentage || 0;
+          const firstSection = course.courseContent?.[0];
+          const firstSubSection = firstSection?.subSections?.[0];
+          const courseLink = firstSection && firstSubSection
+            ? `/courseMenu/${course._id}/section/${firstSection._id}/subSection/${firstSubSection._id}`
+            : `/allCourses/${course._id}`;
+
+          return (
+            <div
+              key={course._id || index}
+              className="bg-black4 rounded-xl shadow-lg overflow-hidden border border-black6 hover:border-yellow8/50 transition-all duration-300 group"
+            >
+              <Link to={courseLink} className="block">
+                {/* Course Thumbnail */}
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={course.thumbnail || "https://via.placeholder.com/400x250"}
+                    alt={course.courseName}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    onError={(e) => {
+                      e.target.src = "https://via.placeholder.com/400x250";
+                    }}
+                  />
+                  {/* Progress Overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-white text-sm font-semibold">Progress</span>
+                      <span className="text-yellow8 text-sm font-bold">{progress}%</span>
+                    </div>
+                    <ProgressBar
+                      completed={progress}
+                      maxCompleted={100}
+                      height="8px"
+                      width="100%"
+                      isLabelVisible={false}
+                      bgColor="#ffe344"
+                      baseBgColor="rgba(255, 255, 255, 0.2)"
+                      className="rounded-full"
+                    />
+                  </div>
+                  {/* Play Button Overlay */}
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="bg-yellow8 text-black rounded-full p-4 transform scale-75 group-hover:scale-100 transition-transform">
+                      <MdPlayArrow className="text-3xl" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Course Content */}
+                <div className="p-5">
+                  {/* Category Badge */}
+                  {course.category && (
+                    <div className="mb-3">
+                      <span className="inline-flex items-center gap-1 bg-blue6 bg-opacity-20 text-blue5 text-xs font-medium px-2 py-1 rounded">
+                        <FaTag className="text-xs" />
+                        {course.category.name}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Course Title */}
+                  <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-yellow8 transition-colors">
+                    {course.courseName}
+                  </h3>
+
+                  {/* Course Description */}
+                  {course.courseDescription && (
+                    <p className="text-sm text-black7 mb-4 line-clamp-2">
+                      {course.courseDescription}
+                    </p>
+                  )}
+
+                  {/* Rating */}
+                  {totalRatings > 0 && (
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="flex items-center gap-1">
+                        <RatingStars Review_Count={courseRating} Star_Size={14} />
+                        <span className="text-sm font-semibold text-white ml-1">
+                          {courseRating.toFixed(1)}
+                        </span>
+                      </div>
+                      <span className="text-xs text-black7">
+                        ({totalRatings} {totalRatings === 1 ? "review" : "reviews"})
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Course Stats */}
+                  <div className="flex items-center gap-4 text-xs text-black7 mb-4 pb-4 border-b border-black6">
+                    {course.totalDuration && (
+                      <div className="flex items-center gap-1">
+                        <FaClock className="text-sm" />
+                        <span>{course.totalDuration}</span>
+                      </div>
+                    )}
+                    {course.studentsEnrolled?.length > 0 && (
+                      <div className="flex items-center gap-1">
+                        <FaUsers className="text-sm" />
+                        <span>{course.studentsEnrolled.length} students</span>
+                      </div>
+                    )}
+                    {course.courseContent?.length > 0 && (
+                      <div className="flex items-center gap-1">
+                        <FaBook className="text-sm" />
+                        <span>{course.courseContent.length} sections</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Continue Learning Button */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      {progress === 100 ? (
+                        <div className="flex items-center gap-2 text-caribbeanGreen5">
+                          <FaGraduationCap />
+                          <span className="text-sm font-semibold">Completed</span>
+                        </div>
+                      ) : progress > 0 ? (
+                        <div className="flex items-center gap-2 text-yellow8">
+                          <FaPlayCircle />
+                          <span className="text-sm font-semibold">Continue Learning</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2 text-blue5">
+                          <MdPlayArrow />
+                          <span className="text-sm font-semibold">Start Learning</span>
+                        </div>
+                      )}
+                    </div>
+                    <MdPlayArrow className="text-yellow8 text-xl group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </Link>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
