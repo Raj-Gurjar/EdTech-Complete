@@ -213,7 +213,7 @@ exports.updateDisplayPicture = async (req, res) => {
         console.log("req.file :", req.file);
         const displayPicturePath = req.file?.path;
 
-        // console.log("disp pic path", displayPicturePath);
+        // console.log("disp pic path.", displayPicturePath);
 
         const displayImage = await uploadToCloudinary(
             displayPicturePath,
