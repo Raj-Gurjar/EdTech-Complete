@@ -19,25 +19,26 @@ import { MdPlayArrow } from "react-icons/md";
 
 export default function EnrolledCourses() {
   const { token } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.profile);
   const [enrolledCourses, setEnrolledCourses] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getEnrolledCourses = async () => {
-    try {
-      setIsLoading(true);
-      const response = await getUserEnrolledCourses(token);
-      setEnrolledCourses(response);
-    } catch (error) {
-      console.log("Unable to fetch Enrolled Courses:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
-    getEnrolledCourses();
-  }, []);
+    const getEnrolledCourses = async () => {
+      try {
+        setIsLoading(true);
+        const response = await getUserEnrolledCourses(token);
+        setEnrolledCourses(response);
+      } catch (error) {
+        console.log("Unable to fetch Enrolled Courses:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (token) {
+      getEnrolledCourses();
+    }
+  }, [token]);
 
   // Loading State
   if (isLoading) {
@@ -105,8 +106,29 @@ export default function EnrolledCourses() {
       {/* Courses Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {enrolledCourses.map((course, index) => {
-          const courseRating = avgRating(course?.ratingAndReviews || []);
-          const totalRatings = course?.ratingAndReviews?.length || 0;
+          // Calculate rating - handle both populated objects and IDs
+          let courseRating = 0;
+          let totalRatings = 0;
+          
+          if (course?.ratingAndReviews && Array.isArray(course.ratingAndReviews)) {
+            totalRatings = course.ratingAndReviews.length;
+            // Check if ratingAndReviews contains objects with rating property
+            const hasRatingObjects = course.ratingAndReviews.some(
+              (item) => item && typeof item === 'object' && item.rating !== undefined
+            );
+            
+            if (hasRatingObjects) {
+              courseRating = avgRating(course.ratingAndReviews);
+            } else {
+              // If it's just IDs, we can't calculate rating from enrolled courses
+              // Rating will show as 0, but we'll still show review count
+              courseRating = 0;
+            }
+          }
+          
+          // Ensure rating is valid number
+          courseRating = isNaN(courseRating) ? 0 : courseRating;
+          
           const progress = course.progressPercentage || 0;
           const firstSection = course.courseContent?.[0];
           const firstSubSection = firstSection?.subSections?.[0];
@@ -182,15 +204,23 @@ export default function EnrolledCourses() {
                   {/* Rating */}
                   {totalRatings > 0 && (
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="flex items-center gap-1">
-                        <RatingStars Review_Count={courseRating} Star_Size={14} />
-                        <span className="text-sm font-semibold text-white ml-1">
-                          {courseRating.toFixed(1)}
+                      {courseRating > 0 ? (
+                        <>
+                          <div className="flex items-center gap-1">
+                            <RatingStars Review_Count={courseRating} Star_Size={14} />
+                            <span className="text-sm font-semibold text-white ml-1">
+                              {courseRating.toFixed(1)}
+                            </span>
+                          </div>
+                          <span className="text-xs text-black7">
+                            ({totalRatings} {totalRatings === 1 ? "review" : "reviews"})
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-xs text-black7">
+                          {totalRatings} {totalRatings === 1 ? "review" : "reviews"} (no ratings yet)
                         </span>
-                      </div>
-                      <span className="text-xs text-black7">
-                        ({totalRatings} {totalRatings === 1 ? "review" : "reviews"})
-                      </span>
+                      )}
                     </div>
                   )}
 

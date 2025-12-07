@@ -251,12 +251,30 @@ exports.getEnrolledCourses = async (req, res) => {
         let userDetails = await User_Model.findOne({ _id: userId })
             .populate({
                 path: "courses",
-                populate: {
-                    path: "courseContent",
-                    populate: {
-                        path: "subSections",
+                populate: [
+                    {
+                        path: "courseContent",
+                        populate: {
+                            path: "subSections",
+                        },
                     },
-                },
+                    {
+                        path: "ratingAndReviews",
+                        select: "rating review user",
+                        populate: {
+                            path: "user",
+                            select: "firstName lastName email profileImage",
+                        },
+                    },
+                    {
+                        path: "category",
+                        select: "name",
+                    },
+                    {
+                        path: "instructor",
+                        select: "firstName lastName",
+                    },
+                ],
             })
             .exec();
 

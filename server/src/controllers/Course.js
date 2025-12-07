@@ -31,6 +31,10 @@ exports.getAllPublishedCourses = async (req, res) => {
             }
         )
             .populate("instructor")
+            .populate({
+                path: "ratingAndReviews",
+                select: "rating", // Only select rating field for performance
+            })
             .exec();
 
         //* return res
@@ -64,7 +68,13 @@ exports.getCourseById = async (req, res) => {
                 },
             })
             .populate("category")
-            .populate("ratingAndReviews")
+            .populate({
+                path: "ratingAndReviews",
+                populate: {
+                    path: "user",
+                    select: "firstName lastName email profileImage",
+                },
+            })
             .populate({
                 path: "courseContent",
                 populate: {
@@ -114,7 +124,13 @@ exports.getFullCourseDetails = async (req, res) => {
                 },
             })
             .populate("category")
-            .populate("ratingAndReviews")
+            .populate({
+                path: "ratingAndReviews",
+                populate: {
+                    path: "user",
+                    select: "firstName lastName email profileImage",
+                },
+            })
             .populate({
                 path: "courseContent",
                 populate: {
@@ -371,7 +387,13 @@ exports.editCourse = async (req, res) => {
                 },
             })
             .populate("category")
-            .populate("ratingAndReviews")
+            .populate({
+                path: "ratingAndReviews",
+                populate: {
+                    path: "user",
+                    select: "firstName lastName email profileImage",
+                },
+            })
             .populate({
                 path: "courseContent",
                 populate: { path: "subSections" },
@@ -588,7 +610,13 @@ exports.getCourseByIdAdmin = async (req, res) => {
                 },
             })
             .populate("category")
-            .populate("ratingAndReviews")
+            .populate({
+                path: "ratingAndReviews",
+                populate: {
+                    path: "user",
+                    select: "firstName lastName email profileImage",
+                },
+            })
             .populate({
                 path: "courseContent",
                 populate: {

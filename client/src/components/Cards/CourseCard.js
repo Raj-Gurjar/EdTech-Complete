@@ -9,7 +9,7 @@ export default function CourseCard({ course }) {
 
   useEffect(() => {
     const count = avgRating(course.ratingAndReviews);
-    setAvgRatingCount(count);
+    setAvgRatingCount(isNaN(count) ? 0 : count);
   }, [course]);
 
   const studentsEnrolled = course.studentsEnrolled?.length || 0;
@@ -63,19 +63,23 @@ export default function CourseCard({ course }) {
           )}
 
           {/* Rating and Reviews */}
-          <div className="flex items-center gap-2 mb-3">
-            <div className="flex items-center gap-1">
-              <RatingStars Review_Count={avgRatingCount} Star_Size={14} />
-              <span className="text-sm font-semibold text-white ml-1">
-                {avgRatingCount.toFixed(1) || "0.0"}
-              </span>
+          {(avgRatingCount > 0 || totalRatings > 0) && (
+            <div className="flex items-center gap-2 mb-3">
+              {avgRatingCount > 0 && (
+                <div className="flex items-center gap-1">
+                  <RatingStars Review_Count={avgRatingCount} Star_Size={14} />
+                  <span className="text-sm font-semibold text-white ml-1">
+                    {avgRatingCount.toFixed(1)}
+                  </span>
+                </div>
+              )}
+              {totalRatings > 0 && (
+                <span className="text-xs text-black7">
+                  ({totalRatings} {totalRatings === 1 ? "review" : "reviews"})
+                </span>
+              )}
             </div>
-            {totalRatings > 0 && (
-              <span className="text-xs text-black7">
-                ({totalRatings} {totalRatings === 1 ? "review" : "reviews"})
-              </span>
-            )}
-          </div>
+          )}
 
           {/* Course Stats */}
           <div className="flex items-center gap-4 text-xs text-black7 mb-4">

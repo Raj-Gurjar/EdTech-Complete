@@ -65,7 +65,7 @@ export default function CourseDetails() {
 
   useEffect(() => {
     const count = avgRating(courseData?.ratingAndReviews);
-    setAvgRatingCount(count);
+    setAvgRatingCount(isNaN(count) ? 0 : count);
   }, [courseData]);
 
   useEffect(() => {
@@ -92,13 +92,15 @@ export default function CourseDetails() {
         setCourseDuration(courseDur);
       }
 
-      // Use reviews from courseData if available, otherwise fetch all
+      // Fetch reviews - prefer from courseData if user is populated, otherwise fetch separately
       if (course?.ratingAndReviews && course.ratingAndReviews.length > 0) {
-        // If ratingAndReviews contains full review objects
-        if (typeof course.ratingAndReviews[0] === 'object') {
+        // Check if reviews have user data populated
+        const firstReview = course.ratingAndReviews[0];
+        if (firstReview && typeof firstReview === 'object' && firstReview.user) {
+          // Reviews have user data, use them directly
           setReviews(course.ratingAndReviews);
         } else {
-          // If it's just IDs, fetch all reviews and filter
+          // Reviews don't have user data, fetch all reviews and filter
           try {
             const allReviews = await getAllReviews();
             const courseReviewIds = course.ratingAndReviews.map(r => r._id || r);
@@ -108,7 +110,22 @@ export default function CourseDetails() {
             setReviews(courseReviews);
           } catch (error) {
             console.error("Error fetching reviews:", error);
+            // Fallback to course reviews even without user data
+            setReviews(course.ratingAndReviews);
           }
+        }
+      } else {
+        // No reviews in course data, try fetching all reviews for this course
+        try {
+          const allReviews = await getAllReviews();
+          const courseReviews = allReviews.filter(
+            (review) => review.course?._id === courseId || review.course === courseId
+          );
+          if (courseReviews.length > 0) {
+            setReviews(courseReviews);
+          }
+        } catch (error) {
+          console.error("Error fetching reviews:", error);
         }
       }
     } catch (error) {
@@ -227,17 +244,21 @@ export default function CourseDetails() {
 
               {/* Course Stats */}
               <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm sm:text-base">
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center">
-                    <RatingStars Review_Count={avgRatingCount} Star_Size={20} />
-                    <span className="ml-2 font-semibold text-white">
-                      {avgRatingCount.toFixed(1)}
-                    </span>
+                {avgRatingCount > 0 && (
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center">
+                      <RatingStars Review_Count={avgRatingCount} Star_Size={20} />
+                      <span className="ml-2 font-semibold text-white">
+                        {avgRatingCount.toFixed(1)}
+                      </span>
+                    </div>
+                    {ratingCount > 0 && (
+                      <span className="text-black7">
+                        ({ratingCount} {ratingCount === 1 ? "review" : "reviews"})
+                      </span>
+                    )}
                   </div>
-                  <span className="text-black7">
-                    ({ratingCount} {ratingCount === 1 ? "review" : "reviews"})
-                  </span>
-                </div>
+                )}
                 <div className="flex items-center gap-2 text-black7">
                   <FaUsers className="text-yellow8" />
                   <span>{studentsEnrolled} {studentsEnrolled === 1 ? "student" : "students"}</span>
@@ -495,12 +516,14 @@ export default function CourseDetails() {
                       Student Reviews
                     </h2>
                     <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-2">
-                        <RatingStars Review_Count={avgRatingCount} Star_Size={24} />
-                        <span className="text-xl font-bold text-white ml-2">
-                          {avgRatingCount.toFixed(1)}
-                        </span>
-                      </div>
+                      {avgRatingCount > 0 && (
+                        <div className="flex items-center gap-2">
+                          <RatingStars Review_Count={avgRatingCount} Star_Size={24} />
+                          <span className="text-xl font-bold text-white ml-2">
+                            {avgRatingCount.toFixed(1)}
+                          </span>
+                        </div>
+                      )}
                       <span className="text-black7">
                         Based on {ratingCount} {ratingCount === 1 ? "review" : "reviews"}
                       </span>
