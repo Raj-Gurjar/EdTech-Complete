@@ -148,102 +148,155 @@ export default function CourseInfoForm() {
   };
 
   return (
-    <div className="createCourse">
-      <h1>Create Info Form</h1>
+    <div className="space-y-6">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-white mb-2">
+          {editCourse ? "Edit Course Information" : "Course Information"}
+        </h2>
+        <p className="text-white4 text-sm">
+          Fill in the details about your course. All fields marked with * are required.
+        </p>
+      </div>
+
       <form
-        className="bg-[#4baca6] flex flex-col gap-5 w-10/12 m-auto"
+        className="space-y-6"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div>
-          <label htmlFor="courseTitle">Course Title</label>
+        {/* Course Title */}
+        <div className="space-y-2">
+          <label htmlFor="courseTitle" className="block text-sm font-medium text-white">
+            Course Title <span className="text-red2">*</span>
+          </label>
           <input
-            className="w-full"
+            className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors"
             id="courseTitle"
-            placeholder="Enter Course Title"
+            placeholder="e.g., Complete Web Development Bootcamp"
             {...register("courseTitle", { required: true })}
           />
-          {errors.courseTitle && <span>Course Title is Required </span>}
+          {errors.courseTitle && (
+            <p className="text-red2 text-sm mt-1">Course Title is required</p>
+          )}
         </div>
-        <div>
-          <label htmlFor="courseShortDescription">
-            Course Short Description
+
+        {/* Course Description */}
+        <div className="space-y-2">
+          <label htmlFor="courseShortDescription" className="block text-sm font-medium text-white">
+            Course Description <span className="text-red2">*</span>
           </label>
           <textarea
-            className="w-full"
+            className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors min-h-[120px] resize-y"
             id="courseShortDescription"
-            placeholder="Enter Course Description"
+            placeholder="Provide a brief description of what students will learn in this course..."
             {...register("courseShortDescription", { required: true })}
           />
           {errors.courseShortDescription && (
-            <span>Course Description is Required </span>
+            <p className="text-red2 text-sm mt-1">Course Description is required</p>
           )}
         </div>
-        <div>
-          <label htmlFor="coursePrice">Course Price</label>
-          <FaRupeeSign />
-          <input
-            id="coursePrice"
-            className="w-full"
-            type="number"
-            placeholder="Enter Course Price"
-            {...register("coursePrice", {
-              required: true,
-              valueAsNumber: true,
-            })}
-          />
-          {errors.coursePrice && <span>Course Price is Required </span>}
+
+        {/* Price and Category Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Course Price */}
+          <div className="space-y-2">
+            <label htmlFor="coursePrice" className="block text-sm font-medium text-white">
+              Course Price <span className="text-red2">*</span>
+            </label>
+            <div className="relative">
+              <FaRupeeSign className="absolute left-3 top-1/2 -translate-y-1/2 text-white4" />
+              <input
+                id="coursePrice"
+                className="w-full bg-black3 border border-black5 rounded-lg pl-10 pr-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors"
+                type="number"
+                placeholder="0"
+                min="0"
+                {...register("coursePrice", {
+                  required: true,
+                  valueAsNumber: true,
+                  min: 0,
+                })}
+              />
+            </div>
+            {errors.coursePrice && (
+              <p className="text-red2 text-sm mt-1">Course Price is required</p>
+            )}
+          </div>
+
+          {/* Course Category */}
+          <div className="space-y-2">
+            <label htmlFor="courseCategory" className="block text-sm font-medium text-white">
+              Course Category <span className="text-red2">*</span>
+            </label>
+            <select
+              className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow8 transition-colors"
+              id="courseCategory"
+              defaultValue=""
+              {...register("courseCategory", { required: true })}
+            >
+              <option value="" disabled className="bg-black2">
+                Choose a Category
+              </option>
+              {!loading &&
+                courseCategories.map((category, index) => (
+                  <option key={index} value={category?._id} className="bg-black2">
+                    {category?.name}
+                  </option>
+                ))}
+            </select>
+            {errors.courseCategory && (
+              <p className="text-red2 text-sm mt-1">Course Category is required</p>
+            )}
+          </div>
         </div>
-        <div>
-          <label htmlFor="courseCategory">Course Category</label>
-          <select
-            className="w-full"
-            id="courseCategory"
-            defaultValue=""
-            {...register("courseCategory", { required: true })}
-          >
-            <option value="" disabled>
-              Choose a Category
-            </option>
-            {!loading &&
-              courseCategories.map((category, index) => (
-                <option key={index} value={category?._id}>
-                  {category?.name}
-                </option>
-              ))}
-          </select>
-          {errors.courseCategory && <span>Course Category is Required </span>}
+
+        {/* Language and Thumbnail Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Course Language */}
+          <div className="space-y-2">
+            <label htmlFor="courseLanguage" className="block text-sm font-medium text-white">
+              Course Language <span className="text-red2">*</span>
+            </label>
+            <input
+              className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors"
+              id="courseLanguage"
+              placeholder="e.g., English, Hindi"
+              {...register("courseLanguage", { required: true })}
+            />
+            {errors.courseLanguage && (
+              <p className="text-red2 text-sm mt-1">Course Language is required</p>
+            )}
+          </div>
+
+          {/* Course Thumbnail */}
+          <div className="space-y-2">
+            <UploadMedia
+              name="courseImage"
+              register={register}
+              label="Course Thumbnail"
+              errors={errors}
+              setValue={setValue}
+              image={true}
+              previewMedia={editCourse ? course.thumbnail : ""}
+            />
+          </div>
         </div>
-        <div>
-          <label htmlFor="courseLanguage">Course Language</label>
-          <input
-            className="w-full"
-            id="courseLanguage"
-            placeholder="Enter Course Language"
-            {...register("courseLanguage", { required: true })}
-          />
-          {errors.courseLanguage && <span>Course Language is Required </span>}
-        </div>
-        <div>
-          <UploadMedia
-            name="courseImage"
-            register={register}
-            label="Course Thumbnail"
-            errors={errors}
-            setValue={setValue}
-            image={true}
-            previewMedia={editCourse ? course.thumbnail : ""}
-          />
-        </div>
-        <div>
-          <label htmlFor="courseBenefits">Course Benefits</label>
+
+        {/* Course Benefits */}
+        <div className="space-y-2">
+          <label htmlFor="courseBenefits" className="block text-sm font-medium text-white">
+            What Students Will Learn <span className="text-red2">*</span>
+          </label>
           <textarea
             id="courseBenefits"
-            placeholder="Enter the Course Benefits"
-            className="w-full"
+            placeholder="List the key learning outcomes and benefits students will gain from this course..."
+            className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors min-h-[120px] resize-y"
             {...register("courseBenefits", { required: true })}
           />
-          {errors.courseBenefits && <span>Course Benefits are required.</span>}
+          {errors.courseBenefits && (
+            <p className="text-red2 text-sm mt-1">Course Benefits are required</p>
+          )}
         </div>
+
+        {/* Requirements/Instructions */}
         <div>
           <ChipInput
             name="courseRequirements"
@@ -255,6 +308,8 @@ export default function CourseInfoForm() {
             chipValues={editCourse ? course.instructions : ""}
           />
         </div>
+
+        {/* Tags */}
         <div>
           <ChipInput
             name="courseTags"
@@ -266,20 +321,34 @@ export default function CourseInfoForm() {
             chipValues={editCourse ? course.tags : ""}
           />
         </div>
-        <div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-black5">
           {editCourse && (
             <button
               type="button"
               onClick={() => dispatch(setStep(2))}
-              className="bg-red-500"
+              className="px-6 py-2.5 bg-black5 hover:bg-black4 text-white rounded-lg transition-colors font-medium"
             >
               Continue without Saving
             </button>
           )}
-          <button type="submit" className="bg-blue-400">
-            {!editCourse ? "Next" : "Save Changes"}
+          <button
+            type="submit"
+            disabled={loading}
+            className="flex-1 px-6 py-2.5 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading
+              ? "Processing..."
+              : !editCourse
+              ? "Save & Continue to Course Builder"
+              : "Save Changes"}
           </button>
-          <button type="reset" onClick={clearFormHandler}>
+          <button
+            type="reset"
+            onClick={clearFormHandler}
+            className="px-6 py-2.5 bg-black5 hover:bg-black4 text-white rounded-lg transition-colors font-medium"
+          >
             Clear All
           </button>
         </div>

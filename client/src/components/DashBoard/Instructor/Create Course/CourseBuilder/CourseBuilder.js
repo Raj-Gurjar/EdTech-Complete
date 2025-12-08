@@ -100,67 +100,115 @@ export default function CourseBuilder() {
     setValue("sectionName", sectionName);
   };
 
-  // console.log("course details", course);
   return (
-    <div>
-      <h1 className="text-2xl">Course Builder</h1>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-white mb-2">Course Builder</h2>
+        <p className="text-white4 text-sm">
+          Create sections and add lectures to structure your course content.
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor="sectionName">Section Name</label>
-          <input
-            type="text"
-            id="sectionName"
-            placeholder="Enter section name"
-            {...register("sectionName", { required: true })}
-            className="w-full"
-          />
-          {errors.sectionName && <span>section name is required</span>}
-        </div>
+      {/* Add Section Form */}
+      <div className="bg-black3 rounded-xl p-6 border border-black5">
+        <h3 className="text-lg font-semibold text-white mb-4">
+          {editSectionName ? "Edit Section" : "Add New Section"}
+        </h3>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="sectionName" className="block text-sm font-medium text-white">
+              Section Name <span className="text-red2">*</span>
+            </label>
+            <input
+              type="text"
+              id="sectionName"
+              placeholder="e.g., Introduction to React"
+              {...register("sectionName", { required: true })}
+              className="w-full bg-black2 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors"
+            />
+            {errors.sectionName && (
+              <p className="text-red2 text-sm mt-1">Section name is required</p>
+            )}
+          </div>
 
-        <div>
-          <label htmlFor="shortDescription">Section's Brief Description</label>
-          <input
-            type="text"
-            id="shortDescription"
-            placeholder="Enter section's brief description"
-            {...register("shortDescription", { required: true })}
-            className="w-full"
-          />
-          {errors.shortDescription && (
-            <span>section's brief description is required</span>
-          )}
-        </div>
-        <div>
-          <label htmlFor="longDescription">Section's details Description</label>
-          <textarea
-            type="text"
-            id="longDescription"
-            placeholder="Enter section's detail description"
-            {...register("longDescription")}
-            className="w-full"
-          />
-        </div>
+          <div className="space-y-2">
+            <label htmlFor="shortDescription" className="block text-sm font-medium text-white">
+              Brief Description <span className="text-red2">*</span>
+            </label>
+            <input
+              type="text"
+              id="shortDescription"
+              placeholder="A short overview of this section"
+              {...register("shortDescription", { required: true })}
+              className="w-full bg-black2 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors"
+            />
+            {errors.shortDescription && (
+              <p className="text-red2 text-sm mt-1">Brief description is required</p>
+            )}
+          </div>
 
-        <div className="my-5">
-          <button type="submit" className="bg-blue-500">
-            {!editSectionName ? "Create Section" : "Edit Section Name"}
-          </button>
-          {editSectionName && (
-            <button className="mx-5" onClick={cancelEdit}>
-              cancel edit
+          <div className="space-y-2">
+            <label htmlFor="longDescription" className="block text-sm font-medium text-white">
+              Detailed Description (Optional)
+            </label>
+            <textarea
+              id="longDescription"
+              placeholder="Provide more details about this section..."
+              {...register("longDescription")}
+              className="w-full bg-black2 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors min-h-[100px] resize-y"
+            />
+          </div>
+
+          <div className="flex gap-4 pt-2">
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-6 py-2.5 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading
+                ? "Processing..."
+                : !editSectionName
+                ? "Create Section"
+                : "Save Changes"}
             </button>
-          )}
-        </div>
-      </form>
+            {editSectionName && (
+              <button
+                type="button"
+                onClick={cancelEdit}
+                className="px-6 py-2.5 bg-black5 hover:bg-black4 text-white rounded-lg transition-colors font-medium"
+              >
+                Cancel
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
 
+      {/* Sections List */}
       {course?.courseContent?.length > 0 && (
-        <SectionDetails handleEditSecName={handleEditSecName} />
+        <div className="bg-black3 rounded-xl p-6 border border-black5">
+          <h3 className="text-lg font-semibold text-white mb-4">
+            Course Sections ({course.courseContent.length})
+          </h3>
+          <SectionDetails handleEditSecName={handleEditSecName} />
+        </div>
       )}
 
-      <div className="flex gap-x-5">
-        <button onClick={goBack}>Back</button>
-        <button onClick={goToNext}>Next</button>
+      {/* Navigation Buttons */}
+      <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-black5">
+        <button
+          onClick={goBack}
+          className="px-6 py-2.5 bg-black5 hover:bg-black4 text-white rounded-lg transition-colors font-medium"
+        >
+          ← Back to Course Info
+        </button>
+        <button
+          onClick={goToNext}
+          className="flex-1 px-6 py-2.5 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-all font-semibold"
+        >
+          Continue to Publish →
+        </button>
       </div>
     </div>
   );

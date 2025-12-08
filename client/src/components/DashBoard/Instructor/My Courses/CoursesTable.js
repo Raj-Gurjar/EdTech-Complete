@@ -6,23 +6,31 @@ import {
   deleteCourse,
   fetchInstructorCourses,
 } from "../../../../services/operations/courseDetailsAPI";
-import { Table, Thead, Tr, Th, Tbody, Td } from "react-super-responsive-table";
 import { COURSE_STATUS } from "../../../../utils/constants";
-import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import Modal from "../../../Modals-Popups/Modal";
 import { formateDate } from "../../../../utils/formatDate";
+import {
+  FaEdit,
+  FaTrash,
+  FaClock,
+  FaRupeeSign,
+  FaTag,
+  FaBook,
+} from "react-icons/fa";
+import { HiOutlineBookOpen } from "react-icons/hi";
 
-export default function CoursesTable({ instCourses, setInstCourses }) {
+export default function CoursesTable({
+  instCourses,
+  setInstCourses,
+  onRefresh,
+}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const { course } = useSelector((state) => state.course);
   const { token } = useSelector((state) => state.auth);
 
   const [loading, setLoading] = useState(false);
   const [modal, setModal] = useState(null);
-
-  // console.log("instCO table :", instCourses);
 
   const handleDeleteCourse = async (courseId) => {
     setLoading(true);
@@ -32,91 +40,165 @@ export default function CoursesTable({ instCourses, setInstCourses }) {
 
     if (result) {
       setInstCourses(result);
+      if (onRefresh) onRefresh();
     }
 
     setModal(null);
     setLoading(false);
   };
 
-  return (
-    <div>
-      <Table className="my-5">
-        <Thead>
-          <Tr className="bg-amber-200 flex gap-x-10 border-black-800 p-5">
-            <Th>Courses</Th>
-            <Th>Duration</Th>
-            <Th>Price</Th>
-            <Th>Actions</Th>
-          </Tr>
-        </Thead>
+  // Calculate total lectures count
+  const getTotalLectures = (course) => {
+    if (!course.courseContent) return 0;
+    return course.courseContent.reduce((total, section) => {
+      return total + (section.subSections?.length || 0);
+    }, 0);
+  };
 
-        <Tbody className="bg-slate-300">
-          {instCourses.length === 0 ? (
-            <Tr>
-              <Td>No Courses Found</Td>
-            </Tr>
-          ) : (
-            <div className="bg-green-300">
-              {instCourses.map((course) => (
-                <Tr
-                  key={course._id}
-                  className="flex gap-x-10 border-black-800 border-2 p-4"
-                >
-                  <Td className="flex gap-x-4 bg-red-200">
-                    <img
-                      src={course?.thumbnail}
-                      className="bg-blue-300 h-[150px] w-[220px] rounded-lg object-cover"
-                      alt="course-thumbnail"
-                    />
-                    <div className="flex flex-col">
-                      <p>Course Name: {course.courseName}</p>
-                      <p>Desc :{course.courseDescription}</p>
-                      <p>Created at : {formateDate(course?.createdAt)}</p>
-                      <p>
-                        {course.status === COURSE_STATUS.DRAFT ? (
-                          <p className="text-red-500">DRAFTED</p>
-                        ) : (
-                          <p className="text-yellow-500">PUBLISHED</p>
-                        )}
+  if (instCourses.length === 0) {
+    return (
+      <div className="bg-black2 rounded-xl p-12 border border-black5 text-center">
+        <HiOutlineBookOpen className="text-6xl text-white4 mx-auto mb-4 opacity-50" />
+        <h3 className="text-xl font-semibold text-white mb-2">
+          No Courses Yet
+        </h3>
+        <p className="text-white4 mb-6">
+          Start creating your first course to share your knowledge with students.
+        </p>
+        <button
+          onClick={() => navigate("/dashboard/createCourse")}
+          className="inline-flex items-center gap-2 px-6 py-3 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-all font-semibold"
+        >
+          <FaBook />
+          <span>Create Your First Course</span>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {instCourses.map((course) => {
+        const isDraft = course.status === COURSE_STATUS.DRAFT;
+        const totalLectures = getTotalLectures(course);
+
+        return (
+          <div
+            key={course._id}
+            className="bg-black2 rounded-xl border border-black5 overflow-hidden hover:border-yellow8 transition-all"
+          >
+            <div className="flex flex-col lg:flex-row">
+              {/* Course Thumbnail */}
+              <div className="lg:w-64 flex-shrink-0">
+                <img
+                  src={course?.thumbnail}
+                  className="w-full h-48 lg:h-full object-cover"
+                  alt={course.courseName}
+                />
+              </div>
+
+              {/* Course Details */}
+              <div className="flex-1 p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-xl font-bold text-white">
+                        {course.courseName}
+                      </h3>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          isDraft
+                            ? "bg-orange-500/20 text-orange-400 border border-orange-500/30"
+                            : "bg-green-600/20 text-green-400 border border-green-600/30"
+                        }`}
+                      >
+                        {isDraft ? "DRAFT" : "PUBLISHED"}
+                      </span>
+                    </div>
+                    <p className="text-white4 text-sm line-clamp-2 mb-4">
+                      {course.courseDescription}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Course Stats */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+                  <div className="flex items-center gap-2 text-white3">
+                    <FaRupeeSign className="text-yellow8" />
+                    <div>
+                      <p className="text-xs text-white4">Price</p>
+                      <p className="text-sm font-semibold text-white">
+                        ₹{course?.price || 0}
                       </p>
                     </div>
-                  </Td>
+                  </div>
 
-                  <Td>Duration : {" add it "}</Td>
-                  <Td>Price : Rs.{course?.price}</Td>
-                  <Td>Category: {course?.category?.name}</Td>
-                  <Td className="">
-                    <button
-                      className="mr-5"
-                      disabled={loading}
-                      onClick={() => {
-                        navigate(`/dashboard/edit-course/${course._id}`);
-                      }}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      disabled={loading}
-                      onClick={() => {
-                        setModal({
-                          text1: "Are You Sure?",
-                          text2: "This course will be deleted permanently",
-                          btn1Text: "Delete Course",
-                          btn2Text: "Cancel",
-                          btn1Handler: () => handleDeleteCourse(course._id),
-                          btn2Handler: () => setModal(null),
-                        });
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </Td>
-                </Tr>
-              ))}
+                  <div className="flex items-center gap-2 text-white3">
+                    <FaTag className="text-yellow8" />
+                    <div>
+                      <p className="text-xs text-white4">Category</p>
+                      <p className="text-sm font-semibold text-white">
+                        {course?.category?.name || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-white3">
+                    <FaBook className="text-yellow8" />
+                    <div>
+                      <p className="text-xs text-white4">Lectures</p>
+                      <p className="text-sm font-semibold text-white">
+                        {totalLectures}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-white3">
+                    <FaClock className="text-yellow8" />
+                    <div>
+                      <p className="text-xs text-white4">Created</p>
+                      <p className="text-sm font-semibold text-white">
+                        {formateDate(course?.createdAt)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-3 pt-4 border-t border-black5">
+                  <button
+                    onClick={() => {
+                      navigate(`/dashboard/edit-course/${course._id}`);
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-black3 hover:bg-black4 text-white rounded-lg transition-colors font-medium"
+                  >
+                    <FaEdit />
+                    <span>Edit Course</span>
+                  </button>
+                  <button
+                    disabled={loading}
+                    onClick={() => {
+                      setModal({
+                        text1: "Delete Course?",
+                        text2:
+                          "This course will be permanently deleted. This action cannot be undone.",
+                        btn1Text: "Delete Course",
+                        btn2Text: "Cancel",
+                        btn1Handler: () => handleDeleteCourse(course._id),
+                        btn2Handler: () => setModal(null),
+                      });
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-red2/20 hover:bg-red2/30 text-red2 rounded-lg transition-colors font-medium border border-red2/30"
+                  >
+                    <FaTrash />
+                    <span>Delete</span>
+                  </button>
+                </div>
+              </div>
             </div>
-          )}
-        </Tbody>
-      </Table>
+          </div>
+        );
+      })}
 
       {modal && <Modal modalData={modal} />}
     </div>

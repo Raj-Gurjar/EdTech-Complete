@@ -1,47 +1,133 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import RenderFormSteps from "../Create Course/RenderFormSteps";
 import {
   setCourse,
   setEditCourse,
+  resetCourseState,
 } from "../../../../toolkit/slice/courseSlice";
 import { getFullDetailsOfCourse } from "../../../../services/operations/courseDetailsAPI";
+import HighlightText from "../../../../user interfaces/HighlightText";
+import { FaSpinner, FaArrowLeft, FaExclamationTriangle } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 export default function EditCourse() {
   const dispatch = useDispatch();
-  const { courseId } = useParams;
+  const navigate = useNavigate();
+  const { courseId } = useParams();
   const { course } = useSelector((state) => state.course);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { token } = useSelector((state) => state.auth);
 
-  console.log("course : ", course);
   const populateCourseDetails = async () => {
     setLoading(true);
-    const result = await getFullDetailsOfCourse(courseId, token);
+    setError(null);
+    
+    try {
+      const result = await getFullDetailsOfCourse(courseId, token);
 
-    console.log("result :", result);
+      // Handle different response structures - API returns { data: { courseDetails, totalDuration } }
+      const courseDetails = result?.courseDetails || result?.data?.courseDetails;
 
-    if (result?.courseDetails) {
-      dispatch(setEditCourse(true));
-      dispatch(setCourse(result?.courseDetails));
+      if (courseDetails && courseDetails._id) {
+        dispatch(setEditCourse(true));
+        dispatch(setCourse(courseDetails));
+      } else {
+        setError("Course not found or invalid course data");
+        toast.error("Failed to load course details");
+      }
+    } catch (err) {
+      console.error("Error loading course:", err);
+      setError("Failed to load course. Please try again.");
+      toast.error("Failed to load course details");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   useEffect(() => {
+    // Reset course state when component mounts
+    dispatch(resetCourseState());
     populateCourseDetails();
-  }, []);
+
+    // Cleanup on unmount
+    return () => {
+      dispatch(resetCourseState());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseId]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-11/12 max-w-7xl mx-auto py-6 sm:py-8">
+        <div className="flex flex-col items-center justify-center py-20">
+          <FaSpinner className="text-yellow8 text-5xl animate-spin mb-4" />
+          <p className="text-white text-lg">Loading course details...</p>
+        </div>
+      </div>
+    );
   }
-  return (
-    <div>
-      <h1>Edit Course</h1>
 
-      <div>{course ? <RenderFormSteps /> : <p>Course Not Found</p>}</div>
+  if (error || !course) {
+    return (
+      <div className="w-11/12 max-w-7xl mx-auto py-6 sm:py-8">
+        <div className="bg-black2 rounded-xl p-8 border border-black5 text-center">
+          <FaExclamationTriangle className="text-red2 text-5xl mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-white mb-2">
+            {error || "Course Not Found"}
+          </h2>
+          <p className="text-white4 mb-6">
+            {error || "The course you're trying to edit doesn't exist or you don't have permission to access it."}
+          </p>
+          <div className="flex gap-4 justify-center">
+            <button
+              onClick={() => navigate("/dashboard/myCourses-Instructor")}
+              className="flex items-center gap-2 px-6 py-3 bg-black5 hover:bg-black4 text-white rounded-lg transition-colors font-medium"
+            >
+              <FaArrowLeft />
+              <span>Back to My Courses</span>
+            </button>
+            <button
+              onClick={populateCourseDetails}
+              className="px-6 py-3 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-colors font-semibold"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-11/12 max-w-7xl mx-auto py-6 sm:py-8">
+      {/* Header Section */}
+      <div className="mb-8">
+        <div className="flex items-center gap-4 mb-4">
+          <button
+            onClick={() => navigate("/dashboard/myCourses-Instructor")}
+            className="p-2 text-white4 hover:text-white hover:bg-black3 rounded-lg transition-colors"
+            title="Back to My Courses"
+          >
+            <FaArrowLeft className="text-xl" />
+          </button>
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-white">
+              Edit <HighlightText text="Course" />
+            </h1>
+            <p className="text-white4 text-sm sm:text-base">
+              Update your course information and content
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Form Steps */}
+      <div>
+        <RenderFormSteps />
+      </div>
     </div>
   );
 }
