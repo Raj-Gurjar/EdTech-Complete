@@ -42,12 +42,12 @@ export default function CourseMenu() {
   return (
     <div className="relative flex min-h-[calc(100vh-3.5rem)] bg-black3">
       {/* Sidebar */}
-      <div className="hidden lg:flex min-w-[350px] max-w-[400px] flex-col border-r border-black6 h-[calc(100vh-3.5rem)] bg-black4 overflow-y-auto">
+      <div className="hidden lg:flex min-w-[350px] max-w-[400px] flex-col border-r border-black6 fixed left-0 top-14 h-[calc(100vh-3.5rem)] bg-black4 overflow-y-auto z-10">
         <CoursePlaylistDetails setReviewModal={setReviewModal} />
       </div>
       
       {/* Main Content Area */}
-      <div className="flex-1 h-[calc(100vh - 3.5rem)] overflow-auto">
+      <div className="flex-1 lg:ml-[350px] min-h-[calc(100vh-3.5rem)] overflow-auto">
         <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
           <Outlet />
         </div>

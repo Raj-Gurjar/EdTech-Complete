@@ -16,10 +16,13 @@ exports.sendOTP = async (req, res) => {
         console.log("inside send OTP");
         const { email } = req.body;
 
+        //* Normalize email (lowercase and trim) to ensure consistent matching
+        const normalizedEmail = email ? email.toLowerCase().trim() : email;
+
         //* Checks
 
         // if Email is already in DB
-        const checkUserPresent = await User_Model.findOne({ email });
+        const checkUserPresent = await User_Model.findOne({ email: normalizedEmail });
 
         if (checkUserPresent) {
             return res.status(401).json({
@@ -51,8 +54,8 @@ exports.sendOTP = async (req, res) => {
             otpResult = await OTP_Model.findOne({ otp: otp });
         }
 
-        //Insert Unique OTP in DB
-        const otpPayload = { email, otp };
+        //Insert Unique OTP in DB (use normalized email)
+        const otpPayload = { email: normalizedEmail, otp };
 
         const otpBody = await OTP_Model.create(otpPayload);
 
@@ -88,6 +91,9 @@ exports.signUp = async (req, res) => {
             otp,
             adminKey,
         } = req.body;
+
+        //* Normalize email (lowercase and trim) to ensure consistent matching
+        const normalizedEmail = email ? email.toLowerCase().trim() : email;
 
         //! User Validation
 
@@ -129,7 +135,7 @@ exports.signUp = async (req, res) => {
         //TODO : Check Valid Email (@gmail, @yahoo, not temp mail)
 
         //* Check already email exist
-        const existingUser = await User_Model.findOne({ email });
+        const existingUser = await User_Model.findOne({ email: normalizedEmail });
 
         if (existingUser) {
             return res.status(400).json({
@@ -140,23 +146,31 @@ exports.signUp = async (req, res) => {
 
         //! Verify OTP
 
-        //* find most resent OTP for user
-        const recentOtp = await OTP_Model.find({ email })
+        //* find most resent OTP for user (using normalized email)
+        const recentOtp = await OTP_Model.find({ email: normalizedEmail })
             .sort({ createdAt: -1 })
             .limit(1);
 
         console.log("Recent Otp :", recentOtp);
-        console.log("Otp :", otp);
-        console.log("recent.Otp :", recentOtp[0].otp);
+        console.log("Otp entered by user:", otp);
+        console.log("Email used for OTP lookup (normalized):", normalizedEmail);
 
         // //* validate OTP
         if (recentOtp.length === 0) {
             // OTP not found
+            console.log("No OTP found for email:", normalizedEmail);
+            // Also try to find any OTPs for debugging
+            const allOtps = await OTP_Model.find({}).sort({ createdAt: -1 }).limit(5);
+            console.log("Recent OTPs in DB (last 5):", allOtps.map(o => ({ email: o.email, otp: o.otp, createdAt: o.createdAt })));
             return res.status(400).json({
                 success: false,
-                message: "OTP not found/Entered",
+                message: "OTP not found or expired. Please request a new OTP.",
             });
-        } else if (otp !== recentOtp[0].otp) {
+        }
+        
+        console.log("Recent OTP from DB:", recentOtp[0].otp);
+        
+        if (otp !== recentOtp[0].otp) {
             //OTP is invalid
             return res.status(400).json({
                 success: false,
@@ -173,7 +187,7 @@ exports.signUp = async (req, res) => {
         const userData = await User_Model.create({
             firstName,
             lastName,
-            email,
+            email: normalizedEmail,
             password: hashedPassword,
             accountType,
             additionalDetails: profileDetails._id,

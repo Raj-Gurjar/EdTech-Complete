@@ -76,9 +76,9 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
     : 0;
 
   return (
-    <div className="h-full flex flex-col bg-black4">
+    <div className="h-full flex flex-col bg-black4 min-h-full">
       {/* Header */}
-      <div className="p-4 border-b border-black6">
+      <div className="p-4 border-b border-black6 flex-shrink-0">
         <button
           onClick={() => navigate("/dashboard/enrolledCourses")}
           className="flex items-center gap-2 text-black7 hover:text-white transition-colors mb-4 group"
