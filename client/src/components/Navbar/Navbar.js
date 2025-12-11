@@ -1,25 +1,51 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavbarLinks } from "../../data/Navbar-links";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BsCart3 } from "react-icons/bs";
 import ProfileDropDown from "./ProfileDropDown";
 import { IoSearch, IoClose } from "react-icons/io5";
 import { HiMenuAlt3 } from "react-icons/hi";
+import { FaSignOutAlt } from "react-icons/fa";
 import Button from "../../user interfaces/Button";
 import { ACCOUNT_TYPE } from "../../utils/constants";
+import { navItems } from "../../data/SideBarData";
+import { logout } from "../../services/operations/authAPI";
+import Modal from "../Modals-Popups/Modal";
 
 export default function Navbar() {
+  const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.profile);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [logoutModal, setLogoutModal] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const mobileMenuRef = useRef(null);
 
   const totalItems = localStorage.getItem("totalItem");
+  
+  // Filter dashboard nav items based on user account type (show when logged in on mobile)
+  const filteredDashboardItems = token !== null && user
+    ? navItems.filter((item) => item.roles.includes(user?.accountType))
+    : [];
+
+  const handleLogout = () => {
+    setLogoutModal({
+      text1: "Are You Sure?",
+      text2: "You will be logged out",
+      btn1Text: "LogOut",
+      btn2Text: "Cancel",
+      btn1Handler: () => {
+        dispatch(logout(navigate));
+        setMobileMenuOpen(false);
+        setLogoutModal(null);
+      },
+      btn2Handler: () => setLogoutModal(null),
+    });
+  };
 
   // Close mobile menu when clicking outside
   useEffect(() => {
@@ -64,7 +90,7 @@ export default function Navbar() {
   return (
     <>
       <div className="bg-black2 text-white fixed z-50 w-full flex h-14 sm:h-16 items-center justify-center border-b border-black5">
-        <div className="flex w-11/12 max-w-maxContent items-center justify-between">
+      <div className="flex w-11/12 max-w-maxContent items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-4">
             <button
@@ -84,33 +110,33 @@ export default function Navbar() {
             >
               Logo
             </Link>
-          </div>
+        </div>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex">
             <ul className="flex gap-x-6 xl:gap-x-8">
-              {NavbarLinks.map((link, index) => (
-                <NavLink
-                  to={link?.path}
-                  key={index}
-                  className={({ isActive }) =>
+            {NavbarLinks.map((link, index) => (
+              <NavLink
+                to={link?.path}
+                key={index}
+                className={({ isActive }) =>
                     `transition-colors duration-200 ${
                       isActive 
                         ? "text-yellow8 font-semibold" 
                         : "text-white hover:text-yellow8"
                     }`
-                  }
-                >
-                  <li>
-                    {link.title === "Catalogs" ? (
-                      <div></div>
-                    ) : (
+                }
+              >
+                <li>
+                  {link.title === "Catalogs" ? (
+                    <div></div>
+                  ) : (
                       <p className="text-sm xl:text-base">{link.title}</p>
-                    )}
-                  </li>
-                </NavLink>
-              ))}
-            </ul>
+                  )}
+                </li>
+              </NavLink>
+            ))}
+          </ul>
           </nav>
 
           {/* Right Side Actions */}
@@ -133,7 +159,7 @@ export default function Navbar() {
                     <IoSearch className="text-lg" />
                   </button>
                 </form>
-              </div>
+        </div>
             )}
 
             {/* Search Icon - Mobile */}
@@ -152,29 +178,29 @@ export default function Navbar() {
             )}
 
             {/* Auth Buttons - Desktop */}
-            {token === null && (
+          {token === null && (
               <div className="hidden sm:flex gap-3 lg:gap-5">
-                <Button
+              <Button
                   btn_color={"bg-yellow8 hover:bg-yellow9"}
-                  btn_name={"Login"}
-                  btn_link={"/login"}
-                  text_color={"text-black"}
+                btn_name={"Login"}
+                btn_link={"/login"}
+                text_color={"text-black"}
                   py={"py-1.5"}
                   px={"px-4"}
-                />
-                <Button
+              />
+              <Button
                   btn_color={"bg-black5 hover:bg-black4"}
-                  btn_name={"Signup"}
-                  btn_link={"/signup"}
-                  text_color={"text-white"}
+                btn_name={"Signup"}
+                btn_link={"/signup"}
+                text_color={"text-white"}
                   py={"py-1.5"}
                   px={"px-4"}
-                />
-              </div>
-            )}
+              />
+            </div>
+          )}
 
             {/* User Actions - Desktop */}
-            {token !== null && (
+          {token !== null && (
               <div className="hidden sm:flex gap-4 lg:gap-5 items-center">
                 {user && user.accountType === ACCOUNT_TYPE.STUDENT && (
                   <Link 
@@ -255,7 +281,8 @@ export default function Navbar() {
         <div className="flex flex-col h-full overflow-y-auto">
           {/* Mobile Navigation Links */}
           <nav className="flex-1 p-6">
-            <ul className="flex flex-col gap-2">
+            {/* Main Navigation Links (Home, Courses, About, Contact) */}
+            <ul className="flex flex-col gap-2 mb-6">
               {NavbarLinks.map((link, index) => (
                 <NavLink
                   to={link?.path}
@@ -275,10 +302,41 @@ export default function Navbar() {
                 </NavLink>
               ))}
             </ul>
+
+            {/* Dashboard Navigation Links (shown when logged in on mobile) */}
+            {token !== null && filteredDashboardItems.length > 0 && (
+              <>
+                <div className="border-t border-black5 my-4"></div>
+                <div className="mb-4">
+                  <h3 className="text-white4 text-xs font-semibold uppercase tracking-wider px-4 mb-3">
+                    Dashboard
+                  </h3>
+                  <ul className="flex flex-col gap-2">
+                    {filteredDashboardItems.map((item, index) => (
+                      <NavLink
+                        key={index}
+                        to={`/dashboard/${item.path}`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={({ isActive }) =>
+                          `flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
+                            isActive
+                              ? "bg-yellow8 text-black2 font-semibold"
+                              : "text-white hover:bg-black3 hover:text-yellow8"
+                          }`
+                        }
+                      >
+                        <span className="mr-3 text-lg">{item.icon}</span>
+                        <span className="text-base">{item.label}</span>
+                      </NavLink>
+                    ))}
+                  </ul>
+                </div>
+              </>
+            )}
           </nav>
 
-          {/* Mobile Auth Buttons */}
-          {token === null && (
+          {/* Mobile Auth Buttons / Logout */}
+          {token === null ? (
             <div className="p-6 border-t border-black5 space-y-3">
               <Button
                 btn_color={"bg-yellow8 hover:bg-yellow9"}
@@ -297,9 +355,22 @@ export default function Navbar() {
                 px={"px-4"}
               />
             </div>
+          ) : (
+            <div className="p-6 border-t border-black5">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center px-4 py-3 rounded-lg text-white hover:bg-black3 hover:text-red2 transition-all duration-200"
+              >
+                <FaSignOutAlt className="mr-3 text-lg" />
+                <span className="text-base font-medium">Logout</span>
+              </button>
+            </div>
           )}
         </div>
       </div>
+
+      {/* Logout Modal */}
+      {logoutModal && <Modal modalData={logoutModal} />}
     </>
   );
 }

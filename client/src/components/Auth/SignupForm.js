@@ -40,56 +40,57 @@ export default function SignForm() {
   return (
     <div className="">
       <form className="flex flex-col" onSubmit={signUpHandler}>
-        <div className="my-1">
-          <p className="text-xl font-semibold">Sign Up as <HighlightText text={accountType} /></p>
+        {/* Account Type Selection */}
+        <div className="mb-6">
+          <p className="text-lg sm:text-xl font-semibold text-white mb-4">
+            Sign Up as <HighlightText text={accountType} />
+          </p>
 
-          <div className="flex gap-x-1 bg-black5 p-1  my-3 text-[13px] rounded-full max-w-max shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]">
+          <div className="flex gap-2 bg-black3 p-1.5 rounded-full border border-black5">
             <button
               type="button"
-              onClick={() => setAccountType("Student")}
-              className={`${
+              onClick={() => setAccountType(ACCOUNT_TYPE.STUDENT)}
+              className={`flex-1 py-2 px-4 sm:px-6 rounded-full text-sm sm:text-base font-medium transition-all duration-200 ${
                 accountType === ACCOUNT_TYPE.STUDENT
-                  ? "bg-black2"
-                  : "bg-transparent text-white3"
-              } py-1 px-5 rounded-full transition-all duration-200"
-              } `}
+                  ? "bg-yellow8 text-black shadow-lg"
+                  : "bg-transparent text-white4 hover:text-white"
+              }`}
             >
               Student
             </button>
             <button
               type="button"
-              onClick={() => setAccountType("Instructor")}
-              className={`${
+              onClick={() => setAccountType(ACCOUNT_TYPE.INSTRUCTOR)}
+              className={`flex-1 py-2 px-4 sm:px-6 rounded-full text-sm sm:text-base font-medium transition-all duration-200 ${
                 accountType === ACCOUNT_TYPE.INSTRUCTOR
-                  ? "bg-black2"
-                  : "bg-transparent text-white3"
-              } py-2 px-5 rounded-full transition-all duration-200"
-            } `}
+                  ? "bg-yellow8 text-black shadow-lg"
+                  : "bg-transparent text-white4 hover:text-white"
+              }`}
             >
               Instructor
             </button>
             <button
               type="button"
-              onClick={() => setAccountType("Admin")}
-              className={`${
+              onClick={() => setAccountType(ACCOUNT_TYPE.ADMIN)}
+              className={`flex-1 py-2 px-4 sm:px-6 rounded-full text-sm sm:text-base font-medium transition-all duration-200 ${
                 accountType === ACCOUNT_TYPE.ADMIN
-                  ? "bg-black2"
-                  : "bg-transparent text-white3"
-              } py-2 px-5 rounded-full transition-all duration-200"
-            } `}
+                  ? "bg-yellow8 text-black shadow-lg"
+                  : "bg-transparent text-white4 hover:text-white"
+              }`}
             >
               Admin
             </button>
           </div>
         </div>
 
-        <div className="flex flex-col w-full gap-y-5 mt-6">
-          <div className="flex flex-row gap-5">
-            <div className="w-1/2">
-           
+        {/* Form Fields */}
+        <div className="flex flex-col w-full gap-5 sm:gap-6">
+          {/* Name Fields - Stack on mobile, side by side on desktop */}
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
+            <div className="flex-1">
               <InputBox
                 label="First Name"
-                placeholder={"Enter First Name"}
+                placeholder="Enter your first name"
                 type="text"
                 id="firstName"
                 name="firstName"
@@ -99,10 +100,10 @@ export default function SignForm() {
               />
             </div>
 
-            <div className="w-1/2">
+            <div className="flex-1">
               <InputBox
                 label="Last Name"
-                placeholder="Enter Last Name"
+                placeholder="Enter your last name"
                 type="text"
                 id="lastName"
                 name="lastName"
@@ -113,9 +114,10 @@ export default function SignForm() {
             </div>
           </div>
 
+          {/* Email */}
           <InputBox
-            label="Email"
-            placeholder="Enter Email"
+            label="Email Address"
+            placeholder="Enter your email address"
             type="email"
             id="email"
             name="email"
@@ -124,9 +126,10 @@ export default function SignForm() {
             changeHandler={changeHandler}
           />
 
+          {/* Password */}
           <InputBox
             label="Password"
-            placeholder="Enter Password"
+            placeholder="Enter your password"
             type="password"
             id="password"
             name="password"
@@ -136,9 +139,10 @@ export default function SignForm() {
             changeHandler={changeHandler}
           />
 
+          {/* Confirm Password */}
           <InputBox
             label="Confirm Password"
-            placeholder="Confirm Password"
+            placeholder="Confirm your password"
             type="password"
             id="confirmPassword"
             name="confirmPassword"
@@ -148,22 +152,25 @@ export default function SignForm() {
             changeHandler={changeHandler}
           />
 
+          {/* Admin Key - Only shown for Admin */}
           {accountType === ACCOUNT_TYPE.ADMIN && (
             <InputBox
               label="Admin's Secret Key"
-              placeholder="Enter Admin's Secret Key"
+              placeholder="Enter admin secret key"
               type="password"
               id="adminKey"
               name="adminKey"
               required={true}
+              isPassword={true}
               value={formData.adminKey}
               changeHandler={changeHandler}
             />
           )}
 
+          {/* Submit Button */}
           <button
             type="submit"
-            className="bg-yellow8 rounded py-1 text-black mt-2 font-semibold"
+            className="w-full bg-yellow8 hover:bg-yellow9 rounded-lg py-3 text-black font-semibold transition-all duration-200 hover:scale-[1.02] shadow-lg mt-2"
           >
             Create Account
           </button>

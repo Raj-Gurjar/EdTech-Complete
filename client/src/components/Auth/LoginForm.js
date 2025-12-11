@@ -39,11 +39,12 @@ export default function LoginForm() {
         <Loader />
       ) : (
         <form onSubmit={loginHandler} className="flex flex-col">
-          <div className="flex flex-col w-full gap-y-5 mt-6">
-            <div className="flex-col flex gap-y-1">
+          <div className="flex flex-col w-full gap-5 sm:gap-6">
+            {/* Email Field */}
+            <div className="flex-col flex gap-y-2">
               <InputBox
-                label={"Email"}
-                placeholder={"Enter Email Id"}
+                label={"Email Address"}
+                placeholder={"Enter your email address"}
                 type={"email"}
                 id={"email"}
                 name={"email"}
@@ -53,10 +54,11 @@ export default function LoginForm() {
               />
             </div>
 
-            <div className="flex flex-col  gap-y-1 relative z-1">
+            {/* Password Field */}
+            <div className="flex flex-col gap-y-2 relative">
               <InputBox
                 label={"Password"}
-                placeholder={"Enter First Name"}
+                placeholder={"Enter your password"}
                 type={showPassword ? "text" : "password"}
                 id={"password"}
                 name={"password"}
@@ -66,18 +68,22 @@ export default function LoginForm() {
                 isPassword={true}
               />
 
-              <div className="text-[12px] text-blue6 cursor-pointer relative flex justify-end">
+              {/* Forgot Password Link */}
+              <div className="text-sm text-yellow8 cursor-pointer relative flex justify-end -mt-2">
                 <Link to="/resetPasswordRequest">
-                  <button className="hover:underline">Forgot Password</button>
+                  <button className="hover:text-yellow9 hover:underline transition-colors">
+                    Forgot Password?
+                  </button>
                 </Link>
               </div>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
-              className="bg-yellow8 rounded py-1 text-black mt-2 font-semibold"
+              className="w-full bg-yellow8 hover:bg-yellow9 rounded-lg py-3 text-black font-semibold transition-all duration-200 hover:scale-[1.02] shadow-lg mt-2"
             >
-              Log in
+              Log In
             </button>
           </div>
         </form>

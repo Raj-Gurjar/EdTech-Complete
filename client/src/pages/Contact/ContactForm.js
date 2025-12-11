@@ -18,19 +18,23 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="flex flex-col w-[90%] text-white justify-center m-auto border-[1.5px] border-white8 p-4 rounded-md ">
-      <h2 className="text-2xl font-semibold mt-4">
-        Share Your Thoughts or Queries with us
-      </h2>
-      <h3 className="text-[14px] text-blue7 italic mb-4">
-        Let us know what's in your mind
-      </h3>
+    <div className="bg-black2 rounded-xl border border-black5 p-6 sm:p-8 shadow-lg">
+      <div className="mb-6">
+        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+          Share Your Thoughts or Queries
+        </h2>
+        <p className="text-white4 text-sm sm:text-base">
+          Let us know what's on your mind. We're here to help!
+        </p>
+      </div>
+
       <form
-        className="log-form flex flex-col gap-y-4"
+        className="flex flex-col gap-5 sm:gap-6"
         onSubmit={handleSubmit(ContactHandler)}
       >
-        <div className="flex gap-5 ">
-          <div className="w-1/2">
+        {/* Name Fields - Stack on mobile, side by side on desktop */}
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
+          <div className="flex-1">
             <InputBox
               label="First Name"
               id="firstName"
@@ -44,7 +48,7 @@ export default function ContactForm() {
             />
           </div>
 
-          <div className="w-1/2">
+          <div className="flex-1">
             <InputBox
               label="Last Name"
               id="lastName"
@@ -75,26 +79,58 @@ export default function ContactForm() {
           errors={errors.email}
         />
 
+        {/* Email */}
+        <InputBox
+          label="Email Address"
+          id="email"
+          type={"email"}
+          required={true}
+          placeholder="Enter your email address"
+          register={register("email", {
+            required: "Email is required",
+            pattern: {
+              value: /^\S+@\S+$/i,
+              message: "Enter a valid email address",
+            },
+          })}
+          errors={errors.email}
+        />
+
+        {/* Subject */}
         <div className="flex flex-col gap-y-1">
-          <label htmlFor="contactNo" className="w-full text-[15px]">
-            Contact Number
+          <label htmlFor="subject" className="text-sm font-medium text-white">
+            Subject <span className="text-red2">*</span>
           </label>
+          <input
+            className="bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors"
+            id="subject"
+            type="text"
+            placeholder="What is this regarding?"
+            {...register("subject", { required: "Subject is required" })}
+          />
+          {errors.subject && (
+            <span className="text-red2 text-sm mt-1">{errors.subject.message}</span>
+          )}
+        </div>
 
-          <div className="flex gap-2 items-end">
-          
-              <select
-                {...register("countryCode", {})}
-                className="bg-black4 w-[80px] h-[32px] rounded-md border-b-[1px] text-[14px]"
-              >
-                {countryCode.map((country, index) => (
-                  <option key={index} value={country.code}>
-                    {country.code} - {country.name}
-                  </option>
-                ))}
-              </select>
-         
-
-            <div className="w-[calc(100%-90px)]">
+        {/* Contact Number */}
+        <div className="flex flex-col gap-y-2">
+          <label htmlFor="contactNo" className="text-sm font-medium text-white">
+            Contact Number (Optional)
+          </label>
+          <div className="flex gap-3">
+            <select
+              {...register("countryCode", {})}
+              className="bg-black3 border border-black5 rounded-lg px-3 py-3 text-white text-sm focus:outline-none focus:border-yellow8 transition-colors flex-shrink-0"
+              style={{ width: "120px" }}
+            >
+              {countryCode.map((country, index) => (
+                <option key={index} value={country.code} className="bg-black2">
+                  {country.code}
+                </option>
+              ))}
+            </select>
+            <div className="flex-1">
               <InputBox
                 id="contactNo"
                 type={"number"}
@@ -115,29 +151,31 @@ export default function ContactForm() {
             </div>
           </div>
           {errors.countryCode && (
-            <span className="text-red-500">{errors.countryCode.message}</span>
+            <span className="text-red2 text-sm">{errors.countryCode.message}</span>
           )}
         </div>
 
-        <div className="flex flex-col gap-y-1">
-          <label htmlFor="message" className="w-full text-[15px]">
-            Message <span className="text-red5">*</span>
+        {/* Message */}
+        <div className="flex flex-col gap-y-2">
+          <label htmlFor="message" className="text-sm font-medium text-white">
+            Message <span className="text-red2">*</span>
           </label>
           <textarea
-            className="bg-black4 border-b-[1px] rounded-[0.5rem] p-[6px] text-white"
+            className="bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors min-h-[150px] resize-y"
             id="message"
-            rows="5"
+            rows="6"
             {...register("message", { required: "Message is required" })}
-            placeholder="Enter your message"
+            placeholder="Tell us more about your query or feedback..."
           />
           {errors.message && (
-            <span className="text-red-500">{errors.message.message}</span>
+            <span className="text-red2 text-sm mt-1">{errors.message.message}</span>
           )}
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className="bg-yellow9 text-black font-semibold p-2 rounded-md mt-4"
+          className="w-full sm:w-auto px-8 py-3 bg-yellow8 hover:bg-yellow9 text-black font-semibold rounded-lg transition-all duration-200 hover:scale-105 shadow-lg mt-2"
         >
           Send Message
         </button>

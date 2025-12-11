@@ -47,15 +47,6 @@ export default function SideBar() {
             </NavLink>
           </li>
         ))}
-        <li>
-          <button
-            onClick={handleLogout}
-            className="w-full text-left flex items-center px-5"
-          >
-            <FaSignOutAlt className="mr-2" />
-            Logout
-          </button>
-        </li>
       </ul>
 
       {modal && <Modal modalData={modal} />}

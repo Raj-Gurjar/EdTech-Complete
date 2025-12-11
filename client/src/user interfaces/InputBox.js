@@ -17,30 +17,37 @@ export default function InputBox({
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="flex-col flex gap-y-1 relative z-1">
-      <label htmlFor={id} className="w-full text-[15px]">
-        {label} {required && <span className="text-red5">*</span>}
-      </label>
-      <input
-        className="bg-black4 rounded-md border-b-[1px] text-[14px] p-[6px] text-white text-semibold"
-        type={isPassword && showPassword ? "text" : type} // Toggle type based on showPassword
-        id={id}
-        name={name}
-        value={value}
-        onChange={changeHandler}
-        required={required}
-        placeholder={placeholder}
-        {...register}
-      />
-      {isPassword && (
-        <span
-          className="absolute cursor-pointer z-2 right-3 top-[35px]"
-          onClick={() => setShowPassword(!showPassword)}
-        >
-          {!showPassword ? <FaEye /> : <FaEyeSlash />}
-        </span>
+    <div className="flex-col flex gap-y-2 relative">
+      {label && (
+        <label htmlFor={id} className="text-sm font-medium text-white">
+          {label} {required && <span className="text-red2">*</span>}
+        </label>
       )}
-      {errors && <span className="text-red-500">{errors.message}</span>}
+      <div className="relative">
+        <input
+          className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors text-sm sm:text-base"
+          type={isPassword && showPassword ? "text" : type}
+          id={id}
+          name={name}
+          value={value}
+          onChange={changeHandler}
+          required={required}
+          placeholder={placeholder}
+          {...register}
+        />
+        {isPassword && (
+          <button
+            type="button"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-white4 hover:text-yellow8 transition-colors"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {!showPassword ? <FaEye /> : <FaEyeSlash />}
+          </button>
+        )}
+      </div>
+      {errors && (
+        <span className="text-red2 text-sm mt-1">{errors.message}</span>
+      )}
     </div>
   );
 }

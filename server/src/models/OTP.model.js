@@ -37,8 +37,14 @@ async function sendVerificationEmail(email, otp) {
 }
 
 OTP_Schema.pre("save", async function (next) {
-    await sendVerificationEmail(this.email, this.otp);
-    next();
+    try {
+        await sendVerificationEmail(this.email, this.otp);
+        next();
+    } catch (error) {
+        console.log("Error in pre-save hook for OTP:", error);
+        // Don't prevent save if email fails - OTP should still be saved
+        next();
+    }
 });
 
 module.exports = mongoose.model("OTP_Model", OTP_Schema);

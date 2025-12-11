@@ -1,82 +1,98 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
-// import Footer from "../../components/Footer/Footer";
+import { NavLink } from "react-router-dom";
 import { getAllCoursesAdmin } from "../../../../services/operations/courseDetailsAPI";
 import { showAllCategories } from "../../../../services/operations/category";
 import AllCoursesAdmin from "./AllCoursesAdmin";
 import { useSelector } from "react-redux";
+import HighlightText from "../../../../user interfaces/HighlightText";
+import { IoSearch } from "react-icons/io5";
+import { FaTags, FaFilter } from "react-icons/fa";
+import Loader from "../../../../components/Loader/Loader";
 
 export default function CourseMenuAdmin() {
   const [courseCategories, setCourseCategories] = useState([]);
   const [coursesData, setCoursesData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const location = useLocation();
   const { token } = useSelector((state) => state.auth);
 
   const getCategories = async () => {
-    setLoading(true);
-    const categories = await showAllCategories();
-    // console.log("cat:", categories);
-    if (categories.length > 0) {
-      setCourseCategories(categories);
+    try {
+      const categories = await showAllCategories();
+      if (categories.length > 0) {
+        setCourseCategories(categories);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
     }
-    setLoading(false);
   };
 
   const showAllCourses = async () => {
     setLoading(true);
-    const courses = await getAllCoursesAdmin(token);
-    console.log("courses:", courses);
-    if (courses.length > 0) {
-      setCoursesData(courses);
+    try {
+      const courses = await getAllCoursesAdmin(token);
+      if (courses && courses.length > 0) {
+        setCoursesData(courses);
+      }
+    } catch (error) {
+      console.error("Error fetching courses:", error);
     }
     setLoading(false);
   };
 
   useEffect(() => {
     getCategories();
-  }, []);
-
-  useEffect(() => {
     showAllCourses();
-  }, []);
+  }, [token]);
 
   return (
-    <div className="p-2">
-      <div>
-        <h1 className="text-2xl">Show Categories</h1>
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <ul className="flex">
+    <div className="w-11/12 max-w-7xl mx-auto py-6 sm:py-8">
+      {/* Header Section */}
+      <div className="mb-8">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-white">
+          Manage <HighlightText text="Courses" />
+        </h1>
+        <p className="text-white4 text-sm sm:text-base">
+          View, approve, and manage all courses on the platform.
+        </p>
+      </div>
+
+      {/* Categories Section */}
+      {courseCategories.length > 0 && (
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <FaTags className="text-yellow8 text-xl" />
+            <h2 className="text-xl font-semibold text-white">Categories</h2>
+          </div>
+          <div className="flex flex-wrap gap-3">
             {courseCategories.map((category, index) => (
               <NavLink
-                to={`category/${category.name
-                  .split(" ")
-                  .join("-")
-                  .toLowerCase()}`}
+                to={`category/${category.name.split(" ").join("-").toLowerCase()}`}
                 key={index}
+                className={({ isActive }) =>
+                  `px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
+                    isActive
+                      ? "bg-yellow8 text-black shadow-lg"
+                      : "bg-black3 text-white hover:bg-black4 border border-black5"
+                  }`
+                }
               >
-                <div key={index} className="bg-yellow-100 flex gap-10 m-5 ">
-                  <p className="text-blue-700">{category.name}</p>
-                </div>
+                {category.name}
               </NavLink>
             ))}
-          </ul>
+          </div>
+        </div>
+      )}
+
+      {/* Courses Section */}
+      <div>
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <Loader />
+          </div>
+        ) : (
+          <AllCoursesAdmin coursesData={coursesData} />
         )}
       </div>
-
-      {/* <div>
-        <h1 className="text-2xl my-10">
-          Top Courses //! make a slider for top courses
-        </h1>
-        <CourseSlider courses={coursesData} />
-      </div> */}
-      <div>
-        <AllCoursesAdmin coursesData={coursesData} />
-      </div>
-
-      {/* <Footer /> */}
     </div>
   );
 }

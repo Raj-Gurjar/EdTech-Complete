@@ -28,37 +28,19 @@ export default function CreateCourses() {
   ];
 
   return (
-    <div className="w-11/12 max-w-7xl mx-auto py-6 sm:py-8">
+    <div className="w-11/12 mx-auto py-6 sm:py-8">
       {/* Header Section */}
       <div className="mb-8">
         <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-white">
           Create New <HighlightText text="Course" />
         </h1>
         <p className="text-white4 text-sm sm:text-base">
-          Build and publish your course step by step. Follow the instructions below to get started.
+          Build and publish your course step by step. Follow the instructions to get started.
         </p>
       </div>
 
-      {/* Instructions Card */}
-      <div className="bg-gradient-to-br from-black3 to-black4 rounded-xl p-6 mb-8 border border-black5 shadow-lg">
-        <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-          <FaLightbulb className="text-yellow8" />
-          Quick Instructions
-        </h2>
-        <ul className="space-y-3">
-          {instructions.map((instruction, index) => (
-            <li key={index} className="flex items-start gap-3 text-white3 text-sm sm:text-base">
-              <span className="mt-1">{instruction.icon}</span>
-              <span>{instruction.text}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Form Steps */}
-      <div>
-        <RenderFormSteps />
-      </div>
+      {/* Form Steps with Instructions */}
+      <RenderFormSteps instructions={instructions} />
     </div>
   );
 }

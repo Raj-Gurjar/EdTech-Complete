@@ -1,12 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaLightbulb } from "react-icons/fa";
 import CourseInfoForm from "./CourseInfo/CourseInfoForm";
 import CourseBuilder from "./CourseBuilder/CourseBuilder";
 import CoursePublish from "./CoursePublish";
 import CourseDraft from "./CourseBuilder/CourseDraft";
 
-export default function RenderFormSteps() {
+export default function RenderFormSteps({ instructions = [] }) {
   const { step } = useSelector((state) => state.course);
 
   const steps = [
@@ -36,21 +36,21 @@ export default function RenderFormSteps() {
             <React.Fragment key={item.id}>
               <div className="flex flex-col items-center flex-1 relative">
                 {/* Step Circle */}
-                <div
+              <div
                   className={`relative z-10 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center font-bold text-sm sm:text-base transition-all duration-300 ${
                     step === item.id
                       ? "bg-yellow8 text-black scale-110 shadow-lg"
                       : step > item.id
                       ? "bg-green-600 text-white"
                       : "bg-black5 text-white4"
-                  }`}
-                >
+                }`}
+              >
                   {step > item.id ? (
                     <FaCheck className="text-lg sm:text-xl" />
                   ) : (
                     item.id
                   )}
-                </div>
+              </div>
                 {/* Step Info */}
                 <div className="mt-3 text-center">
                   <p
@@ -63,7 +63,7 @@ export default function RenderFormSteps() {
                   <p className="text-xs text-white4 mt-1 hidden sm:block">
                     {item.description}
                   </p>
-                </div>
+            </div>
                 {/* Connector Line */}
                 {index < steps.length - 1 && (
                   <div
@@ -73,18 +73,53 @@ export default function RenderFormSteps() {
                     style={{ width: "calc(100% - 3.5rem)" }}
                   />
                 )}
-              </div>
+        </div>
             </React.Fragment>
           ))}
         </div>
       </div>
 
       {/* Form Content */}
-      <div className="bg-black2 rounded-xl p-6 sm:p-8 border border-black5 shadow-lg">
-        {step === 1 && <CourseInfoForm />}
-        {step === 2 && <CourseBuilder />}
-        {step === 3 && <CourseDraft />}
-      </div>
+      {step === 1 ? (
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Course Information Form - 60% on desktop */}
+          <div className="w-full lg:w-[80%] order-2 lg:order-1">
+            <div className="bg-black2 rounded-xl p-6 sm:p-8 border border-black5 shadow-lg">
+              <CourseInfoForm />
+            </div>
+          </div>
+
+          {/* Quick Instructions - 30% on desktop, on top on mobile */}
+          {instructions.length > 0 && (
+            <div className="w-full lg:w-[30%] order-1 lg:order-2">
+              <div className="bg-gradient-to-br from-black3 to-black4 rounded-xl p-6 border border-black5 shadow-lg lg:sticky lg:top-24">
+                <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                  <FaLightbulb className="text-yellow8" />
+                  Quick Instructions
+                </h2>
+                <ul className="space-y-3">
+                  {instructions.map((instruction, index) => (
+                    <li
+                      key={index}
+                      className="flex items-start gap-3 text-white3 text-sm"
+                    >
+                      <span className="mt-1 flex-shrink-0">
+                        {instruction.icon}
+                      </span>
+                      <span>{instruction.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="bg-black2 rounded-xl p-6 sm:p-8 border border-black5 shadow-lg">
+      {step === 2 && <CourseBuilder />}
+      {step === 3 && <CourseDraft />}
+        </div>
+      )}
     </div>
   );
 }

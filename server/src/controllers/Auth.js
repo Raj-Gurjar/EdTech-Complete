@@ -46,7 +46,7 @@ exports.sendOTP = async (req, res) => {
         console.log("otpResult..", otpResult);
 
         while (otpResult) {
-            otp = otpGenerator(6, {
+            otp = otpGenerator.generate(6, {
                 upperCaseAlphabets: false,
                 lowerCaseAlphabets: false,
                 specialChars: false,
@@ -54,12 +54,33 @@ exports.sendOTP = async (req, res) => {
             otpResult = await OTP_Model.findOne({ otp: otp });
         }
 
+        // Delete any existing OTPs for this email to avoid confusion
+        await OTP_Model.deleteMany({ email: normalizedEmail });
+
         //Insert Unique OTP in DB (use normalized email)
         const otpPayload = { email: normalizedEmail, otp };
 
         const otpBody = await OTP_Model.create(otpPayload);
 
-        console.log("OTP Body: ", otpBody);
+        console.log("OTP Body created: ", otpBody);
+        console.log("OTP Body ID:", otpBody._id);
+        console.log("OTP Body email:", otpBody.email);
+        console.log("OTP Body otp:", otpBody.otp);
+        console.log("OTP Body createdAt:", otpBody.createdAt);
+        
+        // Verify OTP was saved by querying it back immediately
+        const verifyOtp = await OTP_Model.findById(otpBody._id);
+        console.log("OTP verification by ID:", verifyOtp ? "Found" : "NOT FOUND");
+        
+        const verifyOtpByEmail = await OTP_Model.findOne({ email: normalizedEmail, otp: otp });
+        console.log("OTP verification by email+otp:", verifyOtpByEmail ? "Found" : "NOT FOUND");
+        
+        if (!verifyOtp || !verifyOtpByEmail) {
+            console.error("CRITICAL: OTP was created but cannot be found immediately after creation!");
+            // Try to find any OTPs for this email
+            const allForEmail = await OTP_Model.find({ email: normalizedEmail });
+            console.log("All OTPs for email:", allForEmail.length);
+        }
 
         res.status(200).json({
             success: true,
@@ -146,37 +167,65 @@ exports.signUp = async (req, res) => {
 
         //! Verify OTP
 
-        //* find most resent OTP for user (using normalized email)
-        const recentOtp = await OTP_Model.find({ email: normalizedEmail })
-            .sort({ createdAt: -1 })
-            .limit(1);
+        //* find most recent OTP for user (using normalized email)
+        // First try exact match with email and OTP
+        let recentOtp = await OTP_Model.findOne({ 
+            email: normalizedEmail, 
+            otp: otp 
+        }).sort({ createdAt: -1 });
 
-        console.log("Recent Otp :", recentOtp);
+        // If not found, try to find by email only (for debugging)
+        if (!recentOtp) {
+            recentOtp = await OTP_Model.findOne({ email: normalizedEmail })
+                .sort({ createdAt: -1 });
+        }
+
+        console.log("Recent Otp found:", recentOtp ? "Yes" : "No");
         console.log("Otp entered by user:", otp);
         console.log("Email used for OTP lookup (normalized):", normalizedEmail);
+        
+        if (recentOtp) {
+            console.log("Recent OTP from DB - email:", recentOtp.email, "otp:", recentOtp.otp, "createdAt:", recentOtp.createdAt);
+        }
 
         // //* validate OTP
-        if (recentOtp.length === 0) {
-            // OTP not found
-            console.log("No OTP found for email:", normalizedEmail);
-            // Also try to find any OTPs for debugging
+        if (!recentOtp) {
+            // OTP not found - try to find any OTPs for debugging
             const allOtps = await OTP_Model.find({}).sort({ createdAt: -1 }).limit(5);
-            console.log("Recent OTPs in DB (last 5):", allOtps.map(o => ({ email: o.email, otp: o.otp, createdAt: o.createdAt })));
+            console.log("Recent OTPs in DB (last 5):", allOtps.map(o => ({ 
+                email: o.email, 
+                otp: o.otp, 
+                createdAt: o.createdAt 
+            })));
+            
+            // Also check if there are any OTPs for this email with different case
+            const caseVariations = await OTP_Model.find({ 
+                $or: [
+                    { email: normalizedEmail.toLowerCase() },
+                    { email: normalizedEmail.toUpperCase() },
+                    { email: normalizedEmail }
+                ]
+            }).sort({ createdAt: -1 });
+            console.log("OTPs found with case variations:", caseVariations.length);
+            
             return res.status(400).json({
                 success: false,
                 message: "OTP not found or expired. Please request a new OTP.",
             });
         }
         
-        console.log("Recent OTP from DB:", recentOtp[0].otp);
-        
-        if (otp !== recentOtp[0].otp) {
+        if (otp !== recentOtp.otp) {
             //OTP is invalid
+            console.log("OTP mismatch - entered:", otp, "stored:", recentOtp.otp);
             return res.status(400).json({
                 success: false,
                 message: "Entered OTP is Invalid or not Matched",
             });
         }
+        
+        // OTP verified successfully - delete it to prevent reuse
+        await OTP_Model.deleteOne({ _id: recentOtp._id });
+        console.log("OTP verified and deleted");
 
         //* Hash Password
         const hashedPassword = await bcrypt.hash(password, 12);

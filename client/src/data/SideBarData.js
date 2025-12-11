@@ -56,7 +56,7 @@ import {
       // "--- for instructor ---"
     {
       label: "Instr-Dashboard",
-      path: "instructor-DashBoard",
+      path: "instructor-dashboard",
       icon: <FaChalkboardTeacher />,
       roles: [instructor],
     },

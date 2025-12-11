@@ -3,23 +3,24 @@ import { FaLocationDot } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { IoMdCall } from "react-icons/io";
 import ContactForm from "./ContactForm";
+import HighlightText from "../../user interfaces/HighlightText";
 
 export default function Contact() {
   const contactInfo = [
     {
-      icon: <FaLocationDot />,
+      icon: <FaLocationDot className="text-yellow8" />,
       title: "Visit Us",
       description: "Come and say Hello to our HQ",
       details: "123, New Street Road, New Delhi, 342211",
     },
     {
-      icon: <MdEmail />,
+      icon: <MdEmail className="text-yellow8" />,
       title: "Email Us",
       description: "Our Friendly Team will help you",
-      details: "Email us on info@EdTech.com",
+      details: "info@EdTech.com",
     },
     {
-      icon: <IoMdCall />,
+      icon: <IoMdCall className="text-yellow8" />,
       title: "Call Us",
       description: "Speak to our team for help or feedback",
       details: "+123 2323 3233",
@@ -27,26 +28,46 @@ export default function Contact() {
   ];
 
   return (
-    <div className="mt-5 w-11/12 mx-auto pb-8">
-      <h1 className="flex justify-center my-6 text-3xl font-bold">Contact Us</h1>
+    <div className="w-11/12 max-w-7xl mx-auto py-6 sm:py-8 pb-12">
+      {/* Header */}
+      <div className="text-center mb-8 sm:mb-12">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 text-white">
+          Contact <HighlightText text="Us" />
+        </h1>
+        <p className="text-white4 text-sm sm:text-base max-w-2xl mx-auto">
+          Have questions or feedback? We'd love to hear from you. Get in touch with our team.
+        </p>
+      </div>
 
-      <div className="flex gap-5 w-11/12 justify-center align-top relative">
-        
-        <div className="cont-con w-1/3 p-7  rounded-md self-start  flex gap-y-6 text-[14px] flex-col bg-black4 ">
+      {/* Main Content - Responsive Layout */}
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+        {/* Contact Info Cards - Full width on mobile, 1/3 on desktop */}
+        <div className="w-full lg:w-1/3 space-y-4">
           {contactInfo.map((info, index) => (
-            <div key={index} className="">
-              <p className="flex items-center gap-2 text-[18px] font-semibold">
-                <span>{info.icon}</span>
-                {info.title}
-              </p>
-              <p className="text-white4">{info.description}</p>
-              <p className="text-blue6">{info.details}</p>
+            <div
+              key={index}
+              className="bg-gradient-to-br from-black3 to-black4 rounded-xl p-6 border border-black5 hover:border-yellow8 transition-all duration-200"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-black2 flex items-center justify-center flex-shrink-0 border border-black5">
+                  <span className="text-2xl">{info.icon}</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">
+                    {info.title}
+                  </h3>
+                  <p className="text-white4 text-sm mb-2">{info.description}</p>
+                  <p className="text-yellow8 text-sm sm:text-base font-medium">
+                    {info.details}
+                  </p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
 
-
-        <div className="w-1/2">
+        {/* Contact Form - Full width on mobile, 2/3 on desktop */}
+        <div className="w-full lg:w-2/3">
           <ContactForm />
         </div>
       </div>
