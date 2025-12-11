@@ -1,26 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavbarLinks } from "../../data/Navbar-links";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { BsCart3 } from "react-icons/bs";
 import ProfileDropDown from "./ProfileDropDown";
 import { IoSearch, IoClose } from "react-icons/io5";
 import { HiMenuAlt3 } from "react-icons/hi";
-import { FaSignOutAlt } from "react-icons/fa";
 import Button from "../../user interfaces/Button";
 import { ACCOUNT_TYPE } from "../../utils/constants";
 import { navItems } from "../../data/SideBarData";
-import { logout } from "../../services/operations/authAPI";
-import Modal from "../Modals-Popups/Modal";
 
 export default function Navbar() {
-  const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.profile);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [logoutModal, setLogoutModal] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const mobileMenuRef = useRef(null);
@@ -31,21 +26,6 @@ export default function Navbar() {
   const filteredDashboardItems = token !== null && user
     ? navItems.filter((item) => item.roles.includes(user?.accountType))
     : [];
-
-  const handleLogout = () => {
-    setLogoutModal({
-      text1: "Are You Sure?",
-      text2: "You will be logged out",
-      btn1Text: "LogOut",
-      btn2Text: "Cancel",
-      btn1Handler: () => {
-        dispatch(logout(navigate));
-        setMobileMenuOpen(false);
-        setLogoutModal(null);
-      },
-      btn2Handler: () => setLogoutModal(null),
-    });
-  };
 
   // Close mobile menu when clicking outside
   useEffect(() => {
@@ -335,8 +315,8 @@ export default function Navbar() {
             )}
           </nav>
 
-          {/* Mobile Auth Buttons / Logout */}
-          {token === null ? (
+          {/* Mobile Auth Buttons */}
+          {token === null && (
             <div className="p-6 border-t border-black5 space-y-3">
               <Button
                 btn_color={"bg-yellow8 hover:bg-yellow9"}
@@ -355,22 +335,10 @@ export default function Navbar() {
                 px={"px-4"}
               />
             </div>
-          ) : (
-            <div className="p-6 border-t border-black5">
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center px-4 py-3 rounded-lg text-white hover:bg-black3 hover:text-red2 transition-all duration-200"
-              >
-                <FaSignOutAlt className="mr-3 text-lg" />
-                <span className="text-base font-medium">Logout</span>
-              </button>
-            </div>
           )}
         </div>
       </div>
 
-      {/* Logout Modal */}
-      {logoutModal && <Modal modalData={logoutModal} />}
     </>
   );
 }
