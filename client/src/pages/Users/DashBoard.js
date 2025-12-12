@@ -10,7 +10,7 @@ export default function DashBoard() {
         <SideBar />
       </div>
       {/* Main Content - Full width on mobile, with margin on desktop */}
-      <div className="h-[calc(100vh - 3.5rem)] lg:ml-[222px] overflow-auto bg-blue-200 mx-auto w-full lg:w-11/12 p-5 max-w-[1000px]">
+      <div className="h-[calc(100vh - 3.5rem)] lg:ml-[222px] overflow-auto bg-blue-200 mx-auto w-full lg:w-11/12 p-5">
         <Outlet />
       </div>
     </div>
