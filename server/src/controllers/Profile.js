@@ -13,6 +13,8 @@ const Category_Model = require("../models/Category.model");
 exports.updateProfile = async (req, res) => {
     //TODO : check email exists or not before updating
     console.log("Inside update profile");
+    console.log("Request body:", req.body);
+    console.log("User ID:", req.user?.id);
     try {
         // Get data from request body
         const {
@@ -40,68 +42,136 @@ exports.updateProfile = async (req, res) => {
         const userDetails = await User_Model.findById(userId);
 
         if (!userDetails) {
+            console.log("User not found for ID:", userId);
             return res.status(400).json({
                 success: false,
                 message: "User details not found",
             });
         }
 
-        const profileId = userDetails.additionalDetails;
-        const profileDetails = await Profile_Model.findById(profileId);
+        console.log("User details found:", {
+            userId: userDetails._id,
+            email: userDetails.email,
+            additionalDetails: userDetails.additionalDetails
+        });
 
-        if (!profileDetails) {
-            return res.status(400).json({
-                success: false,
-                message: "Profile details not found",
-            });
+        let profileId = userDetails.additionalDetails;
+        let profileDetails = null;
+        
+        if (!profileId) {
+            console.log("No profile ID found, creating new profile");
+            // Create a new profile if it doesn't exist
+            profileDetails = await Profile_Model.create({});
+            userDetails.additionalDetails = profileDetails._id;
+            await userDetails.save();
+            profileId = profileDetails._id;
+            console.log("Created new profile:", profileId);
+        } else {
+            // Try to find the profile
+            profileDetails = await Profile_Model.findById(profileId);
+            
+            // If profile doesn't exist but ID is referenced, create a new one
+            if (!profileDetails) {
+                console.log("Profile not found for ID:", profileId, "- Creating new profile");
+                profileDetails = await Profile_Model.create({});
+                userDetails.additionalDetails = profileDetails._id;
+                await userDetails.save();
+                profileId = profileDetails._id;
+                console.log("Created new profile to replace missing one:", profileId);
+            }
         }
 
-        // Update profile details
-        await Profile_Model.updateOne(
-            { _id: profileId },
-            {
-                $set: {
-                    dateOfBirth: dateOfBirth,
-                    gender: gender,
-                    about: about,
-                    contactNumber: contactNumber,
-                },
+        console.log("Profile details found:", {
+            profileId: profileDetails._id,
+            gender: profileDetails.gender,
+            dateOfBirth: profileDetails.dateOfBirth
+        });
+
+        // Check if email is being changed and if it already exists
+        if (email && email !== userDetails.email) {
+            const emailExists = await User_Model.findOne({ email: email.toLowerCase().trim() });
+            if (emailExists && emailExists._id.toString() !== userId) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Email already exists",
+                });
             }
-        );
+        }
 
-        await User_Model.updateOne(
-            { _id: userId },
-            {
-                $set: {
-                    firstName,
-                    lastName,
-                    email,
-                },
+        // Update profile details (only update fields that are provided and not empty strings)
+        const profileUpdate = {};
+        if (dateOfBirth !== undefined && dateOfBirth !== null && dateOfBirth !== '') {
+            profileUpdate.dateOfBirth = new Date(dateOfBirth);
+        }
+        if (gender !== undefined && gender !== null && gender !== '') {
+            profileUpdate.gender = gender;
+        }
+        if (about !== undefined && about !== null) {
+            profileUpdate.about = about;
+        }
+        if (contactNumber !== undefined && contactNumber !== null && contactNumber !== '') {
+            profileUpdate.contactNumber = contactNumber;
+        }
+
+        if (Object.keys(profileUpdate).length > 0) {
+            console.log("Updating profile with:", profileUpdate);
+            const profileUpdateResult = await Profile_Model.updateOne(
+                { _id: profileId },
+                { $set: profileUpdate }
+            );
+            console.log("Profile update result:", profileUpdateResult);
+        }
+
+        // Update user details (only update fields that are provided and not empty strings)
+        const userUpdate = {};
+        if (firstName !== undefined && firstName !== null && firstName.trim() !== '') {
+            userUpdate.firstName = firstName.trim();
+        }
+        if (lastName !== undefined && lastName !== null && lastName.trim() !== '') {
+            userUpdate.lastName = lastName.trim();
+        }
+        if (email !== undefined && email !== null && email.trim() !== '') {
+            const normalizedEmail = email.toLowerCase().trim();
+            // Only update if email is different
+            if (normalizedEmail !== userDetails.email) {
+                userUpdate.email = normalizedEmail;
             }
-        );
+        }
 
-        // Fetch updated profile details
-        const updatedProfile = await Profile_Model.findById(profileId);
-
-        userDetails.additionalDetails = updatedProfile._id;
-        await userDetails.save();
+        if (Object.keys(userUpdate).length > 0) {
+            console.log("Updating user with:", userUpdate);
+            const userUpdateResult = await User_Model.updateOne(
+                { _id: userId },
+                { $set: userUpdate }
+            );
+            console.log("User update result:", userUpdateResult);
+        } else {
+            console.log("No user fields to update");
+        }
 
         // Fetch updated user details with populated additionalDetails
         const updatedUser =
             await User_Model.findById(userId).populate("additionalDetails");
-        // Return success response with updated profile details
+        
+        if (!updatedUser) {
+            return res.status(400).json({
+                success: false,
+                message: "Failed to fetch updated user details",
+            });
+        }
 
+        // Return success response with updated profile details
         return res.status(200).json({
             success: true,
             message: "User's Profile Updated Successfully",
-            updatedProfile,
             updatedUser,
         });
     } catch (error) {
         console.error("Error while updating User Profile:", error);
+        console.error("Error stack:", error.stack);
         return res.status(500).json({
             success: false,
-            message: "Error while updating User Profile",
+            message: error.message || "Error while updating User Profile",
         });
     }
 };

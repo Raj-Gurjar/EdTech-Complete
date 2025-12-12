@@ -50,9 +50,9 @@ export async function getUserEnrolledCourses(token) {
   } catch (error) {
     console.log(
       "Error in fetching Enrolled Courses error..",
-      error.response.data
+      error.response?.data
     );
-    toast.error(error.response.data);
+    toast.error(error.response?.data?.message || error.message || "Failed to fetch enrolled courses");
   }
   toast.dismiss(toastId);
   return result;
@@ -62,7 +62,7 @@ export async function updateProfile(data, token) {
   console.log("data in api ", data);
   const toastId = toast.loading("Loading...");
 
-  let result = [];
+  let result = null;
 
   try {
     const response = await apiConnector("PUT", UPDATE_PROFILE_API, data, {
@@ -82,7 +82,7 @@ export async function updateProfile(data, token) {
     // console.log("Enrolled courses data result data..", result);
   } catch (error) {
     console.log("Error in updating profile api ...", error);
-    toast.error(error.response.data);
+    toast.error(error.response?.data?.message || error.message || "Failed to update profile");
   }
   toast.dismiss(toastId);
   return result;
@@ -93,7 +93,7 @@ export async function updateProfileImage(formData, token) {
 
   const toastId = toast.loading("Loading...");
 
-  let result = [];
+  let result = null;
 
   try {
     const response = await apiConnector(
@@ -116,7 +116,7 @@ export async function updateProfileImage(formData, token) {
     toast.success(response?.data?.message);
   } catch (error) {
     console.log("Error in updating profile api ...", error);
-    toast.error(error?.response?.data);
+    toast.error(error?.response?.data?.message || error.message || "Failed to update profile image");
   }
   toast.dismiss(toastId);
   return result;
@@ -141,7 +141,7 @@ export const deleteAccount = async (data, token) => {
     toast.success("Account deleted Successfully");
   } catch (error) {
     console.log("delete Account api error...", error);
-    toast.error(error.response.message);
+    toast.error(error.response?.data?.message || error.response?.message || error.message || "Failed to delete account");
   }
   toast.dismiss(toastId);
   return result;
@@ -173,7 +173,7 @@ export const getInstructorData = async (token) => {
     toast.success("Instructor Data Fetched Successfully");
   } catch (error) {
     console.log("Instructor data api error...", error);
-    toast.error(error.response.message);
+    toast.error(error.response?.data?.message || error.response?.message || error.message || "Failed to fetch instructor data");
   }
   toast.dismiss(toastId);
   return result;
@@ -205,7 +205,7 @@ export const getAdminData = async (token) => {
     toast.success("Admin Data Fetched Successfully");
   } catch (error) {
     console.log("Admin data api error...", error);
-    toast.error(error.response.message);
+    toast.error(error.response?.data?.message || error.response?.message || error.message || "Failed to fetch admin data");
   }
   toast.dismiss(toastId);
   return result;
