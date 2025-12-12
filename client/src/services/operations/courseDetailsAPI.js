@@ -25,6 +25,7 @@ const {
 
   GET_ALL_COURSES_ADMIN_API,
   PUBLISH_COURSE_ADMIN_API,
+  UNPUBLISH_COURSE_ADMIN_API,
   GET_COURSE_DETAILS_ADMIN_API,
 } = courseEndpoints;
 
@@ -98,6 +99,36 @@ export const publishCourseAdmin = async (courseId, token) => {
     console.log("Publish course api error...", error);
     toast.error(
       error.response?.data?.message || "Error in publishing the course"
+    );
+  }
+
+  toast.dismiss(toastId);
+  return result;
+};
+
+export const unpublishCourseAdmin = async (courseId, token) => {
+  const toastId = toast.loading("Unpublishing Course...");
+  let result = null;
+
+  try {
+    const response = await apiConnector(
+      "POST",
+      UNPUBLISH_COURSE_ADMIN_API,
+      { courseId },
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+
+    if (!response?.data?.success) {
+      throw new Error("Could not unpublish the Course");
+    }
+    toast.success("Course Unpublished Successfully");
+    result = response?.data?.data;
+  } catch (error) {
+    console.log("Unpublish course api error...", error);
+    toast.error(
+      error.response?.data?.message || "Error in unpublishing the course"
     );
   }
 

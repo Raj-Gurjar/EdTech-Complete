@@ -11,6 +11,7 @@ const {
     deleteCourse,
     getFullCourseDetails,
     publishCourse,
+    unpublishCourse,
     getCourseByIdAdmin,
 } = require("../controllers/Course");
 
@@ -55,6 +56,7 @@ router.get("/getAllReviews", getAllRatingAndReviews);
 router.get("/getAllCourses-admin", auth, isAdmin, getAllCoursesAdmin);
 router.post("/courseDetails-admin", auth, isAdmin, getCourseByIdAdmin);
 router.post("/publishCourse-admin", auth, isAdmin, publishCourse);
+router.post("/unpublishCourse-admin", auth, isAdmin, unpublishCourse);
 
 //!Course Progress
 router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);

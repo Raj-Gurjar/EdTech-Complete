@@ -55,6 +55,7 @@ export const courseEndpoints = {
   GET_ALL_COURSES_ADMIN_API: BASE_URL + "/course/getAllCourses-admin",
   GET_COURSE_DETAILS_ADMIN_API: BASE_URL + "/course/courseDetails-admin",
   PUBLISH_COURSE_ADMIN_API: BASE_URL + "/course/publishCourse-admin",
+  UNPUBLISH_COURSE_ADMIN_API: BASE_URL + "/course/unpublishCourse-admin",
 };
 
 //! REVIEWS ENDPOINTS

@@ -595,6 +595,44 @@ exports.publishCourse = async (req, res) => {
     }
 };
 
+exports.unpublishCourse = async (req, res) => {
+    try {
+        const { courseId } = req.body;
+
+        const courseDetails = await Course_Model.findOne({ _id: courseId });
+
+        // Check if the course exists
+        if (!courseDetails) {
+            return res.status(400).json({
+                success: false,
+                message: `Could not find the Course with ${courseId}`,
+            });
+        }
+
+        // If the course status is "Published", update it to "Draft"
+        if (courseDetails.status === "Published") {
+            await Course_Model.findByIdAndUpdate(
+                courseId,
+                { $set: { status: "Draft" } },
+                { new: true }
+            );
+        }
+
+        //* return res
+        return res.status(200).json({
+            success: true,
+            message: "Course Unpublished Successfully.",
+        });
+    } catch (error) {
+        console.log("course unpublish Error: ", error);
+        return res.status(500).json({
+            success: false,
+            message: "Error in unpublishing the Course",
+            error: error.message,
+        });
+    }
+};
+
 exports.getCourseByIdAdmin = async (req, res) => {
     try {
         // console.log("insd get cadmin");
