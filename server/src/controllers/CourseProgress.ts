@@ -1,9 +1,17 @@
+import { Request, Response } from "express";
 const CourseProgress_Model = require("../models/CourseProgress.model");
 const SubSection_Model = require("../models/SubSection.model");
 
-exports.updateCourseProgress = async (req, res) => {
+interface AuthRequest extends Request {
+    user?: {
+        id: string;
+        [key: string]: any;
+    };
+}
+
+export const updateCourseProgress = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     const { courseId, subSectionId } = req.body;
-    const userId = req.user.id;
+    const userId = req.user?.id;
 
     try {
         console.log("c1");
@@ -60,3 +68,4 @@ exports.updateCourseProgress = async (req, res) => {
         });
     }
 };
+

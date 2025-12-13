@@ -1,13 +1,13 @@
+import { Request, Response } from "express";
 const Section_Model = require("../models/Section.model");
 const Course_Model = require("../models/Course.model");
 const SubSection_Model = require("../models/SubSection.model");
 
-exports.createSection = async (req, res) => {
+export const createSection = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //get the data
         const {
             sectionName,
-
             courseId,
         } = req.body;
 
@@ -52,7 +52,7 @@ exports.createSection = async (req, res) => {
     }
 };
 
-exports.updateSection = async (req, res) => {
+export const updateSection = async (req: Request, res: Response): Promise<Response | void> => {
     console.log("Going inside update section");
     try {
         //*get data
@@ -93,7 +93,7 @@ exports.updateSection = async (req, res) => {
     }
 };
 
-exports.deleteSection = async (req, res) => {
+export const deleteSection = async (req: Request, res: Response): Promise<Response | void> => {
     console.log("Entering in delete section controller");
     try {
         //get data
@@ -148,10 +148,10 @@ exports.deleteSection = async (req, res) => {
     }
 };
 
-exports.sectionById = async (req, res) => {
+export const sectionById = async (req: Request, res: Response): Promise<Response | void> => {
     console.log("Section Details");
     try {
-        const { sectionId } = req.body.id;
+        const sectionId = req.body.id;
 
         const sectionDetails = await Section_Model.findById(sectionId)
             .populate("subSections")
@@ -179,3 +179,4 @@ exports.sectionById = async (req, res) => {
         });
     }
 };
+

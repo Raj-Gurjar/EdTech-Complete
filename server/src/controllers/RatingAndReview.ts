@@ -1,10 +1,19 @@
+import { Request, Response } from "express";
+import mongoose from "mongoose";
 const RatingAndReview_Model = require("../models/RatingAndReview.model");
 const Course_Model = require("../models/Course.model");
 
-exports.createRatingNReview = async (req, res) => {
+interface AuthRequest extends Request {
+    user?: {
+        id: string;
+        [key: string]: any;
+    };
+}
+
+export const createRatingNReview = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
         //* get the data
-        const userId = req.user.id;
+        const userId = req.user?.id;
         const { rating, review, courseId } = req.body;
 
         //* validate
@@ -30,7 +39,7 @@ exports.createRatingNReview = async (req, res) => {
         //1 comment per user
         const alreadyReviewed = await RatingAndReview_Model.findOne({
             user: userId,
-            courseId: courseId,
+            course: courseId,
         });
 
         if (alreadyReviewed) {
@@ -76,13 +85,13 @@ exports.createRatingNReview = async (req, res) => {
 };
 
 //get Average Rating
-exports.getAverageRating = async (req, res) => {
+export const getAverageRating = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //get course id
         const courseId = req.body.courseId;
 
         //calculate avg rating
-        const result = await RatingAndReview_Model.aggregate(
+        const result = await RatingAndReview_Model.aggregate([
             {
                 $match: {
                     course: new mongoose.Types.ObjectId(courseId),
@@ -95,8 +104,8 @@ exports.getAverageRating = async (req, res) => {
                         $avg: "$rating",
                     },
                 },
-            }
-        );
+            },
+        ]);
 
         if (result.length > 0) {
             return res.status(200).json({
@@ -112,7 +121,7 @@ exports.getAverageRating = async (req, res) => {
             averageRating: 0,
         });
     } catch (error) {
-        return res.status().json({
+        return res.status(500).json({
             success: false,
             message: "Error while getting average rating.",
         });
@@ -121,7 +130,7 @@ exports.getAverageRating = async (req, res) => {
 
 //get all rating And Reviews
 
-exports.getAllRatingAndReviews = async (req, res) => {
+export const getAllRatingAndReviews = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //get the data
         const allReviews = await RatingAndReview_Model.find({})
@@ -145,7 +154,7 @@ exports.getAllRatingAndReviews = async (req, res) => {
             message: "All rating and reviews are fetched successfully",
             data: allReviews,
         });
-    } catch (error) {
+    } catch (error: any) {
         return res.status(500).json({
             success: false,
             message: "Error in getting all reviews and rating",
@@ -155,3 +164,4 @@ exports.getAllRatingAndReviews = async (req, res) => {
 };
 
 //TODO : get rating and reviews corresponding to a course
+

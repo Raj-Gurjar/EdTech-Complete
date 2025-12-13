@@ -1,10 +1,11 @@
+import { Request, Response } from "express";
+import "dotenv/config";
 const SubSection_Model = require("../models/SubSection.model");
 const Section_Model = require("../models/Section.model");
-require("dotenv").config();
 
 const { uploadToCloudinary } = require("../config/cloudinary");
 
-exports.createSubSection = async (req, res) => {
+export const createSubSection = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         console.log("inside subSec");
         //get data
@@ -31,6 +32,14 @@ exports.createSubSection = async (req, res) => {
             process.env.CLD_LECTURES_FOLDER
         );
         console.log("uplfv", uploadVideo);
+        
+        if (!uploadVideo) {
+            return res.status(500).json({
+                success: false,
+                message: "Error uploading video to cloudinary",
+            });
+        }
+
         //insert in subsection db
         const subSectionDetails = await SubSection_Model.create({
             title: title,
@@ -70,7 +79,7 @@ exports.createSubSection = async (req, res) => {
 };
 
 //TODO these 2 controllers are H.W. 👇
-exports.updateSubSection = async (req, res) => {
+export const updateSubSection = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //get data
         console.log("entering update sub sec controller");
@@ -130,7 +139,7 @@ exports.updateSubSection = async (req, res) => {
     }
 };
 
-exports.deleteSubSection = async (req, res) => {
+export const deleteSubSection = async (req: Request, res: Response): Promise<Response | void> => {
     console.log("inside delete sub sec controller");
     try {
         //get the id
@@ -148,9 +157,7 @@ exports.deleteSubSection = async (req, res) => {
             }
         );
         console.log("dcp1");
-        await SubSection_Model.findByIdAndDelete({
-            _id: subSectionId,
-        });
+        await SubSection_Model.findByIdAndDelete(subSectionId);
         console.log("dcp3");
 
         const updatedSection = await Section_Model.findById(sectionId)
@@ -172,3 +179,4 @@ exports.deleteSubSection = async (req, res) => {
         });
     }
 };
+

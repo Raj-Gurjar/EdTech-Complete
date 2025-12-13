@@ -1,23 +1,38 @@
+import { Request, Response } from "express";
+import mongoose from "mongoose";
+import crypto from "crypto";
 const { razorpayInstance, instance } = require("../config/razorpay");
 
 const User_Model = require("../models/User.model");
 const Course_Model = require("../models/Course.model");
 const mailSender = require("../utils/mailSender");
 const { courseEnrollmentEmail } = require("../mail/courseEnrollmentEmail");
-const { default: mongoose } = require("mongoose");
-const crypto = require("crypto");
 const { paymentSuccessEmail } = require("../mail/paymentSuccessEmail");
 const CourseProgress_Model = require("../models/CourseProgress.model");
 
-exports.capturePayment = async (req, res) => {
+interface AuthRequest extends Request {
+    user?: {
+        id: string;
+        [key: string]: any;
+    };
+}
+
+export const capturePayment = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     //fetch all courses id and user id
     console.log("inside cap pay cnt");
     const { courses } = req.body;
 
-    const userId = req.user.id;
+    const userId = req.user?.id;
     // console.log("userId :", userId);
 
-    if (courses.length === 0) {
+    if (!userId) {
+        return res.status(401).json({
+            success: false,
+            message: "User not authenticated",
+        });
+    }
+
+    if (!courses || courses.length === 0) {
         return res.status(400).json({
             success: false,
             message: "Please Provide Course Id",
@@ -63,7 +78,7 @@ exports.capturePayment = async (req, res) => {
     const options = {
         amount: totalAmount * 100,
         currency: "INR",
-        receipt: Math.random(Date.now()).toString(),
+        receipt: (Math.random() * Date.now()).toString(),
     };
 
     try {
@@ -82,13 +97,13 @@ exports.capturePayment = async (req, res) => {
     }
 };
 
-exports.verifyPayment = async (req, res) => {
+export const verifyPayment = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     const razorpay_order_id = req.body?.razorpay_order_id;
     const razorpay_payment_id = req.body?.razorpay_payment_id;
     const razorpay_signature = req.body?.razorpay_signature;
 
     const courses = req.body?.courses;
-    const userId = req.user.id;
+    const userId = req.user?.id;
 
     if (
         !razorpay_order_id ||
@@ -105,14 +120,28 @@ exports.verifyPayment = async (req, res) => {
 
     let body = razorpay_order_id + "|" + razorpay_payment_id;
 
+    const razorpaySecret = process.env.RAZORPAY_SECRET;
+    if (!razorpaySecret) {
+        return res.status(500).json({
+            success: false,
+            message: "Razorpay secret not configured",
+        });
+    }
+
     const expectedSignature = crypto
-        .createHmac("sha256", process.env.RAZORPAY_SECRET)
+        .createHmac("sha256", razorpaySecret)
         .update(body.toString())
         .digest("hex");
 
     if (expectedSignature === razorpay_signature) {
         //enroll student
-        await enrollStudents(courses, userId, res);
+        const enrollResult = await enrollStudents(courses, userId);
+        if (!enrollResult.success) {
+            return res.status(enrollResult.status || 500).json({
+                success: false,
+                message: enrollResult.message,
+            });
+        }
 
         //return res
         return res.status(200).json({
@@ -127,12 +156,13 @@ exports.verifyPayment = async (req, res) => {
     });
 };
 
-const enrollStudents = async (courses, userId, res) => {
+const enrollStudents = async (courses: string[], userId: string): Promise<{ success: boolean; message?: string; status?: number }> => {
     if (!courses || !userId) {
-        return res.status(404).json({
+        return {
             success: false,
             message: "Please provide all the data",
-        });
+            status: 404,
+        };
     }
 
     for (const courseId of courses) {
@@ -145,10 +175,11 @@ const enrollStudents = async (courses, userId, res) => {
             );
 
             if (!enrolledCourse) {
-                return res.status(404).json({
+                return {
                     success: false,
                     message: "Course not found",
-                });
+                    status: 404,
+                };
             }
             const courseProgress = await CourseProgress_Model.create({
                 courseID: courseId,
@@ -169,6 +200,14 @@ const enrollStudents = async (courses, userId, res) => {
                 { new: true }
             );
 
+            if (!enrolledStudent) {
+                return {
+                    success: false,
+                    message: "Student not found",
+                    status: 404,
+                };
+            }
+
             //send mail to student
             const emailResponse = await mailSender(
                 enrolledStudent.email,
@@ -181,18 +220,21 @@ const enrollStudents = async (courses, userId, res) => {
             // console.log("Email Sent Successfully", emailResponse.response);
         } catch (error) {
             console.log("Error in Enrolling Students", error);
-            return res.status(500).json({
+            return {
                 success: false,
                 message: "Error in Enrolling Students",
-            });
+                status: 500,
+            };
         }
     }
+    
+    return { success: true };
 };
 
-exports.sendPaymentMail = async (req, res) => {
+export const sendPaymentMail = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     const { orderId, paymentId, amount } = req.body;
 
-    const userId = req.user.id;
+    const userId = req.user?.id;
 
     if (!orderId || !paymentId || !amount || !userId) {
         return res.status(404).json({
@@ -208,6 +250,13 @@ exports.sendPaymentMail = async (req, res) => {
 
         const enrolledStudent = await User_Model.findById(userId);
 
+        if (!enrolledStudent) {
+            return res.status(404).json({
+                success: false,
+                message: "Student not found",
+            });
+        }
+
         //send mail
 
         const emailResponse = await mailSender(
@@ -222,6 +271,11 @@ exports.sendPaymentMail = async (req, res) => {
         );
 
         console.log("Mail response", emailResponse);
+        
+        return res.status(200).json({
+            success: true,
+            message: "Payment success email sent",
+        });
     } catch (error) {
         console.log("Error in sending mail", error);
         return res.status(500).json({
@@ -230,3 +284,4 @@ exports.sendPaymentMail = async (req, res) => {
         });
     }
 };
+

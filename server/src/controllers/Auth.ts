@@ -1,16 +1,24 @@
+import { Request, Response } from "express";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import "dotenv/config";
 const User_Model = require("../models/User.model");
 const OTP_Model = require("../models/OTP.model");
 const otpGenerator = require("otp-generator");
 const Profile_Model = require("../models/Profile.model");
-const bcrypt = require("bcrypt");
-require("dotenv").config();
-const jwt = require("jsonwebtoken");
 const mailSender = require("../utils/mailSender");
-// const cookie = require("cookie-parser");
+
+interface AuthRequest extends Request {
+    user?: {
+        id: string;
+        email?: string;
+        [key: string]: any;
+    };
+}
 
 //! Send OTP after hitting SignUp submit button and before DB entry to verify email
 
-exports.sendOTP = async (req, res) => {
+export const sendOTP = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //Extract data
         console.log("inside send OTP");
@@ -32,7 +40,7 @@ exports.sendOTP = async (req, res) => {
         }
         //TODO: Optimize it (generate otp code)(can use other otp generator which only send unique OTPs)
         //* generate otp
-        var otp = otpGenerator.generate(6, {
+        let otp = otpGenerator.generate(6, {
             upperCaseAlphabets: false,
             lowerCaseAlphabets: false,
             specialChars: false,
@@ -87,7 +95,7 @@ exports.sendOTP = async (req, res) => {
             message: "OTP sent Successfully",
             otp,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log("Error in OTP sending :", error);
 
         return res.status(400).json({
@@ -98,7 +106,7 @@ exports.sendOTP = async (req, res) => {
 };
 
 //! Sign Up
-exports.signUp = async (req, res) => {
+export const signUp = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //* Extract data
         console.log("in c");
@@ -192,7 +200,7 @@ exports.signUp = async (req, res) => {
         if (!recentOtp) {
             // OTP not found - try to find any OTPs for debugging
             const allOtps = await OTP_Model.find({}).sort({ createdAt: -1 }).limit(5);
-            console.log("Recent OTPs in DB (last 5):", allOtps.map(o => ({ 
+            console.log("Recent OTPs in DB (last 5):", allOtps.map((o: any) => ({ 
                 email: o.email, 
                 otp: o.otp, 
                 createdAt: o.createdAt 
@@ -248,7 +256,6 @@ exports.signUp = async (req, res) => {
         );
 
         if (!user) {
-            console.log(error);
             return res.status(404).json({
                 success: false,
                 message: "User not found",
@@ -275,7 +282,7 @@ exports.signUp = async (req, res) => {
 
 //! Log In
 
-exports.logIn = async (req, res) => {
+export const logIn = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //Get data
         console.log("Entering login controller");
@@ -310,12 +317,17 @@ exports.logIn = async (req, res) => {
             });
         }
 
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            throw new Error("JWT_SECRET is not defined");
+        }
+
         const payload = {
             email: user.email,
             id: user._id,
             accountType: user.accountType,
         };
-        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+        const token = jwt.sign(payload, jwtSecret, {
             expiresIn: "2h",
         });
         user.token = token;
@@ -326,8 +338,8 @@ exports.logIn = async (req, res) => {
             expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
             httpOnly: true,
         };
-        const makeCookie = res.cookie("tokenCookie", token, options);
-        makeCookie.status(200).json({
+        res.cookie("tokenCookie", token, options);
+        return res.status(200).json({
             success: true,
             token,
             user,
@@ -343,7 +355,7 @@ exports.logIn = async (req, res) => {
 };
 
 //TODO : Check the code properly
-exports.changePassword = async (req, res) => {
+export const changePassword = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
         //get data
         const { email, oldPassword, newPassword, confirmNewPassword } =
@@ -355,6 +367,23 @@ exports.changePassword = async (req, res) => {
             return res.status(400).json({
                 success: false,
                 message: "Enter all the fields.",
+            });
+        }
+
+        // Get user from email or from req.user
+        const userEmail = email || req.user?.email;
+        if (!userEmail) {
+            return res.status(400).json({
+                success: false,
+                message: "Email is required.",
+            });
+        }
+
+        const user = await User_Model.findOne({ email: userEmail });
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found.",
             });
         }
 
@@ -388,7 +417,7 @@ exports.changePassword = async (req, res) => {
 
         //update password to new password
         const updateUser = await User_Model.findOneAndUpdate(
-            { email: email },
+            { email: userEmail },
             {
                 password: hashedNewPassword,
             },
@@ -397,7 +426,7 @@ exports.changePassword = async (req, res) => {
 
         //send mail
         await mailSender(
-            email,
+            userEmail,
             "Password Changed",
             "Your password has be updated Successfully."
         );
@@ -415,3 +444,4 @@ exports.changePassword = async (req, res) => {
         });
     }
 };
+

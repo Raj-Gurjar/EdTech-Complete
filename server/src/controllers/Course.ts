@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 const Course_Model = require("../models/Course.model");
 const Category_Model = require("../models/Category.model");
 const User_Model = require("../models/User.model");
@@ -14,9 +15,16 @@ const {
     calculateTotalDuration,
 } = require("../utils/convertDuration");
 
+interface AuthRequest extends Request {
+    user?: {
+        id: string;
+        [key: string]: any;
+    };
+}
+
 //TODO : Add courseProgress controller (lec 30 , 2.18 time)
 
-exports.getAllPublishedCourses = async (req, res) => {
+export const getAllPublishedCourses = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         const allCourse = await Course_Model.find(
             { status: "Published" },
@@ -43,7 +51,7 @@ exports.getAllPublishedCourses = async (req, res) => {
             message: "Data of All Courses Fetched Successfully.",
             data: allCourse,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log("Get course Error : ", error);
         return res.status(500).json({
             success: false,
@@ -54,7 +62,7 @@ exports.getAllPublishedCourses = async (req, res) => {
 };
 
 // Get Course by Id
-exports.getCourseById = async (req, res) => {
+export const getCourseById = async (req: Request, res: Response): Promise<Response | void> => {
     console.log("in gg");
     try {
         console.log("cccby");
@@ -100,7 +108,7 @@ exports.getCourseById = async (req, res) => {
             message: "Course Data fetched Successfully.",
             data: { courseDetails, totalDuration },
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log("Error in fetching course details", error);
         return res.status(500).json({
             success: false,
@@ -111,11 +119,19 @@ exports.getCourseById = async (req, res) => {
 };
 
 // get full course Details
-exports.getFullCourseDetails = async (req, res) => {
+export const getFullCourseDetails = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
         const { courseId } = req.body;
         // console.log("ccd", courseId);
-        const userId = req.user.id;
+        const userId = req.user?.id;
+        
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "User not authenticated",
+            });
+        }
+
         const courseDetails = await Course_Model.findOne({ _id: courseId })
             .populate({
                 path: "instructor",
@@ -151,16 +167,16 @@ exports.getFullCourseDetails = async (req, res) => {
 
         let courseProgressCount = await CourseProgress_Model.findOne({
             courseID: courseId,
-            userID: userId,
+            userId: userId,
         });
         // console.log("Course Progress Count :", courseProgressCount);
 
         // console.log("ccc", courseDetails.courseContent);
 
         let totalDurationInSeconds = 0;
-        courseDetails.courseContent?.forEach((content) => {
-            content.subSection?.forEach((subSection) => {
-                const timeDurationInSeconds = parseInt(subSection.timeDuration);
+        courseDetails.courseContent?.forEach((content: any) => {
+            content.subSections?.forEach((subSection: any) => {
+                const timeDurationInSeconds = parseInt(subSection.timeDuration || "0");
                 totalDurationInSeconds += timeDurationInSeconds;
             });
         });
@@ -180,7 +196,7 @@ exports.getFullCourseDetails = async (req, res) => {
             },
             message: "All course details fetched",
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log("Error in whole course details fetching :", error);
         return res.status(500).json({
             success: false,
@@ -193,7 +209,7 @@ exports.getFullCourseDetails = async (req, res) => {
 //! ######### Student Specific ##########
 
 //! ######### Instructor Specific ##########
-exports.createCourse = async (req, res) => {
+export const createCourse = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
         //*get the data
         // console.log("entering createCourse");
@@ -239,7 +255,14 @@ exports.createCourse = async (req, res) => {
         }
         // console.log("cp1");
         //TODO: check userID and instructorDetail are equal or not
-        const userId = req.user.id;
+        const userId = req.user?.id;
+        
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "User not authenticated",
+            });
+        }
         // console.log("usedId: ", userId);
 
         const instructorDetails = await User_Model.findById(userId, {
@@ -297,7 +320,7 @@ exports.createCourse = async (req, res) => {
 
         //* Add course in user schema of instructor
         await User_Model.findByIdAndUpdate(
-            { _id: instructorDetails._id },
+            instructorDetails._id,
             {
                 $push: {
                     courses: newCourse._id,
@@ -309,7 +332,7 @@ exports.createCourse = async (req, res) => {
         //TODO: this was h.w.
         //* Add course in Category schema
         await Category_Model.findByIdAndUpdate(
-            { _id: category },
+            category,
             {
                 $push: {
                     courses: newCourse._id,
@@ -325,7 +348,7 @@ exports.createCourse = async (req, res) => {
             message: "New Course Created Successfully.",
             newCourse,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log("Error in creating course", error);
         return res.status(500).json({
             success: false,
@@ -337,7 +360,7 @@ exports.createCourse = async (req, res) => {
 };
 
 //edit Course  (vid. 26, near 1:00hr)
-exports.editCourse = async (req, res) => {
+export const editCourse = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
         console.log("inside edit course controller");
         const { courseId } = req.body;
@@ -355,7 +378,7 @@ exports.editCourse = async (req, res) => {
         //if thumbnail image is found update it
         if (req.files) {
             console.log("Thumbnail updated");
-            const thumbnail = req.files.thumbnailImage;
+            const thumbnail = (req.files as any).thumbnailImage;
             const thumbnailImage = await uploadImageToCloudinary(
                 thumbnail,
                 process.env.FOLDER_NAME_CLOUDINARY
@@ -407,7 +430,7 @@ exports.editCourse = async (req, res) => {
             message: "Course Updated Successfully",
             data: updatedCourse,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log("Error in editing the course", error);
 
         return res.status(500).json({
@@ -417,7 +440,8 @@ exports.editCourse = async (req, res) => {
         });
     }
 };
-exports.deleteCourse = async (req, res) => {
+
+export const deleteCourse = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     console.log("Entering in delete section controller");
     try {
         //get data
@@ -497,9 +521,16 @@ exports.deleteCourse = async (req, res) => {
 };
 
 // list of course by Instructor
-exports.getInstructorCourses = async (req, res) => {
+export const getInstructorCourses = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
-        const instructorId = req.user.id;
+        const instructorId = req.user?.id;
+
+        if (!instructorId) {
+            return res.status(400).json({
+                success: false,
+                message: "User not authenticated",
+            });
+        }
 
         // Find all the courses belonging to instructor
         const instructorCourses = await Course_Model.find({
@@ -518,7 +549,7 @@ exports.getInstructorCourses = async (req, res) => {
             message: "Instructor's Courses fetched successfully",
             data: instructorCourses,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log("Instructor's courses data fetching error", error);
 
         return res.status(500).json({
@@ -530,7 +561,7 @@ exports.getInstructorCourses = async (req, res) => {
 };
 
 //! ######### Admin Specific ##########
-exports.getAllCoursesAdmin = async (req, res) => {
+export const getAllCoursesAdmin = async (req: Request, res: Response): Promise<Response | void> => {
     console.log("inside all admin cour");
     try {
         const allCourse = await Course_Model.find({}, {})
@@ -544,7 +575,7 @@ exports.getAllCoursesAdmin = async (req, res) => {
             message: "Data of All Courses Fetched Successfully.",
             data: allCourse,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log("Get course Error : ", error);
         return res.status(500).json({
             success: false,
@@ -554,7 +585,7 @@ exports.getAllCoursesAdmin = async (req, res) => {
     }
 };
 
-exports.publishCourse = async (req, res) => {
+export const publishCourse = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         const { courseId } = req.body;
         // console.log("ccd", courseId);
@@ -585,7 +616,7 @@ exports.publishCourse = async (req, res) => {
             success: true,
             message: "Course Published Successfully.",
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log("course publish Error: ", error);
         return res.status(500).json({
             success: false,
@@ -595,7 +626,7 @@ exports.publishCourse = async (req, res) => {
     }
 };
 
-exports.unpublishCourse = async (req, res) => {
+export const unpublishCourse = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         const { courseId } = req.body;
 
@@ -623,7 +654,7 @@ exports.unpublishCourse = async (req, res) => {
             success: true,
             message: "Course Unpublished Successfully.",
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log("course unpublish Error: ", error);
         return res.status(500).json({
             success: false,
@@ -633,7 +664,7 @@ exports.unpublishCourse = async (req, res) => {
     }
 };
 
-exports.getCourseByIdAdmin = async (req, res) => {
+export const getCourseByIdAdmin = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         // console.log("insd get cadmin");
         const { courseId } = req.body;
@@ -680,7 +711,7 @@ exports.getCourseByIdAdmin = async (req, res) => {
             message: "Course Data fetched Successfully.",
             data: { courseDetails, totalDuration },
         });
-    } catch (error) {
+    } catch (error: any) {
         console.log("Error in fetching course details", error);
         return res.status(500).json({
             success: false,
@@ -689,3 +720,4 @@ exports.getCourseByIdAdmin = async (req, res) => {
         });
     }
 };
+

@@ -1,16 +1,23 @@
+import { Request, Response } from "express";
 const Profile_Model = require("../models/Profile.model");
 const User_Model = require("../models/User.model");
 const Course_Model = require("../models/Course.model");
 const CourseProgress_Model = require("../models/CourseProgress.model");
-const { populate } = require("../models/ContactUs.model");
 const { uploadToCloudinary } = require("../config/cloudinary");
 const { convertSecondsToDuration } = require("../utils/convertDuration");
 const Category_Model = require("../models/Category.model");
 
+interface AuthRequest extends Request {
+    user?: {
+        id: string;
+        [key: string]: any;
+    };
+}
+
 //! Since while creating SignUp we have already stored null in Profile's data,
 //! so we do not need to create it, we will just to update the null values.
 
-exports.updateProfile = async (req, res) => {
+export const updateProfile = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     //TODO : check email exists or not before updating
     console.log("Inside update profile");
     console.log("Request body:", req.body);
@@ -28,7 +35,7 @@ exports.updateProfile = async (req, res) => {
         } = req.body;
 
         // Get the user id
-        const userId = req.user.id;
+        const userId = req.user?.id;
 
         // Validate user id
         if (!userId) {
@@ -56,7 +63,7 @@ exports.updateProfile = async (req, res) => {
         });
 
         let profileId = userDetails.additionalDetails;
-        let profileDetails = null;
+        let profileDetails: any = null;
         
         if (!profileId) {
             console.log("No profile ID found, creating new profile");
@@ -99,7 +106,7 @@ exports.updateProfile = async (req, res) => {
         }
 
         // Update profile details (only update fields that are provided and not empty strings)
-        const profileUpdate = {};
+        const profileUpdate: any = {};
         if (dateOfBirth !== undefined && dateOfBirth !== null && dateOfBirth !== '') {
             profileUpdate.dateOfBirth = new Date(dateOfBirth);
         }
@@ -123,7 +130,7 @@ exports.updateProfile = async (req, res) => {
         }
 
         // Update user details (only update fields that are provided and not empty strings)
-        const userUpdate = {};
+        const userUpdate: any = {};
         if (firstName !== undefined && firstName !== null && firstName.trim() !== '') {
             userUpdate.firstName = firstName.trim();
         }
@@ -166,7 +173,7 @@ exports.updateProfile = async (req, res) => {
             message: "User's Profile Updated Successfully",
             updatedUser,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error while updating User Profile:", error);
         console.error("Error stack:", error.stack);
         return res.status(500).json({
@@ -178,10 +185,17 @@ exports.updateProfile = async (req, res) => {
 
 //! get all user details
 
-exports.getAllUserDetails = async (req, res) => {
+export const getAllUserDetails = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
         //get id
-        const userId = req.user.id;
+        const userId = req.user?.id;
+
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "User not authenticated",
+            });
+        }
 
         //validate
         const userDetails = await User_Model.findById(userId)
@@ -196,8 +210,9 @@ exports.getAllUserDetails = async (req, res) => {
         }
         //return
         return res.status(200).json({
-            success: false,
+            success: true,
             message: "User's whole data fetched Successfully.",
+            userDetails,
         });
     } catch (error) {
         return res.status(500).json({
@@ -209,15 +224,22 @@ exports.getAllUserDetails = async (req, res) => {
 
 //TODO : In this we will have to schedule the delete account for 3 days or so not immediately delete account
 //TODO : Explore -> cronjob
-exports.deleteUserAccount = async (req, res) => {
+export const deleteUserAccount = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     console.log("in dele");
     try {
         //get the id
-        const userId = req.user.id;
+        const userId = req.user?.id;
         console.log("userId", userId);
+        
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "User not authenticated",
+            });
+        }
         //validate
 
-        const userDetails = await User_Model.findById({ _id: userId });
+        const userDetails = await User_Model.findById(userId);
         // console.log("user de", userDetails);
         if (!userDetails) {
             return res.status(404).json({
@@ -228,9 +250,9 @@ exports.deleteUserAccount = async (req, res) => {
         // console.log("user de", userDetails);
 
         //first we will delete the additional details,course,courseProgress then user details
-        await Profile_Model.findByIdAndDelete({
-            _id: userDetails.additionalDetails._id,
-        });
+        if (userDetails.additionalDetails) {
+            await Profile_Model.findByIdAndDelete(userDetails.additionalDetails);
+        }
 
         // console.log("c1");
 
@@ -257,7 +279,7 @@ exports.deleteUserAccount = async (req, res) => {
 
         // console.log("c3");
 
-        await User_Model.findByIdAndDelete({ _id: userId });
+        await User_Model.findByIdAndDelete(userId);
 
         // console.log("c4");
         //return
@@ -273,15 +295,29 @@ exports.deleteUserAccount = async (req, res) => {
     }
 };
 
-exports.updateDisplayPicture = async (req, res) => {
+export const updateDisplayPicture = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
         console.log("inside upProfi");
-        const userId = req.user.id;
+        const userId = req.user?.id;
+
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "User not authenticated",
+            });
+        }
 
         console.log(userId);
         console.log("req.body", req.body);
         console.log("req.file :", req.file);
         const displayPicturePath = req.file?.path;
+
+        if (!displayPicturePath) {
+            return res.status(400).json({
+                success: false,
+                message: "No image file provided",
+            });
+        }
 
         // console.log("disp pic path.", displayPicturePath);
 
@@ -291,8 +327,15 @@ exports.updateDisplayPicture = async (req, res) => {
         );
         console.log("image..", displayImage);
 
-        const updateProfile = await User_Model.findByIdAndUpdate(
-            { _id: userId },
+        if (!displayImage) {
+            return res.status(500).json({
+                success: false,
+                message: "Error uploading image",
+            });
+        }
+
+        await User_Model.findByIdAndUpdate(
+            userId,
             { profileImage: displayImage.secure_url },
             { new: true }
         );
@@ -313,12 +356,20 @@ exports.updateDisplayPicture = async (req, res) => {
     }
 };
 
-exports.getEnrolledCourses = async (req, res) => {
+export const getEnrolledCourses = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
         console.log("Entering get Enrolled C id");
-        const userId = req.user.id;
+        const userId = req.user?.id;
         console.log("userId", userId);
-        let userDetails = await User_Model.findOne({ _id: userId })
+        
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: "User not authenticated",
+            });
+        }
+
+        let userDetails: any = await User_Model.findOne({ _id: userId })
             .populate({
                 path: "courses",
                 populate: [
@@ -348,23 +399,30 @@ exports.getEnrolledCourses = async (req, res) => {
             })
             .exec();
 
+        if (!userDetails) {
+            return res.status(400).json({
+                success: false,
+                message: `Could not find user with id: ${userId}`,
+            });
+        }
+
         userDetails = userDetails.toObject();
 
         // console.log("user d", userDetails);
-        var subSectionLength = 0;
-        for (var i = 0; i < userDetails.courses.length; i++) {
+        let subSectionLength = 0;
+        for (let i = 0; i < userDetails.courses.length; i++) {
             let totalDurationInSeconds = 0;
             subSectionLength = 0;
 
             for (
-                var j = 0;
+                let j = 0;
                 j < userDetails.courses[i].courseContent.length;
                 j++
             ) {
                 totalDurationInSeconds += userDetails.courses[i].courseContent[
                     j
                 ].subSections.reduce(
-                    (acc, curr) => acc + parseInt(curr.timeDuration),
+                    (acc: number, curr: any) => acc + parseInt(curr.timeDuration || "0"),
                     0
                 );
                 userDetails.courses[i].totalDuration = convertSecondsToDuration(
@@ -379,7 +437,7 @@ exports.getEnrolledCourses = async (req, res) => {
                 courseID: userDetails.courses[i]._id,
                 userId: userId,
             });
-            courseProgressCount = courseProgressCount?.completedVideos.length;
+            const completedVideosCount = courseProgressCount?.completedVideos?.length || 0;
 
             if (subSectionLength === 0) {
                 userDetails.courses[i].progressPercentage = 100;
@@ -388,7 +446,7 @@ exports.getEnrolledCourses = async (req, res) => {
                 const multiplier = Math.pow(10, 2);
                 userDetails.courses[i].progressPercentage =
                     Math.round(
-                        (courseProgressCount / subSectionLength) *
+                        (completedVideosCount / subSectionLength) *
                             100 *
                             multiplier
                     ) / multiplier;
@@ -396,12 +454,6 @@ exports.getEnrolledCourses = async (req, res) => {
         }
 
         // console.log("user details:", userDetails);
-        if (!userDetails) {
-            return res.status(400).json({
-                success: false,
-                message: `Could not find user with id: ${userDetails}`,
-            });
-        }
         return res.status(200).json({
             success: true,
             message: "Enrolled Courses Details fetched successfully",
@@ -416,16 +468,23 @@ exports.getEnrolledCourses = async (req, res) => {
     }
 };
 
-exports.instructorDashboardData = async (req, res) => {
+export const instructorDashboardData = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
         console.log("ins insDash");
         // const { instructor } = req.user.id;
+
+        if (!req.user?.id) {
+            return res.status(400).json({
+                success: false,
+                message: "User not authenticated",
+            });
+        }
 
         const courseDetails = await Course_Model.find({
             instructor: req.user.id,
         });
         console.log("ccd", courseDetails);
-        const courseData = courseDetails.map((course) => {
+        const courseData = courseDetails.map((course: any) => {
             const totalStudentsEnrolled = course.studentsEnrolled.length;
             const totalAmountGenerated = totalStudentsEnrolled * course.price;
 
@@ -456,7 +515,7 @@ exports.instructorDashboardData = async (req, res) => {
     }
 };
 
-exports.adminDashboardData = async (req, res) => {
+export const adminDashboardData = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
         console.log("ins adminDash");
 
@@ -520,7 +579,7 @@ exports.adminDashboardData = async (req, res) => {
         );
         let totalCourses = 0;
 
-        const totalEarningAdmin = courseDetails.reduce((total, course) => {
+        const totalEarningAdmin = courseDetails.reduce((total: number, course: any) => {
             totalCourses += 1;
             return total + course.studentsEnrolled.length * course.price * 0.25;
         }, 0);
@@ -556,3 +615,4 @@ exports.adminDashboardData = async (req, res) => {
         });
     }
 };
+

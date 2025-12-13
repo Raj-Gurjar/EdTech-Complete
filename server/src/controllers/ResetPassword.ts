@@ -1,11 +1,12 @@
+import { Request, Response } from "express";
+import bcrypt from "bcrypt";
+import crypto from "crypto";
 const { passwordResetEmail } = require("../mail/passwordRestEmail");
 const User_Model = require("../models/User.model");
 const mailSender = require("../utils/mailSender");
-const bcrypt = require("bcrypt");
-const crypto = require("crypto");
 
 //! sends url with token to email to reset password
-exports.resetPasswordToken = async (req, res) => {
+export const resetPasswordToken = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //get data
         console.log("reset pass");
@@ -74,7 +75,7 @@ exports.resetPasswordToken = async (req, res) => {
     }
 };
 
-exports.resetPassword = async (req, res) => {
+export const resetPassword = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //get data
 
@@ -116,7 +117,7 @@ exports.resetPassword = async (req, res) => {
         }
 
         //check token expire time
-        if (userDetails.resetPasswordExpires < Date.now()) {
+        if (userDetails.resetPasswordExpires && userDetails.resetPasswordExpires < Date.now()) {
             return res.status(400).json({
                 success: false,
                 message: "Link is expired, please regenerate it.",
@@ -151,3 +152,4 @@ exports.resetPassword = async (req, res) => {
         });
     }
 };
+
