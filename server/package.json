@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "start": "ts-node src/index.js",
+    "start:js": "node src/index.js",
+    "dev": "nodemon",
+    "build": "tsc",
+    "start:prod": "npm run build && node dist/index.js"
   },
   "author": "Raj Chhalotre",
   "license": "ISC",
@@ -27,6 +30,13 @@
     "razorpay": "^2.9.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.0.1",
+    "@types/nodemailer": "^7.0.4",
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }
