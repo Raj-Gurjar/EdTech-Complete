@@ -1,11 +1,11 @@
-// otpEmailTemplate.js
+// Course Enrollment Email Template
 
-exports.otpVerificationEmail = (otp) => {
+export const courseEnrollmentEmail = (courseName: string, name: string): string => {
     return `<!DOCTYPE html>
     <html>
     <head>
-        <meta charset="UTF-8">
-        <title>OTP Verification Email</title>
+    <meta charset = "UTF-8">
+    <title>Course Registration Conformation</title>
         <style>
             /* CSS styles for email content */
             body {
@@ -36,10 +36,8 @@ exports.otpVerificationEmail = (otp) => {
             .message {
                 margin-bottom: 20px;
             }
-            .otp {
+            .course-name {
                 font-weight: bold;
-                font-size: 24px;
-                color: #007bff;
             }
             .footer {
                 text-align: center;
@@ -52,13 +50,12 @@ exports.otpVerificationEmail = (otp) => {
     <body>
         <div class="container">
             <div class="header">
-                <h2>OTP Verification from EdTech</h2>
+                <h2>Course Enrollment Confirmation</h2>
             </div>
             <div class="content">
-                <p class="message">Dear User,</p>
-                <p class="message">Your One-Time Password (OTP) for verification is:</p>
-                <p class="otp">${otp}</p>
-                <p class="message">Please enter this OTP to complete your verification process. This OTP is valid for 5 minutes.</p>
+                <p class="message">Dear ${name},</p>
+                <p class="message">Congratulations! You have successfully enrolled in the course <span class="course-name">${courseName}</span>.</p>
+                <p class="message">We look forward to having you in the class and hope you enjoy the learning experience.</p>
             </div>
             <div class="footer">
                 <p>This email is auto-generated. Please do not reply.</p>
@@ -67,3 +64,4 @@ exports.otpVerificationEmail = (otp) => {
     </body>
     </html>`;
 };
+

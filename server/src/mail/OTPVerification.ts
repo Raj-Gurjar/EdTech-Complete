@@ -1,7 +1,11 @@
-exports.paymentSuccessEmail = (name, amount, orderId, paymentId) => {
+// OTP Verification Email Template
+
+export const otpVerificationEmail = (otp: string): string => {
     return `<!DOCTYPE html>
     <html>
     <head>
+        <meta charset="UTF-8">
+        <title>OTP Verification Email</title>
         <style>
             /* CSS styles for email content */
             body {
@@ -19,7 +23,7 @@ exports.paymentSuccessEmail = (name, amount, orderId, paymentId) => {
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
             .header {
-                background-color: #28a745;
+                background-color: #007bff;
                 color: #fff;
                 text-align: center;
                 padding: 10px;
@@ -32,8 +36,10 @@ exports.paymentSuccessEmail = (name, amount, orderId, paymentId) => {
             .message {
                 margin-bottom: 20px;
             }
-            .order-info {
+            .otp {
                 font-weight: bold;
+                font-size: 24px;
+                color: #007bff;
             }
             .footer {
                 text-align: center;
@@ -46,13 +52,13 @@ exports.paymentSuccessEmail = (name, amount, orderId, paymentId) => {
     <body>
         <div class="container">
             <div class="header">
-                <h2>Payment Successful</h2>
+                <h2>OTP Verification from EdTech</h2>
             </div>
             <div class="content">
-                <p class="message">Dear ${name},</p>
-                <p class="message">Thank you for your payment of Rs.${amount.toFixed(2)}.</p>
-                <p class="message">Your order ID is <span class="order-info">${orderId}</span> <br>and payment ID is <span class="order-info">${paymentId}</span>.</p>
-                <p class="message">We appreciate your business and hope you enjoy your purchase.</p>
+                <p class="message">Dear User,</p>
+                <p class="message">Your One-Time Password (OTP) for verification is:</p>
+                <p class="otp">${otp}</p>
+                <p class="message">Please enter this OTP to complete your verification process. This OTP is valid for 5 minutes.</p>
             </div>
             <div class="footer">
                 <p>This email is auto-generated. Please do not reply.</p>
@@ -61,3 +67,4 @@ exports.paymentSuccessEmail = (name, amount, orderId, paymentId) => {
     </body>
     </html>`;
 };
+

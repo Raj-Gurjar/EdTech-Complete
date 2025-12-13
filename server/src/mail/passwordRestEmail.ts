@@ -1,9 +1,11 @@
-exports.courseEnrollmentEmail = (courseName, name) => {
+// Password Reset Email Template
+
+export const passwordResetEmail = (resetPasswordUrl: string, validityTime: string | number): string => {
     return `<!DOCTYPE html>
     <html>
     <head>
-    <meta charset = "UTF-8">
-    <title>Course Registration Conformation</title>
+        <meta charset="UTF-8">
+        <title>Password Reset Email</title>
         <style>
             /* CSS styles for email content */
             body {
@@ -34,8 +36,11 @@ exports.courseEnrollmentEmail = (courseName, name) => {
             .message {
                 margin-bottom: 20px;
             }
-            .course-name {
+            .link {
                 font-weight: bold;
+                font-size: 18px;
+                color: #007bff;
+                word-wrap: break-word;
             }
             .footer {
                 text-align: center;
@@ -48,12 +53,14 @@ exports.courseEnrollmentEmail = (courseName, name) => {
     <body>
         <div class="container">
             <div class="header">
-                <h2>Course Enrollment Confirmation</h2>
+                <h2>Password Reset Request</h2>
             </div>
             <div class="content">
-                <p class="message">Dear ${name},</p>
-                <p class="message">Congratulations! You have successfully enrolled in the course <span class="course-name">${courseName}</span>.</p>
-                <p class="message">We look forward to having you in the class and hope you enjoy the learning experience.</p>
+                <p class="message">Dear User,</p>
+                <p class="message">You have requested to reset your password. Click on the link below to reset your password:</p>
+                <p class="link"><a href="${resetPasswordUrl}" target="_blank">${resetPasswordUrl}</a></p>
+                <p class="message">Please note that this link is valid for the next ${validityTime} minutes.</p>
+                <p class="message">If you did not request a password reset, please ignore this email.</p>
             </div>
             <div class="footer">
                 <p>This email is auto-generated. Please do not reply.</p>
@@ -62,3 +69,4 @@ exports.courseEnrollmentEmail = (courseName, name) => {
     </body>
     </html>`;
 };
+

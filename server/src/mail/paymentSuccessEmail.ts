@@ -1,9 +1,14 @@
-exports.passwordResetEmail = (resetPasswordUrl, validityTime) => {
+// Payment Success Email Template
+
+export const paymentSuccessEmail = (
+    name: string,
+    amount: number,
+    orderId: string,
+    paymentId: string
+): string => {
     return `<!DOCTYPE html>
     <html>
     <head>
-        <meta charset="UTF-8">
-        <title>Password Reset Email</title>
         <style>
             /* CSS styles for email content */
             body {
@@ -21,7 +26,7 @@ exports.passwordResetEmail = (resetPasswordUrl, validityTime) => {
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
             .header {
-                background-color: #007bff;
+                background-color: #28a745;
                 color: #fff;
                 text-align: center;
                 padding: 10px;
@@ -34,11 +39,8 @@ exports.passwordResetEmail = (resetPasswordUrl, validityTime) => {
             .message {
                 margin-bottom: 20px;
             }
-            .link {
+            .order-info {
                 font-weight: bold;
-                font-size: 18px;
-                color: #007bff;
-                word-wrap: break-word;
             }
             .footer {
                 text-align: center;
@@ -51,14 +53,13 @@ exports.passwordResetEmail = (resetPasswordUrl, validityTime) => {
     <body>
         <div class="container">
             <div class="header">
-                <h2>Password Reset Request</h2>
+                <h2>Payment Successful</h2>
             </div>
             <div class="content">
-                <p class="message">Dear User,</p>
-                <p class="message">You have requested to reset your password. Click on the link below to reset your password:</p>
-                <p class="link"><a href="${resetPasswordUrl}" target="_blank">${resetPasswordUrl}</a></p>
-                <p class="message">Please note that this link is valid for the next ${validityTime} minutes.</p>
-                <p class="message">If you did not request a password reset, please ignore this email.</p>
+                <p class="message">Dear ${name},</p>
+                <p class="message">Thank you for your payment of Rs.${amount.toFixed(2)}.</p>
+                <p class="message">Your order ID is <span class="order-info">${orderId}</span> <br>and payment ID is <span class="order-info">${paymentId}</span>.</p>
+                <p class="message">We appreciate your business and hope you enjoy your purchase.</p>
             </div>
             <div class="footer">
                 <p>This email is auto-generated. Please do not reply.</p>
@@ -67,3 +68,4 @@ exports.passwordResetEmail = (resetPasswordUrl, validityTime) => {
     </body>
     </html>`;
 };
+
