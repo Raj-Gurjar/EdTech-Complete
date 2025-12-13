@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+import express, { Router } from "express";
+const router: Router = express.Router();
 
 const {
     createCourse,
@@ -62,3 +62,4 @@ router.post("/unpublishCourse-admin", auth, isAdmin, unpublishCourse);
 router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);
 
 module.exports = router;
+

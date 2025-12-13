@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+import express, { Router } from "express";
+const router: Router = express.Router();
 
 const {
     createSection,
@@ -15,3 +15,4 @@ router.delete("/deleteSection", auth, isInstructor, deleteSection);
 router.post("/getSection", sectionById);
 
 module.exports = router;
+

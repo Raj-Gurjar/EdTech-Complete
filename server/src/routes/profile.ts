@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+import express, { Router } from "express";
+const router: Router = express.Router();
 
 const {
     getEnrolledCourses,
@@ -38,3 +38,4 @@ router.get(
 router.get("/admin-dashboard", auth, isAdmin, adminDashboardData);
 
 module.exports = router;
+

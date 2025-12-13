@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+import express, { Router } from "express";
+const router: Router = express.Router();
 
 const {
     getAllRatingAndReviews,
@@ -15,3 +15,4 @@ router.get("/getAverageRating", getAverageRating);
 router.get("/getReviews", getAllRatingAndReviews);
 
 module.exports = router;
+

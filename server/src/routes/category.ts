@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+import express, { Router } from "express";
+const router: Router = express.Router();
 
 const {
     createCategory,
@@ -15,3 +15,4 @@ router.get("/showAllCategories", showAllCategories);
 router.delete("/deleteCategory", auth, isAdmin, deleteCategory);
 
 module.exports = router;
+

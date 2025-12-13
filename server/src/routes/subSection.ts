@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+import express, { Router } from "express";
+const router: Router = express.Router();
 
 const {
     createSubSection,
@@ -20,3 +20,4 @@ router.put("/updateSubSection", auth, isInstructor, updateSubSection);
 router.delete("/deleteSubSection", auth, isInstructor, deleteSubSection);
 
 module.exports = router;
+

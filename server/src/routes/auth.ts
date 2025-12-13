@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+import express, { Router } from "express";
+const router: Router = express.Router();
 
 const {
     signUp,
@@ -31,3 +31,4 @@ router.post("/resetPasswordToken", resetPasswordToken);
 router.post("/reset-password", resetPassword);
 
 module.exports = router;
+
