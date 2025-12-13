@@ -1,6 +1,25 @@
-const mongoose = require("mongoose");
+import mongoose, { Schema, Document, Model } from "mongoose";
 
-const Course_Schema = new mongoose.Schema(
+export interface ICourse extends Document {
+    courseName: string;
+    courseDescription?: string;
+    instructor: mongoose.Types.ObjectId;
+    whatYouWillLearn: string[];
+    courseContent: mongoose.Types.ObjectId[];
+    ratingAndReviews: mongoose.Types.ObjectId[];
+    price: number;
+    language: string;
+    thumbnail?: string;
+    tags?: string[];
+    category?: mongoose.Types.ObjectId;
+    studentsEnrolled: mongoose.Types.ObjectId[];
+    instructions?: string[];
+    status: "Draft" | "Published";
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+const Course_Schema = new Schema<ICourse>(
     {
         courseName: {
             type: String,
@@ -27,7 +46,6 @@ const Course_Schema = new mongoose.Schema(
                 ref: "Section_Model",
             },
         ],
-
         ratingAndReviews: [
             {
                 type: mongoose.Schema.Types.ObjectId,
@@ -73,4 +91,7 @@ const Course_Schema = new mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model("Course_Model", Course_Schema);
+const Course_Model: Model<ICourse> = mongoose.model<ICourse>("Course_Model", Course_Schema);
+
+module.exports = Course_Model;
+

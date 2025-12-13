@@ -1,6 +1,17 @@
-const mongoose = require("mongoose");
+import mongoose, { Schema, Document, Model } from "mongoose";
 
-const ContactUs_Schema = new mongoose.Schema(
+export interface IContactUs extends Document {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNo?: number;
+    subject: string;
+    message: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+const ContactUs_Schema = new Schema<IContactUs>(
     {
         firstName: {
             type: String,
@@ -32,4 +43,7 @@ const ContactUs_Schema = new mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model("ContactUs_Model", ContactUs_Schema);
+const ContactUs_Model: Model<IContactUs> = mongoose.model<IContactUs>("ContactUs_Model", ContactUs_Schema);
+
+module.exports = ContactUs_Model;
+

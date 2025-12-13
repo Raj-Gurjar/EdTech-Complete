@@ -1,6 +1,15 @@
-const mongoose = require("mongoose");
+import mongoose, { Schema, Document, Model } from "mongoose";
 
-const RatingAndReview_Schema = new mongoose.Schema(
+export interface IRatingAndReview extends Document {
+    user: mongoose.Types.ObjectId;
+    rating: number;
+    review?: string;
+    course: mongoose.Types.ObjectId;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+const RatingAndReview_Schema = new Schema<IRatingAndReview>(
     {
         user: {
             type: mongoose.Schema.Types.ObjectId,
@@ -27,7 +36,10 @@ const RatingAndReview_Schema = new mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model(
+const RatingAndReview_Model: Model<IRatingAndReview> = mongoose.model<IRatingAndReview>(
     "RatingAndReview_Model",
     RatingAndReview_Schema
 );
+
+module.exports = RatingAndReview_Model;
+

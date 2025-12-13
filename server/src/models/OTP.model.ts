@@ -1,26 +1,15 @@
-const mongoose = require("mongoose");
+import mongoose, { Schema, Document, Model } from "mongoose";
 const mailSender = require("../utils/mailSender");
-const { otpVerificationEmail } = require("../mail/OTPVerification");
+import { otpVerificationEmail } from "../mail/OTPVerification";
 
-const OTP_Schema = new mongoose.Schema({
-    email: {
-        type: String,
-        required: true,
-    },
-    otp: {
-        type: String,
-        required: true,
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now(),
-        expires: 5 * 60,
-    },
-});
+export interface IOTP extends Document {
+    email: string;
+    otp: string;
+    createdAt?: Date;
+}
 
 //!function to send email
-
-async function sendVerificationEmail(email, otp) {
+async function sendVerificationEmail(email: string, otp: string): Promise<void> {
     try {
         const emailContent = otpVerificationEmail(otp);
         const mailResponse = await mailSender(
@@ -36,6 +25,22 @@ async function sendVerificationEmail(email, otp) {
     }
 }
 
+const OTP_Schema = new Schema<IOTP>({
+    email: {
+        type: String,
+        required: true,
+    },
+    otp: {
+        type: String,
+        required: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now(),
+        expires: 5 * 60,
+    },
+});
+
 OTP_Schema.pre("save", async function (next) {
     try {
         await sendVerificationEmail(this.email, this.otp);
@@ -47,4 +52,7 @@ OTP_Schema.pre("save", async function (next) {
     }
 });
 
-module.exports = mongoose.model("OTP_Model", OTP_Schema);
+const OTP_Model: Model<IOTP> = mongoose.model<IOTP>("OTP_Model", OTP_Schema);
+
+module.exports = OTP_Model;
+

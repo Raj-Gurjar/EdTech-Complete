@@ -1,6 +1,23 @@
-const mongoose = require("mongoose");
+import mongoose, { Schema, Document, Model } from "mongoose";
 
-const User_Schema = new mongoose.Schema(
+export interface IUser extends Document {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    accountType: "Admin" | "Student" | "Instructor";
+    adminKey?: string;
+    profileImage?: string;
+    additionalDetails: mongoose.Types.ObjectId;
+    courses: mongoose.Types.ObjectId[];
+    courseProgress: mongoose.Types.ObjectId[];
+    resetPasswordToken?: string;
+    resetPasswordExpires?: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+const User_Schema = new Schema<IUser>(
     {
         firstName: {
             type: String,
@@ -44,7 +61,6 @@ const User_Schema = new mongoose.Schema(
                 ref: "Course_Model",
             },
         ],
-
         courseProgress: [
             {
                 type: mongoose.Schema.Types.ObjectId,
@@ -52,11 +68,9 @@ const User_Schema = new mongoose.Schema(
                 required: true,
             },
         ],
-
         resetPasswordToken: {
             type: String,
         },
-
         resetPasswordExpires: {
             type: Date,
         },
@@ -66,4 +80,7 @@ const User_Schema = new mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model("User_Model", User_Schema);
+const User_Model: Model<IUser> = mongoose.model<IUser>("User_Model", User_Schema);
+
+module.exports = User_Model;
+

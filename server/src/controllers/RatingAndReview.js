@@ -1,5 +1,5 @@
-const RatingAndReview_Model = require("../models/RatingAndReview.model.js");
-const Course_Model = require("../models/Course.model.js");
+const RatingAndReview_Model = require("../models/RatingAndReview.model");
+const Course_Model = require("../models/Course.model");
 
 exports.createRatingNReview = async (req, res) => {
     try {

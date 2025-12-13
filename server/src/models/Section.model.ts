@@ -1,12 +1,20 @@
-const mongoose = require("mongoose");
+import mongoose, { Schema, Document, Model } from "mongoose";
 
-const Section_Schema = new mongoose.Schema(
+export interface ISection extends Document {
+    sectionName?: string;
+    shortDescription?: string;
+    longDescription?: string;
+    subSections: mongoose.Types.ObjectId[];
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+const Section_Schema = new Schema<ISection>(
     {
         sectionName: {
             type: String,
             trim: true,
         },
-
         shortDescription: {
             type: String,
             default: "short description",
@@ -17,7 +25,6 @@ const Section_Schema = new mongoose.Schema(
             type: String,
             default: "long description",
         },
-
         subSections: [
             {
                 type: mongoose.Schema.Types.ObjectId,
@@ -31,4 +38,7 @@ const Section_Schema = new mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model("Section_Model", Section_Schema);
+const Section_Model: Model<ISection> = mongoose.model<ISection>("Section_Model", Section_Schema);
+
+module.exports = Section_Model;
+
