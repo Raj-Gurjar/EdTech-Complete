@@ -1,6 +1,11 @@
 import React from "react";
 
-export default function HighlightText({ text, textSize }) {
+interface HighlightTextProps {
+  text: string;
+  textSize?: string;
+}
+
+export default function HighlightText({ text, textSize }: HighlightTextProps) {
   return (
     <span
       className={`${textSize} bg-gradient-to-bl from-blue5 to-blue8 bg-clip-text text-transparent leading-normal`}
@@ -9,3 +14,4 @@ export default function HighlightText({ text, textSize }) {
     </span>
   );
 }
+

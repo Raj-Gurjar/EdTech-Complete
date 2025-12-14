@@ -1,8 +1,7 @@
 import { apiConnector } from "../apiConnector";
 import { categoryEndpoints } from "../api";
 import toast from "react-hot-toast";
-
-// import {setLoading}
+import { AxiosError } from "axios";
 
 const {
   CREATE_CATEGORY_API,
@@ -11,16 +10,32 @@ const {
   DELETE_CATEGORY_API,
 } = categoryEndpoints;
 
-export const createCategory = async (data, token) => {
-  // console.log("entering createCategory", data);
+interface CategoryData {
+  name: string;
+  description?: string;
+  [key: string]: any;
+}
+
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+    message?: string;
+  };
+}
+
+export const createCategory = async (
+  data: CategoryData,
+  token: string
+): Promise<boolean | null> => {
   const toastId = toast.loading("Loading");
-  let result = null;
+  let result: boolean | null = null;
 
   try {
     const response = await apiConnector("POST", CREATE_CATEGORY_API, data, {
       Authorization: `Bearer ${token}`,
     });
-    // console.log("create category api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not create category");
@@ -29,39 +44,38 @@ export const createCategory = async (data, token) => {
     result = response?.data?.data;
   } catch (error) {
     console.log("create category api error...", error);
-    toast.error(error.response.data.message);
+    const apiError = error as ApiError;
+    toast.error(apiError.response?.data?.message || "Failed to create category");
   }
-  // console.log("Result: ", result);
   toast.dismiss(toastId);
   result = true;
   return result;
 };
 
-export const showAllCategories = async () => {
-  // const toastId = toast.loading("Loading");
-  let result = [];
+export const showAllCategories = async (): Promise<any[]> => {
+  let result: any[] = [];
 
   try {
     const response = await apiConnector("GET", GET_ALL_CATEGORIES_API);
-    // console.log("Course category detail..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not fetch Course Category");
     }
-    // toast.success("Course Category details fetched");
     result = response?.data?.data;
   } catch (error) {
     console.log("course category api error...", error);
-    toast.error(error.response.message);
+    const apiError = error as ApiError;
+    toast.error(apiError.response?.message || "Failed to fetch categories");
   }
-  // toast.dismiss(toastId);
   return result;
 };
 
-export const getCategoryPageDetails = async (categoryId) => {
+export const getCategoryPageDetails = async (
+  categoryId: string
+): Promise<any> => {
   console.log("inside getCatPageDetails");
   const toastId = toast.loading("Loading");
-  let result = [];
+  let result: any = [];
 
   try {
     const response = await apiConnector("POST", CATEGORY_PAGE_DATA_API, {
@@ -72,22 +86,23 @@ export const getCategoryPageDetails = async (categoryId) => {
     if (!response?.data?.success) {
       throw new Error("Could not fetch this Category Page Data");
     }
-    // toast.success("Course Category details fetched");
     result = response?.data;
   } catch (error) {
     console.log("category details page api error...", error);
-    toast.error(error.response.message);
-    result = error.response?.data;
+    const apiError = error as ApiError;
+    toast.error(apiError.response?.message || "Failed to fetch category details");
+    result = apiError.response?.data;
   }
   toast.dismiss(toastId);
   return result;
 };
 
-export const deleteCategory = async (categoryId, token) => {
+export const deleteCategory = async (
+  categoryId: string,
+  token: string
+): Promise<any> => {
   const toastId = toast.loading("Loading");
-  let result = null;
-
-  // console.log("Delete category data: ", categoryId);
+  let result: any = null;
 
   try {
     const response = await apiConnector(
@@ -96,11 +111,8 @@ export const deleteCategory = async (categoryId, token) => {
       categoryId,
       {
         Authorization: `Bearer ${token}`,
-        // "Content-Type": "application/json",
       }
     );
-
-    // console.log("Delete category api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not delete category");
@@ -109,8 +121,10 @@ export const deleteCategory = async (categoryId, token) => {
     result = response?.data?.data;
   } catch (error) {
     console.log("delete category api error...", error);
-    toast.error(error.response.data.message);
+    const apiError = error as ApiError;
+    toast.error(apiError.response?.data?.message || "Failed to delete category");
   }
   toast.dismiss(toastId);
   return result;
 };
+

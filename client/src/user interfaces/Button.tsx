@@ -2,6 +2,15 @@ import React from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+interface ButtonProps {
+  btn_name: string;
+  btn_link: string;
+  btn_color: string;
+  px?: string;
+  py?: string;
+  text_color?: string;
+  text_size?: string;
+}
 
 export default function Button({
   btn_name,
@@ -11,7 +20,7 @@ export default function Button({
   py = "py-3",
   text_color = "text-black",
   text_size = "13px",
-}) {
+}: ButtonProps) {
   return (
     <div className="flex gap-7">
       <Link to={btn_link}>
@@ -25,17 +34,23 @@ export default function Button({
   );
 }
 
-export function SideArrowButton({btn_link , btn_text}) {
+interface SideArrowButtonProps {
+  btn_link: string;
+  btn_text: string;
+}
+
+export function SideArrowButton({ btn_link, btn_text }: SideArrowButtonProps) {
   return (
     <div>
-      <Link to="/login">
+      <Link to={btn_link}>
         <div className="mt-4 flex justify-left items-center gap-1 text-[14px] hover:underline">
           <p>
             <FaArrowLeft />
           </p>
-          <p>Back to Login</p>
+          <p>{btn_text}</p>
         </div>
       </Link>
     </div>
   );
 }
+

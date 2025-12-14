@@ -1,9 +1,24 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { UseFormRegisterReturn, FieldError } from "react-hook-form";
+
+interface InputBoxProps {
+  name: string;
+  type?: string;
+  required?: boolean;
+  id?: string;
+  label?: string;
+  value?: string;
+  changeHandler?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  isPassword?: boolean;
+  errors?: FieldError;
+  register?: UseFormRegisterReturn;
+}
 
 export default function InputBox({
   name,
-  type,
+  type = "text",
   required,
   id,
   label,
@@ -13,7 +28,7 @@ export default function InputBox({
   isPassword,
   errors,
   register,
-}) {
+}: InputBoxProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -51,3 +66,4 @@ export default function InputBox({
     </div>
   );
 }
+
