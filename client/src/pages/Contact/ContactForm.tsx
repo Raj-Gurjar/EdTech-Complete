@@ -4,14 +4,25 @@ import { useForm } from "react-hook-form";
 import countryCode from "../../data/countryCode.json";
 import InputBox from "../../user interfaces/InputBox";
 
+interface ContactFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  subject: string;
+  countryCode?: string;
+  contactNo?: string;
+  message: string;
+}
+
 export default function ContactForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm();
-  const ContactHandler = (data) => {
+  } = useForm<ContactFormData>();
+
+  const ContactHandler = (data: ContactFormData) => {
     toast.success("Contact details sent");
     console.log("Contact Details sent:", data);
     reset();
@@ -36,6 +47,7 @@ export default function ContactForm() {
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
           <div className="flex-1">
             <InputBox
+              name="firstName"
               label="First Name"
               id="firstName"
               type={"text"}
@@ -50,6 +62,7 @@ export default function ContactForm() {
 
           <div className="flex-1">
             <InputBox
+              name="lastName"
               label="Last Name"
               id="lastName"
               type={"text"}
@@ -64,23 +77,7 @@ export default function ContactForm() {
         </div>
 
         <InputBox
-          label="Email Address"
-          id="email"
-          type={"email"}
-          required={true}
-          placeholder="Enter your email address"
-          register={register("email", {
-            required: "Email is required",
-            pattern: {
-              value: /^\S+@\S+$/i,
-              message: "Enter a valid email address",
-            },
-          })}
-          errors={errors.email}
-        />
-
-        {/* Email */}
-        <InputBox
+          name="email"
           label="Email Address"
           id="email"
           type={"email"}
@@ -124,7 +121,7 @@ export default function ContactForm() {
               className="bg-black3 border border-black5 rounded-lg px-3 py-3 text-white text-sm focus:outline-none focus:border-yellow8 transition-colors flex-shrink-0"
               style={{ width: "120px" }}
             >
-              {countryCode.map((country, index) => (
+              {countryCode.map((country: { code: string }, index: number) => (
                 <option key={index} value={country.code} className="bg-black2">
                   {country.code}
                 </option>
@@ -132,6 +129,7 @@ export default function ContactForm() {
             </select>
             <div className="flex-1">
               <InputBox
+                name="contactNo"
                 id="contactNo"
                 type={"number"}
                 placeholder="Enter your contact number"
@@ -163,7 +161,7 @@ export default function ContactForm() {
           <textarea
             className="bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors min-h-[150px] resize-y"
             id="message"
-            rows="6"
+            rows={6}
             {...register("message", { required: "Message is required" })}
             placeholder="Tell us more about your query or feedback..."
           />
@@ -183,3 +181,4 @@ export default function ContactForm() {
     </div>
   );
 }
+

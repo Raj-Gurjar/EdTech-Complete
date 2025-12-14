@@ -4,9 +4,17 @@ import { MdEmail } from "react-icons/md";
 import { IoMdCall } from "react-icons/io";
 import ContactForm from "./ContactForm";
 import HighlightText from "../../user interfaces/HighlightText";
+import { ReactElement } from "react";
+
+interface ContactInfo {
+  icon: ReactElement;
+  title: string;
+  description: string;
+  details: string;
+}
 
 export default function Contact() {
-  const contactInfo = [
+  const contactInfo: ContactInfo[] = [
     {
       icon: <FaLocationDot className="text-yellow8" />,
       title: "Visit Us",
@@ -74,3 +82,4 @@ export default function Contact() {
     </div>
   );
 }
+

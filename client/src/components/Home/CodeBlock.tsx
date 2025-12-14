@@ -2,6 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { TypeAnimation } from "react-type-animation";
 
+interface CodeBlockProps {
+  position: string;
+  title: string;
+  text: string;
+  btn1: string;
+  btn2: string;
+  codeText: string;
+  bgGradient?: string;
+}
+
 export default function CodeBlock({
   position,
   title,
@@ -10,8 +20,8 @@ export default function CodeBlock({
   btn2,
   codeText,
   bgGradient = "",
-}) {
-  const num = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+}: CodeBlockProps) {
+  const num: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
   return (
     <div className={`flex ${position} items-center gap-6 sm:gap-8 lg:gap-12`}>
@@ -65,3 +75,4 @@ export default function CodeBlock({
     </div>
   );
 }
+
