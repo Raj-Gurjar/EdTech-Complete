@@ -1,9 +1,9 @@
-import React from 'react'
-import AboutSection1 from './AboutSection1'
-import AboutSection2 from './AboutSection2'
-import AboutSection3 from './AboutSection3'
-import AboutSection4 from './AboutSection4'
-import Footer from '../../components/Footer/Footer'
+import React from 'react';
+import AboutSection1 from './AboutSection1';
+import AboutSection2 from './AboutSection2';
+import AboutSection3 from './AboutSection3';
+import AboutSection4 from './AboutSection4';
+import Footer from '../../components/Footer/Footer';
 
 export default function About() {
   return (
@@ -27,5 +27,6 @@ export default function About() {
           <Footer/>
       </div>
     </div>
-  )
+  );
 }
+

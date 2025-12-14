@@ -1,7 +1,12 @@
 import React from "react";
 
+interface Achievement {
+  number: string;
+  label: string;
+}
+
 export default function AboutSection3() {
-  const achievements = [
+  const achievements: Achievement[] = [
     { number: "5K", label: "Lessons" },
     { number: "10K", label: "Students" },
     { number: "500+", label: "Courses" },
@@ -19,3 +24,4 @@ export default function AboutSection3() {
     </div>
   );
 }
+

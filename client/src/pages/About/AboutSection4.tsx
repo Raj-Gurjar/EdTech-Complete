@@ -2,8 +2,20 @@ import React, { useEffect, useState, useRef } from "react";
 import HighlightText from "../../user interfaces/HighlightText";
 import Button from "../../user interfaces/Button";
 
+interface Feature {
+  id: number;
+  heading: string;
+  highlightText?: string;
+  description: string;
+  button?: {
+    btn_color: string;
+    btn_name: string;
+    btn_link: string;
+  };
+}
+
 export default function AboutSection4() {
-  const features = [
+  const features: Feature[] = [
     {
       id: 0,
       heading: "World Class Learning for",
@@ -48,15 +60,14 @@ export default function AboutSection4() {
     },
   ];
 
-  const [minHeight, setMinHeight] = useState(0);
-  const featureRef = useRef(null);
+  const [minHeight, setMinHeight] = useState<number>(0);
+  const featureRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (featureRef.current) {
       setMinHeight(featureRef.current.clientHeight);
     }
   }, []);
-
 
   return (
     <div className="">
@@ -73,19 +84,21 @@ export default function AboutSection4() {
               <div className="bg-black3 p-5">
                 <h1 className="text-2xl font-bold">{i.heading}</h1>
                 <h2 className="text-2xl font-bold">
-                  <HighlightText text={i.highlightText} />
+                  <HighlightText text={i.highlightText || ""} />
                 </h2>
                 <p className="text-[14px] my-4">{i.description}</p>
                 <div>
-                  <Button
-                    btn_color={i.button.btn_color}
-                    btn_name={i.button.btn_name}
-                    btn_link={i.button.btn_link}
-                    text_size={"text-[13px]"}
-                    text_color={"text-black"}
-                    px={"px-4"}
-                    py={"py-2"}
-                  />
+                  {i.button && (
+                    <Button
+                      btn_color={i.button.btn_color}
+                      btn_name={i.button.btn_name}
+                      btn_link={i.button.btn_link}
+                      text_size={"text-[13px]"}
+                      text_color={"text-black"}
+                      px={"px-4"}
+                      py={"py-2"}
+                    />
+                  )}
                 </div>
               </div>
             ) : (
@@ -100,3 +113,4 @@ export default function AboutSection4() {
     </div>
   );
 }
+

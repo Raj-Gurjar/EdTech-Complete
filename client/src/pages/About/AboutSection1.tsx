@@ -4,7 +4,7 @@ import HighlightText from "../../user interfaces/HighlightText";
 
 export default function AboutSection1() {
   // Array of image data
-  const images = [img1, img1, img1];
+  const images: string[] = [img1, img1, img1];
 
   return (
     <div className="bg-black4 flex justify-center flex-col text-center items-center pt-10">
@@ -35,3 +35,4 @@ export default function AboutSection1() {
     </div>
   );
 }
+
