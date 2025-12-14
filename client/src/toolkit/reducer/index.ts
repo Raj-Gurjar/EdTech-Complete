@@ -12,4 +12,6 @@ const rootReducer = combineReducers({
   course: courseReducer,
   viewCourse: viewCourseReducer
 });
+
 export default rootReducer;
+

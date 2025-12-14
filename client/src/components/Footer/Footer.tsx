@@ -1,13 +1,24 @@
 import React from 'react';
 
+interface SocialMedia {
+  name: string;
+  url: string;
+  icon: string;
+}
+
+interface Page {
+  name: string;
+  url: string;
+}
+
 export default function Footer() {
-  const socialMedia = [
+  const socialMedia: SocialMedia[] = [
     { name: 'YouTube', url: 'https://youtube.com', icon: '/path-to-youtube-icon.png' },
     { name: 'Instagram', url: 'https://instagram.com', icon: '/path-to-instagram-icon.png' },
     { name: 'Twitter', url: 'https://twitter.com', icon: '/path-to-twitter-icon.png' }
   ];
 
-  const pages = [
+  const pages: Page[] = [
     { name: 'Home', url: '/' },
     { name: 'About', url: '/about' },
     { name: 'All Courses', url: '/courses' },
@@ -15,7 +26,7 @@ export default function Footer() {
     { name: 'FAQ', url: '/faq' }
   ];
 
-  const contactInfo = [
+  const contactInfo: string[] = [
     '123 LMS Street, City, Country',
     'Email: support@lms.com',
     'Phone: +1 234 567 890'
@@ -76,3 +87,4 @@ export default function Footer() {
     </footer>
   );
 }
+
