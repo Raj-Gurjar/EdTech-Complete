@@ -5,8 +5,19 @@ import {
   TiStarOutline,
 } from "react-icons/ti";
 
-export default function RatingStars({ Review_Count, Star_Size }) {
-  const [starCount, setStarCount] = useState({
+interface RatingStarsProps {
+  Review_Count: number;
+  Star_Size?: number;
+}
+
+interface StarCount {
+  full: number;
+  half: number;
+  empty: number;
+}
+
+export default function RatingStars({ Review_Count, Star_Size = 20 }: RatingStarsProps) {
+  const [starCount, setStarCount] = useState<StarCount>({
     full: 0,
     half: 0,
     empty: 0,
@@ -25,15 +36,15 @@ export default function RatingStars({ Review_Count, Star_Size }) {
   return (
     <div className="flex gap-1 text-yellow-100">
       {[...new Array(starCount.full)].map((_, i) => {
-        return <TiStarFullOutline key={i} size={Star_Size || 20} />;
+        return <TiStarFullOutline key={i} size={Star_Size} />;
       })}
 
       {[...new Array(starCount.half)].map((_, i) => {
-        return <TiStarHalfOutline key={i} size={Star_Size || 20} />;
+        return <TiStarHalfOutline key={i} size={Star_Size} />;
       })}
 
       {[...new Array(starCount.empty)].map((_, i) => {
-        return <TiStarOutline key={i} size={Star_Size || 20} />;
+        return <TiStarOutline key={i} size={Star_Size} />;
       })}
     </div>
   );

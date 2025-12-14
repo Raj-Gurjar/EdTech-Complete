@@ -1,4 +1,21 @@
 import React, { useEffect, useState } from "react";
+import { UseFormRegister, UseFormSetValue, FieldErrors } from "react-hook-form";
+
+interface UploadMediaProps {
+  name: string;
+  label: string;
+  setValue: UseFormSetValue<any>;
+  register: UseFormRegister<any>;
+  errors: FieldErrors<any>;
+  video?: boolean;
+  image?: boolean;
+  previewMedia?: string;
+}
+
+interface MediaState {
+  file: File | string;
+  preview: string;
+}
 
 export default function UploadMedia({
   name,
@@ -9,9 +26,8 @@ export default function UploadMedia({
   video,
   image,
   previewMedia,
-}) {
-  // console.log("set val", setValue);
-  const [media, setMedia] = useState({
+}: UploadMediaProps) {
+  const [media, setMedia] = useState<MediaState>({
     file: "",
     preview: previewMedia || "",
   });
@@ -27,13 +43,13 @@ export default function UploadMedia({
     }
   }, [previewMedia]);
 
-  const handleFileChange = (e) => {
-    const uploadedFile = e.target.files[0];
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const uploadedFile = e.target.files?.[0];
     if (uploadedFile) {
       const reader = new FileReader();
       reader.readAsDataURL(uploadedFile);
       reader.onloadend = () => {
-        setMedia({ file: uploadedFile, preview: reader.result });
+        setMedia({ file: uploadedFile, preview: reader.result as string });
       };
     }
   };
@@ -50,7 +66,6 @@ export default function UploadMedia({
           video ? (
             <video
               src={media.preview}
-              alt={label}
               controls
               className="h-[300px] w-[500px] m-5"
             />

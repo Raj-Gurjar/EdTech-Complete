@@ -7,7 +7,7 @@ export const authEndpoints = {
   LOGIN_API: BASE_URL + "/auth/login",
   RESET_PASSWORD_TOKEN_API: BASE_URL + "/auth/resetPasswordToken",
   RESET_PASSWORD_API: BASE_URL + "/auth/reset-password",
-};
+} as const;
 
 //! PROFILE ENDPOINTS
 
@@ -21,14 +21,14 @@ export const profileEndpoints = {
   DELETE_PROFILE_API: BASE_URL + "/profile/deleteProfile",
   GET_INSTRUCTOR_DASHBOARD_DATA_API: BASE_URL + "/profile/instructor-dashboard",
   GET_ADMIN_DASHBOARD_DATA_API: BASE_URL + "/profile/admin-dashboard",
-};
+} as const;
 
 //! STUDENTS ENDPOINTS
 export const studentPaymentEndpoints = {
   COURSE_PAYMENT_API: BASE_URL + "/payment/capturePayment",
   COURSE_VERIFY_API: BASE_URL + "/payment/verifyPayment",
   SEND_PAYMENT_SUCCESS_EMAIL_API: BASE_URL + "/payment/sendPaymentSuccessEmail",
-};
+} as const;
 
 //! COURSE ENDPOINTS
 export const courseEndpoints = {
@@ -56,12 +56,12 @@ export const courseEndpoints = {
   GET_COURSE_DETAILS_ADMIN_API: BASE_URL + "/course/courseDetails-admin",
   PUBLISH_COURSE_ADMIN_API: BASE_URL + "/course/publishCourse-admin",
   UNPUBLISH_COURSE_ADMIN_API: BASE_URL + "/course/unpublishCourse-admin",
-};
+} as const;
 
 //! REVIEWS ENDPOINTS
 export const reviewEndpoints = {
   GET_ALL_REVIEWS_API: BASE_URL + "/course/getAllReviews",
-};
+} as const;
 
 //! CATEGORY ENDPOINTS
 export const categoryEndpoints = {
@@ -69,13 +69,13 @@ export const categoryEndpoints = {
   GET_ALL_CATEGORIES_API: BASE_URL + "/category/showAllCategories",
   CREATE_CATEGORY_API: BASE_URL + "/category/createCategory",
   DELETE_CATEGORY_API: BASE_URL + "/category/deleteCategory",
-};
+} as const;
 
 //! CONTACT ENDPOINT
 
 export const contactEndpoints = {
   CONTACT_US_API: BASE_URL + "/reach/contact",
-};
+} as const;
 
 //! SETTINGS ENDPOINTS
-export const settingsEndpoints = {};
+export const settingsEndpoints = {} as const;
