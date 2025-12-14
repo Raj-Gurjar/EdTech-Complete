@@ -11,12 +11,21 @@ import {
 import { MdClose } from "react-icons/md";
 import toast from "react-hot-toast";
 
-export default function CourseReviewModal({ setReviewModal }) {
-  const { user } = useSelector((state) => state.profile);
-  const { courseEntireData } = useSelector((state) => state.viewCourse);
-  const { token } = useSelector((state) => state.auth);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [rating, setRating] = useState(0);
+interface CourseReviewModalProps {
+  setReviewModal: (value: boolean) => void;
+}
+
+interface ReviewFormData {
+  courseReview: string;
+  courseRating: number;
+}
+
+export default function CourseReviewModal({ setReviewModal }: CourseReviewModalProps) {
+  const { user } = useSelector((state: any) => state.profile);
+  const { courseEntireData } = useSelector((state: any) => state.viewCourse);
+  const { token } = useSelector((state: any) => state.auth);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [rating, setRating] = useState<number>(0);
 
   const {
     register,
@@ -24,19 +33,19 @@ export default function CourseReviewModal({ setReviewModal }) {
     setValue,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm<ReviewFormData>();
 
   useEffect(() => {
     setValue("courseReview", "");
     setValue("courseRating", 0);
   }, [setValue]);
 
-  const ratingChange = (newRating) => {
+  const ratingChange = (newRating: number) => {
     setRating(newRating);
     setValue("courseRating", newRating);
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: ReviewFormData) => {
     if (!data.courseRating || data.courseRating === 0) {
       toast.error("Please select a rating");
       return;
@@ -64,7 +73,7 @@ export default function CourseReviewModal({ setReviewModal }) {
     }
   };
 
-  const handleBackdropClick = (e) => {
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       setReviewModal(false);
     }
@@ -102,7 +111,7 @@ export default function CourseReviewModal({ setReviewModal }) {
                 alt={courseEntireData.courseName}
                 className="w-20 h-20 rounded-lg object-cover"
                 onError={(e) => {
-                  e.target.src = "https://via.placeholder.com/200x150";
+                  (e.target as HTMLImageElement).src = "https://via.placeholder.com/200x150";
                 }}
               />
             )}
@@ -161,7 +170,7 @@ export default function CourseReviewModal({ setReviewModal }) {
                   message: "Review must be at least 10 characters long"
                 }
               })}
-              rows="6"
+              rows={6}
               className="w-full px-4 py-3 bg-black5 border border-black6 rounded-lg text-white placeholder-black7 focus:outline-none focus:ring-2 focus:ring-yellow8 focus:border-transparent transition-all resize-none"
             />
             {errors.courseReview && (
@@ -205,3 +214,4 @@ export default function CourseReviewModal({ setReviewModal }) {
     </div>
   );
 }
+

@@ -10,11 +10,14 @@ import { FreeMode, Pagination, Autoplay, Navigation } from "swiper/modules";
 import { getAllReviews } from "../../services/operations/courseDetailsAPI";
 import ReviewCard from "../Cards/ReviewCard";
 import HighlightText from "../../user interfaces/HighlightText";
-// import ReactStars from "rea ct-stars";
 
-export default function ReviewSlider({ reviewData }) {
-  const [reviewsData, setReviewsData] = useState([]);
-  const [loading, setLoading] = useState(false);
+interface ReviewSliderProps {
+  reviewData?: any[];
+}
+
+export default function ReviewSlider({ reviewData }: ReviewSliderProps) {
+  const [reviewsData, setReviewsData] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const truncateWords = 20;
 
@@ -32,11 +35,8 @@ export default function ReviewSlider({ reviewData }) {
     showAllReviews();
   }, []);
 
-  // console.log("rdd", reviewsData);
-
   return (
     <div className="mx-auto m-11/12 mt-[100px]">
-
       <div>
         <h1 className="text-3xl font-bold">Reviews from our <HighlightText text={"Learners"}/></h1>
       </div>
@@ -72,3 +72,4 @@ export default function ReviewSlider({ reviewData }) {
     </div>
   );
 }
+

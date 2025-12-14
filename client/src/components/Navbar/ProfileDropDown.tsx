@@ -13,21 +13,21 @@ import {
 } from "react-icons/fa";
 
 export default function ProfileDropDown() {
-  const [profile, toggleProfile] = useState(false);
-  const dropdownRef = useRef(null);
+  const [profile, toggleProfile] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const { user } = useSelector((state) => state.profile);
+  const { user } = useSelector((state: any) => state.profile);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   function logOutHandler() {
-    dispatch(logout(navigate));
+    dispatch(logout(navigate) as any);
   }
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         toggleProfile(false);
       }
     }
@@ -130,3 +130,4 @@ export default function ProfileDropDown() {
     </div>
   );
 }
+

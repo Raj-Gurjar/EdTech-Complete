@@ -5,8 +5,34 @@ import avgRating from "../../utils/avgRating";
 import { COURSE_STATUS } from "../../utils/constants";
 import { FaUser, FaRupeeSign, FaStar, FaBookOpen } from "react-icons/fa";
 
-export default function CourseCardAdmin({ course }) {
-  const [avgRatingCount, setAvgRatingCount] = useState(0);
+interface CourseSection {
+  subSections?: any[];
+}
+
+interface Course {
+  _id: string;
+  courseName: string;
+  thumbnail?: string;
+  price?: number;
+  status?: string;
+  category?: {
+    name: string;
+  };
+  instructor?: {
+    firstName: string;
+    lastName: string;
+  };
+  ratingAndReviews?: any[];
+  studentsEnrolled?: any[];
+  courseContent?: CourseSection[];
+}
+
+interface CourseCardAdminProps {
+  course: Course;
+}
+
+export default function CourseCardAdmin({ course }: CourseCardAdminProps) {
+  const [avgRatingCount, setAvgRatingCount] = useState<number>(0);
 
   useEffect(() => {
     const count = avgRating(course.ratingAndReviews);
@@ -15,7 +41,7 @@ export default function CourseCardAdmin({ course }) {
 
   const totalStudents = course?.studentsEnrolled?.length || 0;
   const totalLectures = course?.courseContent?.reduce(
-    (acc, section) => acc + (section?.subSections?.length || 0),
+    (acc: number, section: CourseSection) => acc + (section?.subSections?.length || 0),
     0
   ) || 0;
 
@@ -104,3 +130,4 @@ export default function CourseCardAdmin({ course }) {
     </Link>
   );
 }
+

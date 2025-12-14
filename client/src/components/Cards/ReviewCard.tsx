@@ -2,7 +2,24 @@ import React from "react";
 import RatingStars from "../../utils/RatingStars";
 import { formateDate } from "../../utils/formatDate";
 
-export default function ReviewCard({ data }) {
+interface ReviewUser {
+  firstName?: string;
+  lastName?: string;
+  profileImage?: string;
+}
+
+interface ReviewData {
+  user?: ReviewUser;
+  rating?: number;
+  review?: string;
+  createdAt?: string;
+}
+
+interface ReviewCardProps {
+  data: ReviewData | null;
+}
+
+export default function ReviewCard({ data }: ReviewCardProps) {
   if (!data) return null;
 
   const user = data?.user || {};
@@ -19,7 +36,7 @@ export default function ReviewCard({ data }) {
             alt={userName}
             className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-2 border-black5"
             onError={(e) => {
-              e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${userName}`;
+              (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/initials/svg?seed=${userName}`;
             }}
           />
         </div>
@@ -57,3 +74,4 @@ export default function ReviewCard({ data }) {
     </div>
   );
 }
+

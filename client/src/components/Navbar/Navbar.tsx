@@ -11,16 +11,16 @@ import { ACCOUNT_TYPE } from "../../utils/constants";
 import { navItems } from "../../data/SideBarData";
 
 export default function Navbar() {
-  const { token } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.profile);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const { token } = useSelector((state: any) => state.auth);
+  const { user } = useSelector((state: any) => state.profile);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [searchOpen, setSearchOpen] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const navigate = useNavigate();
   const location = useLocation();
-  const mobileMenuRef = useRef(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
-  const totalItems = localStorage.getItem("totalItem");
+  const totalItems = parseInt(localStorage.getItem("totalItem") || "0", 10);
   
   // Filter dashboard nav items based on user account type (show when logged in on mobile)
   const filteredDashboardItems = token !== null && user
@@ -29,10 +29,10 @@ export default function Navbar() {
 
   // Close mobile menu when clicking outside
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+    function handleClickOutside(event: MouseEvent) {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
         // Don't close if clicking on hamburger button
-        if (!event.target.closest('.hamburger-button')) {
+        if (!(event.target as Element).closest('.hamburger-button')) {
           setMobileMenuOpen(false);
         }
       }
@@ -52,7 +52,7 @@ export default function Navbar() {
   }, [mobileMenuOpen]);
 
   // Handle search
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/allCourses?search=${encodeURIComponent(searchQuery.trim())}`);
@@ -111,7 +111,7 @@ export default function Navbar() {
                   {link.title === "Catalogs" ? (
                     <div></div>
                   ) : (
-                      <p className="text-sm xl:text-base">{link.title}</p>
+                    <p className="text-sm xl:text-base">{link.title}</p>
                   )}
                 </li>
               </NavLink>
@@ -342,3 +342,4 @@ export default function Navbar() {
     </>
   );
 }
+

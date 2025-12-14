@@ -4,8 +4,30 @@ import RatingStars from "../../utils/RatingStars";
 import avgRating from "../../utils/avgRating";
 import { FaUsers, FaBook } from "react-icons/fa";
 
-export default function CourseCard({ course }) {
-  const [avgRatingCount, setAvgRatingCount] = useState(0);
+interface Course {
+  _id: string;
+  courseName: string;
+  thumbnail?: string;
+  price?: number;
+  status?: string;
+  category?: {
+    name: string;
+  };
+  instructor?: {
+    firstName: string;
+    lastName: string;
+  };
+  ratingAndReviews?: any[];
+  studentsEnrolled?: any[];
+  courseContent?: any[];
+}
+
+interface CourseCardProps {
+  course: Course;
+}
+
+export default function CourseCard({ course }: CourseCardProps) {
+  const [avgRatingCount, setAvgRatingCount] = useState<number>(0);
 
   useEffect(() => {
     const count = avgRating(course.ratingAndReviews);
@@ -25,7 +47,7 @@ export default function CourseCard({ course }) {
             alt={course?.courseName}
             className="w-full h-[180px] sm:h-[200px] object-cover group-hover:scale-110 transition-transform duration-500"
             onError={(e) => {
-              e.target.src = "https://via.placeholder.com/400x250";
+              (e.target as HTMLImageElement).src = "https://via.placeholder.com/400x250";
             }}
           />
           <div className="absolute top-3 right-3">
@@ -89,7 +111,7 @@ export default function CourseCard({ course }) {
                 <span>{studentsEnrolled} {studentsEnrolled === 1 ? "student" : "students"}</span>
               </div>
             )}
-            {course.courseContent?.length > 0 && (
+            {course.courseContent?.length && course.courseContent.length > 0 && (
               <div className="flex items-center gap-1">
                 <FaBook className="text-sm" />
                 <span>{course.courseContent.length} {course.courseContent.length === 1 ? "section" : "sections"}</span>
@@ -111,3 +133,4 @@ export default function CourseCard({ course }) {
     </Link>
   );
 }
+

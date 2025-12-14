@@ -6,7 +6,29 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import CourseCard from "../Cards/CourseCard";
 
-export default function CourseSlider({ courses }) {
+interface Course {
+  _id: string;
+  courseName: string;
+  thumbnail?: string;
+  price?: number;
+  status?: string;
+  category?: {
+    name: string;
+  };
+  instructor?: {
+    firstName: string;
+    lastName: string;
+  };
+  ratingAndReviews?: any[];
+  studentsEnrolled?: any[];
+  courseContent?: any[];
+}
+
+interface CourseSliderProps {
+  courses: Course[];
+}
+
+export default function CourseSlider({ courses }: CourseSliderProps) {
   // Add custom styles for Swiper
   useEffect(() => {
     const style = document.createElement("style");
@@ -88,3 +110,4 @@ export default function CourseSlider({ courses }) {
     </div>
   );
 }
+

@@ -1,8 +1,7 @@
 import { apiConnector } from "../apiConnector";
 import { authEndpoints, profileEndpoints } from "../api";
 import toast from "react-hot-toast";
-
-// import {setLoading}
+import { AxiosError } from "axios";
 
 import { setToken, setLoading } from "../../toolkit/slice/authSlice";
 import { setUser } from "../../toolkit/slice/profileSlice";
@@ -20,12 +19,20 @@ const {
   GET_ADMIN_DASHBOARD_DATA_API,
 } = profileEndpoints;
 
-// export function getUserDetails(token, navigate) {}
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+    message?: string;
+  };
+  message?: string;
+}
 
-export async function getUserEnrolledCourses(token) {
+export async function getUserEnrolledCourses(token: string): Promise<any[]> {
   const toastId = toast.loading("Loading...");
 
-  let result = [];
+  let result: any[] = [];
 
   try {
     const response = await apiConnector(
@@ -44,25 +51,23 @@ export async function getUserEnrolledCourses(token) {
     }
     result = response.data.userDetails.courses;
     console.log("Enrolled courses data result data..", result);
-    // toast.success("Enrolled Courses Data Fetched");
-    // navigate("/verifyEmail");
-    // toast.dismiss(toastId);
   } catch (error) {
     console.log(
       "Error in fetching Enrolled Courses error..",
-      error.response?.data
+      (error as ApiError).response?.data
     );
-    toast.error(error.response?.data?.message || error.message || "Failed to fetch enrolled courses");
+    const apiError = error as ApiError;
+    toast.error(apiError.response?.data?.message || apiError.message || "Failed to fetch enrolled courses");
   }
   toast.dismiss(toastId);
   return result;
 }
 
-export async function updateProfile(data, token) {
+export async function updateProfile(data: any, token: string): Promise<any> {
   console.log("data in api ", data);
   const toastId = toast.loading("Loading...");
 
-  let result = null;
+  let result: any = null;
 
   try {
     const response = await apiConnector("PUT", UPDATE_PROFILE_API, data, {
@@ -76,24 +81,20 @@ export async function updateProfile(data, token) {
     }
     result = response?.data?.updatedUser;
 
-    // localStorage.setItem("user", JSON.stringify(result));
     toast.success(response?.data?.message);
-
-    // console.log("Enrolled courses data result data..", result);
   } catch (error) {
     console.log("Error in updating profile api ...", error);
-    toast.error(error.response?.data?.message || error.message || "Failed to update profile");
+    const apiError = error as ApiError;
+    toast.error(apiError.response?.data?.message || apiError.message || "Failed to update profile");
   }
   toast.dismiss(toastId);
   return result;
 }
 
-export async function updateProfileImage(formData, token) {
-  // console.log("data in api ", formData.get("profileImage"));
-
+export async function updateProfileImage(formData: FormData, token: string): Promise<any> {
   const toastId = toast.loading("Loading...");
 
-  let result = null;
+  let result: any = null;
 
   try {
     const response = await apiConnector(
@@ -116,16 +117,16 @@ export async function updateProfileImage(formData, token) {
     toast.success(response?.data?.message);
   } catch (error) {
     console.log("Error in updating profile api ...", error);
-    toast.error(error?.response?.data?.message || error.message || "Failed to update profile image");
+    const apiError = error as ApiError;
+    toast.error(apiError.response?.data?.message || apiError.message || "Failed to update profile image");
   }
   toast.dismiss(toastId);
   return result;
 }
 
-export const deleteAccount = async (data, token) => {
-  // console.log("entering updateSubSec api call:", data);
+export const deleteAccount = async (data: any, token: string): Promise<boolean | null> => {
   const toastId = toast.loading("Loading");
-  let result = null;
+  let result: boolean | null = null;
 
   console.log("delete profile data : ", data);
   try {
@@ -141,18 +142,17 @@ export const deleteAccount = async (data, token) => {
     toast.success("Account deleted Successfully");
   } catch (error) {
     console.log("delete Account api error...", error);
-    toast.error(error.response?.data?.message || error.response?.message || error.message || "Failed to delete account");
+    const apiError = error as ApiError;
+    toast.error(apiError.response?.data?.message || apiError.response?.message || apiError.message || "Failed to delete account");
   }
   toast.dismiss(toastId);
   return result;
 };
 
-export const getInstructorData = async (token) => {
+export const getInstructorData = async (token: string): Promise<any[]> => {
   const toastId = toast.loading("Loading");
-  // console.log("tttt", token);
-  let result = [];
+  let result: any[] = [];
 
-  // console.log("delete profile data : ", data);
   try {
     const response = await apiConnector(
       "GET",
@@ -162,29 +162,26 @@ export const getInstructorData = async (token) => {
         Authorization: `Bearer ${token}`,
       }
     );
-    // console.log("inst dashboard data api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not get the inst data");
     }
     result = response?.data?.data;
-    // console.log("result", result);
 
     toast.success("Instructor Data Fetched Successfully");
   } catch (error) {
     console.log("Instructor data api error...", error);
-    toast.error(error.response?.data?.message || error.response?.message || error.message || "Failed to fetch instructor data");
+    const apiError = error as ApiError;
+    toast.error(apiError.response?.data?.message || apiError.response?.message || apiError.message || "Failed to fetch instructor data");
   }
   toast.dismiss(toastId);
   return result;
 };
 
-export const getAdminData = async (token) => {
+export const getAdminData = async (token: string): Promise<any[]> => {
   const toastId = toast.loading("Loading");
-  // console.log("tttt", token);
-  let result = [];
+  let result: any[] = [];
 
-  // console.log("delete profile data : ", data);
   try {
     const response = await apiConnector(
       "GET",
@@ -194,19 +191,19 @@ export const getAdminData = async (token) => {
         Authorization: `Bearer ${token}`,
       }
     );
-    // console.log("inst dashboard data api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not get the admin data");
     }
     result = response?.data?.data;
-    // console.log("result", result);
 
     toast.success("Admin Data Fetched Successfully");
   } catch (error) {
     console.log("Admin data api error...", error);
-    toast.error(error.response?.data?.message || error.response?.message || error.message || "Failed to fetch admin data");
+    const apiError = error as ApiError;
+    toast.error(apiError.response?.data?.message || apiError.response?.message || apiError.message || "Failed to fetch admin data");
   }
   toast.dismiss(toastId);
   return result;
 };
+
