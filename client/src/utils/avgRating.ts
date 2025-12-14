@@ -1,4 +1,6 @@
-export default function avgRating(ratingArr) {
+type RatingItem = number | { rating: number };
+
+export default function avgRating(ratingArr: RatingItem[] | null | undefined): number {
   // Handle null, undefined, or empty arrays
   if (!ratingArr || !Array.isArray(ratingArr) || ratingArr.length === 0) {
     return 0;

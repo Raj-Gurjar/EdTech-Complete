@@ -1,4 +1,11 @@
-export const SideBarLinks = [
+export interface SideBarLink {
+  id: number;
+  name: string;
+  path: string;
+  icon: string;
+}
+
+export const SideBarLinks: SideBarLink[] = [
   {
     id: 1,
     name: "My Profile",
