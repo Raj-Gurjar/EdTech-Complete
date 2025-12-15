@@ -8,11 +8,24 @@ import { ACCOUNT_TYPE } from "../../utils/constants";
 import InputBox from "../../user interfaces/InputBox";
 import HighlightText from "../../user interfaces/HighlightText";
 
-export default function SignForm() {
-  const [accountType, setAccountType] = useState("Student");
+interface SignupFormProps {
+  setIsLoggedIn?: (value: boolean) => void;
+}
+
+interface SignupFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  adminKey: string;
+}
+
+export default function SignupForm({ setIsLoggedIn }: SignupFormProps) {
+  const [accountType, setAccountType] = useState<string>("Student");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<SignupFormData>({
     firstName: "",
     lastName: "",
     email: "",
@@ -21,7 +34,7 @@ export default function SignForm() {
     adminKey: "",
   });
 
-  function changeHandler(event) {
+  function changeHandler(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -31,10 +44,10 @@ export default function SignForm() {
 
   const { firstName, lastName, email, password, confirmPassword } = formData;
 
-  async function signUpHandler(event) {
+  async function signUpHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    dispatch(setSignupData({ ...formData, accountType }));
-    dispatch(sendOTP(email, navigate));
+    dispatch(setSignupData({ ...formData, accountType }) as any);
+    dispatch(sendOTP(email, navigate) as any);
   }
 
   return (
@@ -179,3 +192,4 @@ export default function SignForm() {
     </div>
   );
 }
+

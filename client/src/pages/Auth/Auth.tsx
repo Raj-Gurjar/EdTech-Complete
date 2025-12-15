@@ -3,7 +3,11 @@ import AuthTemplate from "../../components/Auth/AuthTemplate";
 import loginImg from "../../assets/images/home-img-1.jpg";
 import signupImg from "../../assets/images/home-img-1.jpg";
 
-export function Login({ setIsLoggedIn }) {
+interface LoginProps {
+  setIsLoggedIn?: (value: boolean) => void;
+}
+
+export function Login({ setIsLoggedIn }: LoginProps) {
   return (
     <div>
       <AuthTemplate
@@ -18,17 +22,18 @@ export function Login({ setIsLoggedIn }) {
   );
 }
 
-export function Signup({ setIsLoggedIn }) {
+export function Signup({ setIsLoggedIn }: LoginProps) {
   return (
     <div>
       <AuthTemplate
         title="Join Us Today"
         desc1="Create your account and start your learning journey."
         desc2="Get access to all the resources and community support."
-        sideImg={signupImg} // Updated the image for signup
-        formType="signup" // Changed formType to "signup"
+        sideImg={signupImg}
+        formType="signup"
         setIsLoggedIn={setIsLoggedIn}
       />
     </div>
   );
 }
+

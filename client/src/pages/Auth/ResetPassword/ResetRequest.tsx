@@ -6,15 +6,15 @@ import InputBox from "../../../user interfaces/InputBox";
 import { SideArrowButton } from "../../../user interfaces/Button";
 
 export default function ResetRequest() {
-  const [emailSent, setEmailSent] = useState(false);
-  const [email, setEmail] = useState("");
-  const { loading } = useSelector((state) => state.auth);
+  const [emailSent, setEmailSent] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+  const { loading } = useSelector((state: any) => state.auth);
 
   const dispatch = useDispatch();
 
-  function handleOnSubmit(e) {
+  function handleOnSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    dispatch(getPasswordResetToken(email, setEmailSent));
+    dispatch(getPasswordResetToken(email, setEmailSent) as any);
   }
 
   return (
@@ -68,3 +68,4 @@ export default function ResetRequest() {
     </div>
   );
 }
+

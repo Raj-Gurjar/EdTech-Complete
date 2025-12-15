@@ -11,15 +11,15 @@ import InputBox from "../../user interfaces/InputBox";
 export default function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.auth);
-  const [showPassword, setShowPassword] = useState(false);
+  const { loading } = useSelector((state: any) => state.auth);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  function changeHandler(event) {
+  function changeHandler(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -28,10 +28,9 @@ export default function LoginForm() {
   }
 
   const { email, password } = formData;
-  function loginHandler(e) {
+  function loginHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    dispatch(login(email, password, navigate));
-    // toast.success("Logged In");
+    dispatch(login(email, password, navigate) as any);
   }
   return (
     <div className="">
@@ -91,3 +90,4 @@ export default function LoginForm() {
     </div>
   );
 }
+

@@ -5,7 +5,13 @@ const getTotalItems = localStorage.getItem("CartTotalItems");
 const getCart = localStorage.getItem("cart");
 const getTotalAmount = localStorage.getItem("CartTotalAmount");
 
-const cartInitialState = {
+interface CartState {
+  cart: any[];
+  totalItems: number;
+  totalAmount: number;
+}
+
+const cartInitialState: CartState = {
   cart: getCart ? JSON.parse(getCart) : [],
   totalItems: getTotalItems ? JSON.parse(getTotalItems) : 0,
   totalAmount: getTotalAmount ? JSON.parse(getTotalAmount) : 0,
@@ -17,7 +23,7 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const course = action.payload;
-      const index = state.cart.findIndex((item) => item._id === course._id);
+      const index = state.cart.findIndex((item: any) => item._id === course._id);
 
       if (index >= 0) {
         toast.error("This Course is already in the Cart");
@@ -37,7 +43,7 @@ const cartSlice = createSlice({
     removeFromCart: (state, action) => {
       console.log("in remove");
       const courseId = action.payload;
-      const index = state.cart.findIndex((item) => item._id === courseId);
+      const index = state.cart.findIndex((item: any) => item._id === courseId);
 
       console.log("ind", state.cart[index]);
       if (index >= 0) {
@@ -52,26 +58,21 @@ const cartSlice = createSlice({
         toast.success("Course Removed Successfully");
       }
     },
-    setTotalItems(state, value) {
-      state.token = value.payload;
+    setTotalItems(state, action) {
+      state.totalItems = action.payload;
     },
     //! add a func to reset cart
-    resetCart: (state, action) => {
+    resetCart: (state) => {
       console.log("resetCart Called");
-      const courseId = action.payload;
-      const index = state.cart.findIndex((item) => item._id === courseId);
+      state.cart = [];
+      state.totalItems = 0;
+      state.totalAmount = 0;
 
-      if (index >= 0) {
-        state.cart = [];
-        state.totalItems = 0;
-        state.totalAmount = 0;
+      localStorage.setItem("cart", JSON.stringify(state.cart));
+      localStorage.setItem("totalItem", JSON.stringify(state.totalItems));
+      localStorage.setItem("totalAmount", JSON.stringify(state.totalAmount));
 
-        localStorage.setItem("cart", JSON.stringify(state.cart));
-        localStorage.setItem("totalItem", JSON.stringify(state.totalItems));
-        localStorage.setItem("totalAmount", JSON.stringify(state.totalAmount));
-
-        toast.success("All items Removed");
-      }
+      toast.success("Cart Reset");
     },
   },
 });
@@ -81,6 +82,6 @@ export const {
   removeFromCart,
   setTotalItems,
   resetCart,
-  totalItems,
 } = cartSlice.actions;
 export default cartSlice.reducer;
+

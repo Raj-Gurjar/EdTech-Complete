@@ -5,6 +5,15 @@ import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import HighlightText from "../../user interfaces/HighlightText";
 
+interface AuthTemplateProps {
+  title: string;
+  desc1: string;
+  desc2: string;
+  sideImg: string;
+  formType: "login" | "signup";
+  setIsLoggedIn?: (value: boolean) => void;
+}
+
 export default function AuthTemplate({
   title,
   desc1,
@@ -12,7 +21,7 @@ export default function AuthTemplate({
   sideImg,
   formType,
   setIsLoggedIn,
-}) {
+}: AuthTemplateProps) {
   return (
     <div className="w-11/12 max-w-7xl mx-auto py-8 sm:py-12 lg:py-16">
       <div className="flex flex-col lg:flex-row justify-between gap-8 lg:gap-12">
@@ -37,7 +46,7 @@ export default function AuthTemplate({
             {formType === "signup" ? (
               <SignupForm setIsLoggedIn={setIsLoggedIn} />
             ) : (
-              <LoginForm setIsLoggedIn={setIsLoggedIn} />
+              <LoginForm />
             )}
 
             {/* Divider */}
@@ -86,3 +95,4 @@ export default function AuthTemplate({
     </div>
   );
 }
+

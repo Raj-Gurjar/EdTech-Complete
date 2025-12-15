@@ -7,8 +7,13 @@ import InputBox from "../../../user interfaces/InputBox";
 import Loader from "../../../components/Loader/Loader";
 import { SideArrowButton } from "../../../user interfaces/Button";
 
+interface ResetPasswordFormData {
+  newPassword: string;
+  confNewPassword: string;
+}
+
 export default function ResetPassword() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ResetPasswordFormData>({
     newPassword: "",
     confNewPassword: "",
   });
@@ -17,12 +22,12 @@ export default function ResetPassword() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { loading } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state: any) => state.auth);
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfPassword, setShowConfPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfPassword, setShowConfPassword] = useState<boolean>(false);
 
-  const onChangeHandler = (e) => {
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevData) => ({
       ...prevData,
       [e.target.name]: e.target.value,
@@ -31,10 +36,10 @@ export default function ResetPassword() {
 
   const { newPassword, confNewPassword } = formData;
 
-  function onSubmitHandler(e) {
+  function onSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const token = location.pathname.split("/").at(-1);
-    dispatch(resetPassword(newPassword, confNewPassword, token, navigate));
+    const token = location.pathname.split("/").at(-1) || "";
+    dispatch(resetPassword(newPassword, confNewPassword, token, navigate) as any);
   }
 
   return (
@@ -96,3 +101,4 @@ export default function ResetPassword() {
     </div>
   );
 }
+

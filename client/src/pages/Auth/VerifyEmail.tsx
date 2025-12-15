@@ -6,8 +6,8 @@ import { signUp, sendOTP } from "../../services/operations/authAPI";
 import { SideArrowButton } from "../../user interfaces/Button";
 
 export default function VerifyEmail() {
-  const [otp, setOtp] = useState("");
-  const { loading, signupData } = useSelector((state) => state.auth);
+  const [otp, setOtp] = useState<string>("");
+  const { loading, signupData } = useSelector((state: any) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ export default function VerifyEmail() {
     adminKey,
   } = signupData || {};
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(
       signUp(
@@ -40,7 +40,7 @@ export default function VerifyEmail() {
         otp,
         adminKey,
         navigate
-      )
+      ) as any
     );
   };
 
@@ -87,7 +87,7 @@ export default function VerifyEmail() {
 
           <button
             className="bg-yellow8 text-black rounded font-semibold py-1 mt-3"
-            onClick={() => dispatch(sendOTP(email, navigate))}
+            onClick={() => dispatch(sendOTP(email, navigate) as any)}
           >
             Resend OTP
           </button>
@@ -98,3 +98,4 @@ export default function VerifyEmail() {
     </div>
   );
 }
+
