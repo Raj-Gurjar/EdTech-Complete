@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,23 +23,59 @@ import {
   FaArrowLeft
 } from "react-icons/fa";
 import { MdEmail, MdPhone, MdCake, MdTransgender, MdDescription } from "react-icons/md";
+import { RootState } from "../../toolkit/reducer";
+
+interface User {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  accountType: string;
+  profileImage?: string;
+  additionalDetails?: {
+    gender?: string;
+    contactNumber?: string;
+    dateOfBirth?: string;
+    about?: string;
+  };
+  [key: string]: any;
+}
+
+interface ProfileFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  dateOfBirth?: string;
+  gender?: string;
+  contactNumber?: string;
+  about?: string;
+}
+
+interface ModalData {
+  text1: string;
+  text2: string;
+  btn1Text: string;
+  btn2Text: string;
+  btn1Handler: () => void;
+  btn2Handler: () => void;
+}
 
 export default function EditProfile() {
-  const { user } = useSelector((state) => state.profile);
-  const { token } = useSelector((state) => state.auth);
+  const { user } = useSelector((state: RootState) => state.profile);
+  const { token } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
-  const [modal, setModal] = useState(null);
+  const [modal, setModal] = useState<ModalData | null>(null);
   const navigate = useNavigate();
-  const [profileImg, setProfileImage] = useState("");
-  const [showImg, setShowImg] = useState("");
-  const [isUploading, setIsUploading] = useState(false);
+  const [profileImg, setProfileImage] = useState<File | string>("");
+  const [showImg, setShowImg] = useState<string>("");
+  const [isUploading, setIsUploading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<ProfileFormData>();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: ProfileFormData): Promise<void> => {
     const result = await updateProfile(data, token);
 
     if (result) {
@@ -51,28 +87,28 @@ export default function EditProfile() {
     }
   };
 
-  const deleteHandler = async () => {
+  const deleteHandler = async (): Promise<void> => {
     const result = await deleteAccount(user?._id, token);
 
     if (result) {
-      dispatch(logout(navigate));
+      dispatch(logout(navigate) as any);
     }
   };
 
-  const handleImageChange = (e) => {
-    const img = e.target.files[0];
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const img = e.target.files?.[0];
     if (img) {
       setProfileImage(img);
       TransformFile(img);
     }
   };
 
-  const TransformFile = (file) => {
+  const TransformFile = (file: File): void => {
     const reader = new FileReader();
     if (file) {
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        setShowImg(reader.result);
+        setShowImg(reader.result as string);
       };
     } else {
       setProfileImage("");
@@ -80,7 +116,7 @@ export default function EditProfile() {
     }
   };
 
-  const uploadImageHandler = async (e) => {
+  const uploadImageHandler = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     if (!profileImg) {
       toast.error("Please select an image first");
@@ -89,7 +125,7 @@ export default function EditProfile() {
 
     setIsUploading(true);
     const formData = new FormData();
-    formData.append("profileImage", profileImg);
+    formData.append("profileImage", profileImg as File);
 
     const result = await updateProfileImage(formData, token);
 
@@ -404,7 +440,7 @@ export default function EditProfile() {
               id="about"
               defaultValue={user?.additionalDetails?.about}
               {...register("about")}
-              rows="6"
+              rows={6}
               className="w-full px-4 py-3 bg-black5 border border-black6 rounded-lg text-white placeholder-black7 focus:outline-none focus:ring-2 focus:ring-yellow8 focus:border-transparent transition-all resize-none"
               placeholder="Share your interests, goals, or anything you'd like others to know..."
             />
@@ -468,3 +504,4 @@ export default function EditProfile() {
     </div>
   );
 }
+

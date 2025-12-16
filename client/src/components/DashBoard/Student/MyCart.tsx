@@ -15,29 +15,48 @@ import {
   FaTag
 } from "react-icons/fa";
 import { MdShoppingCart } from "react-icons/md";
+import { RootState } from "../../../toolkit/reducer";
+
+interface Course {
+  _id: string;
+  courseName: string;
+  thumbnail?: string;
+  price?: number;
+  status?: string;
+  category?: {
+    name: string;
+  };
+  instructor?: {
+    firstName: string;
+    lastName: string;
+  };
+  ratingAndReviews?: any[];
+  studentsEnrolled?: any[];
+  courseContent?: any[];
+}
 
 export default function MyCart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { cart, totalAmount, totalItems } = useSelector((state) => state.cart);
-  const { token } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.profile);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const { cart, totalAmount, totalItems } = useSelector((state: RootState) => state.cart);
+  const { token } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.profile);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   // Fallback to localStorage if Redux state is empty
   const finalTotalAmount = totalAmount || JSON.parse(localStorage.getItem("totalAmount") || "0");
   const finalTotalItems = totalItems || JSON.parse(localStorage.getItem("totalItem") || "0");
 
-  const handleBuyCourse = async () => {
+  const handleBuyCourse = async (): Promise<void> => {
     if (cart.length === 0) return;
     
     setIsProcessing(true);
-    const courses = cart.map((course) => course._id);
+    const courses = cart.map((course: Course) => course._id);
     await buyCourse(token, courses, user, navigate, dispatch);
     setIsProcessing(false);
   };
 
-  const handleRemoveFromCart = (courseId) => {
+  const handleRemoveFromCart = (courseId: string): void => {
     dispatch(removeFromCart(courseId));
   };
 
@@ -88,7 +107,7 @@ export default function MyCart() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Cart Items Section */}
         <div className="lg:col-span-2 space-y-4">
-          {cart.map((course) => {
+          {cart.map((course: Course) => {
             const courseRating = avgRating(course?.ratingAndReviews || []);
             const totalRatings = course?.ratingAndReviews?.length || 0;
 
@@ -107,8 +126,8 @@ export default function MyCart() {
                       src={course?.thumbnail || "https://via.placeholder.com/400x250"}
                       alt={course?.courseName}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                      onError={(e) => {
-                        e.target.src = "https://via.placeholder.com/400x250";
+                      onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                        (e.target as HTMLImageElement).src = "https://via.placeholder.com/400x250";
                       }}
                     />
                   </Link>
@@ -157,13 +176,13 @@ export default function MyCart() {
 
                       {/* Course Stats */}
                       <div className="flex items-center gap-4 text-xs text-black7">
-                        {course.studentsEnrolled?.length > 0 && (
+                        {course.studentsEnrolled && course.studentsEnrolled.length > 0 && (
                           <div className="flex items-center gap-1">
                             <FaUsers className="text-sm" />
                             <span>{course.studentsEnrolled.length} students</span>
                           </div>
                         )}
-                        {course.courseContent?.length > 0 && (
+                        {course.courseContent && course.courseContent.length > 0 && (
                           <div className="flex items-center gap-1">
                             <FaBook className="text-sm" />
                             <span>{course.courseContent.length} sections</span>
@@ -258,3 +277,4 @@ export default function MyCart() {
     </div>
   );
 }
+

@@ -11,18 +11,35 @@ import {
   FaIdCard
 } from "react-icons/fa";
 import { MdEmail, MdPhone, MdCake, MdTransgender } from "react-icons/md";
+import { RootState } from "../../toolkit/reducer";
+
+interface User {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  accountType: string;
+  profileImage?: string;
+  additionalDetails?: {
+    gender?: string;
+    contactNumber?: string;
+    dateOfBirth?: string;
+    about?: string;
+  };
+  [key: string]: any;
+}
 
 export default function MyProfile() {
-  const { user } = useSelector((state) => state.profile);
+  const { user } = useSelector((state: RootState) => state.profile);
   const navigate = useNavigate();
 
-  const accountTypeColors = {
+  const accountTypeColors: Record<string, string> = {
     STUDENT: "bg-blue6",
     INSTRUCTOR: "bg-yellow8",
     ADMIN: "bg-pink6",
   };
 
-  const accountTypeText = {
+  const accountTypeText: Record<string, string> = {
     STUDENT: "Student",
     INSTRUCTOR: "Instructor",
     ADMIN: "Admin",
@@ -57,8 +74,8 @@ export default function MyProfile() {
               )}
             </div>
             {/* Account Type Badge */}
-            <div className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 ${accountTypeColors[user?.accountType] || "bg-black6"} text-black font-bold px-3 py-1 rounded-full text-xs shadow-lg`}>
-              {accountTypeText[user?.accountType] || "User"}
+            <div className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 ${accountTypeColors[user?.accountType || ""] || "bg-black6"} text-black font-bold px-3 py-1 rounded-full text-xs shadow-lg`}>
+              {accountTypeText[user?.accountType || ""] || "User"}
             </div>
           </div>
 
@@ -217,3 +234,4 @@ export default function MyProfile() {
     </div>
   );
 }
+

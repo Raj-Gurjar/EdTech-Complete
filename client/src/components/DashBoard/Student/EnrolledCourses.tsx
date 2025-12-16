@@ -16,14 +16,41 @@ import {
   FaSpinner
 } from "react-icons/fa";
 import { MdPlayArrow } from "react-icons/md";
+import { RootState } from "../../../toolkit/reducer";
+
+interface CourseSection {
+  _id: string;
+  sectionName: string;
+  subSections?: {
+    _id: string;
+    [key: string]: any;
+  }[];
+  [key: string]: any;
+}
+
+interface EnrolledCourse {
+  _id: string;
+  courseName: string;
+  thumbnail?: string;
+  courseDescription?: string;
+  totalDuration?: string;
+  progressPercentage?: number;
+  category?: {
+    name: string;
+  };
+  ratingAndReviews?: any[];
+  studentsEnrolled?: any[];
+  courseContent?: CourseSection[];
+  [key: string]: any;
+}
 
 export default function EnrolledCourses() {
-  const { token } = useSelector((state) => state.auth);
-  const [enrolledCourses, setEnrolledCourses] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { token } = useSelector((state: RootState) => state.auth);
+  const [enrolledCourses, setEnrolledCourses] = useState<EnrolledCourse[] | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const getEnrolledCourses = async () => {
+    const getEnrolledCourses = async (): Promise<void> => {
       try {
         setIsLoading(true);
         const response = await getUserEnrolledCourses(token);
@@ -148,8 +175,8 @@ export default function EnrolledCourses() {
                     src={course.thumbnail || "https://via.placeholder.com/400x250"}
                     alt={course.courseName}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    onError={(e) => {
-                      e.target.src = "https://via.placeholder.com/400x250";
+                    onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                      (e.target as HTMLImageElement).src = "https://via.placeholder.com/400x250";
                     }}
                   />
                   {/* Progress Overlay */}
@@ -232,13 +259,13 @@ export default function EnrolledCourses() {
                         <span>{course.totalDuration}</span>
                       </div>
                     )}
-                    {course.studentsEnrolled?.length > 0 && (
+                    {course.studentsEnrolled && course.studentsEnrolled.length > 0 && (
                       <div className="flex items-center gap-1">
                         <FaUsers className="text-sm" />
                         <span>{course.studentsEnrolled.length} students</span>
                       </div>
                     )}
-                    {course.courseContent?.length > 0 && (
+                    {course.courseContent && course.courseContent.length > 0 && (
                       <div className="flex items-center gap-1">
                         <FaBook className="text-sm" />
                         <span>{course.courseContent.length} sections</span>
@@ -277,3 +304,4 @@ export default function EnrolledCourses() {
     </div>
   );
 }
+
