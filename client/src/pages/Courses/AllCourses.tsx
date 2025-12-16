@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { showAllCategories } from "../../services/operations/category";
 import { NavLink, useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
 import { getAllCoursesPublic } from "../../services/operations/courseDetailsAPI";
@@ -7,17 +6,44 @@ import CourseCard from "../../components/Cards/CourseCard";
 import CourseSlider from "../../components/Sliders/CourseSlider";
 import { IoSearch, IoClose } from "react-icons/io5";
 import { BsFilter } from "react-icons/bs";
+import { showAllCategories } from "../../services/operations/category";
+
+interface Category {
+  _id: string;
+  name: string;
+  description?: string;
+  [key: string]: any;
+}
+
+interface Course {
+  _id: string;
+  courseName: string;
+  thumbnail?: string;
+  price?: number;
+  status?: string;
+  category?: {
+    name: string;
+  };
+  instructor?: {
+    firstName: string;
+    lastName: string;
+  };
+  courseDescription?: string;
+  ratingAndReviews?: any[];
+  studentsEnrolled?: any[];
+  courseContent?: any[];
+}
 
 export default function AllCourses() {
-  const [courseCategories, setCourseCategories] = useState([]);
-  const [coursesData, setCoursesData] = useState([]);
-  const [filteredCourses, setFilteredCourses] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [showFilters, setShowFilters] = useState(false);
+  const [courseCategories, setCourseCategories] = useState<Category[]>([]);
+  const [coursesData, setCoursesData] = useState<Course[]>([]);
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [showFilters, setShowFilters] = useState<boolean>(false);
 
-  const getCategories = async () => {
+  const getCategories = async (): Promise<void> => {
     setLoading(true);
     const categories = await showAllCategories();
     if (categories.length > 0) {
@@ -26,7 +52,7 @@ export default function AllCourses() {
     setLoading(false);
   };
 
-  const showAllCourses = async () => {
+  const showAllCourses = async (): Promise<void> => {
     setLoading(true);
     const courses = await getAllCoursesPublic();
     if (courses.length > 0) {
@@ -66,7 +92,7 @@ export default function AllCourses() {
     showAllCourses();
   }, []);
 
-  const clearFilters = () => {
+  const clearFilters = (): void => {
     setSearchQuery("");
     setSelectedCategory("all");
   };
@@ -224,3 +250,5 @@ export default function AllCourses() {
     </div>
   );
 }
+
+

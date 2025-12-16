@@ -9,22 +9,57 @@ import {
 import SelectedCategory from "../../components/Course-Catalog/SelectedCategory";
 import CourseCard from "../../components/Cards/CourseCard";
 
+interface Category {
+  _id: string;
+  name: string;
+  description?: string;
+  [key: string]: any;
+}
+
+interface Course {
+  _id: string;
+  courseName: string;
+  thumbnail?: string;
+  price?: number;
+  status?: string;
+  category?: {
+    name: string;
+  };
+  instructor?: {
+    firstName: string;
+    lastName: string;
+  };
+  ratingAndReviews?: any[];
+  studentsEnrolled?: any[];
+  courseContent?: any[];
+}
+
+interface CategoryPageData {
+  selectedCategory?: {
+    name: string;
+    description?: string;
+    courses?: Course[];
+  };
+  mostSellingCourses?: Course[];
+  [key: string]: any;
+}
+
 export default function SingleCategory() {
   // Destructure categoryName directly from useParams
-  const { categoryName } = useParams();
-  const [categoryPageData, setCategoryPageData] = useState(null);
-  const [categoryId, setCategoryId] = useState("");
+  const { categoryName } = useParams<{ categoryName: string }>();
+  const [categoryPageData, setCategoryPageData] = useState<CategoryPageData | null>(null);
+  const [categoryId, setCategoryId] = useState<string>("");
 
-  const [loading, setLoading] = useState(false);
-  const [active, setActive] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [active, setActive] = useState<boolean>(false);
 
-  const getCategoriesId = async () => {
+  const getCategoriesId = async (): Promise<void> => {
     setLoading(true);
     const result = await showAllCategories();
     console.log("getAllCatId res: ", result);
 
     const category = result.find(
-      (ct) => ct.name.split(" ").join("-").toLowerCase() === categoryName
+      (ct: Category) => ct.name.split(" ").join("-").toLowerCase() === categoryName
     );
 
     console.log("cat", category);
@@ -35,7 +70,7 @@ export default function SingleCategory() {
     setLoading(false);
   };
 
-  const getCatPageDetails = async () => {
+  const getCatPageDetails = async (): Promise<void> => {
     const result = await getCategoryPageDetails(categoryId);
     console.log("getCatDetail res: ", result);
     if (result) {
@@ -44,7 +79,9 @@ export default function SingleCategory() {
   };
 
   useEffect(() => {
-    getCategoriesId();
+    if (categoryName) {
+      getCategoriesId();
+    }
   }, [categoryName]);
 
   useEffect(() => {
@@ -77,7 +114,7 @@ export default function SingleCategory() {
           </h1>
           <div>
             <CourseSlider
-              courses={categoryPageData?.selectedCategory?.courses}
+              courses={categoryPageData?.selectedCategory?.courses || []}
             />
           </div>
         </section>
@@ -106,7 +143,7 @@ export default function SingleCategory() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 m-5">
-            {categoryPageData?.selectedCategory?.courses.map(
+            {categoryPageData?.selectedCategory?.courses?.map(
               (course, index) => (
                 <CourseCard course={course} key={index} />
               )
@@ -117,7 +154,7 @@ export default function SingleCategory() {
         <section className="bg-slate-300 my-5">
           <h1 className="text-2xl">Other Popular Courses</h1>
           <div>
-            <CourseSlider courses={categoryPageData?.mostSellingCourses} />
+            <CourseSlider courses={categoryPageData?.mostSellingCourses || []} />
           </div>
         </section>
       </div>
@@ -126,3 +163,5 @@ export default function SingleCategory() {
     </div>
   );
 }
+
+

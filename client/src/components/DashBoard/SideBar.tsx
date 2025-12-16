@@ -6,27 +6,37 @@ import Modal from "../Modals-Popups/Modal";
 import { FaSignOutAlt } from "react-icons/fa"; // Importing specific icon
 import { ACCOUNT_TYPE } from "../../utils/constants";
 import { navItems } from "../../data/SideBarData";
+import { RootState } from "../../toolkit/reducer";
+
+interface ModalData {
+  text1: string;
+  text2: string;
+  btn1Text: string;
+  btn2Text: string;
+  btn1Handler: () => void;
+  btn2Handler: () => void;
+}
 
 export default function SideBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [modal, setModal] = useState(null);
-  const { user } = useSelector((state) => state.profile);
+  const [modal, setModal] = useState<ModalData | null>(null);
+  const { user } = useSelector((state: RootState) => state.profile);
 
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     setModal({
       text1: "Are You Sure?",
       text2: "You will be logged out",
       btn1Text: "LogOut",
       btn2Text: "Cancel",
-      btn1Handler: () => dispatch(logout(navigate)),
+      btn1Handler: () => dispatch(logout(navigate) as any),
       btn2Handler: () => setModal(null),
     });
   };
 
   // Filter navItems based on user account type
   const filteredNavItems = navItems.filter((item) =>
-    item.roles.includes(user?.accountType)
+    item.roles.includes(user?.accountType || "")
   );
 
   return (
@@ -53,3 +63,5 @@ export default function SideBar() {
     </div>
   );
 }
+
+
