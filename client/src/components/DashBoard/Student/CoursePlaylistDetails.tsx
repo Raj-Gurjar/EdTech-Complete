@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import {
-  courseEntireData,
-  courseSectionData,
-  setCourseSectionData,
-} from "../../../toolkit/slice/viewCourseSlice";
 import { 
   FaArrowLeft, 
   FaChevronDown, 
@@ -14,22 +9,44 @@ import {
   FaBook
 } from "react-icons/fa";
 import { MdCheckCircle, MdPlayArrow } from "react-icons/md";
+import { RootState } from "../../../toolkit/reducer";
 
-export default function VideoDetailsSideBar({ setReviewModal }) {
+interface SubSection {
+  _id: string;
+  title?: string;
+  timeDuration?: string;
+  [key: string]: any;
+}
+
+// Use a flexible type that matches the Redux state structure
+// The slice uses 'subSection' but actual data uses 'subSections'
+type CourseSectionData = {
+  _id: string;
+  sectionName?: string;
+  subSection?: any[];
+  subSections?: SubSection[];
+  [key: string]: any;
+};
+
+interface CoursePlaylistDetailsProps {
+  setReviewModal: (value: boolean) => void;
+}
+
+export default function CoursePlaylistDetails({ setReviewModal }: CoursePlaylistDetailsProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { sectionId, subSectionId } = useParams();
+  const { sectionId, subSectionId } = useParams<{ sectionId?: string; subSectionId?: string }>();
 
-  const [activeStatus, setActiveStatus] = useState("f");
-  const [videoActive, setVideoActive] = useState("");
-  const [expandedSections, setExpandedSections] = useState(new Set());
+  const [activeStatus, setActiveStatus] = useState<string>("");
+  const [videoActive, setVideoActive] = useState<string>("");
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
 
   const {
     courseSectionData,
     courseEntireData,
     totalNoOfLectures,
     completedLectures,
-  } = useSelector((state) => state.viewCourse);
+  } = useSelector((state: RootState) => state.viewCourse);
 
   useEffect(() => {
     setActiveFlags();
@@ -37,9 +54,9 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
     if (sectionId) {
       setExpandedSections(new Set([sectionId]));
     }
-  }, [courseSectionData, courseEntireData, location.pathname]);
+  }, [courseSectionData, courseEntireData, location.pathname, sectionId]);
 
-  const setActiveFlags = () => {
+  const setActiveFlags = (): void => {
     if (!courseSectionData?.length) {
       return;
     }
@@ -48,20 +65,20 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
     );
     if (currentSectionIndex === -1) return;
     
-    const currentSubSectionIndex = courseSectionData?.[
-      currentSectionIndex
-    ]?.subSections.findIndex((data) => data._id === subSectionId);
-
-    const activeSubSectionId =
-      courseSectionData[currentSectionIndex]?.subSections?.[
-        currentSubSectionIndex
-      ]?._id;
+    const section = courseSectionData[currentSectionIndex] as CourseSectionData;
+    const subSections = section?.subSections || section?.subSection || [];
     
-    setActiveStatus(courseSectionData[currentSectionIndex]?._id);
-    setVideoActive(activeSubSectionId);
+    const currentSubSectionIndex = subSections.findIndex(
+      (data: any) => data._id === subSectionId
+    );
+
+    const activeSubSectionId = subSections[currentSubSectionIndex]?._id;
+    
+    setActiveStatus(section?._id || "");
+    setVideoActive(activeSubSectionId || "");
   };
 
-  const toggleSection = (sectionId) => {
+  const toggleSection = (sectionId: string): void => {
     const newExpanded = new Set(expandedSections);
     if (newExpanded.has(sectionId)) {
       newExpanded.delete(sectionId);
@@ -130,25 +147,27 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
         </h3>
         
         <div className="space-y-2">
-          {courseSectionData.map((section, index) => {
-            const isExpanded = expandedSections.has(section._id);
-            const isActive = activeStatus === section._id;
-            const completedCount = section.subSections.filter(sub => 
+          {courseSectionData.map((section, index: number) => {
+            const sectionData = section as CourseSectionData;
+            const subSections = sectionData?.subSections || sectionData?.subSection || [];
+            const isExpanded = expandedSections.has(sectionData._id);
+            const isActive = activeStatus === sectionData._id;
+            const completedCount = subSections.filter((sub: any) => 
               completedLectures.includes(sub._id)
-            ).length;
-            const totalCount = section.subSections.length;
+            ).length || 0;
+            const totalCount = subSections.length || 0;
             const sectionProgress = totalCount > 0 
               ? Math.round((completedCount / totalCount) * 100)
               : 0;
 
             return (
               <div
-                key={section._id || index}
+                key={sectionData._id || index}
                 className="border border-black6 rounded-lg overflow-hidden"
               >
                 {/* Section Header */}
                 <div
-                  onClick={() => toggleSection(section._id)}
+                  onClick={() => toggleSection(sectionData._id)}
                   className={`p-3 cursor-pointer transition-colors ${
                     isActive ? "bg-yellow8 bg-opacity-20" : "bg-black5 hover:bg-black6"
                   }`}
@@ -161,7 +180,7 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
                         <FaChevronRight className="text-black7 text-xs flex-shrink-0" />
                       )}
                       <span className="text-sm font-semibold text-white truncate">
-                        {section?.sectionName || `Section ${index + 1}`}
+                        {sectionData?.sectionName || `Section ${index + 1}`}
                       </span>
                     </div>
                     <span className="text-xs text-black7 ml-2 flex-shrink-0">
@@ -179,7 +198,7 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
                 {/* SubSections */}
                 {isExpanded && (
                   <div className="bg-black4">
-                    {section?.subSections.map((lecture, lectureIndex) => {
+                    {subSections.map((lecture: any, lectureIndex: number) => {
                       const isCompleted = completedLectures.includes(lecture._id);
                       const isActiveLecture = videoActive === lecture._id;
 
@@ -188,7 +207,7 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
                           key={lecture._id || lectureIndex}
                           onClick={() => {
                             navigate(
-                              `/courseMenu/${courseEntireData?._id}/section/${section?._id}/subSection/${lecture?._id}`
+                              `/courseMenu/${courseEntireData?._id}/section/${sectionData?._id}/subSection/${lecture?._id}`
                             );
                             setVideoActive(lecture._id);
                           }}
@@ -238,3 +257,4 @@ export default function VideoDetailsSideBar({ setReviewModal }) {
     </div>
   );
 }
+

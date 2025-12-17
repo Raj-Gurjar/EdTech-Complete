@@ -8,14 +8,38 @@ import HighlightText from "../../../../user interfaces/HighlightText";
 import { IoSearch } from "react-icons/io5";
 import { FaTags, FaFilter } from "react-icons/fa";
 import Loader from "../../../../components/Loader/Loader";
+import { RootState } from "../../../../toolkit/reducer";
 
-export default function CourseMenuAdmin() {
-  const [courseCategories, setCourseCategories] = useState([]);
-  const [coursesData, setCoursesData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const { token } = useSelector((state) => state.auth);
+interface Category {
+  _id: string;
+  name: string;
+  description?: string;
+  [key: string]: any;
+}
 
-  const getCategories = async () => {
+interface Course {
+  _id: string;
+  courseName: string;
+  thumbnail?: string;
+  price?: number;
+  status?: string;
+  category?: {
+    name: string;
+  };
+  instructor?: {
+    firstName: string;
+    lastName: string;
+  };
+  [key: string]: any;
+}
+
+export default function CoursesMenuAdmin() {
+  const [courseCategories, setCourseCategories] = useState<Category[]>([]);
+  const [coursesData, setCoursesData] = useState<Course[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { token } = useSelector((state: RootState) => state.auth);
+
+  const getCategories = async (): Promise<void> => {
     try {
       const categories = await showAllCategories();
       if (categories.length > 0) {
@@ -26,7 +50,9 @@ export default function CourseMenuAdmin() {
     }
   };
 
-  const showAllCourses = async () => {
+  const showAllCourses = async (): Promise<void> => {
+    if (!token) return;
+    
     setLoading(true);
     try {
       const courses = await getAllCoursesAdmin(token);
@@ -67,7 +93,7 @@ export default function CourseMenuAdmin() {
             {courseCategories.map((category, index) => (
               <NavLink
                 to={`category/${category.name.split(" ").join("-").toLowerCase()}`}
-                key={index}
+                key={category._id || index}
                 className={({ isActive }) =>
                   `px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
                     isActive
@@ -96,3 +122,4 @@ export default function CourseMenuAdmin() {
     </div>
   );
 }
+

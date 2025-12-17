@@ -15,31 +15,72 @@ import {
 } from "react-icons/fa";
 import { MdCheckCircle } from "react-icons/md";
 import toast from "react-hot-toast";
+import { RootState } from "../../../../toolkit/reducer";
+
+interface SubSection {
+  _id: string;
+  title?: string;
+  timeDuration?: string;
+  videoUrl?: string;
+  description?: string;
+  [key: string]: any;
+}
+
+// Use a flexible type that matches the Redux state structure
+// The slice uses 'subSection' but actual data uses 'subSections'
+type CourseSectionData = {
+  _id: string;
+  sectionName?: string;
+  subSection?: any[];
+  subSections?: SubSection[];
+  [key: string]: any;
+};
+
+interface VideoData extends SubSection {
+  videoUrl: string;
+}
+
+// Player ref type - video-react doesn't have TypeScript types
+interface PlayerRef {
+  seek: (time: number) => void;
+  play: () => void;
+  pause: () => void;
+  [key: string]: any;
+}
 
 export default function VideoDetails() {
-  const { courseId, sectionId, subSectionId } = useParams();
+  const { courseId, sectionId, subSectionId } = useParams<{ 
+    courseId: string; 
+    sectionId: string; 
+    subSectionId: string;
+  }>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
 
-   //!---- playerRef has all functions of a video player
-  const playerRef = useRef();
+  //!---- playerRef has all functions of a video player
+  const playerRef = useRef<PlayerRef | null>(null);
   
-  const { token } = useSelector((state) => state.auth);
+  const { token } = useSelector((state: RootState) => state.auth);
   const { courseSectionData, courseEntireData, completedLectures } =
-    useSelector((state) => state.viewCourse);
+    useSelector((state: RootState) => state.viewCourse);
 
-  const [videoData, setVideoData] = useState([]);
-  const [videoEnded, setVideoEnded] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [videoData, setVideoData] = useState<VideoData | null>(null);
+  const [videoEnded, setVideoEnded] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const isFirstVideo = () => {
+  const isFirstVideo = (): boolean => {
     const currentSectionIndex = courseSectionData.findIndex(
       (data) => data._id === sectionId
     );
-    const currentSubSectionIndex = courseSectionData[
-      currentSectionIndex
-    ].subSections.findIndex((data) => data._id === subSectionId);
+    
+    if (currentSectionIndex === -1) return false;
+    
+    const section = courseSectionData[currentSectionIndex] as CourseSectionData;
+    const subSections = section?.subSections || section?.subSection || [];
+    const currentSubSectionIndex = subSections.findIndex(
+      (data: any) => data._id === subSectionId
+    ) ?? -1;
 
     if (currentSectionIndex === 0 && currentSubSectionIndex === 0) {
       return true;
@@ -48,16 +89,20 @@ export default function VideoDetails() {
     }
   };
 
-  const isLastVideo = () => {
+  const isLastVideo = (): boolean => {
     const currentSectionIndex = courseSectionData.findIndex(
       (data) => data._id === sectionId
     );
-    const noOfSubSections =
-      courseSectionData[currentSectionIndex].subSections.length;
+    
+    if (currentSectionIndex === -1) return false;
+    
+    const section = courseSectionData[currentSectionIndex] as CourseSectionData;
+    const subSections = section?.subSections || section?.subSection || [];
+    const noOfSubSections = subSections.length || 0;
 
-    const currentSubSectionIndex = courseSectionData[
-      currentSectionIndex
-    ].subSections.findIndex((data) => data._id === subSectionId);
+    const currentSubSectionIndex = subSections.findIndex(
+      (data: any) => data._id === subSectionId
+    ) ?? -1;
 
     if (
       currentSectionIndex === courseSectionData.length - 1 &&
@@ -69,80 +114,92 @@ export default function VideoDetails() {
     }
   };
 
-  const goToNextVideo = () => {
+  const goToNextVideo = (): void => {
     const currentSectionIndex = courseSectionData.findIndex(
       (data) => data._id === sectionId
     );
+    
+    if (currentSectionIndex === -1) return;
 
-    const noOfSubSections =
-      courseSectionData[currentSectionIndex].subSections.length;
+    const section = courseSectionData[currentSectionIndex] as CourseSectionData;
+    const subSections = section?.subSections || section?.subSection || [];
+    const noOfSubSections = subSections.length || 0;
 
-    const currentSubSectionIndex = courseSectionData[
-      currentSectionIndex
-    ].subSections.findIndex((data) => data._id === subSectionId);
+    const currentSubSectionIndex = subSections.findIndex(
+      (data: any) => data._id === subSectionId
+    ) ?? -1;
 
     //same section next video e.g(lec 1.1 to 1.2)
-    if (currentSubSectionIndex !== noOfSubSections - 1) {
-      const nextSubSectionId =
-        courseSectionData[currentSectionIndex].subSections[
-          currentSubSectionIndex + 1
-        ]._id;
+    if (currentSubSectionIndex !== noOfSubSections - 1 && currentSubSectionIndex !== -1) {
+      const nextSubSectionId = subSections[currentSubSectionIndex + 1]?._id;
 
-      navigate(
-        `/courseMenu/${courseId}/section/${sectionId}/subSection/${nextSubSectionId}`
-      );
+      if (nextSubSectionId) {
+        navigate(
+          `/courseMenu/${courseId}/section/${sectionId}/subSection/${nextSubSectionId}`
+        );
+      }
     }
     //next section 1st video e.g (lec 1.9(last) to 2.1(first))
     else {
-      const nextSectionId = courseSectionData[currentSectionIndex + 1]._id;
-      const nextSubSectionId =
-        courseSectionData[currentSectionIndex + 1].subSections[0]._id;
+      if (currentSectionIndex < courseSectionData.length - 1) {
+        const nextSection = courseSectionData[currentSectionIndex + 1] as CourseSectionData;
+        const nextSectionSubSections = nextSection?.subSections || nextSection?.subSection || [];
+        const nextSectionId = nextSection?._id;
+        const nextSubSectionId = nextSectionSubSections[0]?._id;
 
-      navigate(
-        `/courseMenu/${courseId}/section/${nextSectionId}/subSection/${nextSubSectionId}`
-      );
+        if (nextSectionId && nextSubSectionId) {
+          navigate(
+            `/courseMenu/${courseId}/section/${nextSectionId}/subSection/${nextSubSectionId}`
+          );
+        }
+      }
     }
   };
 
-  const goToPreviousVideo = () => {
+  const goToPreviousVideo = (): void => {
     const currentSectionIndex = courseSectionData.findIndex(
       (data) => data._id === sectionId
     );
+    
+    if (currentSectionIndex === -1) return;
 
-    const currentSubSectionIndex = courseSectionData[
-      currentSectionIndex
-    ].subSections.findIndex((data) => data._id === subSectionId);
+    const section = courseSectionData[currentSectionIndex] as CourseSectionData;
+    const subSections = section?.subSections || section?.subSection || [];
+    const currentSubSectionIndex = subSections.findIndex(
+      (data: any) => data._id === subSectionId
+    ) ?? -1;
 
     //same sec prev video
-    if (currentSubSectionIndex !== 0) {
-      const prevSubSectionId =
-        courseSectionData[currentSectionIndex].subSections[
-          currentSubSectionIndex - 1
-        ]._id;
+    if (currentSubSectionIndex > 0) {
+      const prevSubSectionId = subSections[currentSubSectionIndex - 1]?._id;
 
-      navigate(
-        `/courseMenu/${courseId}/section/${sectionId}/subSection/${prevSubSectionId}`
-      );
+      if (prevSubSectionId) {
+        navigate(
+          `/courseMenu/${courseId}/section/${sectionId}/subSection/${prevSubSectionId}`
+        );
+      }
     }
     //next section prev video
     else {
-      const prevSectionId = courseSectionData[currentSectionIndex - 1]._id;
+      if (currentSectionIndex > 0) {
+        const prevSection = courseSectionData[currentSectionIndex - 1] as CourseSectionData;
+        const prevSectionSubSections = prevSection?.subSections || prevSection?.subSection || [];
+        const prevSectionId = prevSection?._id;
+        const prevSubSectionLength = prevSectionSubSections.length || 0;
+        const prevSubSectionId = prevSectionSubSections[prevSubSectionLength - 1]?._id;
 
-      const prevSubSectionLength =
-        courseSectionData[currentSectionIndex - 1].subSections.length;
-
-      const prevSubSectionId =
-        courseSectionData[currentSectionIndex - 1].subSections[
-          prevSubSectionLength - 1
-        ]._id;
-
-      navigate(
-        `/courseMenu/${courseId}/section/${prevSectionId}/subSection/${prevSubSectionId}`
-      );
+        if (prevSectionId && prevSubSectionId) {
+          navigate(
+            `/courseMenu/${courseId}/section/${prevSectionId}/subSection/${prevSubSectionId}`
+          );
+        }
+      }
     }
   };
 
-  const handleLectureCompletion = async () => {
+  const handleLectureCompletion = async (): Promise<void> => {
+    if (!courseId || !subSectionId || !token) return;
+    
     setLoading(true);
 
     const res = await markLectureAsComplete({ courseId, subSectionId }, token);
@@ -156,16 +213,16 @@ export default function VideoDetails() {
     setLoading(false);
   };
 
-  const handleRewatch = () => {
+  const handleRewatch = (): void => {
     if (playerRef?.current) {
-      playerRef?.current?.seek(0);
-      playerRef?.current?.play();
+      playerRef.current.seek(0);
+      playerRef.current.play();
       setVideoEnded(false);
     }
   };
 
   useEffect(() => {
-    const setVideoSpecificDetails = async () => {
+    const setVideoSpecificDetails = async (): Promise<void> => {
       if (!courseSectionData.length) {
         return;
       }
@@ -179,18 +236,22 @@ export default function VideoDetails() {
 
         // console.log("filerD", filteredData);
 
-        const filteredVideoData = filteredData?.[0].subSections.filter(
-          (data) => data._id === subSectionId
+        const section = filteredData?.[0] as CourseSectionData | undefined;
+        const subSections = section?.subSections || section?.subSection || [];
+        const filteredVideoData = subSections.filter(
+          (data: any) => data._id === subSectionId
         );
 
         // console.log("filerVidD", filteredVideoData);
 
-        setVideoData(filteredVideoData[0]);
-        setVideoEnded(false);
+        if (filteredVideoData?.[0]) {
+          setVideoData(filteredVideoData[0] as VideoData);
+          setVideoEnded(false);
+        }
       }
     };
     setVideoSpecificDetails();
-  }, [courseSectionData, courseEntireData, location.pathname]);
+  }, [courseSectionData, courseEntireData, location.pathname, courseId, sectionId, subSectionId, navigate]);
 
   if (!videoData) {
     return (
@@ -203,7 +264,7 @@ export default function VideoDetails() {
     );
   }
 
-  const isCompleted = completedLectures.includes(subSectionId);
+  const isCompleted = completedLectures.includes(subSectionId || "");
 
   return (
     <div className="space-y-6">
@@ -211,7 +272,7 @@ export default function VideoDetails() {
       <div className="bg-black4 rounded-xl shadow-lg overflow-hidden border border-black6 relative">
         <div className="relative w-full bg-black">
           <Player
-            ref={playerRef}
+            ref={playerRef as any}
             aspectRatio="16:9"
             playsInline
             onEnded={() => setVideoEnded(true)}
@@ -319,3 +380,4 @@ export default function VideoDetails() {
     </div>
   );
 }
+

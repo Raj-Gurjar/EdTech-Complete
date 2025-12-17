@@ -4,21 +4,42 @@ import { IoSearch, IoClose } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa";
 import { COURSE_STATUS } from "../../../../utils/constants";
 
-export default function AllCoursesAdmin({ coursesData }) {
-  const [filteredCourses, setFilteredCourses] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [showFilters, setShowFilters] = useState(false);
+interface Course {
+  _id: string;
+  courseName: string;
+  thumbnail?: string;
+  price?: number;
+  status?: string;
+  category?: {
+    name: string;
+  };
+  instructor?: {
+    firstName: string;
+    lastName: string;
+  };
+  courseDescription?: string;
+  [key: string]: any;
+}
+
+interface AllCoursesAdminProps {
+  coursesData: Course[];
+}
+
+export default function AllCoursesAdmin({ coursesData }: AllCoursesAdminProps) {
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [showFilters, setShowFilters] = useState<boolean>(false);
 
   // Get unique categories from courses
-  const categories = [
-    ...new Set(
+  const categories: string[] = Array.from(
+    new Set(
       coursesData
         ?.map((course) => course.category?.name)
-        .filter((name) => name)
-    ),
-  ];
+        .filter((name): name is string => Boolean(name))
+    )
+  );
 
   // Filter courses
   useEffect(() => {
@@ -48,7 +69,7 @@ export default function AllCoursesAdmin({ coursesData }) {
     setFilteredCourses(filtered);
   }, [searchQuery, statusFilter, categoryFilter, coursesData]);
 
-  const clearFilters = () => {
+  const clearFilters = (): void => {
     setSearchQuery("");
     setStatusFilter("all");
     setCategoryFilter("all");
@@ -205,3 +226,4 @@ export default function AllCoursesAdmin({ coursesData }) {
     </div>
   );
 }
+

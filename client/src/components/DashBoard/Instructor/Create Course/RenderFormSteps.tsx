@@ -5,11 +5,27 @@ import CourseInfoForm from "./CourseInfo/CourseInfoForm";
 import CourseBuilder from "./CourseBuilder/CourseBuilder";
 import CoursePublish from "./CoursePublish";
 import CourseDraft from "./CourseBuilder/CourseDraft";
+import { RootState } from "../../../../toolkit/reducer";
 
-export default function RenderFormSteps({ instructions = [] }) {
-  const { step } = useSelector((state) => state.course);
+interface Instruction {
+  icon: React.ReactElement;
+  text: string;
+}
 
-  const steps = [
+interface RenderFormStepsProps {
+  instructions?: Instruction[];
+}
+
+interface Step {
+  id: number;
+  title: string;
+  description: string;
+}
+
+export default function RenderFormSteps({ instructions = [] }: RenderFormStepsProps) {
+  const { step } = useSelector((state: RootState) => state.course);
+
+  const steps: Step[] = [
     {
       id: 1,
       title: "Course Information",
@@ -36,21 +52,21 @@ export default function RenderFormSteps({ instructions = [] }) {
             <React.Fragment key={item.id}>
               <div className="flex flex-col items-center flex-1 relative">
                 {/* Step Circle */}
-              <div
+                <div
                   className={`relative z-10 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center font-bold text-sm sm:text-base transition-all duration-300 ${
                     step === item.id
                       ? "bg-yellow8 text-black scale-110 shadow-lg"
                       : step > item.id
                       ? "bg-green-600 text-white"
                       : "bg-black5 text-white4"
-                }`}
-              >
+                  }`}
+                >
                   {step > item.id ? (
                     <FaCheck className="text-lg sm:text-xl" />
                   ) : (
                     item.id
                   )}
-              </div>
+                </div>
                 {/* Step Info */}
                 <div className="mt-3 text-center">
                   <p
@@ -63,7 +79,7 @@ export default function RenderFormSteps({ instructions = [] }) {
                   <p className="text-xs text-white4 mt-1 hidden sm:block">
                     {item.description}
                   </p>
-            </div>
+                </div>
                 {/* Connector Line */}
                 {index < steps.length - 1 && (
                   <div
@@ -73,7 +89,7 @@ export default function RenderFormSteps({ instructions = [] }) {
                     style={{ width: "calc(100% - 3.5rem)" }}
                   />
                 )}
-        </div>
+              </div>
             </React.Fragment>
           ))}
         </div>
@@ -116,10 +132,11 @@ export default function RenderFormSteps({ instructions = [] }) {
         </div>
       ) : (
         <div className="bg-black2 rounded-xl p-6 sm:p-8 border border-black5 shadow-lg">
-      {step === 2 && <CourseBuilder />}
-      {step === 3 && <CourseDraft />}
+          {step === 2 && <CourseBuilder />}
+          {step === 3 && <CourseDraft />}
         </div>
       )}
     </div>
   );
 }
+

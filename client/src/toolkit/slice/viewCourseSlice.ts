@@ -16,14 +16,14 @@ interface Course {
 
 interface ViewCourseState {
   courseSectionData: CourseSection[];
-  courseEntireData: Course[];
+  courseEntireData: Course | null;
   completedLectures: string[];
   totalNoOfLectures: number;
 }
 
 const initialState: ViewCourseState = {
   courseSectionData: [],
-  courseEntireData: [],
+  courseEntireData: null,
   completedLectures: [],
   totalNoOfLectures: 0,
 };
@@ -35,7 +35,7 @@ const viewCourseSlice = createSlice({
     setCourseSectionData: (state, action: PayloadAction<CourseSection[]>) => {
       state.courseSectionData = action.payload;
     },
-    setEntireCourseData: (state, action: PayloadAction<Course[]>) => {
+    setEntireCourseData: (state, action: PayloadAction<Course | null>) => {
       state.courseEntireData = action.payload;
     },
     setTotalNoOfLectures: (state, action: PayloadAction<number>) => {
