@@ -11,17 +11,20 @@ import { getFullDetailsOfCourse } from "../../../../services/operations/courseDe
 import HighlightText from "../../../../user interfaces/HighlightText";
 import { FaSpinner, FaArrowLeft, FaExclamationTriangle } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { RootState } from "../../../../toolkit/reducer";
 
 export default function EditCourse() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { courseId } = useParams();
-  const { course } = useSelector((state) => state.course);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { token } = useSelector((state) => state.auth);
+  const { courseId } = useParams<{ courseId: string }>();
+  const { course } = useSelector((state: RootState) => state.course);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const { token } = useSelector((state: RootState) => state.auth);
 
-  const populateCourseDetails = async () => {
+  const populateCourseDetails = async (): Promise<void> => {
+    if (!courseId || !token) return;
+    
     setLoading(true);
     setError(null);
     
@@ -105,29 +108,17 @@ export default function EditCourse() {
     <div className="w-11/12 max-w-7xl mx-auto py-6 sm:py-8">
       {/* Header Section */}
       <div className="mb-8">
-        <div className="flex items-center gap-4 mb-4">
-          <button
-            onClick={() => navigate("/dashboard/myCourses-Instructor")}
-            className="p-2 text-white4 hover:text-white hover:bg-black3 rounded-lg transition-colors"
-            title="Back to My Courses"
-          >
-            <FaArrowLeft className="text-xl" />
-          </button>
-          <div>
-            <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-white">
-              Edit <HighlightText text="Course" />
-            </h1>
-            <p className="text-white4 text-sm sm:text-base">
-              Update your course information and content
-            </p>
-          </div>
-        </div>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-white">
+          Edit <HighlightText text="Course" />
+        </h1>
+        <p className="text-white4 text-sm sm:text-base">
+          Update your course information, content, and settings.
+        </p>
       </div>
 
       {/* Form Steps */}
-      <div>
-        <RenderFormSteps />
-      </div>
+      <RenderFormSteps instructions={[]} />
     </div>
   );
 }
+

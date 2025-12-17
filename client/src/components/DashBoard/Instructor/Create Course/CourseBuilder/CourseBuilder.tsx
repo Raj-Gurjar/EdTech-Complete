@@ -12,6 +12,13 @@ import {
   updateSection,
   createSection,
 } from "../../../../../services/operations/courseDetailsAPI";
+import { RootState } from "../../../../../toolkit/reducer";
+
+interface SectionFormData {
+  sectionName: string;
+  shortDescription?: string;
+  longDescription?: string;
+}
 
 export default function CourseBuilder() {
   const {
@@ -19,31 +26,32 @@ export default function CourseBuilder() {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm<SectionFormData>();
 
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
-  const [editSectionName, setEditSectionName] = useState(null);
-  const { course } = useSelector((state) => state.course);
-  const { token } = useSelector((state) => state.auth);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [editSectionName, setEditSectionName] = useState<string | null>(null);
+  const { course } = useSelector((state: RootState) => state.course);
+  const { token } = useSelector((state: RootState) => state.auth);
 
-  const cancelEdit = () => {
+  const cancelEdit = (): void => {
     setEditSectionName(null);
     setValue("sectionName", "");
   };
 
-  function goBack() {
+  function goBack(): void {
     dispatch(setStep(1));
     dispatch(setEditCourse(true));
   }
-  function goToNext() {
+
+  function goToNext(): void {
     if (course?.courseContent?.length === 0) {
       toast.error("Please add atleast one Section.");
       return;
     }
     if (
-      course.courseContent.some((section) => section?.subSections?.length === 0)
+      course?.courseContent?.some((section: any) => section?.subSections?.length === 0)
     ) {
       toast.error("Please add atleast one Lecture in each section");
       return;
@@ -53,12 +61,13 @@ export default function CourseBuilder() {
     dispatch(setStep(3));
   }
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: SectionFormData): Promise<void> => {
+    if (!course || !token) return;
+    
     setLoading(true);
     let result;
 
     //if we edit
-
     if (editSectionName) {
       result = await updateSection(
         {
@@ -90,7 +99,7 @@ export default function CourseBuilder() {
     setLoading(false);
   };
 
-  const handleEditSecName = (sectionId, sectionName) => {
+  const handleEditSecName = (sectionId: string, sectionName: string): void => {
     console.log("Edit Sec Name called");
     if (editSectionName === sectionId) {
       cancelEdit();
@@ -186,7 +195,7 @@ export default function CourseBuilder() {
       </div>
 
       {/* Sections List */}
-      {course?.courseContent?.length > 0 && (
+      {course?.courseContent && course.courseContent.length > 0 && (
         <div className="bg-black3 rounded-xl p-6 border border-black5">
           <h3 className="text-lg font-semibold text-white mb-4">
             Course Sections ({course.courseContent.length})
@@ -213,3 +222,4 @@ export default function CourseBuilder() {
     </div>
   );
 }
+

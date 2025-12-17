@@ -2,9 +2,15 @@ import React from "react";
 import RenderFormSteps from "./RenderFormSteps";
 import HighlightText from "../../../../user interfaces/HighlightText";
 import { FaBook, FaInfoCircle, FaLightbulb } from "react-icons/fa";
+import { ReactElement } from "react";
+
+interface Instruction {
+  icon: ReactElement;
+  text: string;
+}
 
 export default function CreateCourses() {
-  const instructions = [
+  const instructions: Instruction[] = [
     {
       icon: <FaInfoCircle className="text-yellow8" />,
       text: "Fill in all required course information accurately",
@@ -44,3 +50,4 @@ export default function CreateCourses() {
     </div>
   );
 }
+

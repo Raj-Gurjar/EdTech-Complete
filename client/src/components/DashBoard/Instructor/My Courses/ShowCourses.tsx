@@ -1,21 +1,31 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaPlus, FaBook, FaSpinner } from "react-icons/fa";
 import { fetchInstructorCourses } from "../../../../services/operations/courseDetailsAPI";
 import CoursesTable from "./CoursesTable";
 import HighlightText from "../../../../user interfaces/HighlightText";
+import { RootState } from "../../../../toolkit/reducer";
+
+interface Course {
+  _id: string;
+  courseName: string;
+  status?: string;
+  [key: string]: any;
+}
 
 export default function ShowCourse() {
   const navigate = useNavigate();
 
-  const { token } = useSelector((state) => state.auth);
+  const { token } = useSelector((state: RootState) => state.auth);
 
-  const [instCourses, setInstCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [instCourses, setInstCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchCourses = async () => {
+  const fetchCourses = async (): Promise<void> => {
+    if (!token) return;
+    
     setLoading(true);
     const result = await fetchInstructorCourses(token);
     if (result) {
@@ -113,3 +123,4 @@ export default function ShowCourse() {
     </div>
   );
 }
+

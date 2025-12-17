@@ -16,6 +16,25 @@ import toast from "react-hot-toast";
 import { COURSE_STATUS } from "../../../../../utils/constants";
 import UploadMedia from "../../../../../utils/UploadMedia";
 import ChipInput from "./ChipInput";
+import { RootState } from "../../../../../toolkit/reducer";
+
+interface Category {
+  _id: string;
+  name: string;
+  [key: string]: any;
+}
+
+interface CourseInfoFormData {
+  courseTitle: string;
+  courseShortDescription: string;
+  coursePrice: number;
+  courseLanguage: string;
+  courseTags: string[];
+  courseBenefits: string;
+  courseCategory: string;
+  courseRequirements: string[];
+  courseImage: File | string;
+}
 
 export default function CourseInfoForm() {
   const {
@@ -24,20 +43,20 @@ export default function CourseInfoForm() {
     setValue,
     getValues,
     formState: { errors },
-  } = useForm();
+  } = useForm<CourseInfoFormData>();
 
   const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.auth);
-  const { course, editCourse } = useSelector((state) => state.course);
-  const [loading, setLoading] = useState(false);
-  const [courseCategories, setCourseCategories] = useState([]);
+  const { token } = useSelector((state: RootState) => state.auth);
+  const { course, editCourse } = useSelector((state: RootState) => state.course);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [courseCategories, setCourseCategories] = useState<Category[]>([]);
 
-  const clearFormHandler = () => {
+  const clearFormHandler = (): void => {
     dispatch(resetCourseState());
   };
 
   useEffect(() => {
-    const getCategories = async () => {
+    const getCategories = async (): Promise<void> => {
       setLoading(true);
       const categories = await showAllCategories();
       if (categories.length > 0) {
@@ -46,38 +65,42 @@ export default function CourseInfoForm() {
       setLoading(false);
     };
 
-    if (editCourse) {
-      setValue("courseTitle", course.courseName);
-      setValue("courseShortDescription", course.courseDescription);
-      setValue("coursePrice", course.price);
-      setValue("courseLanguage", course.language);
-      setValue("courseTags", course.tag);
-      setValue("courseBenefits", course.whatYouWillLearn);
-      setValue("courseCategory", course.category);
-      setValue("courseRequirements", course.instruction);
-      setValue("courseImage", course.thumbnail);
+    if (editCourse && course) {
+      setValue("courseTitle", course.courseName || "");
+      setValue("courseShortDescription", course.courseDescription || "");
+      setValue("coursePrice", course.price || 0);
+      setValue("courseLanguage", course.language || "");
+      setValue("courseTags", course.tag || []);
+      setValue("courseBenefits", course.whatYouWillLearn || "");
+      setValue("courseCategory", course.category?._id || "");
+      setValue("courseRequirements", course.instruction || []);
+      setValue("courseImage", course.thumbnail || "");
     }
 
     getCategories();
   }, [editCourse, course, setValue]);
 
-  const isFormUpdated = () => {
+  const isFormUpdated = (): boolean => {
+    if (!course) return true;
+    
     const currentValues = getValues();
     return (
       currentValues.courseTitle !== course.courseName ||
       currentValues.courseShortDescription !== course.courseDescription ||
       currentValues.coursePrice !== course.price ||
       currentValues.courseLanguage !== course.language ||
-      currentValues.courseTags !== course.tag ||
+      JSON.stringify(currentValues.courseTags) !== JSON.stringify(course.tag) ||
       currentValues.courseBenefits !== course.whatYouWillLearn ||
-      currentValues.courseCategory !== course.category._id ||
+      currentValues.courseCategory !== course.category?._id ||
       currentValues.courseImage !== course.thumbnail ||
-      currentValues.courseRequirements !== course.instruction
+      JSON.stringify(currentValues.courseRequirements) !== JSON.stringify(course.instruction)
     );
   };
 
-  const onSubmit = async (data) => {
-    if (editCourse) {
+  const onSubmit = async (data: CourseInfoFormData): Promise<void> => {
+    if (!token) return;
+    
+    if (editCourse && course) {
       if (isFormUpdated()) {
         const formData = new FormData();
         const currentValues = getValues();
@@ -90,25 +113,25 @@ export default function CourseInfoForm() {
           formData.append("courseDescription", data.courseShortDescription);
         }
         if (currentValues.coursePrice !== course.price) {
-          formData.append("price", data.coursePrice);
+          formData.append("price", String(data.coursePrice));
         }
         if (currentValues.courseLanguage !== course.language) {
           formData.append("language", data.courseLanguage);
         }
-        if (currentValues.courseTags !== course.tag) {
-          formData.append("tag", data.courseTags);
+        if (JSON.stringify(currentValues.courseTags) !== JSON.stringify(course.tag)) {
+          formData.append("tag", JSON.stringify(data.courseTags));
         }
         if (currentValues.courseBenefits !== course.whatYouWillLearn) {
           formData.append("whatWillYouLearn", data.courseBenefits);
         }
-        if (currentValues.courseCategory !== course.category._id) {
+        if (currentValues.courseCategory !== course.category?._id) {
           formData.append("category", data.courseCategory);
         }
         if (currentValues.courseImage !== course.thumbnail) {
-          formData.append("thumbnail", data.courseImage);
+          formData.append("thumbnail", data.courseImage as File);
         }
-        if (currentValues.courseRequirements !== course.instructions) {
-          formData.append("instruction", data.courseRequirements);
+        if (JSON.stringify(currentValues.courseRequirements) !== JSON.stringify(course.instruction)) {
+          formData.append("instruction", JSON.stringify(data.courseRequirements));
         }
 
         setLoading(true);
@@ -128,13 +151,13 @@ export default function CourseInfoForm() {
     const formData = new FormData();
     formData.append("courseName", data.courseTitle);
     formData.append("courseDescription", data.courseShortDescription);
-    formData.append("price", data.coursePrice);
+    formData.append("price", String(data.coursePrice));
     formData.append("language", data.courseLanguage);
     formData.append("whatYouWillLearn", data.courseBenefits);
     formData.append("category", data.courseCategory);
-    formData.append("instructions", data.courseRequirements);
-    formData.append("tag", data.courseTags);
-    formData.append("thumbnail", data.courseImage);
+    formData.append("instructions", JSON.stringify(data.courseRequirements));
+    formData.append("tag", JSON.stringify(data.courseTags));
+    formData.append("thumbnail", data.courseImage as File);
     formData.append("status", COURSE_STATUS.DRAFT);
 
     setLoading(true);
@@ -237,8 +260,8 @@ export default function CourseInfoForm() {
               </option>
               {!loading &&
                 courseCategories.map((category, index) => (
-                  <option key={index} value={category?._id} className="bg-black2">
-                    {category?.name}
+                  <option key={category._id || index} value={category._id} className="bg-black2">
+                    {category.name}
                   </option>
                 ))}
             </select>
@@ -275,7 +298,7 @@ export default function CourseInfoForm() {
               errors={errors}
               setValue={setValue}
               image={true}
-              previewMedia={editCourse ? course.thumbnail : ""}
+              previewMedia={editCourse && course ? course.thumbnail : undefined}
             />
           </div>
         </div>
@@ -305,7 +328,7 @@ export default function CourseInfoForm() {
             errors={errors}
             setValue={setValue}
             getValues={getValues}
-            chipValues={editCourse ? course.instructions : ""}
+            chipValues={editCourse && course ? course.instructions : ""}
           />
         </div>
 
@@ -318,7 +341,7 @@ export default function CourseInfoForm() {
             errors={errors}
             setValue={setValue}
             getValues={getValues}
-            chipValues={editCourse ? course.tags : ""}
+            chipValues={editCourse && course ? course.tags : ""}
           />
         </div>
 
@@ -356,3 +379,4 @@ export default function CourseInfoForm() {
     </div>
   );
 }
+
