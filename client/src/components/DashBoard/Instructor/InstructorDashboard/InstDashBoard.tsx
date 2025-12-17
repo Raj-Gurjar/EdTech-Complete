@@ -14,17 +14,37 @@ import {
   FaGraduationCap
 } from "react-icons/fa";
 import Loader from "../../../Loader/Loader";
+import { ReactElement } from "react";
+import { RootState } from "../../../../toolkit/reducer";
+
+interface Course {
+  courseName: string;
+  totalStudentsEnrolled?: number;
+  totalAmountGenerated?: number;
+  [key: string]: any;
+}
+
+interface Stat {
+  title: string;
+  value: string | number;
+  icon: ReactElement;
+  color: string;
+  bgColor: string;
+  borderColor: string;
+}
 
 export default function InstDashBoard() {
-  const { token } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.profile);
+  const { token } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.profile);
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
-  const [instructorData, setInstructorData] = useState(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [instructorData, setInstructorData] = useState<Course[] | null>(null);
 
   useEffect(() => {
-    const getInstructorDashData = async () => {
+    const getInstructorDashData = async (): Promise<void> => {
+      if (!token) return;
+      
       setLoading(true);
       try {
         const response = await getInstructorData(token);
@@ -52,7 +72,7 @@ export default function InstDashBoard() {
 
   const totalCourses = user?.courses?.length || instructorData?.length || 0;
 
-  const stats = [
+  const stats: Stat[] = [
     {
       title: "Total Courses",
       value: totalCourses,
@@ -132,7 +152,7 @@ export default function InstDashBoard() {
           {/* Chart Section */}
           <div className="bg-black2 rounded-xl p-6 sm:p-8 border border-black5 shadow-lg mb-8">
             <InstructorChart
-              courses={instructorData}
+              courses={instructorData || []}
               totalStudents={totalStudentsEnrolled}
             />
           </div>
@@ -203,3 +223,4 @@ export default function InstDashBoard() {
     </div>
   );
 }
+

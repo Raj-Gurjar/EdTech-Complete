@@ -13,20 +13,51 @@ import {
   FaUserCheck,
   FaRupeeSign,
   FaArrowRight,
-  FaCog,
-  FaList,
 } from "react-icons/fa";
+import { ReactElement } from "react";
+import { RootState } from "../../../../toolkit/reducer";
+
+interface AdminData {
+  totalUsers?: number;
+  totalStudents?: number;
+  totalInstructors?: number;
+  totalCourses?: number;
+  totalCategories?: number;
+  totalActiveStudents?: number;
+  totalActiveInstructors?: number;
+  totalEarningAdmin?: number | string;
+  [key: string]: any;
+}
+
+interface Stat {
+  title: string;
+  value: string | number;
+  icon: ReactElement;
+  color: string;
+  bgColor: string;
+  borderColor: string;
+}
+
+interface QuickAction {
+  title: string;
+  description: string;
+  icon: ReactElement;
+  path: string;
+  color: string;
+}
 
 export default function AdminDashboard() {
-  const { token } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.profile);
+  const { token } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.profile);
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
-  const [adminData, setAdminData] = useState(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [adminData, setAdminData] = useState<AdminData | null>(null);
 
   useEffect(() => {
-    const getAdminDashData = async () => {
+    const getAdminDashData = async (): Promise<void> => {
+      if (!token) return;
+      
       setLoading(true);
       try {
         const response = await getAdminData(token);
@@ -48,7 +79,7 @@ export default function AdminDashboard() {
     );
   }
 
-  const stats = [
+  const stats: Stat[] = [
     {
       title: "Total Users",
       value: adminData?.totalUsers || 0,
@@ -107,7 +138,7 @@ export default function AdminDashboard() {
     },
     {
       title: "Total Earnings",
-      value: `₹${parseFloat(adminData?.totalEarningAdmin || 0).toLocaleString()}`,
+      value: `₹${parseFloat(String(adminData?.totalEarningAdmin || 0)).toLocaleString()}`,
       icon: <FaRupeeSign className="text-3xl" />,
       color: "text-yellow8",
       bgColor: "bg-yellow8/10",
@@ -115,7 +146,7 @@ export default function AdminDashboard() {
     },
   ];
 
-  const quickActions = [
+  const quickActions: QuickAction[] = [
     {
       title: "Manage Courses",
       description: "View, approve, and manage all courses",
@@ -215,7 +246,7 @@ export default function AdminDashboard() {
                   <div className="flex justify-between items-center">
                     <span className="text-white4 text-sm">Engagement Rate</span>
                     <span className="text-yellow8 font-bold">
-                      {adminData.totalUsers > 0
+                      {adminData.totalUsers && adminData.totalUsers > 0
                         ? Math.round(
                             ((adminData.totalActiveStudents || 0) /
                               adminData.totalUsers) *
@@ -249,7 +280,7 @@ export default function AdminDashboard() {
                   <div className="flex justify-between items-center">
                     <span className="text-white font-medium">Total Revenue</span>
                     <span className="text-yellow8 font-bold text-lg">
-                      ₹{parseFloat(adminData.totalEarningAdmin || 0).toLocaleString()}
+                      ₹{parseFloat(String(adminData.totalEarningAdmin || 0)).toLocaleString()}
                     </span>
                   </div>
                 </div>
@@ -295,3 +326,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

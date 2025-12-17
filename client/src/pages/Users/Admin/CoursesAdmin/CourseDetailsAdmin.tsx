@@ -30,16 +30,68 @@ import { formateDate } from "../../../../utils/formatDate";
 import RatingStars from "../../../../utils/RatingStars";
 import { COURSE_STATUS } from "../../../../utils/constants";
 import Loader from "../../../../components/Loader/Loader";
+import { RootState } from "../../../../toolkit/reducer";
+
+interface SubSection {
+  _id: string;
+  title?: string;
+  description?: string;
+  videoUrl?: string;
+  [key: string]: any;
+}
+
+interface CourseSection {
+  _id: string;
+  sectionName?: string;
+  shortDescription?: string;
+  subSections?: SubSection[];
+  [key: string]: any;
+}
+
+interface Instructor {
+  _id: string;
+  firstName?: string;
+  lastName?: string;
+  profileImage?: string;
+  [key: string]: any;
+}
+
+interface Category {
+  _id: string;
+  name?: string;
+  [key: string]: any;
+}
+
+interface CourseData {
+  _id: string;
+  courseName?: string;
+  courseDescription?: string;
+  thumbnail?: string;
+  price?: number;
+  language?: string;
+  status?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  category?: Category;
+  instructor?: Instructor;
+  ratingAndReviews?: any[];
+  studentsEnrolled?: string[] | any[];
+  courseContent?: CourseSection[];
+  whatYouWillLearn?: string;
+  instructions?: string[];
+  tags?: string[];
+  [key: string]: any;
+}
 
 export default function CourseDetailsAdmin() {
-  const [courseData, setCourseData] = useState(null);
-  const [courseDuration, setCourseDuration] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [avgRatingCount, setAvgRatingCount] = useState(0);
-  const [openSection, setOpenSection] = useState([]);
+  const [courseData, setCourseData] = useState<CourseData | null>(null);
+  const [courseDuration, setCourseDuration] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [avgRatingCount, setAvgRatingCount] = useState<number>(0);
+  const [openSection, setOpenSection] = useState<string[]>([]);
 
-  const { courseId } = useParams();
-  const { token } = useSelector((state) => state.auth);
+  const { courseId } = useParams<{ courseId: string }>();
+  const { token } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,10 +99,12 @@ export default function CourseDetailsAdmin() {
     setAvgRatingCount(count);
   }, [courseData]);
 
-  const showCourse = useCallback(async () => {
+  const showCourse = useCallback(async (): Promise<void> => {
+    if (!courseId || !token) return;
+    
     setLoading(true);
     try {
-      const response = await getCourseDetailsAdmin({ courseId }, token);
+      const response = await getCourseDetailsAdmin(courseId, token);
       const course = response?.data?.courseDetails;
       const courseDur = response?.data?.totalDuration;
 
@@ -67,15 +121,20 @@ export default function CourseDetailsAdmin() {
     setLoading(false);
   }, [courseId, token]);
 
-  const publishCourseHandler = async () => {
+  const publishCourseHandler = async (): Promise<void> => {
+    if (!courseId || !token) return;
+    
     setLoading(true);
     try {
       await publishCourseAdmin(courseId, token);
       // Update courseData state to reflect the published status
-      setCourseData((prevData) => ({
-        ...prevData,
-        status: COURSE_STATUS.PUBLISHED,
-      }));
+      setCourseData((prevData) => {
+        if (!prevData) return null;
+        return {
+          ...prevData,
+          status: COURSE_STATUS.PUBLISHED,
+        };
+      });
       toast.success("Course published successfully.");
     } catch (error) {
       console.error("Error publishing course: ", error);
@@ -84,15 +143,20 @@ export default function CourseDetailsAdmin() {
     setLoading(false);
   };
 
-  const unpublishCourseHandler = async () => {
+  const unpublishCourseHandler = async (): Promise<void> => {
+    if (!courseId || !token) return;
+    
     setLoading(true);
     try {
       await unpublishCourseAdmin(courseId, token);
       // Update courseData state to reflect the draft status
-      setCourseData((prevData) => ({
-        ...prevData,
-        status: COURSE_STATUS.DRAFT,
-      }));
+      setCourseData((prevData) => {
+        if (!prevData) return null;
+        return {
+          ...prevData,
+          status: COURSE_STATUS.DRAFT,
+        };
+      });
       toast.success("Course unpublished successfully.");
     } catch (error) {
       console.error("Error unpublishing course: ", error);
@@ -107,12 +171,12 @@ export default function CourseDetailsAdmin() {
     }
   }, [courseId, showCourse]);
 
-  const handleShare = () => {
+  const handleShare = (): void => {
     copy(window.location.href);
     toast.success("Link Copied");
   };
 
-  const handleToggleSection = (id) => {
+  const handleToggleSection = (id: string): void => {
     setOpenSection(
       openSection.includes(id)
         ? openSection.filter((e) => e !== id)
@@ -120,7 +184,7 @@ export default function CourseDetailsAdmin() {
     );
   };
 
-  const toggleAllSections = () => {
+  const toggleAllSections = (): void => {
     if (openSection.length === courseData?.courseContent?.length) {
       setOpenSection([]);
     } else {
@@ -313,7 +377,9 @@ export default function CourseDetailsAdmin() {
             <div>
               <p className="text-white4 text-sm">Students Enrolled</p>
               <p className="text-2xl font-bold text-white">
-                {courseData?.studentsEnrolled?.length || 0}
+                {Array.isArray(courseData?.studentsEnrolled) 
+                  ? courseData.studentsEnrolled.length 
+                  : 0}
               </p>
             </div>
           </div>
@@ -514,11 +580,11 @@ export default function CourseDetailsAdmin() {
           </div>
 
           {/* Tags and Instructions */}
-          {courseData?.tags?.length > 0 && (
+          {courseData?.tags && courseData.tags.length > 0 && (
             <div className="bg-black2 rounded-xl p-6 border border-black5">
               <h3 className="text-lg font-bold text-white mb-4">Tags</h3>
               <div className="flex flex-wrap gap-2">
-                {courseData?.tags.map((tag, index) => (
+                {courseData.tags.map((tag, index) => (
                   <span
                     key={index}
                     className="px-3 py-1 rounded-full bg-black3 text-white4 text-sm border border-black5"
@@ -530,13 +596,13 @@ export default function CourseDetailsAdmin() {
             </div>
           )}
 
-          {courseData?.instructions?.length > 0 && (
+          {courseData?.instructions && courseData.instructions.length > 0 && (
             <div className="bg-black2 rounded-xl p-6 border border-black5">
               <h3 className="text-lg font-bold text-white mb-4">
                 Instructions
               </h3>
               <ul className="space-y-2">
-                {courseData?.instructions.map((instruction, index) => (
+                {courseData.instructions.map((instruction, index) => (
                   <li key={index} className="flex items-start gap-2 text-white4 text-sm">
                     <FaCheckCircle className="text-yellow8 mt-1 flex-shrink-0 text-xs" />
                     <span>{instruction}</span>
@@ -550,3 +616,4 @@ export default function CourseDetailsAdmin() {
     </div>
   );
 }
+
