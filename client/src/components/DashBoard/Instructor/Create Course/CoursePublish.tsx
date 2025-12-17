@@ -5,19 +5,24 @@ import { useForm } from "react-hook-form";
 import { COURSE_STATUS } from "../../../../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { editCourseDetails } from "../../../../services/operations/courseDetailsAPI";
+import { RootState } from "../../../../toolkit/reducer";
+
+interface PublishFormData {
+  public: boolean;
+}
 
 export default function CoursePublish() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { register, handleSubmit, setValue, getValues } = useForm();
+  const { register, handleSubmit, setValue, getValues } = useForm<PublishFormData>();
 
-  const { course } = useSelector((state) => state.course);
-  const { token } = useSelector((state) => state.auth);
+  const { course } = useSelector((state: RootState) => state.course);
+  const { token } = useSelector((state: RootState) => state.auth);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const goBack = () => {
+  const goBack = (): void => {
     dispatch(setStep(2));
   };
 
@@ -25,20 +30,22 @@ export default function CoursePublish() {
     if (course?.status === COURSE_STATUS.PUBLISHED) {
       setValue("public", true);
     }
-  });
-  const goToCourses = () => {
+  }, [course, setValue]);
+
+  const goToCourses = (): void => {
     dispatch(resetCourseState());
     navigate("/dashboard/myCourses-Instructor");
   };
 
-  const handleCoursePublish = async () => {
+  const handleCoursePublish = async (): Promise<void> => {
+    if (!course || !token) return;
+
     if (
       (course?.status === COURSE_STATUS.PUBLISHED &&
         getValues("public") === true) ||
       (course?.status === COURSE_STATUS.DRAFT && getValues("public") === false)
     ) {
       //no updating in form then no need to make api call
-   
       goToCourses();
       return;
     }
@@ -66,7 +73,7 @@ export default function CoursePublish() {
     setLoading(false);
   };
 
-  const onSubmit = () => {
+  const onSubmit = (): void => {
     handleCoursePublish();
   };
 
@@ -159,3 +166,4 @@ export default function CoursePublish() {
     </div>
   );
 }
+

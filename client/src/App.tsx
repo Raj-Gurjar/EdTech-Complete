@@ -1,5 +1,6 @@
+import React from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { ACCOUNT_TYPE } from "./utils/constants";
 
@@ -27,7 +28,6 @@ import EditCourse from "./components/DashBoard/Instructor/My Courses/EditCourse"
 import AllCourses from "./pages/Courses/AllCourses";
 import SingleCategory from "./pages/Courses/SingleCategory";
 import CourseDetails from "./pages/Courses/CourseDetails";
-import ShowDetails from "./pages/Courses/ShowSectionDetails";
 import ShowSectionDetails from "./pages/Courses/ShowSectionDetails";
 import EditProfile from "./components/DashBoard/EditProfile";
 import ProtectedRoute from "./utils/ProtectedRoute";
@@ -39,9 +39,10 @@ import CreateCategory from "./pages/Users/Admin/CategoryAdmin/CreateCategory";
 import CourseMenuAdmin from "./pages/Users/Admin/CoursesAdmin/CoursesMenuAdmin";
 import CourseDetailsAdmin from "./pages/Users/Admin/CoursesAdmin/CourseDetailsAdmin";
 import AdminDashboard from "./pages/Users/Admin/Admin DashBoard/AdminDashboard";
+import { RootState } from "./toolkit/reducer";
 
 function App() {
-  const { user } = useSelector((state) => state.profile);
+  const { user } = useSelector((state: RootState) => state.profile);
   return (
     <div className="App">
       <Navbar />
@@ -145,3 +146,4 @@ function App() {
 }
 
 export default App;
+

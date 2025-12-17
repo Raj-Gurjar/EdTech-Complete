@@ -1,5 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, KeyboardEvent, FormEvent } from "react";
 import { FaPlus, FaTimes } from "react-icons/fa";
+import { UseFormRegisterReturn, UseFormSetValue, UseFormGetValues, FieldErrors } from "react-hook-form";
+
+interface ChipInputProps {
+  name: string;
+  label: string;
+  register: (name: string, options?: any) => UseFormRegisterReturn;
+  errors: FieldErrors;
+  setValue: UseFormSetValue<any>;
+  getValues: UseFormGetValues<any>;
+  chipValues?: string[] | string;
+}
 
 export default function ChipInput({
   name,
@@ -9,11 +20,11 @@ export default function ChipInput({
   setValue,
   getValues,
   chipValues,
-}) {
-  const [chipInput, setChipInput] = useState("");
+}: ChipInputProps) {
+  const [chipInput, setChipInput] = useState<string>("");
   
   // Handle different input types: array, string, or empty
-  const getInitialChips = () => {
+  const getInitialChips = (): string[] => {
     if (!chipValues) return [];
     if (Array.isArray(chipValues)) return chipValues;
     if (typeof chipValues === 'string') {
@@ -26,12 +37,12 @@ export default function ChipInput({
     return [];
   };
 
-  const [chipInputList, setChipInputList] = useState(getInitialChips());
+  const [chipInputList, setChipInputList] = useState<string[]>(getInitialChips());
 
   useEffect(() => {
     register(name, {
       required: true,
-      validate: (value) => value.length > 0,
+      validate: (value: string[]) => value.length > 0,
     });
   }, [register, name]);
 
@@ -48,7 +59,7 @@ export default function ChipInput({
     setValue(name, chipInputList);
   }, [name, chipInputList, setValue]);
 
-  const addReqHandler = (e) => {
+  const addReqHandler = (e: FormEvent<HTMLButtonElement> | FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const trimmedInput = chipInput.trim();
     if (trimmedInput && !chipInputList.includes(trimmedInput)) {
@@ -57,16 +68,16 @@ export default function ChipInput({
     }
   };
 
-  const removeReqHandler = (index) => {
+  const removeReqHandler = (index: number): void => {
     const updateReqList = [...chipInputList];
     updateReqList.splice(index, 1);
     setChipInputList(updateReqList);
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === "Enter") {
       e.preventDefault();
-      addReqHandler(e);
+      addReqHandler(e as any);
     }
   };
 
@@ -130,3 +141,4 @@ export default function ChipInput({
     </div>
   );
 }
+
