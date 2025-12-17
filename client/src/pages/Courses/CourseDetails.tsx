@@ -167,7 +167,12 @@ export default function CourseDetails() {
             const allReviews = await getAllReviews();
             const courseReviewIds = course.ratingAndReviews.map((r: any) => r._id || r);
             const courseReviews = allReviews.filter(
-              (review: Review) => courseReviewIds.includes(review._id) || review.course?._id === courseId
+              (review: Review) => {
+                const reviewCourseId = typeof review.course === 'string' 
+                  ? review.course 
+                  : review.course?._id;
+                return courseReviewIds.includes(review._id) || reviewCourseId === courseId;
+              }
             );
             setReviews(courseReviews);
           } catch (error) {
@@ -181,7 +186,12 @@ export default function CourseDetails() {
         try {
           const allReviews = await getAllReviews();
           const courseReviews = allReviews.filter(
-            (review: Review) => review.course?._id === courseId || review.course === courseId
+            (review: Review) => {
+              const reviewCourseId = typeof review.course === 'string' 
+                ? review.course 
+                : review.course?._id;
+              return reviewCourseId === courseId;
+            }
           );
           if (courseReviews.length > 0) {
             setReviews(courseReviews);
