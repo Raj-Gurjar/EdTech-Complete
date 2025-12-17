@@ -5,16 +5,41 @@ import { FaTrashAlt, FaTags, FaCalendarAlt, FaInfoCircle } from "react-icons/fa"
 import Modal from "../../../../components/Modals-Popups/Modal";
 import { formateDate } from "../../../../utils/formatDate";
 import Loader from "../../../../components/Loader/Loader";
+import { RootState } from "../../../../toolkit/reducer";
 
-export default function CategoryTable({ getCategories, courseCategories }) {
-  const [loading, setLoading] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(null);
-  const { token } = useSelector((state) => state.auth);
+interface Category {
+  _id?: string;
+  id?: string;
+  name: string;
+  description?: string;
+  createdAt?: string;
+  courses?: any[];
+  [key: string]: any;
+}
 
-  const handleDeleteCategory = async (categoryId, categoryName) => {
+interface CategoryTableProps {
+  getCategories: () => void;
+  courseCategories: Category[];
+}
+
+interface ModalData {
+  text1: string;
+  text2: string;
+  btn1Text: string;
+  btn2Text: string;
+  btn1Handler: () => void;
+  btn2Handler: () => void;
+}
+
+export default function CategoryTable({ getCategories, courseCategories }: CategoryTableProps) {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [deleteModal, setDeleteModal] = useState<ModalData | null>(null);
+  const { token } = useSelector((state: RootState) => state.auth);
+
+  const handleDeleteCategory = async (categoryId: string, categoryName: string): Promise<void> => {
     setLoading(true);
     try {
-      await deleteCategory({ categoryId: categoryId }, token);
+      await deleteCategory(categoryId, token || "");
       getCategories();
       setDeleteModal(null);
     } catch (error) {
@@ -108,7 +133,7 @@ export default function CategoryTable({ getCategories, courseCategories }) {
                         text2: `Are you sure you want to delete "${category.name}"? This action cannot be undone.`,
                         btn1Text: "Delete",
                         btn2Text: "Cancel",
-                        btn1Handler: () => handleDeleteCategory(category._id || category.id, category.name),
+                        btn1Handler: () => handleDeleteCategory(category._id || category.id || "", category.name),
                         btn2Handler: () => setDeleteModal(null),
                       })
                     }
@@ -129,3 +154,4 @@ export default function CategoryTable({ getCategories, courseCategories }) {
     </div>
   );
 }
+

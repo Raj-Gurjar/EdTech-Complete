@@ -26,28 +26,90 @@ import {
 } from "react-icons/fa";
 import ReviewCard from "../../components/Cards/ReviewCard";
 import CourseReviewModal from "../../components/Modals-Popups/CourseReviewModal";
+import { RootState } from "../../toolkit/reducer";
+
+interface SubSection {
+  _id: string;
+  title?: string;
+  timeDuration?: string;
+  [key: string]: any;
+}
+
+interface CourseSection {
+  _id: string;
+  sectionName: string;
+  shortDescription?: string;
+  subSections?: SubSection[];
+  [key: string]: any;
+}
+
+interface Instructor {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  profileImage?: string;
+  [key: string]: any;
+}
+
+interface CourseData {
+  _id: string;
+  courseName: string;
+  courseDescription?: string;
+  thumbnail?: string;
+  price?: number;
+  language?: string;
+  updatedAt?: string;
+  category?: {
+    name: string;
+  };
+  instructor?: Instructor;
+  ratingAndReviews?: any[];
+  studentsEnrolled?: string[] | any[];
+  courseContent?: CourseSection[];
+  whatYouWillLearn?: string[];
+  instructions?: string[];
+  [key: string]: any;
+}
+
+interface Review {
+  _id: string;
+  user?: any;
+  course?: string | { _id: string };
+  rating?: number;
+  review?: string;
+  [key: string]: any;
+}
+
+interface ModalData {
+  text1: string;
+  text2: string;
+  btn1Text: string;
+  btn2Text: string;
+  btn1Handler: () => void;
+  btn2Handler: () => void;
+}
 
 export default function CourseDetails() {
-  const [courseData, setCourseData] = useState(null);
-  const [courseDuration, setCourseDuration] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [avgRatingCount, setAvgRatingCount] = useState(0);
-  const [modal, setModal] = useState(null);
-  const [openSection, setOpenSection] = useState([]);
-  const [reviews, setReviews] = useState([]);
-  const [showReviewModal, setShowReviewModal] = useState(false);
-  const [totalLectures, setTotalLectures] = useState(0);
+  const [courseData, setCourseData] = useState<CourseData | null>(null);
+  const [courseDuration, setCourseDuration] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [avgRatingCount, setAvgRatingCount] = useState<number>(0);
+  const [modal, setModal] = useState<ModalData | null>(null);
+  const [openSection, setOpenSection] = useState<string[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [showReviewModal, setShowReviewModal] = useState<boolean>(false);
+  const [totalLectures, setTotalLectures] = useState<number>(0);
 
-  const { paymentLoading } = useSelector((state) => state.course);
-  const { courseId } = useParams();
-  const { user } = useSelector((state) => state.profile);
-  const { token } = useSelector((state) => state.auth);
+  const { paymentLoading } = useSelector((state: RootState) => state.course);
+  const { courseId } = useParams<{ courseId: string }>();
+  const { user } = useSelector((state: RootState) => state.profile);
+  const { token } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const isEnrolled = user && courseData?.studentsEnrolled?.includes(user?._id);
 
-  const handleToggleSection = (id) => {
+  const handleToggleSection = (id: string): void => {
     setOpenSection(
       openSection.includes(id)
         ? openSection.filter((e) => e !== id)
@@ -55,7 +117,7 @@ export default function CourseDetails() {
     );
   };
 
-  const toggleAllSections = () => {
+  const toggleAllSections = (): void => {
     if (openSection.length === courseData?.courseContent?.length) {
       setOpenSection([]);
     } else {
@@ -77,10 +139,10 @@ export default function CourseDetails() {
     }
   }, [courseData]);
 
-  const showCourse = async () => {
+  const showCourse = async (): Promise<void> => {
     setLoading(true);
     try {
-      const response = await getCourseDetails(courseId);
+      const response = await getCourseDetails(courseId || "");
       const course = response?.data?.courseDetails;
       const courseDur = response?.data?.totalDuration;
 
@@ -103,9 +165,9 @@ export default function CourseDetails() {
           // Reviews don't have user data, fetch all reviews and filter
           try {
             const allReviews = await getAllReviews();
-            const courseReviewIds = course.ratingAndReviews.map(r => r._id || r);
+            const courseReviewIds = course.ratingAndReviews.map((r: any) => r._id || r);
             const courseReviews = allReviews.filter(
-              (review) => courseReviewIds.includes(review._id) || review.course?._id === courseId
+              (review: Review) => courseReviewIds.includes(review._id) || review.course?._id === courseId
             );
             setReviews(courseReviews);
           } catch (error) {
@@ -119,7 +181,7 @@ export default function CourseDetails() {
         try {
           const allReviews = await getAllReviews();
           const courseReviews = allReviews.filter(
-            (review) => review.course?._id === courseId || review.course === courseId
+            (review: Review) => review.course?._id === courseId || review.course === courseId
           );
           if (courseReviews.length > 0) {
             setReviews(courseReviews);
@@ -141,9 +203,9 @@ export default function CourseDetails() {
     }
   }, [courseId]);
 
-  const handleBuyCourse = () => {
+  const handleBuyCourse = (): void => {
     if (token) {
-      buyCourse(token, [courseId], user, navigate, dispatch);
+      buyCourse(token, [courseId || ""], user, navigate, dispatch);
       return;
     }
     setModal({
@@ -156,7 +218,7 @@ export default function CourseDetails() {
     });
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (): void => {
     if (user?.accountType === ACCOUNT_TYPE.INSTRUCTOR || user?.accountType === ACCOUNT_TYPE.ADMIN) {
       toast.error("Only a Student Account can buy a course");
       return;
@@ -176,7 +238,7 @@ export default function CourseDetails() {
     });
   };
 
-  const handleShare = () => {
+  const handleShare = (): void => {
     copy(window.location.href);
     toast.success("Course link copied to clipboard!");
   };
@@ -573,3 +635,4 @@ export default function CourseDetails() {
     </div>
   );
 }
+

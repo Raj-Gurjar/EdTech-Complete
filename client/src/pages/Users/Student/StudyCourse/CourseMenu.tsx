@@ -14,14 +14,17 @@ import {
   getCourseDetails,
 } from "../../../../services/operations/courseDetailsAPI";
 import CourseReviewModal from "../../../../components/Modals-Popups/CourseReviewModal";
+import { RootState } from "../../../../toolkit/reducer";
 
 export default function CourseMenu() {
-  const [reviewModal, setReviewModal] = useState(false);
-  const { courseId } = useParams();
-  const { token } = useSelector((state) => state.auth);
+  const [reviewModal, setReviewModal] = useState<boolean>(false);
+  const { courseId } = useParams<{ courseId: string }>();
+  const { token } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
-  const setCourseDetails = async () => {
+  const setCourseDetails = async (): Promise<void> => {
+    if (!courseId || !token) return;
+    
     const courseData = await getFullDetailsOfCourse(courseId, token);
     console.log("course Data", courseData);
 
@@ -30,14 +33,15 @@ export default function CourseMenu() {
     dispatch(setCompletedLecture(courseData.completedVideos));
 
     let lectures = 0;
-    courseData?.courseDetails?.courseContent?.forEach((sec) => {
-      lectures += sec.subSections.length;
+    courseData?.courseDetails?.courseContent?.forEach((sec: any) => {
+      lectures += sec.subSections?.length || 0;
     });
     dispatch(setTotalNoOfLectures(lectures));
   };
+  
   useEffect(() => {
     setCourseDetails();
-  }, []);
+  }, [courseId, token]);
 
   return (
     <div className="relative flex min-h-[calc(100vh-3.5rem)] bg-black3">
@@ -57,3 +61,4 @@ export default function CourseMenu() {
     </div>
   );
 }
+

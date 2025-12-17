@@ -4,14 +4,35 @@ import { Link, useParams } from "react-router-dom";
 import { FaBook, FaClock, FaPlayCircle, FaCheckCircle } from "react-icons/fa";
 import { formateDate } from "../../utils/formatDate";
 
-export default function ShowSectionDetails() {
-  const [sectionData, setSectionData] = useState(null);
-  const [loading, setLoading] = useState(false);
+interface SubSection {
+  _id: string;
+  title?: string;
+  description?: string;
+  timeDuration?: string;
+  videoUrl?: string;
+  [key: string]: any;
+}
 
-  const sectionId = useParams();
-  const showSection = async () => {
+interface SectionData {
+  _id: string;
+  sectionName: string;
+  shortDescription?: string;
+  longDescription?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  subSections?: SubSection[];
+  [key: string]: any;
+}
+
+export default function ShowSectionDetails() {
+  const [sectionData, setSectionData] = useState<SectionData | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const { sectionId } = useParams<{ sectionId: string }>();
+  
+  const showSection = async (): Promise<void> => {
     setLoading(true);
-    const result = await getSectionDetails(sectionId);
+    const result = await getSectionDetails(sectionId || "");
 
     if (result) {
       setSectionData(result?.data);
@@ -23,7 +44,7 @@ export default function ShowSectionDetails() {
     if (sectionId) {
       showSection();
     }
-  }, []);
+  }, [sectionId]);
 
   console.log("sectionData :", sectionData);
 
@@ -170,9 +191,9 @@ export default function ShowSectionDetails() {
                     <div className="p-4 sm:p-6 bg-black1">
                       <div className="relative w-full bg-black rounded-lg overflow-hidden shadow-2xl">
                         <div className="aspect-video">
-              <video
+                          <video
                             src={subSection.videoUrl}
-                controls
+                            controls
                             controlsList="nodownload"
                             className="w-full h-full object-contain"
                             preload="metadata"
@@ -206,8 +227,9 @@ export default function ShowSectionDetails() {
               </div>
             </div>
           </div>
-      </div>
+        </div>
       </section>
     </div>
   );
 }
+

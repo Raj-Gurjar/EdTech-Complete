@@ -1,29 +1,37 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "../../../../toolkit/slice/authSlice";
 import { createCategory } from "../../../../services/operations/category";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../../../../toolkit/reducer";
+
+interface CategoryFormData {
+  categoryName: string;
+  categoryDescription: string;
+}
 
 export default function CreateCategory() {
-  const { token } = useSelector((state) => state.auth);
+  const { token } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm<CategoryFormData>();
 
-  const onSubmit = async (data) => {
-    setLoading(true);
+  const onSubmit = async (data: CategoryFormData): Promise<void> => {
+    dispatch(setLoading(true));
 
     let result = await createCategory(
       {
         categoryName: data.categoryName,
         categoryDescription: data.categoryDescription,
+        name: ""
       },
-      token
+      token || ""
     );
 
     if (result) {
@@ -32,7 +40,7 @@ export default function CreateCategory() {
       setValue("categoryDescription", "");
     }
 
-    setLoading(false);
+    dispatch(setLoading(false));
   };
 
   //! -- Add a back button
@@ -90,3 +98,4 @@ export default function CreateCategory() {
     </div>
   );
 }
+

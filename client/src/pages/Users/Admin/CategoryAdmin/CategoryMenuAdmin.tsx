@@ -8,13 +8,20 @@ import HighlightText from "../../../../user interfaces/HighlightText";
 import { FaPlus, FaTags } from "react-icons/fa";
 import Loader from "../../../../components/Loader/Loader";
 
+interface Category {
+  _id: string;
+  name: string;
+  description?: string;
+  [key: string]: any;
+}
+
 export default function CategoryMenuAdmin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [courseCategories, setCourseCategories] = useState([]);
-  const [loading, setLoadingState] = useState(false);
+  const [courseCategories, setCourseCategories] = useState<Category[]>([]);
+  const [loading, setLoadingState] = useState<boolean>(false);
 
-  const getCategories = async () => {
+  const getCategories = async (): Promise<void> => {
     setLoadingState(true);
     dispatch(setLoading(true));
     try {
@@ -71,3 +78,4 @@ export default function CategoryMenuAdmin() {
     </div>
   );
 }
+
