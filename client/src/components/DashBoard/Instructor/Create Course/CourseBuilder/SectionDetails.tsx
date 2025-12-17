@@ -1,48 +1,78 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FaEdit, FaTrash, FaPlus, FaChevronDown, FaChevronUp, FaPlay } from "react-icons/fa";
 import { HiOutlineBookOpen } from "react-icons/hi";
 import SubSectionModal from "./SubSectionModal";
-
-
 import {
   deleteSection,
   deleteSubSection,
 } from "../../../../../services/operations/courseDetailsAPI";
 import { setCourse } from "../../../../../toolkit/slice/courseSlice";
 import Modal from "../../../../Modals-Popups/Modal";
+import { RootState } from "../../../../../toolkit/reducer";
 
-export default function SectionDetails({ handleEditSecName }) {
-  const { course } = useSelector((state) => state.course);
-  const { token } = useSelector((state) => state.auth);
+interface SubSection {
+  _id: string;
+  title?: string;
+  description?: string;
+  videoUrl?: string;
+  [key: string]: any;
+}
+
+interface CourseSection {
+  _id: string;
+  sectionName?: string;
+  subSections?: SubSection[];
+  [key: string]: any;
+}
+
+interface SectionDetailsProps {
+  handleEditSecName: (sectionId: string, sectionName: string) => void;
+}
+
+interface ModalData {
+  text1: string;
+  text2: string;
+  btn1Text: string;
+  btn2Text: string;
+  btn1Handler: () => void;
+  btn2Handler: () => void;
+}
+
+export default function SectionDetails({ handleEditSecName }: SectionDetailsProps) {
+  const { course } = useSelector((state: RootState) => state.course);
+  const { token } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
-  const [addSubSection, setAddSubSection] = useState(null);
-  const [viewSubSection, setViewSubSection] = useState(null);
-  const [editSubSection, setEditSubSection] = useState(null);
-  const [modal, setModal] = useState(null);
+  const [addSubSection, setAddSubSection] = useState<string | null>(null);
+  const [viewSubSection, setViewSubSection] = useState<SubSection | null>(null);
+  const [editSubSection, setEditSubSection] = useState<SubSection & { sectionId?: string } | null>(null);
+  const [modal, setModal] = useState<ModalData | null>(null);
 
-  // console.log("editSubSection :", editSubSection);
-  const handleDeleteSection = async (sectionId) => {
+  const handleDeleteSection = async (sectionId: string): Promise<void> => {
+    if (!course || !token) return;
+    
     const result = await deleteSection({
       sectionId,
       courseId: course._id,
-      token,
-    });
+    }, token);
     // console.log("sec delete result: ", result);
     if (result) {
       dispatch(setCourse(result));
     }
     setModal(null);
   };
-  const handleDeleteSubSection = async (subSectionId, sectionId) => {
-    const result = await deleteSubSection({ subSectionId, sectionId, token });
+
+  const handleDeleteSubSection = async (subSectionId: string, sectionId: string): Promise<void> => {
+    if (!course || !token) return;
+    
+    const result = await deleteSubSection({ subSectionId, sectionId }, token);
     // console.log("sub sec delete result: ", result);
     if (result) {
       // // TODO: something we can add here
-      const updatedCourseContent = course.courseContent.map((section) =>
+      const updatedCourseContent = course.courseContent?.map((section: CourseSection) =>
         section._id === sectionId ? result : section
-      );
+      ) || [];
       const updatedCourse = { ...course, courseContent: updatedCourseContent };
 
       dispatch(setCourse(updatedCourse));
@@ -50,20 +80,20 @@ export default function SectionDetails({ handleEditSecName }) {
     setModal(null);
   };
 
-  const [expandedSections, setExpandedSections] = useState(() => {
-    return course?.courseContent?.map((section) => section._id) || [];
+  const [expandedSections, setExpandedSections] = useState<string[]>(() => {
+    return course?.courseContent?.map((section: CourseSection) => section._id) || [];
   });
 
   // Update expanded sections when course content changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (course?.courseContent) {
       setExpandedSections(
-        course.courseContent.map((section) => section._id)
+        course.courseContent.map((section: CourseSection) => section._id)
       );
     }
   }, [course?.courseContent]);
 
-  const toggleSection = (sectionId) => {
+  const toggleSection = (sectionId: string): void => {
     setExpandedSections((prev) =>
       prev.includes(sectionId)
         ? prev.filter((id) => id !== sectionId)
@@ -80,7 +110,7 @@ export default function SectionDetails({ handleEditSecName }) {
       </div>
 
       <div className="space-y-3">
-        {course?.courseContent?.map((section, sectionIndex) => {
+        {course?.courseContent?.map((section: CourseSection, sectionIndex: number) => {
           const isExpanded = expandedSections.includes(section._id);
           const lectureCount = section.subSections?.length || 0;
 
@@ -117,7 +147,7 @@ export default function SectionDetails({ handleEditSecName }) {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() =>
-                        handleEditSecName(section._id, section.sectionName)
+                        handleEditSecName(section._id, section.sectionName || "")
                       }
                       className="p-2 text-white4 hover:text-yellow8 hover:bg-black3 rounded-lg transition-colors"
                       title="Edit Section"
@@ -154,7 +184,7 @@ export default function SectionDetails({ handleEditSecName }) {
                       <p className="text-sm">No lectures in this section yet</p>
                     </div>
                   ) : (
-                    section.subSections.map((lecture, lectureIndex) => (
+                    section.subSections?.map((lecture: SubSection, lectureIndex: number) => (
                       <div
                         key={lecture?._id}
                         className="group bg-black2 border border-black5 rounded-lg p-3 hover:border-yellow8 transition-all cursor-pointer"
@@ -239,26 +269,25 @@ export default function SectionDetails({ handleEditSecName }) {
       {addSubSection ? (
         <SubSectionModal
           modalData={addSubSection}
-          setModalData={setAddSubSection}
+          setModalData={(data) => setAddSubSection(data as string | null)}
           add={true}
         />
       ) : viewSubSection ? (
         <SubSectionModal
           modalData={viewSubSection}
-          setModalData={setViewSubSection}
+          setModalData={(data) => setViewSubSection(data as SubSection | null)}
           view={true}
         />
       ) : editSubSection ? (
         <SubSectionModal
           modalData={editSubSection}
-          setModalData={setEditSubSection}
+          setModalData={(data) => setEditSubSection(data as SubSection & { sectionId?: string } | null)}
           edit={true}
         />
-      ) : (
-        <div></div>
-      )}
+      ) : null}
 
       {modal && <Modal modalData={modal} />}
     </div>
   );
 }
+

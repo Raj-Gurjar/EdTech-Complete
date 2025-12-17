@@ -18,21 +18,58 @@ import {
   FaBook,
 } from "react-icons/fa";
 import { HiOutlineBookOpen } from "react-icons/hi";
+import { RootState } from "../../../../toolkit/reducer";
+
+interface Course {
+  _id: string;
+  courseName: string;
+  courseDescription?: string;
+  thumbnail?: string;
+  price?: number;
+  status?: string;
+  category?: {
+    name: string;
+  };
+  courseContent?: Array<{
+    _id: string;
+    subSections?: Array<{ _id: string }>;
+    [key: string]: any;
+  }>;
+  createdAt?: string;
+  [key: string]: any;
+}
+
+interface CoursesTableProps {
+  instCourses: Course[];
+  setInstCourses: (courses: Course[]) => void;
+  onRefresh?: () => void;
+}
+
+interface ModalData {
+  text1: string;
+  text2: string;
+  btn1Text: string;
+  btn2Text: string;
+  btn1Handler: () => void;
+  btn2Handler: () => void;
+}
 
 export default function CoursesTable({
   instCourses,
   setInstCourses,
   onRefresh,
-}) {
+}: CoursesTableProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { token } = useSelector((state) => state.auth);
+  const { token } = useSelector((state: RootState) => state.auth);
 
-  const [loading, setLoading] = useState(false);
-  const [modal, setModal] = useState(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [modal, setModal] = useState<ModalData | null>(null);
 
-  const handleDeleteCourse = async (courseId) => {
+  const handleDeleteCourse = async (courseId: string): Promise<void> => {
+    if (!token) return;
+    
     setLoading(true);
 
     await deleteCourse({ courseId: courseId }, token);
@@ -48,7 +85,7 @@ export default function CoursesTable({
   };
 
   // Calculate total lectures count
-  const getTotalLectures = (course) => {
+  const getTotalLectures = (course: Course): number => {
     if (!course.courseContent) return 0;
     return course.courseContent.reduce((total, section) => {
       return total + (section.subSections?.length || 0);
@@ -204,3 +241,4 @@ export default function CoursesTable({
     </div>
   );
 }
+

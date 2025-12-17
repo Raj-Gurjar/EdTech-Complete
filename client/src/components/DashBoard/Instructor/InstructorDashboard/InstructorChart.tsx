@@ -5,8 +5,20 @@ import { FaUsers, FaRupeeSign } from "react-icons/fa";
 
 Chart.register(...registerables);
 
-export default function InstructorChart({ courses, totalStudents }) {
-  const [currentChart, setCurrentChart] = useState("students");
+interface Course {
+  courseName: string;
+  totalStudentsEnrolled?: number;
+  totalAmountGenerated?: number;
+  [key: string]: any;
+}
+
+interface InstructorChartProps {
+  courses: Course[];
+  totalStudents: number;
+}
+
+export default function InstructorChart({ courses, totalStudents }: InstructorChartProps) {
+  const [currentChart, setCurrentChart] = useState<"students" | "income">("students");
 
   if (!courses || courses.length === 0) {
     return (
@@ -20,7 +32,7 @@ export default function InstructorChart({ courses, totalStudents }) {
   }
 
   // Modern color palette
-  const colors = [
+  const colors: string[] = [
     "#F59E0B", // yellow8
     "#3B82F6", // blue
     "#10B981", // green
@@ -31,8 +43,8 @@ export default function InstructorChart({ courses, totalStudents }) {
     "#EC4899", // pink
   ];
 
-  const getColors = (numColors) => {
-    const result = [];
+  const getColors = (numColors: number): string[] => {
+    const result: string[] = [];
     for (let i = 0; i < numColors; i++) {
       result.push(colors[i % colors.length]);
     }
@@ -71,7 +83,7 @@ export default function InstructorChart({ courses, totalStudents }) {
     maintainAspectRatio: true,
     plugins: {
       legend: {
-        position: "right",
+        position: "right" as const,
         labels: {
           color: "#E5E7EB",
           font: {
@@ -91,7 +103,7 @@ export default function InstructorChart({ courses, totalStudents }) {
         padding: 12,
         displayColors: true,
         callbacks: {
-          label: function (context) {
+          label: function (context: any) {
             const label = context.label || "";
             const value = context.parsed || 0;
             if (currentChart === "students") {
@@ -170,3 +182,4 @@ export default function InstructorChart({ courses, totalStudents }) {
     </div>
   );
 }
+
