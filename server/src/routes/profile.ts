@@ -8,6 +8,7 @@ const {
     updateDisplayPicture,
     instructorDashboardData,
     adminDashboardData,
+    getPublicStatistics,
 } = require("../controllers/Profile");
 
 const {
@@ -36,6 +37,7 @@ router.get(
     instructorDashboardData
 );
 router.get("/admin-dashboard", auth, isAdmin, adminDashboardData);
+router.get("/public-statistics", getPublicStatistics);
 
 module.exports = router;
 

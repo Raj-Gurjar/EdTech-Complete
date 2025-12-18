@@ -17,6 +17,7 @@ const {
   DELETE_PROFILE_API,
   GET_INSTRUCTOR_DASHBOARD_DATA_API,
   GET_ADMIN_DASHBOARD_DATA_API,
+  GET_PUBLIC_STATISTICS_API,
 } = profileEndpoints;
 
 interface ApiError {
@@ -204,6 +205,24 @@ export const getAdminData = async (token: string): Promise<any[]> => {
     toast.error(apiError.response?.data?.message || apiError.response?.message || apiError.message || "Failed to fetch admin data");
   }
   toast.dismiss(toastId);
+  return result;
+};
+
+export const getPublicStatistics = async (): Promise<any | null> => {
+  let result: any | null = null;
+
+  try {
+    const response = await apiConnector("GET", GET_PUBLIC_STATISTICS_API);
+
+    if (!response?.data?.success) {
+      throw new Error("Could not get public statistics");
+    }
+    result = response?.data?.data;
+  } catch (error) {
+    console.log("Public statistics api error...", error);
+    const apiError = error as ApiError;
+    console.error(apiError.response?.data?.message || apiError.response?.message || apiError.message || "Failed to fetch public statistics");
+  }
   return result;
 };
 

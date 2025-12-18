@@ -70,41 +70,44 @@ export default function AboutSection4() {
   }, []);
 
   return (
-    <div className="">
-      <div className="grid mx-auto grid-cols-1 lg:grid-cols-4 mb-10 w-11/12">
+    <div className="w-11/12 max-w-7xl mx-auto">
+      <div className="grid mx-auto grid-cols-1 lg:grid-cols-4 mb-10 gap-4 sm:gap-6">
         {features.map((i) => (
           <div
             key={i.id}
             ref={i.id === 0 ? featureRef : null}
             className={`${i.id === 0 && "lg:col-span-2"} ${
               i.id % 2 === 1 ? "bg-black4" : "bg-black2"
-            } ${i.id === 3 && "lg:col-start-2"}`}
+            } ${i.id === 3 && "lg:col-start-2"} rounded-lg border border-black5 hover:border-yellow8 transition-all duration-300`}
           >
             {i.id === 0 ? (
-              <div className="bg-black3 p-5">
-                <h1 className="text-2xl font-bold">{i.heading}</h1>
-                <h2 className="text-2xl font-bold">
+              <div className="bg-black3 p-6 sm:p-8 rounded-lg">
+                <h1 className="text-xl sm:text-2xl font-bold text-white mb-2">{i.heading}</h1>
+                <h2 className="text-xl sm:text-2xl font-bold mb-4">
                   <HighlightText text={i.highlightText || ""} />
                 </h2>
-                <p className="text-[14px] my-4">{i.description}</p>
+                <p className="text-sm sm:text-base my-4 text-white4 leading-relaxed">{i.description}</p>
                 <div>
                   {i.button && (
                     <Button
                       btn_color={i.button.btn_color}
                       btn_name={i.button.btn_name}
                       btn_link={i.button.btn_link}
-                      text_size={"text-[13px]"}
+                      text_size={"text-sm sm:text-base"}
                       text_color={"text-black"}
-                      px={"px-4"}
-                      py={"py-2"}
+                      px={"px-4 sm:px-6"}
+                      py={"py-2 sm:py-3"}
                     />
                   )}
                 </div>
               </div>
             ) : (
-              <div className={`p-5 min-h-[${minHeight}px]`}>
-                <h1 className="text-xl font-semibold mb-4">{i.heading}</h1>
-                <p className="text-[14px] text-white3">{i.description}</p>
+              <div 
+                className="p-5 sm:p-6"
+                style={{ minHeight: minHeight > 0 ? `${minHeight}px` : 'auto' }}
+              >
+                <h1 className="text-lg sm:text-xl font-semibold mb-4 text-white">{i.heading}</h1>
+                <p className="text-sm sm:text-base text-white3 leading-relaxed">{i.description}</p>
               </div>
             )}
           </div>

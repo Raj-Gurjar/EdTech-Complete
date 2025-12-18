@@ -7,24 +7,25 @@ import Footer from '../../components/Footer/Footer';
 
 export default function About() {
   return (
-    <div className=''>
-      <div>
+    <div className='min-h-screen'>
+      <div className='mb-8 sm:mb-12'>
         <AboutSection1/>
       </div>
 
-      <div>
+      <div className='mb-8 sm:mb-12'>
         <AboutSection2/>
       </div>
 
-      <div>
+      <div className='mb-8 sm:mb-12 w-11/12 max-w-7xl mx-auto'>
         <AboutSection3/>
       </div>
-      <div>
+      
+      <div className='mb-8 sm:mb-12'>
         <AboutSection4/>
       </div>
 
       <div>
-          <Footer/>
+        <Footer/>
       </div>
     </div>
   );

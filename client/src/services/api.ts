@@ -21,6 +21,7 @@ export const profileEndpoints = {
   DELETE_PROFILE_API: BASE_URL + "/profile/deleteProfile",
   GET_INSTRUCTOR_DASHBOARD_DATA_API: BASE_URL + "/profile/instructor-dashboard",
   GET_ADMIN_DASHBOARD_DATA_API: BASE_URL + "/profile/admin-dashboard",
+  GET_PUBLIC_STATISTICS_API: BASE_URL + "/profile/public-statistics",
 } as const;
 
 //! STUDENTS ENDPOINTS
