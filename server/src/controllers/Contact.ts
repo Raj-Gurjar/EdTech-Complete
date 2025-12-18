@@ -17,20 +17,25 @@ export const createContactUs = async (req: Request, res: Response): Promise<Resp
 
         //validate
         if (!firstName || !lastName || !message || !email || !subject) {
-            return res.status(402).json({
+            return res.status(400).json({
                 success: false,
                 message: "Data is missing",
             });
         }
-        //create db entry
-        const updateContactUs = await ContactUs_Model.create({
+        //create db entry - only include phoneNo if it's provided and not empty
+        const contactData: any = {
             firstName,
             lastName,
             email,
-            phoneNo,
             subject,
             message,
-        });
+        };
+        
+        if (phoneNo && phoneNo.trim() !== "") {
+            contactData.phoneNo = phoneNo;
+        }
+        
+        const updateContactUs = await ContactUs_Model.create(contactData);
         console.log("updated contact data: ", updateContactUs);
 
         //send mail to user

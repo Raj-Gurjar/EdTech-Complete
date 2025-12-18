@@ -26,6 +26,7 @@ app.use("/api/v1/course", require("./routes/section"));
 app.use("/api/v1/course", require("./routes/subSection"));
 app.use("/api/v1/payment", require("./routes/payment"));
 app.use("/api/v1/course", require("./routes/ratings"));
+app.use("/api/v1/reach", require("./routes/contact"));
 
 app.listen(PORT, () => {
     console.log("Server is listening on port " + PORT);

@@ -4,7 +4,7 @@ export interface IContactUs extends Document {
     firstName: string;
     lastName: string;
     email: string;
-    phoneNo?: number;
+    phoneNo?: string;
     subject: string;
     message: string;
     createdAt?: Date;
@@ -26,7 +26,7 @@ const ContactUs_Schema = new Schema<IContactUs>(
             require: true,
         },
         phoneNo: {
-            type: Number,
+            type: String,
         },
         subject: {
             type: String,

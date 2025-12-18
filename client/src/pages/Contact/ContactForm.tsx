@@ -1,8 +1,8 @@
-import React from "react";
-import toast from "react-hot-toast";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import countryCode from "../../data/countryCode.json";
 import InputBox from "../../user interfaces/InputBox";
+import { createContactUs } from "../../services/operations/contactAPI";
 
 interface ContactFormData {
   firstName: string;
@@ -15,6 +15,7 @@ interface ContactFormData {
 }
 
 export default function ContactForm() {
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -22,10 +23,34 @@ export default function ContactForm() {
     reset,
   } = useForm<ContactFormData>();
 
-  const ContactHandler = (data: ContactFormData) => {
-    toast.success("Contact details sent");
-    console.log("Contact Details sent:", data);
-    reset();
+  const ContactHandler = async (data: ContactFormData): Promise<void> => {
+    setIsSubmitting(true);
+
+    // Combine country code and contact number if both are provided
+    let phoneNo: string | undefined;
+    if (data.countryCode && data.contactNo) {
+      phoneNo = `${data.countryCode}${data.contactNo}`;
+    } else if (data.contactNo) {
+      phoneNo = data.contactNo;
+    }
+
+    // Prepare data for API
+    const contactData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      subject: data.subject,
+      message: data.message,
+      ...(phoneNo && { phoneNo }),
+    };
+
+    const success = await createContactUs(contactData);
+
+    if (success) {
+      reset();
+    }
+
+    setIsSubmitting(false);
   };
 
   return (
@@ -173,9 +198,10 @@ export default function ContactForm() {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full sm:w-auto px-8 py-3 bg-yellow8 hover:bg-yellow9 text-black font-semibold rounded-lg transition-all duration-200 hover:scale-105 shadow-lg mt-2"
+          disabled={isSubmitting}
+          className="w-full sm:w-auto px-8 py-3 bg-yellow8 hover:bg-yellow9 text-black font-semibold rounded-lg transition-all duration-200 hover:scale-105 shadow-lg mt-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
         >
-          Send Message
+          {isSubmitting ? "Sending..." : "Send Message"}
         </button>
       </form>
     </div>
