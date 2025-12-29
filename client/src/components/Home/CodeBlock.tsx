@@ -30,17 +30,17 @@ export default function CodeBlock({
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight">
           {title}
         </h2>
-        <p className="text-base sm:text-lg text-black6 leading-relaxed">
+        <p className="text-base sm:text-lg text-white4 leading-relaxed">
           {text}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 mt-4">
           <Link to="/allCourses">
-            <button className="bg-yellow8 hover:bg-yellow9 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base w-full sm:w-auto">
+            <button className="bg-yellow8 hover:bg-yellow9 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base w-full sm:w-auto shadow-md">
               {btn1}
             </button>
           </Link>
           <Link to="/about">
-            <button className="bg-black8 hover:bg-black7 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg border border-black6 text-sm sm:text-base w-full sm:w-auto">
+            <button className="bg-black4 hover:bg-black5 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg border border-black5 text-sm sm:text-base w-full sm:w-auto">
               {btn2}
             </button>
           </Link>

@@ -21,12 +21,12 @@ export default function HomeHeadingSec() {
       {/* CTA Buttons */}
       <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mt-8 sm:mt-10 lg:mt-12 px-4">
         <Link to="/allCourses">
-          <button className="bg-yellow9 hover:bg-yellow8 text-black font-semibold px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base w-full sm:w-auto">
+          <button className="bg-yellow8 hover:bg-yellow9 text-black font-semibold px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base w-full sm:w-auto shadow-md">
             Browse Courses
           </button>
         </Link>
         <Link to="/about">
-          <button className="bg-black6 hover:bg-black7 text-white font-semibold px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base w-full sm:w-auto border border-black5">
+          <button className="bg-black4 hover:bg-black5 text-white font-semibold px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base w-full sm:w-auto border border-black5">
             Learn More
           </button>
         </Link>

@@ -188,18 +188,6 @@ export default function AllCourses() {
         </div>
       </section>
 
-      {/* Top Courses Slider */}
-      {coursesData.length > 0 && (
-        <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-maxContent mx-auto">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6 sm:mb-8">
-              Featured Courses
-            </h2>
-            <CourseSlider courses={coursesData.slice(0, 10)} />
-          </div>
-        </section>
-      )}
-
       {/* All Courses Grid */}
       <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-maxContent mx-auto">
@@ -245,6 +233,18 @@ export default function AllCourses() {
           )}
         </div>
       </section>
+
+      {/* Featured Courses Slider */}
+      {coursesData.length > 0 && (
+        <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-black2 border-t border-black5">
+          <div className="max-w-maxContent mx-auto">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6 sm:mb-8">
+              Featured Courses
+            </h2>
+            <CourseSlider courses={coursesData.slice(0, 10)} />
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>

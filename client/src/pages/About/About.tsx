@@ -16,7 +16,7 @@ export default function About() {
         <AboutSection2/>
       </div>
 
-      <div className='mb-8 sm:mb-12 w-11/12 max-w-7xl mx-auto'>
+      <div className='mb-8 sm:mb-12 w-full'>
         <AboutSection3/>
       </div>
       
