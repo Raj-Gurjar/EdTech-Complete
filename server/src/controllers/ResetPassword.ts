@@ -49,7 +49,7 @@ export const resetPasswordToken = async (req: Request, res: Response): Promise<R
         console.log("Updated Details ..", updatedDetails);
         //create url
 
-        const resetPasswordUrl = `${process.env.FRONTEND_LOCAL_HOST_3000}/reset-password/${token}`;
+        const resetPasswordUrl = `${process.env.FRONTENT_URL}/reset-password/${token}`;
         const validityTime = 5; // 5 minutes
 
         console.log("reset password url", resetPasswordUrl);
@@ -78,7 +78,6 @@ export const resetPasswordToken = async (req: Request, res: Response): Promise<R
 export const resetPassword = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //get data
-
         console.log("in reset pass");
 
         const { password, confPassword, token } = req.body;

@@ -1,4 +1,5 @@
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+// Use environment variable or default to localhost for development
+const BASE_URL = (process.env.REACT_APP_BASE_URL || "http://localhost:4002") + "/api/v1";
 
 //! Auth endpoints
 export const authEndpoints = {

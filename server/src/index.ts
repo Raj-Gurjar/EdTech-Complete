@@ -5,32 +5,47 @@ const dbConnect = require("./config/database");
 
 const app = express();
 
-const PORT: number = parseInt(process.env.PORT || "4003", 10);
+const PORT: number = parseInt(process.env.PORT || "4002", 10);
 
 app.use(express.json());
 
 // CORS configuration - allow only frontend and localhost:3000
 const allowedOrigins = [
-    "http://localhost:3000",
+    "http://localhost:3000/",
     process.env.FRONTEND_URL || "",
 ].filter(Boolean); // Remove empty strings
 
+// Log allowed origins for debugging
+console.log("Allowed CORS origins:", allowedOrigins);
+
 app.use(cors({
     origin: (origin, callback) => {
-        // Allow requests with no origin (like mobile apps or curl requests)
+        // Allow requests with no origin (like mobile apps, Postman, or curl requests)
         if (!origin) {
+            console.log("Request with no origin - allowing");
             return callback(null, true);
         }
         
-        if (allowedOrigins.indexOf(origin) !== -1) {
+        // Remove trailing slash for comparison
+        const normalizedOrigin = origin.endsWith("/") ? origin.slice(0, -1) : origin;
+        
+        // Check if origin is in allowed list
+        const isAllowed = allowedOrigins.some(allowed => {
+            const normalizedAllowed = allowed.endsWith("/") ? allowed.slice(0, -1) : allowed;
+            return normalizedOrigin === normalizedAllowed;
+        });
+        
+        if (isAllowed) {
+            console.log(`CORS: Allowing origin ${origin}`);
             callback(null, true);
         } else {
-            callback(new Error("Not allowed by CORS"));
+            console.log(`CORS: Blocking origin ${origin}. Allowed origins:`, allowedOrigins);
+            callback(new Error(`Not allowed by CORS. Origin: ${origin}`));
         }
     },
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
 }));
 
 app.use("/api/v1/auth", require("./routes/auth"));
@@ -51,7 +66,7 @@ app.get("/", (req: Request, res: Response) => {
 dbConnect();
 
 // Only start server if not in Vercel environment
-if (process.env.VERCEL !== "1") {
+if (process.env.NODE_ENV !== "production") {
     app.listen(PORT, () => {
         console.log("Server is listening on port " + PORT);
     });
