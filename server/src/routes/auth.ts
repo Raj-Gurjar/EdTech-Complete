@@ -6,6 +6,7 @@ const {
     logIn,
     sendOTP,
     changePassword,
+    refreshToken,
 } = require("../controllers/Auth");
 const {
     resetPasswordToken,
@@ -20,6 +21,7 @@ router.post("/signup", signUp);
 router.post("/login", logIn);
 router.post("/sendOTP", sendOTP);
 router.post("/changePassword", changePassword);
+router.post("/refreshToken", refreshToken);
 
 
 //! Reset Password

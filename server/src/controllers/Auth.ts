@@ -327,18 +327,27 @@ export const logIn = async (req: Request, res: Response): Promise<Response | voi
             id: user._id,
             accountType: user.accountType,
         };
+        // Generate access token (short-lived)
         const token = jwt.sign(payload, jwtSecret, {
             expiresIn: "2h",
+        });
+        
+        // Generate refresh token (long-lived, stored in httpOnly cookie)
+        const refreshToken = jwt.sign(payload, jwtSecret, {
+            expiresIn: "7d",
         });
         user.token = token;
         user.password = undefined;
 
-        //! Create-Cookie
-        const options = {
-            expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+        //! Create-Cookie for refresh token
+        const cookieOptions = {
+            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
             httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // Only send over HTTPS in production
+            sameSite: "strict" as const,
         };
-        res.cookie("tokenCookie", token, options);
+        res.cookie("refreshToken", refreshToken, cookieOptions);
+        
         return res.status(200).json({
             success: true,
             token,
@@ -441,6 +450,73 @@ export const changePassword = async (req: AuthRequest, res: Response): Promise<R
         return res.status(500).json({
             success: false,
             message: `Error in changing Password`,
+        });
+    }
+};
+
+//! Refresh Token
+export const refreshToken = async (req: Request, res: Response): Promise<Response | void> => {
+    try {
+        // Get refresh token from cookie
+        const refreshToken = req.cookies?.refreshToken;
+        
+        if (!refreshToken) {
+            return res.status(401).json({
+                success: false,
+                message: "Refresh token is missing",
+            });
+        }
+
+        const jwtSecret = process.env.JWT_SECRET;
+        if (!jwtSecret) {
+            throw new Error("JWT_SECRET is not defined");
+        }
+
+        // Verify refresh token
+        let decoded: any;
+        try {
+            decoded = jwt.verify(refreshToken, jwtSecret);
+        } catch (error: any) {
+            if (error.name === 'TokenExpiredError') {
+                return res.status(401).json({
+                    success: false,
+                    message: "Refresh token has expired. Please login again.",
+                });
+            }
+            throw error;
+        }
+
+        // Get user from database
+        const user = await User_Model.findById(decoded.id).populate("additionalDetails");
+        
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        // Generate new access token
+        const payload = {
+            email: user.email,
+            id: user._id,
+            accountType: user.accountType,
+        };
+        
+        const newToken = jwt.sign(payload, jwtSecret, {
+            expiresIn: "2h",
+        });
+
+        return res.status(200).json({
+            success: true,
+            token: newToken,
+            message: "Token refreshed successfully",
+        });
+    } catch (error) {
+        console.log("Error in refresh token:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to refresh token",
         });
     }
 };

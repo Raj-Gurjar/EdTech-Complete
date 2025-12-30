@@ -8,6 +8,7 @@ export const authEndpoints = {
   LOGIN_API: BASE_URL + "/auth/login",
   RESET_PASSWORD_TOKEN_API: BASE_URL + "/auth/resetPasswordToken",
   RESET_PASSWORD_API: BASE_URL + "/auth/reset-password",
+  REFRESH_TOKEN_API: BASE_URL + "/auth/refreshToken",
 } as const;
 
 //! PROFILE ENDPOINTS

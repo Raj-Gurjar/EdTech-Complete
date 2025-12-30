@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express, { Request, Response } from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 const dbConnect = require("./config/database");
 
 const app = express();
@@ -8,9 +9,11 @@ const app = express();
 const PORT: number = parseInt(process.env.PORT || "4002", 10);
 
 app.use(express.json());
+app.use(cookieParser());
 
 // CORS configuration - allow only frontend and localhost:3000
 const allowedOrigins = [
+    "http://localhost:3000",
     "http://localhost:3000/",
     process.env.FRONTEND_URL || "",
 ].filter(Boolean); // Remove empty strings

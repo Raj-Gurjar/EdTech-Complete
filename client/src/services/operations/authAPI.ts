@@ -7,6 +7,7 @@ import { AnyAction, Dispatch } from "@reduxjs/toolkit";
 import { setToken, setLoading } from "../../toolkit/slice/authSlice";
 import { setUser } from "../../toolkit/slice/profileSlice";
 import { resetCart } from "../../toolkit/slice/cartSlice";
+import { saveToken, removeToken } from "../../utils/tokenUtils";
 
 const {
   SEND_AUTH_OTP_API,
@@ -121,7 +122,13 @@ export function login(email: string, password: string, navigate: NavigateFunctio
       toast.success("Login Successful");
       navigate("/dashboard/myDashboard");
 
-      dispatch(setToken(response?.data?.token));
+      const newToken = response?.data?.token;
+      
+      // Save token using utility function
+      if (newToken) {
+        saveToken(newToken);
+        dispatch(setToken(newToken));
+      }
 
       const userImage = response.data?.user?.image
         ? response.data.user.image
@@ -129,7 +136,6 @@ export function login(email: string, password: string, navigate: NavigateFunctio
 
       dispatch(setUser({ ...response.data.user, image: userImage }));
       console.log("set user..", response.data.user);
-      localStorage.setItem("token", JSON.stringify(response.data.token));
       localStorage.setItem("user", JSON.stringify(response.data.user));
     } catch (error) {
       console.log("Login api error ...", error);
@@ -146,7 +152,7 @@ export function logout(navigate: NavigateFunction) {
     dispatch(setToken(null));
     dispatch(setUser(null));
     dispatch(resetCart());
-    localStorage.removeItem("token");
+    removeToken();
     localStorage.removeItem("user");
     toast.success("Logged Out");
     console.log("Log out calling");

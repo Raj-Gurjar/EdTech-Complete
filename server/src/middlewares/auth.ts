@@ -47,12 +47,34 @@ export const auth = async (req: AuthRequest, res: Response, next: NextFunction):
             };
 
             req.user = decodePayload;
-        } catch (error) {
+        } catch (error: any) {
             //validation issue
             console.log("Error in auth middleware", error);
+            
+            // Check if token is expired
+            if (error.name === 'TokenExpiredError') {
+                res.status(401).json({
+                    success: false,
+                    message: "Token has expired. Please login again.",
+                    code: "TOKEN_EXPIRED",
+                });
+                return;
+            }
+            
+            // Check if token is invalid format
+            if (error.name === 'JsonWebTokenError') {
+                res.status(401).json({
+                    success: false,
+                    message: "Token is invalid or malformed",
+                    code: "TOKEN_INVALID",
+                });
+                return;
+            }
+            
             res.status(401).json({
                 success: false,
                 message: "Token is invalid",
+                code: "TOKEN_ERROR",
             });
             return;
         }
