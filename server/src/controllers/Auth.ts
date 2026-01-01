@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import axios from "axios";
 import "dotenv/config";
 const User_Model = require("../models/User.model");
 const OTP_Model = require("../models/OTP.model");
@@ -359,6 +360,193 @@ export const logIn = async (req: Request, res: Response): Promise<Response | voi
         return res.status(500).json({
             success: false,
             message: "Login Failed, Please try again",
+        });
+    }
+};
+
+//! Google Authentication
+export const googleAuth = async (req: Request, res: Response): Promise<Response | void> => {
+    try {
+        console.log("Entering Google auth controller");
+        const { access_token, user: googleUserInfo } = req.body;
+
+        // Validate input
+        if (!access_token || !googleUserInfo) {
+            return res.status(400).json({
+                success: false,
+                message: "Access token and user information are required",
+            });
+        }
+
+        // Verify the access token with Google
+        let verifiedUserInfo;
+        try {
+            const googleResponse = await axios.get(
+                "https://www.googleapis.com/oauth2/v3/userinfo",
+                {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                    },
+                }
+            );
+            verifiedUserInfo = googleResponse.data;
+        } catch (error) {
+            console.log("Error verifying Google token:", error);
+            return res.status(401).json({
+                success: false,
+                message: "Invalid Google access token",
+            });
+        }
+
+        // Normalize email
+        const normalizedEmail = verifiedUserInfo.email?.toLowerCase().trim();
+        
+        if (!normalizedEmail) {
+            return res.status(400).json({
+                success: false,
+                message: "Email not found in Google account",
+            });
+        }
+
+        // Extract user information
+        const firstName = googleUserInfo.given_name || verifiedUserInfo.given_name || "User";
+        const lastName = googleUserInfo.family_name || verifiedUserInfo.family_name || "";
+        const profileImage = googleUserInfo.picture || verifiedUserInfo.picture || 
+            `https://api.dicebear.com/7.x/initials/svg?seed=${firstName} ${lastName}`;
+
+        // Check if user already exists
+        let user = await User_Model.findOne({ email: normalizedEmail }).populate(
+            "additionalDetails"
+        );
+
+        if (user) {
+            // User exists - log them in
+            console.log("Existing user found, logging in");
+
+            const jwtSecret = process.env.JWT_SECRET;
+            if (!jwtSecret) {
+                throw new Error("JWT_SECRET is not defined");
+            }
+
+            const payload = {
+                email: user.email,
+                id: user._id,
+                accountType: user.accountType,
+            };
+
+            // Generate access token
+            const token = jwt.sign(payload, jwtSecret, {
+                expiresIn: "2h",
+            });
+
+            // Generate refresh token
+            const refreshToken = jwt.sign(payload, jwtSecret, {
+                expiresIn: "7d",
+            });
+
+            // Update profile image if it's different and from Google
+            if (profileImage && profileImage !== user.profileImage && profileImage.includes("googleusercontent")) {
+                user.profileImage = profileImage;
+                await user.save();
+            }
+
+            user.token = token;
+            user.password = undefined;
+
+            // Set refresh token cookie
+            const cookieOptions = {
+                expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict" as const,
+            };
+            res.cookie("refreshToken", refreshToken, cookieOptions);
+
+            return res.status(200).json({
+                success: true,
+                token,
+                user,
+                message: "Logged in successfully with Google",
+            });
+        } else {
+            // User doesn't exist - create new user
+            console.log("New user, creating account");
+
+            // Generate a random password for Google-authenticated users
+            // They won't need it since they use Google to login
+            const randomPassword = Math.random().toString(36).slice(-12) + 
+                                 Math.random().toString(36).slice(-12) + 
+                                 "!@#";
+            const hashedPassword = await bcrypt.hash(randomPassword, 12);
+
+            // Create profile details
+            const profileDetails = await Profile_Model.create({});
+
+            // Create user with default accountType as "Student"
+            const userData = await User_Model.create({
+                firstName,
+                lastName,
+                email: normalizedEmail,
+                password: hashedPassword,
+                accountType: "Student", // Default to Student for Google sign-ups
+                additionalDetails: profileDetails._id,
+                profileImage,
+            });
+
+            user = await User_Model.findById(userData._id)
+                .select("-password")
+                .populate("additionalDetails");
+
+            if (!user) {
+                return res.status(404).json({
+                    success: false,
+                    message: "User not found after creation",
+                });
+            }
+
+            // Generate JWT tokens
+            const jwtSecret = process.env.JWT_SECRET;
+            if (!jwtSecret) {
+                throw new Error("JWT_SECRET is not defined");
+            }
+
+            const payload = {
+                email: user.email,
+                id: user._id,
+                accountType: user.accountType,
+            };
+
+            const token = jwt.sign(payload, jwtSecret, {
+                expiresIn: "2h",
+            });
+
+            const refreshToken = jwt.sign(payload, jwtSecret, {
+                expiresIn: "7d",
+            });
+
+            user.token = token;
+
+            // Set refresh token cookie
+            const cookieOptions = {
+                expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict" as const,
+            };
+            res.cookie("refreshToken", refreshToken, cookieOptions);
+
+            return res.status(201).json({
+                success: true,
+                token,
+                user,
+                message: "Account created and logged in successfully with Google",
+            });
+        }
+    } catch (error) {
+        console.log("Error in Google auth:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Google authentication failed, please try again",
         });
     }
 };

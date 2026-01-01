@@ -9,6 +9,7 @@ export const authEndpoints = {
   RESET_PASSWORD_TOKEN_API: BASE_URL + "/auth/resetPasswordToken",
   RESET_PASSWORD_API: BASE_URL + "/auth/reset-password",
   REFRESH_TOKEN_API: BASE_URL + "/auth/refreshToken",
+  GOOGLE_AUTH_API: BASE_URL + "/auth/google",
 } as const;
 
 //! PROFILE ENDPOINTS

@@ -2,8 +2,12 @@ import React from "react";
 import SignupForm from "./SignupForm";
 import LoginForm from "./LoginForm";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import HighlightText from "../../user interfaces/HighlightText";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useDispatch } from "react-redux";
+import { googleAuth } from "../../services/operations/authAPI";
+import axios from "axios";
 
 interface AuthTemplateProps {
   title: string;
@@ -22,6 +26,49 @@ export default function AuthTemplate({
   formType,
   setIsLoggedIn,
 }: AuthTemplateProps) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        // Get user info from Google using the access token
+        const userInfoResponse = await axios.get(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+            },
+          }
+        );
+
+        const userInfo = userInfoResponse.data;
+        
+        // Create a credential-like object or send user info directly
+        // For now, we'll send the access_token and user info to backend
+        // The backend can verify the token with Google
+        const credentialData = {
+          access_token: tokenResponse.access_token,
+          user: {
+            email: userInfo.email,
+            given_name: userInfo.given_name,
+            family_name: userInfo.family_name,
+            picture: userInfo.picture,
+            sub: userInfo.sub,
+          },
+        };
+
+        // Send to backend - backend will verify and create/login user
+        dispatch(googleAuth(credentialData, navigate) as any);
+      } catch (error) {
+        console.error("Failed to fetch user info from Google", error);
+      }
+    },
+    onError: () => {
+      console.error("Google login failed");
+    },
+  });
+
   return (
     <div className="w-11/12 max-w-7xl mx-auto py-8 sm:py-12 lg:py-16">
       <div className="flex flex-col lg:flex-row justify-between gap-8 lg:gap-12">
@@ -57,7 +104,10 @@ export default function AuthTemplate({
             </div>
 
             {/* Google Sign In Button */}
-            <button className="w-full flex justify-center items-center rounded-lg font-medium text-white3 border border-black5 px-4 py-3 gap-x-2 hover:bg-black3 hover:border-yellow8 transition-all duration-200">
+            <button 
+              onClick={() => handleGoogleLogin()}
+              className="w-full flex justify-center items-center rounded-lg font-medium text-white3 border border-black5 px-4 py-3 gap-x-2 hover:bg-black3 hover:border-yellow8 transition-all duration-200"
+            >
               <FcGoogle className="text-2xl" />
               <span className="text-sm sm:text-base">
                 {formType === "login" ? "Sign In" : "Sign Up"} with Google

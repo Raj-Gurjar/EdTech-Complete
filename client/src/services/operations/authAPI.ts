@@ -15,6 +15,7 @@ const {
   LOGIN_API,
   RESET_PASSWORD_TOKEN_API,
   RESET_PASSWORD_API,
+  GOOGLE_AUTH_API,
 } = authEndpoints;
 
 interface ApiError {
@@ -209,6 +210,51 @@ export function resetPassword(password: string, confPassword: string, token: str
       toast.error(apiError.response?.data?.message || "Failed to reset password");
     }
     dispatch(setLoading(false));
+  };
+}
+
+export function googleAuth(authData: string | object, navigate: NavigateFunction) {
+  return async (dispatch: Dispatch<AnyAction>) => {
+    const toastId = toast.loading("Authenticating with Google...");
+    dispatch(setLoading(true));
+
+    try {
+      // Parse if it's a string, otherwise use as is
+      const payload = typeof authData === "string" ? JSON.parse(authData) : authData;
+
+      const response = await apiConnector("POST", GOOGLE_AUTH_API, payload);
+
+      console.log("Google auth response...", response);
+
+      if (!response.data.success) {
+        throw new Error(response.data.message);
+      }
+
+      toast.success("Google Authentication Successful");
+      navigate("/dashboard/myDashboard");
+
+      const newToken = response?.data?.token;
+      
+      // Save token using utility function
+      if (newToken) {
+        saveToken(newToken);
+        dispatch(setToken(newToken));
+      }
+
+      const userImage = response.data?.user?.image
+        ? response.data.user.image
+        : `https://api.dicebear.com/7.x/initials/svg?seed=${response.data.user.firstName}${response.data.user.lastName}`;
+
+      dispatch(setUser({ ...response.data.user, image: userImage }));
+      console.log("set user..", response.data.user);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+    } catch (error) {
+      console.log("Google auth error...", error);
+      const apiError = error as ApiError;
+      toast.error(apiError.response?.data?.message || "Google Authentication Failed");
+    }
+    dispatch(setLoading(false));
+    toast.dismiss(toastId);
   };
 }
 
