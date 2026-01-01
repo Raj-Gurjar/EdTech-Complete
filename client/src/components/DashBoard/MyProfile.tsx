@@ -8,7 +8,8 @@ import {
   FaUser,
   FaEdit,
   FaUserCircle,
-  FaIdCard
+  FaIdCard,
+  FaShieldAlt
 } from "react-icons/fa";
 import { MdEmail, MdPhone, MdCake, MdTransgender } from "react-icons/md";
 import { RootState } from "../../toolkit/reducer";
@@ -34,12 +35,18 @@ export default function MyProfile() {
   const navigate = useNavigate();
 
   const accountTypeColors: Record<string, string> = {
+    Student: "bg-blue6",
+    Instructor: "bg-yellow8",
+    Admin: "bg-pink6",
     STUDENT: "bg-blue6",
     INSTRUCTOR: "bg-yellow8",
     ADMIN: "bg-pink6",
   };
 
   const accountTypeText: Record<string, string> = {
+    Student: "Student",
+    Instructor: "Instructor",
+    Admin: "Admin",
     STUDENT: "Student",
     INSTRUCTOR: "Instructor",
     ADMIN: "Admin",
@@ -74,7 +81,7 @@ export default function MyProfile() {
               )}
             </div>
             {/* Account Type Badge */}
-            <div className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 ${accountTypeColors[user?.accountType || ""] || "bg-black6"} text-black font-bold px-3 py-1 rounded-full text-xs shadow-lg`}>
+            <div className={`absolute -bottom-2 left-1/2 transform -translate-x-1/2 ${accountTypeColors[user?.accountType || ""] || "bg-black6"} ${user?.accountType === "Instructor" || user?.accountType === "INSTRUCTOR" ? "text-black" : "text-white"} font-bold px-3 py-1 rounded-full text-xs shadow-lg`}>
               {accountTypeText[user?.accountType || ""] || "User"}
             </div>
           </div>
@@ -145,6 +152,26 @@ export default function MyProfile() {
               <div>
                 <p className="text-black8 text-xs">Email Address</p>
                 <p className="text-white text-sm font-medium">{user?.email || "Not set"}</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-3 p-3 bg-black5 rounded-lg">
+              <FaShieldAlt className="text-blue5 text-lg" />
+              <div className="flex-1">
+                <p className="text-black8 text-xs">Role / Account Type</p>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
+                    user?.accountType === "Student" 
+                      ? "bg-blue6 text-white" 
+                      : user?.accountType === "Instructor"
+                      ? "bg-yellow8 text-black"
+                      : user?.accountType === "Admin"
+                      ? "bg-pink6 text-white"
+                      : "bg-black6 text-white4"
+                  }`}>
+                    {accountTypeText[user?.accountType || ""] || "User"}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
