@@ -378,9 +378,28 @@ export const googleAuth = async (req: Request, res: Response): Promise<Response 
             });
         }
 
-        // Verify the access token with Google
+        // Verify the access token with Google and check it was issued to our app
         let verifiedUserInfo;
+        const googleClientId = process.env.GOOGLE_CLIENT_ID;
+        
         try {
+            // First, verify the token and check the audience (client ID)
+            if (googleClientId) {
+                const tokenInfoResponse = await axios.get(
+                    `https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${access_token}`
+                );
+                const tokenInfo = tokenInfoResponse.data;
+                
+                // Verify the token was issued to our client ID
+                if (tokenInfo.audience !== googleClientId && tokenInfo.aud !== googleClientId) {
+                    return res.status(401).json({
+                        success: false,
+                        message: "Invalid Google access token - token not issued for this application",
+                    });
+                }
+            }
+            
+            // Get user info from Google
             const googleResponse = await axios.get(
                 "https://www.googleapis.com/oauth2/v3/userinfo",
                 {
@@ -390,11 +409,11 @@ export const googleAuth = async (req: Request, res: Response): Promise<Response 
                 }
             );
             verifiedUserInfo = googleResponse.data;
-        } catch (error) {
+        } catch (error: any) {
             console.log("Error verifying Google token:", error);
             return res.status(401).json({
                 success: false,
-                message: "Invalid Google access token",
+                message: error.response?.data?.error_description || "Invalid Google access token",
             });
         }
 
