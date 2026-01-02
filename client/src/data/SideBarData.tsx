@@ -2,7 +2,6 @@ import {
   FaUser,
   FaShoppingCart,
   FaBook,
-  FaChalkboardTeacher,
   FaCogs,
   FaBookOpen,
   FaTag,
@@ -63,12 +62,6 @@ export const navItems: NavItem[] = [
   },
   // "--- for instructor ---"
   {
-    label: "Instr-Dashboard",
-    path: "instructor-dashboard",
-    icon: <FaChalkboardTeacher />,
-    roles: [instructor],
-  },
-  {
     label: "Create Course",
     path: "createCourse",
     icon: <FaBook />,
@@ -82,12 +75,6 @@ export const navItems: NavItem[] = [
   },
 
   // "--- for Admin ---"
-  {
-    label: "Admin Dashboard",
-    path: "admin-dashboard",
-    icon: <BiSolidDashboard />,
-    roles: [admin],
-  },
   {
     label: "All Courses",
     path: "courseMenu-admin",

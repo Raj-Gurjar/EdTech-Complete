@@ -16,6 +16,7 @@ import VerifyEmail from "./pages/Auth/VerifyEmail";
 import ResetRequest from "./pages/Auth/ResetPassword/ResetRequest";
 import ResetPassword from "./pages/Auth/ResetPassword/ResetPassword";
 import DashBoard from "./pages/Users/DashBoard";
+import DashboardRouter from "./components/DashBoard/DashboardRouter";
 import MyDashBoard from "./components/DashBoard/MyDashBoard";
 import MyProfile from "./components/DashBoard/MyProfile";
 import EnrolledCourses from "./components/DashBoard/Student/EnrolledCourses";
@@ -79,7 +80,9 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route path="myDashboard" element={<MyDashBoard />} />
+            {/* Dashboard route - shows different dashboard based on account type */}
+            <Route path="myDashboard" element={<DashboardRouter />} />
+            
             <Route path="myProfile" element={<MyProfile />} />
             <Route path="editProfile" element={<EditProfile />} />
             <Route path="settings" element={<Settings />} />
