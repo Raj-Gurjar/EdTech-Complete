@@ -10,6 +10,7 @@ import {
   FaPhone,
   FaMapMarkerAlt,
 } from "react-icons/fa";
+import Logo from "../Logo/Logo";
 
 interface SocialMedia {
   name: string;
@@ -85,9 +86,12 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="mb-6">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-                <span className="text-yellow8">Ed</span>Tech
-              </h2>
+              <div className="mb-3">
+                <Logo 
+                  logoClassName="w-10 h-10" 
+                  textClassName="text-2xl sm:text-3xl"
+                />
+              </div>
               <p className="text-white4 text-sm sm:text-base leading-relaxed">
                 Empowering learners worldwide with quality online education. 
                 Learn, grow, and achieve your goals with our comprehensive courses.
@@ -167,10 +171,10 @@ export default function Footer() {
               <li className="flex items-center gap-3 text-white4 text-sm sm:text-base">
                 <FaEnvelope className="text-yellow8 flex-shrink-0" />
                 <a
-                  href="mailto:info@edtech.com"
+                  href="mailto:info@skillscript.com"
                   className="hover:text-yellow8 transition-colors duration-200"
                 >
-                  info@edtech.com
+                  info@skillscript.com
                 </a>
               </li>
               <li className="flex items-center gap-3 text-white4 text-sm sm:text-base">
@@ -216,7 +220,7 @@ export default function Footer() {
         <div className="border-t border-black5 pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-white6 text-xs sm:text-sm text-center sm:text-left">
-              © {new Date().getFullYear()} EdTech. All rights reserved.
+              © {new Date().getFullYear()} SkillScript. All rights reserved.
             </p>
             <div className="flex items-center gap-6 text-white6 text-xs sm:text-sm">
               <Link

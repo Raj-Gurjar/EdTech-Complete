@@ -17,7 +17,7 @@ export default function AboutSection1() {
         </div>
         <div className="w-full sm:w-4/5 lg:w-3/4 mx-auto">
           <p className="text-sm sm:text-base text-white4 mb-8 sm:mb-10 leading-relaxed">
-            At EdTech, we're revolutionizing the way people learn online. Our platform brings together 
+            At SkillScript, we're revolutionizing the way people learn online. Our platform brings together 
             world-class instructors, cutting-edge technology, and a passion for education to create 
             transformative learning experiences. We believe that quality education should be accessible 
             to everyone, anywhere, at any time.

@@ -135,7 +135,7 @@ export async function buyCourse(
       key: process.env.REACT_APP_RAZORPAY_KEY || process.env.RAZORPAY_KEY,
       amount: `${orderResponse.data.message.currency}`,
       currency: orderResponse.data.message.currency,
-      name: "EdTech",
+      name: "SkillScript",
       description: "Thank you for purchasing course",
       image: rzp_logo,
       order_id: orderResponse.data.message.id,

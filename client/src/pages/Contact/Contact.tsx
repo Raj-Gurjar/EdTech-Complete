@@ -25,7 +25,7 @@ export default function Contact() {
       icon: <MdEmail className="text-yellow8" />,
       title: "Email Us",
       description: "Our Friendly Team will help you",
-      details: "info@EdTech.com",
+      details: "info@skillscript.com",
     },
     {
       icon: <IoMdCall className="text-yellow8" />,

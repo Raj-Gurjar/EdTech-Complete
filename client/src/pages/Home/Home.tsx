@@ -57,7 +57,7 @@ export default function Home() {
               btn2="Learn More"
               bgGradient="shadow-[0_10px_20px_rgba(240,_46,_170,_0.7)]"
               codeText={`function greet() {
-    console.log("Welcome to EdTech!");
+    console.log("Welcome to SkillScript!");
     return "Start Learning Today!";
 }
 

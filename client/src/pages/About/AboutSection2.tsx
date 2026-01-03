@@ -14,7 +14,7 @@ export default function AboutSection2() {
 
           <div className="text-sm sm:text-base text-white4 flex gap-y-3 sm:gap-y-4 flex-col justify-start leading-relaxed">
             <p>
-              EdTech was born from a simple yet powerful vision: to make quality education 
+              SkillScript was born from a simple yet powerful vision: to make quality education 
               accessible to everyone, regardless of their location or background. Founded in 2020 
               by a team of passionate educators and technologists, we recognized the growing need 
               for flexible, high-quality online learning solutions.

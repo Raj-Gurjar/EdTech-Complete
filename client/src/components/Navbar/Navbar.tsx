@@ -9,6 +9,7 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import Button from "../../user interfaces/Button";
 import { ACCOUNT_TYPE } from "../../utils/constants";
 import { navItems } from "../../data/SideBarData";
+import Logo from "../Logo/Logo";
 
 export default function Navbar() {
   const { token } = useSelector((state: any) => state.auth);
@@ -84,12 +85,7 @@ export default function Navbar() {
                 <HiMenuAlt3 className="text-2xl" />
               )}
             </button>
-            <Link 
-              to="/" 
-              className="text-lg sm:text-xl font-bold text-yellow8 hover:text-yellow7 transition-colors"
-            >
-              Logo
-            </Link>
+            <Logo />
         </div>
 
           {/* Desktop Navigation Links */}
