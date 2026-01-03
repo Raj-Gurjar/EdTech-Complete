@@ -174,27 +174,50 @@ export const fetchCourseDetails = async (courseId: string): Promise<any> => {
   return result;
 };
 
-export const addCourseDetails = async (data: FormData, token: string): Promise<any> => {
-  const toastId = toast.loading("Loading");
+export const addCourseDetails = async (
+  data: FormData, 
+  token: string,
+  onUploadProgress?: (progress: number) => void
+): Promise<any> => {
+  const toastId = toast.loading("Uploading thumbnail...", {
+    duration: Infinity,
+  });
   let result: any = null;
 
   try {
-    const response = await apiConnector("POST", CREATE_COURSE_API, data, {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${token}`,
-    });
+    const response = await apiConnector(
+      "POST", 
+      CREATE_COURSE_API, 
+      data, 
+      {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+      undefined,
+      (progressEvent: any) => {
+        if (progressEvent.total && progressEvent.loaded < progressEvent.total) {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          if (onUploadProgress) {
+            onUploadProgress(percentCompleted);
+          }
+          // Keep toast loading without showing percentage
+          toast.loading("Uploading thumbnail...", { id: toastId, duration: Infinity });
+        }
+      }
+    );
 
     if (!response?.data?.success) {
       throw new Error("Could not add details in Course");
     }
-    toast.success("Course Details added Successfully");
+    toast.success("Course Details added Successfully", { id: toastId });
     result = response?.data?.newCourse;
   } catch (error) {
     console.log("add course api error...", error);
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || "Failed to add course details");
+    toast.error(apiError.response?.data?.message || "Failed to add course details", { id: toastId });
   }
-  toast.dismiss(toastId);
   return result;
 };
 
@@ -249,28 +272,51 @@ export const createSection = async (data: any, token: string): Promise<any> => {
   return result;
 };
 
-export const createSubSection = async (data: FormData, token: string): Promise<any> => {
-  const toastId = toast.loading("Loading");
+export const createSubSection = async (
+  data: FormData, 
+  token: string,
+  onUploadProgress?: (progress: number) => void
+): Promise<any> => {
+  const toastId = toast.loading("Uploading video...", {
+    duration: Infinity,
+  });
   let result: any = null;
 
   try {
-    const response = await apiConnector("POST", CREATE_SUBSECTION_API, data, {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${token}`,
-    });
+    const response = await apiConnector(
+      "POST", 
+      CREATE_SUBSECTION_API, 
+      data, 
+      {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+      undefined,
+      (progressEvent: any) => {
+        if (progressEvent.total && progressEvent.loaded < progressEvent.total) {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          if (onUploadProgress) {
+            onUploadProgress(percentCompleted);
+          }
+          // Keep toast loading without showing percentage
+          toast.loading("Uploading video...", { id: toastId, duration: Infinity });
+        }
+      }
+    );
     console.log("create sub-section api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not create sub-section");
     }
-    toast.success("Sub-Section Created Successfully");
+    toast.success("Sub-Section Created Successfully", { id: toastId });
     result = response?.data?.data;
   } catch (error) {
     console.log("create sub-section api error...", error);
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || "Failed to create sub-section");
+    toast.error(apiError.response?.data?.message || "Failed to create sub-section", { id: toastId });
   }
-  toast.dismiss(toastId);
   return result;
 };
 
