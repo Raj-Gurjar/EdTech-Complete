@@ -17,7 +17,7 @@ const {
     isInstructor,
     isAdmin,
 } = require("../middlewares/auth");
-const { fileUpload } = require("../middlewares/multer");
+const { imageUpload, fileSizeErrorHandler } = require("../middlewares/multer");
 
 //!Routes for get enrolled Courses
 
@@ -26,7 +26,8 @@ router.put("/updateProfile", auth, updateProfile);
 router.put(
     "/updateDisplayPicture",
     auth,
-    fileUpload.single("profileImage"),
+    imageUpload.single("profileImage"),
+    fileSizeErrorHandler,
     updateDisplayPicture
 );
 router.delete("/deleteProfile", auth, deleteUserAccount);

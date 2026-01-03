@@ -7,13 +7,14 @@ const {
     updateSubSection,
 } = require("../controllers/SubSection");
 const { auth, isInstructor } = require("../middlewares/auth");
-const { fileUpload } = require("../middlewares/multer");
+const { videoUpload, fileSizeErrorHandler } = require("../middlewares/multer");
 
 router.post(
     "/addSubSection",
     auth,
     isInstructor,
-    fileUpload.single("videoUrl"),
+    videoUpload.single("videoUrl"),
+    fileSizeErrorHandler,
     createSubSection
 );
 router.put("/updateSubSection", auth, isInstructor, updateSubSection);

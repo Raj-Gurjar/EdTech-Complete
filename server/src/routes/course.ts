@@ -27,7 +27,7 @@ const {
     isStudent,
     isAdmin,
 } = require("../middlewares/auth");
-const { fileUpload } = require("../middlewares/multer");
+const { imageUpload, fileSizeErrorHandler } = require("../middlewares/multer");
 
 const { updateCourseProgress } = require("../controllers/CourseProgress");
 
@@ -39,7 +39,8 @@ router.post(
     "/createCourse",
     auth,
     isInstructor,
-    fileUpload.single("thumbnail"),
+    imageUpload.single("thumbnail"),
+    fileSizeErrorHandler,
     createCourse
 );
 router.post("/editCourse", auth, isInstructor, editCourse);
