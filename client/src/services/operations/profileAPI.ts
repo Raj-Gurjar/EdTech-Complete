@@ -168,8 +168,6 @@ export const getInstructorData = async (token: string): Promise<any[]> => {
       throw new Error("Could not get the inst data");
     }
     result = response?.data?.data;
-
-    toast.success("Instructor Data Fetched Successfully");
   } catch (error) {
     console.log("Instructor data api error...", error);
     const apiError = error as ApiError;
@@ -197,8 +195,6 @@ export const getAdminData = async (token: string): Promise<any[]> => {
       throw new Error("Could not get the admin data");
     }
     result = response?.data?.data;
-
-    toast.success("Admin Data Fetched Successfully");
   } catch (error) {
     console.log("Admin data api error...", error);
     const apiError = error as ApiError;

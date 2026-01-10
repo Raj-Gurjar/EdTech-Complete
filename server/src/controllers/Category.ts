@@ -63,7 +63,6 @@ export const showAllCategories = async (req: Request, res: Response): Promise<Re
 
         return res.status(200).json({
             success: true,
-            message: "All the categories are returned successfully.",
             data: allCategories,
         });
     } catch (error) {
@@ -155,7 +154,6 @@ export const categoryPageDetails = async (req: Request, res: Response): Promise<
         //return
         return res.status(200).json({
             success: true,
-            message: "Category Page Data fetched Successfully.",
             data: {
                 selectedCategory,
                 differentCategory,

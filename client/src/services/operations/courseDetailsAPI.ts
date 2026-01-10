@@ -49,7 +49,6 @@ export const getAllCoursesPublic = async (): Promise<any[]> => {
     if (!response?.data?.success) {
       throw new Error("Could not fetch Courses");
     }
-    toast.success("All courses details fetched Successfully");
     result = response?.data?.data;
   } catch (error) {
     console.log("Get all courses api error...", error);
@@ -76,7 +75,6 @@ export const getAllCoursesAdmin = async (token: string): Promise<any[]> => {
     if (!response?.data?.success) {
       throw new Error("Could not fetch Courses");
     }
-    toast.success("All courses details fetched Successfully");
     result = response?.data?.data;
   } catch (error) {
     console.log("Get all courses api error...", error);
@@ -162,7 +160,6 @@ export const fetchCourseDetails = async (courseId: string): Promise<any> => {
     if (!response?.data?.success) {
       throw new Error(response.data.message);
     }
-    toast.success("A Course details fetched successfully");
     result = response?.data;
   } catch (error) {
     console.log("course details api error...", error);
@@ -436,7 +433,6 @@ export const fetchInstructorCourses = async (token: string): Promise<any[]> => {
     if (!response?.data?.success) {
       throw new Error("Could not fetch Instructor Courses");
     }
-    toast.success("Course Instructors fetched successfully");
     result = response?.data?.data;
   } catch (error) {
     console.log("Course Instructor api error...", error);
@@ -490,7 +486,6 @@ export const getFullDetailsOfCourse = async (courseId: string, token: string): P
     if (!response?.data?.success) {
       throw new Error("Could not fetch Full Course Details");
     }
-    toast.success("Full Course fetched successfully");
     result = response?.data?.data;
   } catch (error) {
     console.log("Full Course api error...", error);
@@ -606,7 +601,6 @@ export const getAllReviews = async (): Promise<any[]> => {
     if (!response?.data?.success) {
       throw new Error("Could not fetch Reviews");
     }
-    toast.success("All Reviews details fetched Successfully");
     result = response?.data?.data;
   } catch (error) {
     console.log("Get all reviews api error...", error);

@@ -151,7 +151,6 @@ export const getAllRatingAndReviews = async (req: Request, res: Response): Promi
         // console.log("rr", allReviews);
         return res.status(200).json({
             success: true,
-            message: "All rating and reviews are fetched successfully",
             data: allReviews,
         });
     } catch (error: any) {

@@ -211,7 +211,6 @@ export const getAllUserDetails = async (req: AuthRequest, res: Response): Promis
         //return
         return res.status(200).json({
             success: true,
-            message: "User's whole data fetched Successfully.",
             userDetails,
         });
     } catch (error) {
@@ -456,7 +455,6 @@ export const getEnrolledCourses = async (req: AuthRequest, res: Response): Promi
         // console.log("user details:", userDetails);
         return res.status(200).json({
             success: true,
-            message: "Enrolled Courses Details fetched successfully",
             userDetails,
         });
     } catch (error) {
@@ -503,7 +501,6 @@ export const instructorDashboardData = async (req: AuthRequest, res: Response): 
 
         return res.status(200).json({
             success: true,
-            message: "Instructor Stats fetched Successfully",
             data: courseData,
         });
     } catch (error) {
@@ -595,7 +592,6 @@ export const adminDashboardData = async (req: AuthRequest, res: Response): Promi
 
         return res.status(200).json({
             success: true,
-            message: "Admin Data fetched Successfully",
             data: {
                 totalUsers,
                 totalStudents,
@@ -659,7 +655,6 @@ export const getPublicStatistics = async (req: Request, res: Response): Promise<
 
         return res.status(200).json({
             success: true,
-            message: "Public statistics fetched successfully",
             data: {
                 totalStudents,
                 totalCourses,

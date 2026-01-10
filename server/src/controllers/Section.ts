@@ -168,7 +168,6 @@ export const sectionById = async (req: Request, res: Response): Promise<Response
         //return
         return res.status(200).json({
             success: true,
-            message: "Section Data fetched Successfully.",
             data: sectionDetails,
         });
     } catch (error) {

@@ -48,7 +48,6 @@ export const getAllPublishedCourses = async (req: Request, res: Response): Promi
         //* return res
         return res.status(200).json({
             success: true,
-            message: "Data of All Courses Fetched Successfully.",
             data: allCourse,
         });
     } catch (error: any) {
@@ -105,7 +104,6 @@ export const getCourseById = async (req: Request, res: Response): Promise<Respon
 
         return res.status(200).json({
             success: true,
-            message: "Course Data fetched Successfully.",
             data: { courseDetails, totalDuration },
         });
     } catch (error: any) {
@@ -194,7 +192,6 @@ export const getFullCourseDetails = async (req: AuthRequest, res: Response): Pro
                     ? courseProgressCount?.completedVideos
                     : [],
             },
-            message: "All course details fetched",
         });
     } catch (error: any) {
         console.log("Error in whole course details fetching :", error);
@@ -546,7 +543,6 @@ export const getInstructorCourses = async (req: AuthRequest, res: Response): Pro
         // Return
         return res.status(200).json({
             success: true,
-            message: "Instructor's Courses fetched successfully",
             data: instructorCourses,
         });
     } catch (error: any) {
@@ -572,7 +568,6 @@ export const getAllCoursesAdmin = async (req: Request, res: Response): Promise<R
         //* return res
         return res.status(200).json({
             success: true,
-            message: "Data of All Courses Fetched Successfully.",
             data: allCourse,
         });
     } catch (error: any) {
@@ -708,7 +703,6 @@ export const getCourseByIdAdmin = async (req: Request, res: Response): Promise<R
 
         return res.status(200).json({
             success: true,
-            message: "Course Data fetched Successfully.",
             data: { courseDetails, totalDuration },
         });
     } catch (error: any) {
