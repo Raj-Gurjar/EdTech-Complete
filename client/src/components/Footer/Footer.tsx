@@ -128,9 +128,9 @@ export default function Footer() {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="text-white4 hover:text-yellow8 transition-colors duration-200 text-sm sm:text-base flex items-center gap-2 group"
+                    className="text-white4 hover:text-purple6 transition-colors duration-200 text-sm sm:text-base flex items-center gap-2 group"
                   >
-                    <span className="w-0 group-hover:w-2 h-0.5 bg-yellow8 transition-all duration-200"></span>
+                    <span className="w-0 group-hover:w-2 h-0.5 bg-purple6 transition-all duration-200"></span>
                     {link.name}
                   </Link>
                 </li>
@@ -148,9 +148,9 @@ export default function Footer() {
                 <li key={resource.name}>
                   <Link
                     to={resource.path}
-                    className="text-white4 hover:text-yellow8 transition-colors duration-200 text-sm sm:text-base flex items-center gap-2 group"
+                    className="text-white4 hover:text-purple6 transition-colors duration-200 text-sm sm:text-base flex items-center gap-2 group"
                   >
-                    <span className="w-0 group-hover:w-2 h-0.5 bg-yellow8 transition-all duration-200"></span>
+                    <span className="w-0 group-hover:w-2 h-0.5 bg-purple6 transition-all duration-200"></span>
                     {resource.name}
                   </Link>
                 </li>
@@ -165,23 +165,23 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3 mb-6">
               <li className="flex items-start gap-3 text-white4 text-sm sm:text-base">
-                <FaMapMarkerAlt className="text-yellow8 mt-1 flex-shrink-0" />
+                <FaMapMarkerAlt className="text-purple6 mt-1 flex-shrink-0" />
                 <span>123 Education Street, Learning City, LC 12345</span>
               </li>
               <li className="flex items-center gap-3 text-white4 text-sm sm:text-base">
-                <FaEnvelope className="text-yellow8 flex-shrink-0" />
+                <FaEnvelope className="text-purple6 flex-shrink-0" />
                 <a
                   href="mailto:info@skillscript.com"
-                  className="hover:text-yellow8 transition-colors duration-200"
+                  className="hover:text-purple6 transition-colors duration-200"
                 >
                   info@skillscript.com
                 </a>
               </li>
               <li className="flex items-center gap-3 text-white4 text-sm sm:text-base">
-                <FaPhone className="text-yellow8 flex-shrink-0" />
+                <FaPhone className="text-purple6 flex-shrink-0" />
                 <a
                   href="tel:+1234567890"
-                  className="hover:text-yellow8 transition-colors duration-200"
+                  className="hover:text-purple6 transition-colors duration-200"
                 >
                   +1 (234) 567-890
                 </a>
@@ -202,12 +202,12 @@ export default function Footer() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Your email address"
-                  className="bg-black3 border border-black5 rounded-lg px-4 py-2.5 text-white placeholder:text-white6 focus:outline-none focus:border-yellow8 transition-colors text-sm sm:text-base"
+                  className="bg-black3 border border-black5 rounded-lg px-4 py-2.5 text-white placeholder:text-white6 focus:outline-none focus:border-purple6 transition-colors text-sm sm:text-base"
                   required
                 />
                 <button
                   type="submit"
-                  className="bg-yellow8 hover:bg-yellow9 text-black font-semibold rounded-lg px-4 py-2.5 transition-all duration-200 hover:scale-105 text-sm sm:text-base"
+                  className="bg-purple6 hover:bg-purple7 text-white font-semibold rounded-lg px-4 py-2.5 transition-all duration-200 hover:scale-105 text-sm sm:text-base"
                 >
                   Subscribe
                 </button>
@@ -225,21 +225,21 @@ export default function Footer() {
             <div className="flex items-center gap-6 text-white6 text-xs sm:text-sm">
               <Link
                 to="/privacy"
-                className="hover:text-yellow8 transition-colors duration-200"
+                className="hover:text-purple6 transition-colors duration-200"
               >
                 Privacy
               </Link>
               <span>•</span>
               <Link
                 to="/terms"
-                className="hover:text-yellow8 transition-colors duration-200"
+                className="hover:text-purple6 transition-colors duration-200"
               >
                 Terms
               </Link>
               <span>•</span>
               <Link
                 to="/cookies"
-                className="hover:text-yellow8 transition-colors duration-200"
+                className="hover:text-purple6 transition-colors duration-200"
               >
                 Cookies
               </Link>

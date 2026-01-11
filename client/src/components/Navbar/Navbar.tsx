@@ -10,6 +10,8 @@ import Button from "../../user interfaces/Button";
 import { ACCOUNT_TYPE } from "../../utils/constants";
 import { navItems } from "../../data/SideBarData";
 import Logo from "../Logo/Logo";
+import PrimaryCTA from "../../user interfaces/PrimaryCTA";
+import SecondaryCTA from "../../user interfaces/SecondaryCTA";
 
 export default function Navbar() {
   const { token } = useSelector((state: any) => state.auth);
@@ -70,12 +72,22 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="bg-black2 text-white fixed z-50 w-full flex h-14 sm:h-16 items-center justify-center border-b border-black5">
-      <div className="flex w-11/12 max-w-maxContent items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-4">
+      <nav 
+        className="fixed z-50 w-full text-white"
+        style={{
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          background: 'linear-gradient(180deg, rgb(19, 20, 21) 6.642384572072071%, rgba(0, 0, 0, 0.3) 100%)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          opacity: 1,
+        }}
+      >
+        <div className="flex items-center justify-between w-full max-w-maxContent mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20">
+          {/* Left Section: Logo and Separator */}
+          <div className="flex items-center gap-4 sm:gap-6">
+            {/* Mobile Menu Button */}
             <button
-              className="hamburger-button lg:hidden text-white hover:text-yellow8 transition-colors p-2 -ml-2"
+              className="hamburger-button lg:hidden text-white hover:text-white/80 transition-colors p-2 -ml-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -85,162 +97,194 @@ export default function Navbar() {
                 <HiMenuAlt3 className="text-2xl" />
               )}
             </button>
-            <Logo />
-        </div>
+            
+            {/* Logo */}
+            <Logo showText={true} textClassName="text-white" />
+            
+            {/* Separator - Gradient Line */}
+            <div 
+              className="hidden lg:block h-6 w-px"
+              style={{
+                background: 'linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%)',
+              }}
+            />
+          </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex">
+          {/* Center Section: Navigation Links */}
+          <nav className="hidden lg:flex items-center">
             <ul className="flex gap-x-6 xl:gap-x-8">
-            {NavbarLinks.map((link, index) => (
-              <NavLink
-                to={link?.path}
-                key={index}
-                className={({ isActive }) =>
-                    `transition-colors duration-200 ${
+              {NavbarLinks.map((link, index) => (
+                <NavLink
+                  to={link?.path}
+                  key={index}
+                  className={({ isActive }) =>
+                    `transition-opacity duration-200 ${
                       isActive 
-                        ? "text-yellow8 font-semibold" 
-                        : "text-white hover:text-yellow8"
+                        ? "opacity-100 font-medium" 
+                        : "opacity-60 hover:opacity-100"
                     }`
-                }
-              >
-                <li>
-                  {link.title === "Catalogs" ? (
-                    <div></div>
-                  ) : (
-                    <p className="text-sm xl:text-base">{link.title}</p>
-                  )}
-                </li>
-              </NavLink>
-            ))}
-          </ul>
+                  }
+                  style={{
+                    fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
+                    fontWeight: 500,
+                    letterSpacing: '-0.5px',
+                    lineHeight: '26px',
+                    color: 'rgb(255, 255, 255)',
+                  }}
+                >
+                  <li>
+                    {link.title !== "Catalogs" && (
+                      <p className="text-sm xl:text-base">{link.title}</p>
+                    )}
+                  </li>
+                </NavLink>
+              ))}
+            </ul>
           </nav>
 
-          {/* Right Side Actions */}
-          <div className="flex items-center gap-3 sm:gap-4 lg:gap-5">
-            {/* Search - Desktop */}
+          {/* Right Section: CTA Buttons and User Actions */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            {/* CTA Buttons - Desktop (when not logged in) */}
+            {token === null && (
+              <div className="hidden lg:flex items-center gap-3">
+                <SecondaryCTA to="/login" className="text-sm">
+                  Login
+                </SecondaryCTA>
+                <PrimaryCTA to="/signup" className="text-sm">
+                  Signup
+                </PrimaryCTA>
+              </div>
+            )}
+
+            {/* User Actions - Desktop (when logged in) */}
             {token !== null && (
-              <div className="hidden md:block relative">
-                <form onSubmit={handleSearch} className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search courses..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="bg-black3 border border-black5 rounded-lg px-4 py-1.5 pr-10 text-white text-sm w-48 lg:w-64 focus:outline-none focus:border-yellow8 transition-colors placeholder:text-white4"
-                  />
-                  <button
-                    type="submit"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-white4 hover:text-yellow8 transition-colors"
+              <div className="hidden lg:flex gap-4 items-center">
+                {/* Search - Desktop */}
+                <div className="relative">
+                  <form onSubmit={handleSearch} className="relative">
+                    <input
+                      type="text"
+                      placeholder="Search courses..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg px-4 py-1.5 pr-10 text-white text-sm w-48 lg:w-64 focus:outline-none focus:border-white/20 transition-colors placeholder:text-white/40"
+                      style={{
+                        fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
+                      }}
+                    />
+                    <button
+                      type="submit"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors"
+                    >
+                      <IoSearch className="text-lg" />
+                    </button>
+                  </form>
+                </div>
+
+                {user && user.accountType === ACCOUNT_TYPE.STUDENT && (
+                  <Link 
+                    to="/dashboard/myCart" 
+                    className="relative flex items-center p-2 hover:bg-white/5 rounded-lg transition-colors group"
+                    aria-label="Shopping cart"
                   >
-                    <IoSearch className="text-lg" />
-                  </button>
-                </form>
-        </div>
-            )}
-
-            {/* Search Icon - Mobile */}
-            {token !== null && (
-              <button
-                onClick={() => setSearchOpen(!searchOpen)}
-                className="md:hidden text-white hover:text-yellow8 transition-colors p-2"
-                aria-label="Search"
-              >
-                {searchOpen ? (
-                  <IoClose className="text-xl" />
-                ) : (
-                  <IoSearch className="text-xl" />
+                    <BsCart3 className="text-xl group-hover:text-white transition-colors" />
+                    {totalItems > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-purple6 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
+                        {totalItems}
+                      </span>
+                    )}
+                  </Link>
                 )}
-              </button>
+                <ProfileDropDown />
+              </div>
             )}
 
-            {/* Auth Buttons - Desktop */}
-          {token === null && (
-              <div className="hidden sm:flex gap-3 lg:gap-5">
-              <Button
-                  btn_color={"bg-yellow8 hover:bg-yellow9"}
-                btn_name={"Login"}
-                btn_link={"/login"}
-                text_color={"text-black"}
-                  py={"py-1.5"}
-                  px={"px-4"}
-              />
-              <Button
-                  btn_color={"bg-black5 hover:bg-black4"}
-                btn_name={"Signup"}
-                btn_link={"/signup"}
-                text_color={"text-white"}
-                  py={"py-1.5"}
-                  px={"px-4"}
-              />
+            {/* Mobile Actions */}
+            <div className="lg:hidden flex items-center gap-2">
+              {/* Search Icon - Mobile */}
+              {token !== null && (
+                <button
+                  onClick={() => setSearchOpen(!searchOpen)}
+                  className="text-white/80 hover:text-white transition-colors p-2"
+                  aria-label="Search"
+                >
+                  {searchOpen ? (
+                    <IoClose className="text-xl" />
+                  ) : (
+                    <IoSearch className="text-xl" />
+                  )}
+                </button>
+              )}
+
+              {/* User Actions - Mobile */}
+              {token !== null && (
+                <>
+                  {user && user.accountType === ACCOUNT_TYPE.STUDENT && (
+                    <Link 
+                      to="/dashboard/myCart" 
+                      className="relative flex items-center p-2"
+                      aria-label="Shopping cart"
+                    >
+                      <BsCart3 className="text-xl" />
+                      {totalItems > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-purple6 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
+                          {totalItems}
+                        </span>
+                      )}
+                    </Link>
+                  )}
+                  <ProfileDropDown />
+                </>
+              )}
+
+              {/* Auth Buttons - Mobile (when not logged in) */}
+              {token === null && (
+                <div className="flex gap-2">
+                  <SecondaryCTA to="/login" className="text-xs px-4 py-2">
+                    Login
+                  </SecondaryCTA>
+                  <PrimaryCTA to="/signup" className="text-xs px-4 py-2">
+                    Signup
+                  </PrimaryCTA>
+                </div>
+              )}
             </div>
-          )}
-
-            {/* User Actions - Desktop */}
-          {token !== null && (
-              <div className="hidden sm:flex gap-4 lg:gap-5 items-center">
-                {user && user.accountType === ACCOUNT_TYPE.STUDENT && (
-                  <Link 
-                    to="/dashboard/myCart" 
-                    className="relative flex items-center p-2 hover:bg-black3 rounded-lg transition-colors group"
-                    aria-label="Shopping cart"
-                  >
-                    <BsCart3 className="text-xl group-hover:text-yellow8 transition-colors" />
-                    {totalItems > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-yellow8 text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
-                        {totalItems}
-                      </span>
-                    )}
-                  </Link>
-                )}
-                <ProfileDropDown />
-              </div>
-            )}
-
-            {/* User Actions - Mobile (in hamburger menu) */}
-            {token !== null && (
-              <div className="sm:hidden flex items-center gap-3">
-                {user && user.accountType === ACCOUNT_TYPE.STUDENT && (
-                  <Link 
-                    to="/dashboard/myCart" 
-                    className="relative flex items-center p-2"
-                    aria-label="Shopping cart"
-                  >
-                    <BsCart3 className="text-xl" />
-                    {totalItems > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-yellow8 text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
-                        {totalItems}
-                      </span>
-                    )}
-                  </Link>
-                )}
-                <ProfileDropDown />
-              </div>
-            )}
           </div>
         </div>
 
         {/* Mobile Search Bar */}
         {searchOpen && token !== null && (
-          <div className="absolute top-full left-0 right-0 bg-black2 border-b border-black5 p-4 md:hidden">
+          <div 
+            className="absolute top-full left-0 right-0 p-4 md:hidden"
+            style={{
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              background: 'linear-gradient(180deg, rgb(19, 20, 21) 6.642384572072071%, rgba(0, 0, 0, 0.3) 100%)',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            }}
+          >
             <form onSubmit={handleSearch} className="relative">
               <input
                 type="text"
                 placeholder="Search courses..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-black3 border border-black5 rounded-lg px-4 py-2.5 pr-12 text-white w-full focus:outline-none focus:border-yellow8 transition-colors placeholder:text-white4"
+                className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg px-4 py-2.5 pr-12 text-white w-full focus:outline-none focus:border-white/20 transition-colors placeholder:text-white/40"
+                style={{
+                  fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
+                }}
                 autoFocus
               />
               <button
                 type="submit"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white4 hover:text-yellow8 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors"
               >
                 <IoSearch className="text-xl" />
               </button>
             </form>
           </div>
         )}
-      </div>
+      </nav>
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
@@ -250,9 +294,14 @@ export default function Navbar() {
       {/* Mobile Menu Sidebar */}
       <div
         ref={mobileMenuRef}
-        className={`fixed top-14 sm:top-16 left-0 h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] w-80 max-w-[85vw] bg-black2 border-r border-black5 z-50 transform transition-transform duration-300 ease-in-out lg:hidden ${
+        className={`fixed top-16 sm:top-20 left-0 h-[calc(100vh-4rem)] sm:h-[calc(100vh-5rem)] w-80 max-w-[85vw] bg-black2 border-r border-white/10 z-50 transform transition-transform duration-300 ease-in-out lg:hidden ${
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
+        style={{
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          background: 'linear-gradient(180deg, rgb(19, 20, 21) 6.642384572072071%, rgba(0, 0, 0, 0.95) 100%)',
+        }}
       >
         <div className="flex flex-col h-full overflow-y-auto">
           {/* Mobile Navigation Links */}
@@ -313,23 +362,13 @@ export default function Navbar() {
 
           {/* Mobile Auth Buttons */}
           {token === null && (
-            <div className="p-6 border-t border-black5 space-y-3">
-              <Button
-                btn_color={"bg-yellow8 hover:bg-yellow9"}
-                btn_name={"Login"}
-                btn_link={"/login"}
-                text_color={"text-black"}
-                py={"py-2.5"}
-                px={"px-4"}
-              />
-              <Button
-                btn_color={"bg-black5 hover:bg-black4"}
-                btn_name={"Signup"}
-                btn_link={"/signup"}
-                text_color={"text-white"}
-                py={"py-2.5"}
-                px={"px-4"}
-              />
+            <div className="p-6 border-t border-white/10 space-y-3">
+              <SecondaryCTA to="/login" className="w-full">
+                Login
+              </SecondaryCTA>
+              <PrimaryCTA to="/signup" className="w-full">
+                Signup
+              </PrimaryCTA>
             </div>
           )}
         </div>

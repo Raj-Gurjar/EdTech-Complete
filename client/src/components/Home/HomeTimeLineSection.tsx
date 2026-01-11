@@ -15,7 +15,7 @@ export default function HomeTimeLineSection() {
               className="flex gap-4 sm:gap-6 justify-center align-middle items-start w-full"
             >
               <div className="relative flex-shrink-0">
-                <div className="h-12 w-12 sm:h-14 sm:w-14 bg-white2 rounded-full p-2 sm:p-2.5 flex items-center justify-center shadow-md">
+                <div className="h-12 w-12 sm:h-14 sm:w-14 bg-purple6/20 backdrop-blur-sm border border-purple6/50 rounded-full p-2 sm:p-2.5 flex items-center justify-center shadow-md shadow-purple6/30">
                   <img 
                     src={item.Logo} 
                     alt={`timeline-icon-${item.id}`}
@@ -24,13 +24,13 @@ export default function HomeTimeLineSection() {
                 </div>
                 {/* Dotted Line */}
                 {index < items_length - 1 && (
-                  <div className="absolute left-1/2 top-12 sm:top-14 transform -translate-x-1/2 w-0.5 h-12 sm:h-16 bg-black8 border-l border-dotted border-black6 z-0"></div>
+                  <div className="absolute left-1/2 top-12 sm:top-14 transform -translate-x-1/2 w-0.5 h-12 sm:h-16 bg-purple6/50 border-l border-dotted border-purple6/30 z-0"></div>
                 )}
               </div>
 
               <div className="flex flex-col items-start gap-1 sm:gap-2 flex-1 pt-1">
-                <p className="text-base sm:text-lg font-semibold text-black1">{item.heading}</p>
-                <p className="text-sm sm:text-base text-black3 leading-relaxed">{item.Description}</p>
+                <p className="text-base sm:text-lg font-semibold text-white">{item.heading}</p>
+                <p className="text-sm sm:text-base text-white4 leading-relaxed">{item.Description}</p>
               </div>
             </div>
           ))}
@@ -42,12 +42,12 @@ export default function HomeTimeLineSection() {
             <img
               src={TimeLineImg}
               alt="timeline-sec-img"
-              className="w-full h-auto max-h-[400px] object-cover shadow-[0_20px_50px_rgba(8,_112,_184,_0.5)]"
+              className="w-full h-auto max-h-[400px] object-cover shadow-[0_20px_50px_rgba(96,_28,_255,_0.4)]"
             />
           </div>
 
           {/* Stats Card */}
-          <div className="bg-caribbeanGreen9 flex flex-col sm:flex-row justify-between items-center py-4 sm:py-5 px-4 sm:px-6 gap-3 sm:gap-4 text-white uppercase w-[90%] sm:w-[80%] -mt-8 sm:-mt-12 lg:-mt-16 left-1/2 transform -translate-x-1/2 absolute rounded-lg sm:rounded-xl shadow-[rgba(0,_0,_0,_0.3)_0px_20px_30px_-10px]">
+          <div className="bg-purple7/90 backdrop-blur-sm flex flex-col sm:flex-row justify-between items-center py-4 sm:py-5 px-4 sm:px-6 gap-3 sm:gap-4 text-white uppercase w-[90%] sm:w-[80%] -mt-8 sm:-mt-12 lg:-mt-16 left-1/2 transform -translate-x-1/2 absolute rounded-lg sm:rounded-xl shadow-[rgba(96,_28,_255,_0.4)_0px_20px_30px_-10px]">
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">10+</h1>
               <p className="text-white4 text-xs sm:text-sm text-center sm:text-left">Years of Experience</p>

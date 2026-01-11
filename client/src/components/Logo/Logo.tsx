@@ -19,14 +19,22 @@ export default function Logo({
       to="/" 
       className={`flex items-center gap-2 ${className}`}
     >
-      {/* Logo Placeholder - Replace this div with <img src="/logo.png" alt="SkillScript" /> when logo is ready */}
-      <div className={`w-8 h-8 bg-yellow8 rounded-lg flex items-center justify-center ${logoClassName}`}>
-        <span className="text-black font-bold text-sm">SS</span>
-      </div>
       {showText && (
-        <span className={`text-lg sm:text-xl font-bold text-yellow8 hover:text-yellow7 transition-colors ${textClassName}`}>
+        <span 
+          className={`text-lg sm:text-xl font-medium text-white hover:text-white/80 transition-colors ${textClassName}`}
+          style={{
+            fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
+            fontWeight: 500,
+            letterSpacing: '-0.5px',
+          }}
+        >
           SkillScript
         </span>
+      )}
+      {!showText && (
+        <div className={`w-8 h-8 bg-yellow8 rounded-lg flex items-center justify-center ${logoClassName}`}>
+          <span className="text-black font-bold text-sm">SS</span>
+        </div>
       )}
     </Link>
   );

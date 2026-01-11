@@ -1,14 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import HighlightText from "../../user interfaces/HighlightText";
 import HomeRandomImg1 from "../../assets/images/home-img-1.jpg";
+import PrimaryCTA from "../../user interfaces/PrimaryCTA";
 
 export default function HomeRandomImgSection() {
   return (
     <div className="mt-12 sm:mt-16 lg:mt-20 mx-auto w-full items-center">
       {/* Heading Section */}
       <div className="text-center capitalize mb-4 sm:mb-6">
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight px-4">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight px-4 text-white">
           Your Swiss Knife for{" "}
           <HighlightText text={"learning any programming language"} textSize={"text-2xl sm:text-3xl lg:text-4xl"} />
         </h2>
@@ -16,7 +16,7 @@ export default function HomeRandomImgSection() {
       
       {/* Description */}
       <div className="mt-4 sm:mt-6 max-w-2xl mx-auto px-4">
-        <p className="text-base sm:text-lg text-black3 font-medium text-center leading-relaxed">
+        <p className="text-base sm:text-lg text-white4 font-medium text-center leading-relaxed">
           Master multiple programming languages and frameworks with our comprehensive curriculum. 
           From Python to JavaScript, React to Node.js - learn it all in one place.
         </p>
@@ -60,11 +60,9 @@ export default function HomeRandomImgSection() {
 
       {/* CTA Button */}
       <div className="items-center justify-center my-8 sm:my-10 flex px-4">
-        <Link to="/allCourses">
-          <button className="bg-yellow8 hover:bg-yellow9 text-black font-semibold px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base">
-            Explore All Courses
-          </button>
-        </Link>
+        <PrimaryCTA to="/allCourses">
+          Explore All Courses
+        </PrimaryCTA>
       </div>
     </div>
   );

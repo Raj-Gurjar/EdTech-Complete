@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { TypeAnimation } from "react-type-animation";
+import PrimaryCTA from "../../user interfaces/PrimaryCTA";
+import SecondaryCTA from "../../user interfaces/SecondaryCTA";
 
 interface CodeBlockProps {
   position: string;
@@ -34,16 +36,12 @@ export default function CodeBlock({
           {text}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 mt-4">
-          <Link to="/allCourses">
-            <button className="bg-yellow8 hover:bg-yellow9 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base w-full sm:w-auto shadow-md">
-              {btn1}
-            </button>
-          </Link>
-          <Link to="/about">
-            <button className="bg-black4 hover:bg-black5 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg border border-black5 text-sm sm:text-base w-full sm:w-auto">
-              {btn2}
-            </button>
-          </Link>
+          <PrimaryCTA to="/allCourses" className="w-full sm:w-auto">
+            {btn1}
+          </PrimaryCTA>
+          <SecondaryCTA to="/about" className="w-full sm:w-auto">
+            {btn2}
+          </SecondaryCTA>
         </div>
       </div>
 
