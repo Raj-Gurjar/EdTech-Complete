@@ -116,20 +116,20 @@ const colors = {
   red4: "#FF3232",
   red5: "#E60000",
 
-  // 10 shades of purple (light to dark)
-  purple1: "#f3e8ff",
-  purple2: "#e9d5ff",
-  purple3: "#d8b4fe",
-  purple4: "#c084fc",
-  purple5: "#a855f7",
-  purple6: "#9333ea",
-  purple7: "#7e22ce",
-  purple8: "#6b21a8",
-  purple9: "#581c87",
-  purple10: "#3b0764",
+  // 10 shades of purple (light to dark) - Softer, eye-friendly palette
+  purple1: "#f5f3ff",
+  purple2: "#ede9fe",
+  purple3: "#ddd6fe",
+  purple4: "#c4b5fd",
+  purple5: "#a78bfa",
+  purple6: "#8b5cf6", // Softer lavender - Primary purple
+  purple7: "#7c3aed", // Muted purple
+  purple8: "#6d28d9", // Deeper muted purple
+  purple9: "#5b21b6", // Dark muted purple
+  purple10: "#4c1d95", // Darkest muted purple
   
-  // Framer button purple
-  framerPurple: "#601cff", // rgb(96, 28, 255)
+  // Framer button purple - Softer shade
+  framerPurple: "#8b5cf6", // rgb(139, 92, 246) - Softer lavender
 };
 
 module.exports = { colors };

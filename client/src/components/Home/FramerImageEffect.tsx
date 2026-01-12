@@ -29,7 +29,7 @@ export default function FramerImageEffect({ children, className = "" }: FramerIm
       <div
         className="absolute inset-0 pointer-events-none -z-10"
         style={{
-          backgroundColor: 'rgb(96, 28, 255)',
+          backgroundColor: 'rgb(139, 92, 246)',
           filter: 'blur(40px)',
           borderRadius: '100%',
           opacity: 0.2,
@@ -52,7 +52,7 @@ export default function FramerImageEffect({ children, className = "" }: FramerIm
         <div
           className="absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none"
           style={{
-            background: 'linear-gradient(90deg, rgba(96, 28, 255, 0) 0%, rgb(96, 28, 255) 50%, rgba(96, 28, 255, 0) 100%)',
+            background: 'linear-gradient(90deg, rgba(139, 92, 246, 0) 0%, rgb(139, 92, 246) 50%, rgba(139, 92, 246, 0) 100%)',
           }}
         ></div>
       </div>

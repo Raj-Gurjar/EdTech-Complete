@@ -20,7 +20,8 @@ export type ColorName =
   | 'pink1' | 'pink2' | 'pink3' | 'pink4' | 'pink5' | 'pink6' | 'pink7' | 'pink8' | 'pink9' | 'pink10'
   | 'grey1' | 'grey2' | 'grey3' | 'grey4' | 'grey5' | 'grey6' | 'grey7' | 'grey8' | 'grey9' | 'grey10'
   | 'red1' | 'red2' | 'red3' | 'red4' | 'red5'
-  | 'purple1' | 'purple2' | 'purple3' | 'purple4' | 'purple5' | 'purple6' | 'purple7' | 'purple8' | 'purple9' | 'purple10';
+  | 'purple1' | 'purple2' | 'purple3' | 'purple4' | 'purple5' | 'purple6' | 'purple7' | 'purple8' | 'purple9' | 'purple10'
+  | 'framerPurple';
 
 /**
  * RGB values for colors (for use in rgba() functions)
@@ -37,6 +38,11 @@ export const colorRGB = {
   // Background colors
   blackBg: { r: 18, g: 18, b: 18 },   // #121212
   darkBg: { r: 10, g: 10, b: 10 },    // #0a0a0a
+  
+  // Purple colors (softer palette)
+  purple6: { r: 139, g: 92, b: 246 },  // #8b5cf6 - Primary purple
+  purple7: { r: 124, g: 58, b: 237 },  // #7c3aed - Muted purple
+  framerPurple: { r: 139, g: 92, b: 246 }, // #8b5cf6 - Softer lavender
 } as const;
 
 /**

@@ -40,7 +40,7 @@ export default function CourseCard({ course }: CourseCardProps) {
 
   return (
     <Link to={`/allCourses/${course._id}`} className="group">
-      <div className="bg-black/40 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 hover:border-purple6/50 transition-all duration-300 hover:shadow-[0_10px_40px_rgba(96,_28,_255,_0.4)] hover:-translate-y-1 h-full flex flex-col">
+      <div className="bg-black/40 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 hover:border-purple6/50 transition-all duration-300 hover:shadow-[0_10px_40px_rgba(139,_92,_246,_0.4)] hover:-translate-y-1 h-full flex flex-col">
         {/* Course Thumbnail */}
         <FramerImageEffect className="w-full">
           <div className="relative rounded-[19px] overflow-hidden">

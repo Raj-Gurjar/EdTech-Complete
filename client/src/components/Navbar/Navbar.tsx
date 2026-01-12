@@ -6,7 +6,6 @@ import { BsCart3 } from "react-icons/bs";
 import ProfileDropDown from "./ProfileDropDown";
 import { IoSearch, IoClose } from "react-icons/io5";
 import { HiMenuAlt3 } from "react-icons/hi";
-import Button from "../../user interfaces/Button";
 import { ACCOUNT_TYPE } from "../../utils/constants";
 import { navItems } from "../../data/SideBarData";
 import Logo from "../Logo/Logo";
@@ -99,7 +98,7 @@ export default function Navbar() {
             </button>
             
             {/* Logo */}
-            <Logo showText={true} textClassName="text-white" />
+            <Logo showLogo={true} showText={true} textClassName="text-white" />
             
             {/* Separator - Gradient Line */}
             <div 
@@ -108,22 +107,22 @@ export default function Navbar() {
                 background: 'linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%)',
               }}
             />
-          </div>
+        </div>
 
           {/* Center Section: Navigation Links */}
           <nav className="hidden lg:flex items-center">
             <ul className="flex gap-x-6 xl:gap-x-8">
-              {NavbarLinks.map((link, index) => (
-                <NavLink
-                  to={link?.path}
-                  key={index}
-                  className={({ isActive }) =>
+            {NavbarLinks.map((link, index) => (
+              <NavLink
+                to={link?.path}
+                key={index}
+                className={({ isActive }) =>
                     `transition-opacity duration-200 ${
                       isActive 
                         ? "opacity-100 font-medium" 
                         : "opacity-60 hover:opacity-100"
                     }`
-                  }
+                }
                   style={{
                     fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
                     fontWeight: 500,
@@ -131,15 +130,15 @@ export default function Navbar() {
                     lineHeight: '26px',
                     color: 'rgb(255, 255, 255)',
                   }}
-                >
-                  <li>
+              >
+                <li>
                     {link.title !== "Catalogs" && (
-                      <p className="text-sm xl:text-base">{link.title}</p>
-                    )}
-                  </li>
-                </NavLink>
-              ))}
-            </ul>
+                    <p className="text-sm xl:text-base">{link.title}</p>
+                  )}
+                </li>
+              </NavLink>
+            ))}
+          </ul>
           </nav>
 
           {/* Right Section: CTA Buttons and User Actions */}
@@ -161,25 +160,25 @@ export default function Navbar() {
               <div className="hidden lg:flex gap-4 items-center">
                 {/* Search - Desktop */}
                 <div className="relative">
-                  <form onSubmit={handleSearch} className="relative">
-                    <input
-                      type="text"
-                      placeholder="Search courses..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                <form onSubmit={handleSearch} className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search courses..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                       className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg px-4 py-1.5 pr-10 text-white text-sm w-48 lg:w-64 focus:outline-none focus:border-white/20 transition-colors placeholder:text-white/40"
                       style={{
                         fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
                       }}
-                    />
-                    <button
-                      type="submit"
+                  />
+                  <button
+                    type="submit"
                       className="absolute right-2 top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors"
-                    >
-                      <IoSearch className="text-lg" />
-                    </button>
-                  </form>
-                </div>
+                  >
+                    <IoSearch className="text-lg" />
+                  </button>
+                </form>
+        </div>
 
                 {user && user.accountType === ACCOUNT_TYPE.STUDENT && (
                   <Link 
@@ -217,23 +216,23 @@ export default function Navbar() {
               )}
 
               {/* User Actions - Mobile */}
-              {token !== null && (
+            {token !== null && (
                 <>
-                  {user && user.accountType === ACCOUNT_TYPE.STUDENT && (
-                    <Link 
-                      to="/dashboard/myCart" 
-                      className="relative flex items-center p-2"
-                      aria-label="Shopping cart"
-                    >
-                      <BsCart3 className="text-xl" />
-                      {totalItems > 0 && (
+                {user && user.accountType === ACCOUNT_TYPE.STUDENT && (
+                  <Link 
+                    to="/dashboard/myCart" 
+                    className="relative flex items-center p-2"
+                    aria-label="Shopping cart"
+                  >
+                    <BsCart3 className="text-xl" />
+                    {totalItems > 0 && (
                         <span className="absolute -top-1 -right-1 bg-purple6 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
-                          {totalItems}
-                        </span>
-                      )}
-                    </Link>
-                  )}
-                  <ProfileDropDown />
+                        {totalItems}
+                      </span>
+                    )}
+                  </Link>
+                )}
+                <ProfileDropDown />
                 </>
               )}
 
@@ -246,8 +245,8 @@ export default function Navbar() {
                   <PrimaryCTA to="/signup" className="text-xs px-4 py-2">
                     Signup
                   </PrimaryCTA>
-                </div>
-              )}
+              </div>
+            )}
             </div>
           </div>
         </div>

@@ -14,7 +14,7 @@ interface PrimaryCTAProps {
  * PrimaryCTA - Primary call-to-action button with purple background
  * 
  * Features:
- * - Purple background (rgb(96, 28, 255))
+ * - Purple background (rgb(139, 92, 246)) - Softer lavender
  * - White border with 15% opacity
  * - Multi-layer box shadow with glow effects
  * - DM Sans font family
@@ -48,13 +48,13 @@ export default function PrimaryCTA({
   `;
 
   const primaryStyles = {
-    backgroundColor: 'rgb(96, 28, 255)',
+    backgroundColor: 'rgb(139, 92, 246)',
     borderColor: 'rgba(255, 255, 255, 0.15)',
     borderWidth: '1px',
     textAlign: 'center' as const,
     borderStyle: 'solid',
     borderRadius: '10px',
-    boxShadow: 'rgba(102, 0, 255, 0.5) 0px 8px 40px 0px, rgba(255, 255, 255, 0) 0px 0px 10px 1px inset, rgba(123, 0, 255, 0.12) 0px 0px 0px 1px',
+    boxShadow: 'rgba(139, 92, 246, 0.4) 0px 8px 40px 0px, rgba(255, 255, 255, 0) 0px 0px 10px 1px inset, rgba(124, 58, 237, 0.12) 0px 0px 0px 1px',
     fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
     fontWeight: 500,
     letterSpacing: '-0.5px',
@@ -63,7 +63,7 @@ export default function PrimaryCTA({
   };
 
   const hoverStyles = {
-    boxShadow: 'rgba(102, 0, 255, 0.6) 0px 8px 50px 0px, rgba(255, 255, 255, 0.05) 0px 0px 10px 1px inset, rgba(123, 0, 255, 0.15) 0px 0px 0px 1px',
+    boxShadow: 'rgba(139, 92, 246, 0.5) 0px 8px 50px 0px, rgba(255, 255, 255, 0.05) 0px 0px 10px 1px inset, rgba(124, 58, 237, 0.15) 0px 0px 0px 1px',
   };
 
   const content = (

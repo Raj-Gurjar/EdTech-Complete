@@ -47,7 +47,7 @@ export default function Home() {
               text="Master in-demand programming skills with our comprehensive courses. From beginner basics to advanced concepts, learn at your own pace with expert instructors and hands-on projects."
               btn1="Explore Courses"
               btn2="Watch Demo"
-              bgGradient="shadow-[0_10px_20px_rgba(96,_28,_255,_0.4)]"
+              bgGradient="shadow-[0_10px_20px_rgba(139,_92,_246,_0.4)]"
               codeText={`<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,7 +67,7 @@ export default function Home() {
               text="Apply what you learn through practical projects. Build portfolio-worthy applications, solve real problems, and gain the confidence to tackle any coding challenge."
               btn1="View Projects"
               btn2="Learn More"
-              bgGradient="shadow-[0_10px_20px_rgba(96,_28,_255,_0.4)]"
+              bgGradient="shadow-[0_10px_20px_rgba(139,_92,_246,_0.4)]"
               codeText={`function greet() {
     console.log("Welcome to SkillScript!");
     return "Start Learning Today!";

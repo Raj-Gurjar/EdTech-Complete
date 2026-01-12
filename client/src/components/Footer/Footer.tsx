@@ -88,7 +88,8 @@ export default function Footer() {
             <div className="mb-6">
               <div className="mb-3">
                 <Logo 
-                  logoClassName="w-10 h-10" 
+                  showLogo={true}
+                  logoClassName="w-10 h-10 sm:w-12 sm:h-12" 
                   textClassName="text-2xl sm:text-3xl"
                 />
               </div>

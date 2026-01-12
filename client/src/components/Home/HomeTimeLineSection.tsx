@@ -44,7 +44,7 @@ export default function HomeTimeLineSection() {
           </FramerImageEffect>
 
           {/* Stats Card */}
-          <div className="bg-purple7/90 backdrop-blur-sm flex flex-col sm:flex-row justify-between items-center py-4 sm:py-5 px-4 sm:px-6 gap-3 sm:gap-4 text-white uppercase w-[90%] sm:w-[80%] -mt-8 sm:-mt-12 lg:-mt-16 left-1/2 transform -translate-x-1/2 absolute rounded-lg sm:rounded-xl shadow-[rgba(96,_28,_255,_0.4)_0px_20px_30px_-10px]">
+          <div className="bg-purple7/90 backdrop-blur-sm flex flex-col sm:flex-row justify-between items-center py-4 sm:py-5 px-4 sm:px-6 gap-3 sm:gap-4 text-white uppercase w-[90%] sm:w-[80%] -mt-8 sm:-mt-12 lg:-mt-16 left-1/2 transform -translate-x-1/2 absolute rounded-lg sm:rounded-xl shadow-[rgba(139,_92,_246,_0.4)_0px_20px_30px_-10px]">
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">10+</h1>
               <p className="text-white4 text-xs sm:text-sm text-center sm:text-left">Years of Experience</p>
