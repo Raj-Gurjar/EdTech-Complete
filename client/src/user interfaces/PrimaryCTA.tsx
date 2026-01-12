@@ -51,6 +51,7 @@ export default function PrimaryCTA({
     backgroundColor: 'rgb(96, 28, 255)',
     borderColor: 'rgba(255, 255, 255, 0.15)',
     borderWidth: '1px',
+    textAlign: 'center' as const,
     borderStyle: 'solid',
     borderRadius: '10px',
     boxShadow: 'rgba(102, 0, 255, 0.5) 0px 8px 40px 0px, rgba(255, 255, 255, 0) 0px 0px 10px 1px inset, rgba(123, 0, 255, 0.12) 0px 0px 0px 1px',

@@ -2,6 +2,7 @@ import React from "react";
 import InstructorImg from "../../assets/images/home-img-1.jpg";
 import HighlightText from "../../user interfaces/HighlightText";
 import PrimaryCTA from "../../user interfaces/PrimaryCTA";
+import FramerImageEffect from "./FramerImageEffect";
 
 export default function BecomeInstructor() {
   return (
@@ -9,13 +10,13 @@ export default function BecomeInstructor() {
       <div className="flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8 lg:gap-12 p-6 sm:p-8 lg:p-12">
         {/* Image Section */}
         <div className="w-full lg:w-[45%] order-2 lg:order-1">
-          <div className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-[0_10px_40px_rgba(96,_28,_255,_0.3),_0_0_20px_rgba(147,_51,_234,_0.2)]">
+          <FramerImageEffect className="w-full">
             <img 
               src={InstructorImg} 
               alt="instructor-img" 
-              className="w-full h-auto object-cover"
+              className="w-full h-auto object-cover rounded-[19px]"
             />
-          </div>
+          </FramerImageEffect>
         </div>
 
         {/* Content Section */}
@@ -32,7 +33,7 @@ export default function BecomeInstructor() {
 
           <div className="mt-2">
             <PrimaryCTA to="/signup" className="w-full sm:w-auto">
-              Start Teaching Today
+                Start Teaching Today
             </PrimaryCTA>
           </div>
         </div>

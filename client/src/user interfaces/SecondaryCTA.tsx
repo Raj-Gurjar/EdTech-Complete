@@ -54,6 +54,7 @@ export default function SecondaryCTA({
     borderStyle: 'solid',
     borderColor: 'rgba(255, 255, 255, 0.15)',
     borderRadius: '10px',
+    textAlign: 'center' as const,
     boxShadow: 'none',
     fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
     fontWeight: 500,

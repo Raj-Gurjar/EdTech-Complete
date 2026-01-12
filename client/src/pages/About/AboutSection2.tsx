@@ -1,15 +1,16 @@
 import React from "react";
 import img1 from "../../assets/images/home-img-1.jpg";
 import HighlightText from "../../user interfaces/HighlightText";
+import FramerImageEffect from "../../components/Home/FramerImageEffect";
 
 export default function AboutSection2() {
   return (
-    <div className="my-8 sm:my-12 lg:my-16 flex flex-col mt-16 sm:mt-24 lg:mt-32 w-11/12 max-w-7xl mx-auto justify-center flex-wrap gap-12 sm:gap-16">
+    <div className="my-8 sm:my-12 lg:my-16 flex flex-col mt-16 sm:mt-24 lg:mt-32 w-11/12 max-w-7xl mx-auto justify-center flex-wrap gap-12 sm:gap-16 px-4 sm:px-6">
       {/* Founding Story Section */}
       <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
         <div className="w-full lg:w-[45%] order-2 lg:order-1">
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-6 text-white">
-            <HighlightText text={"Our Founding Story"} />
+            <HighlightText text={"Our Founding Story"} textSize={"text-xl sm:text-2xl lg:text-3xl"} />
           </h1>
 
           <div className="text-sm sm:text-base text-white4 flex gap-y-3 sm:gap-y-4 flex-col justify-start leading-relaxed">
@@ -30,11 +31,13 @@ export default function AboutSection2() {
         </div>
 
         <div className="w-full lg:w-[45%] order-1 lg:order-2">
-          <img 
-            src={img1} 
-            alt="Our founding story" 
-            className="w-full h-auto rounded-lg shadow-lg object-cover max-h-[400px] lg:max-h-[500px]" 
-          />
+          <FramerImageEffect className="w-full">
+            <img 
+              src={img1} 
+              alt="Our founding story" 
+              className="w-full h-auto rounded-[19px] object-cover max-h-[400px] lg:max-h-[500px]" 
+            />
+          </FramerImageEffect>
         </div>
       </div>
 

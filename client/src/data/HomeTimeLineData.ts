@@ -1,8 +1,9 @@
-import Logo1 from "../assets/TimeLineLogos/icons8-book-96.png";
+import { IconType } from "react-icons";
+import { FaChalkboardTeacher, FaLaptopCode, FaCertificate, FaBriefcase } from "react-icons/fa";
 
 export interface HomeTimeLineItem {
   id: number;
-  Logo: string;
+  Logo: IconType;
   heading: string;
   Description: string;
 }
@@ -10,26 +11,26 @@ export interface HomeTimeLineItem {
 export const HomeTimeLineSec: HomeTimeLineItem[] = [
   {
     id: 1,
-    Logo: Logo1,
-    heading: "Leadership",
-    Description: "Fully Committed to success company"
+    Logo: FaChalkboardTeacher,
+    heading: "Expert Instructors",
+    Description: "Learn from industry professionals with years of real-world experience"
   },
   {
     id: 2,
-    Logo: Logo1,
-    heading: "Leadership",
-    Description: "Fully Committed to success company"
+    Logo: FaLaptopCode,
+    heading: "Hands-on Projects",
+    Description: "Build real-world applications and build a portfolio that stands out"
   },
   {
     id: 3,
-    Logo: Logo1,
-    heading: "Leadership",
-    Description: "Fully Committed to success company"
+    Logo: FaCertificate,
+    heading: "Certified Learning",
+    Description: "Earn industry-recognized certificates upon course completion"
   },
   {
     id: 4,
-    Logo: Logo1,
-    heading: "Leadership",
-    Description: "Fully Committed to success company"
+    Logo: FaBriefcase,
+    heading: "Career Support",
+    Description: "Get job placement assistance and career guidance from experts"
   },
 ];

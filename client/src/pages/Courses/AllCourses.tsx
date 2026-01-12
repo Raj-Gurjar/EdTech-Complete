@@ -7,6 +7,9 @@ import CourseSlider from "../../components/Sliders/CourseSlider";
 import { IoSearch, IoClose } from "react-icons/io5";
 import { BsFilter } from "react-icons/bs";
 import { showAllCategories } from "../../services/operations/category";
+import HighlightText from "../../user interfaces/HighlightText";
+import PrimaryCTA from "../../user interfaces/PrimaryCTA";
+import "../Home/Home.scss";
 
 interface Category {
   _id: string;
@@ -98,14 +101,23 @@ export default function AllCourses() {
   };
 
   return (
-    <div className="min-h-screen bg-black3">
+    <div className="min-h-screen bg-blackBg relative overflow-hidden">
+      {/* Purple Gradient Background Patches */}
+      <div className="home-gradient-bg fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="gradient-patch-1"></div>
+        <div className="gradient-patch-2"></div>
+        <div className="gradient-patch-3"></div>
+        <div className="gradient-patch-4"></div>
+        <div className="gradient-patch-5"></div>
+      </div>
+
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-black2 to-black4 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
+      <section className="relative py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-maxContent mx-auto text-center">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
-            Explore Our Courses
+            Explore Our <HighlightText text={"Courses"} textSize={"text-3xl sm:text-4xl lg:text-5xl"} />
           </h1>
-          <p className="text-base sm:text-lg text-black8 max-w-2xl mx-auto mb-8">
+          <p className="text-base sm:text-lg text-white4 max-w-2xl mx-auto mb-8 leading-relaxed">
             Discover thousands of courses designed to help you achieve your goals.
             Learn from industry experts and advance your career.
           </p>
@@ -113,18 +125,21 @@ export default function AllCourses() {
           {/* Search Bar */}
           <div className="max-w-2xl mx-auto mb-6">
             <div className="relative">
-              <IoSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-black7 text-xl" />
+              <IoSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white4 text-xl" />
               <input
                 type="text"
                 placeholder="Search for courses, instructors, or topics..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 sm:py-4 rounded-lg bg-black2 border border-black5 text-white placeholder-black7 focus:outline-none focus:border-yellow8 focus:ring-2 focus:ring-yellow8/20"
+                className="w-full pl-12 pr-4 py-3 sm:py-4 rounded-lg bg-black/30 backdrop-blur-sm border border-white/10 text-white placeholder-white4 focus:outline-none focus:border-purple6 focus:ring-2 focus:ring-purple6/20 transition-colors"
+                style={{
+                  fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
+                }}
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-black7 hover:text-white transition-colors"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white4 hover:text-white transition-colors"
                 >
                   <IoClose className="text-xl" />
                 </button>
@@ -138,14 +153,17 @@ export default function AllCourses() {
               onClick={() => setSelectedCategory("all")}
               className={`px-4 sm:px-6 py-2 rounded-full text-sm sm:text-base font-medium transition-all duration-300 ${
                 selectedCategory === "all"
-                  ? "bg-yellow8 text-black font-semibold shadow-lg"
-                  : "bg-black2 text-white border border-black5 hover:border-yellow8/50"
+                  ? "bg-purple6 text-white font-semibold shadow-lg shadow-purple6/30"
+                  : "bg-black/30 backdrop-blur-sm text-white border border-white/10 hover:border-purple6/50"
               }`}
+              style={{
+                fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
+              }}
             >
               All Courses
             </button>
             {loading ? (
-              <div className="text-black7">Loading categories...</div>
+              <div className="text-white4">Loading categories...</div>
             ) : (
               courseCategories.map((category, index) => (
                 <button
@@ -153,9 +171,12 @@ export default function AllCourses() {
                   onClick={() => setSelectedCategory(category.name)}
                   className={`px-4 sm:px-6 py-2 rounded-full text-sm sm:text-base font-medium transition-all duration-300 ${
                     selectedCategory === category.name
-                      ? "bg-yellow8 text-black font-semibold shadow-lg"
-                      : "bg-black2 text-white border border-black5 hover:border-yellow8/50"
+                      ? "bg-purple6 text-white font-semibold shadow-lg shadow-purple6/30"
+                      : "bg-black/30 backdrop-blur-sm text-white border border-white/10 hover:border-purple6/50"
                   }`}
+                  style={{
+                    fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
+                  }}
                 >
                   {category.name}
                 </button>
@@ -166,14 +187,14 @@ export default function AllCourses() {
           {/* Active Filters Display */}
           {(searchQuery || selectedCategory !== "all") && (
             <div className="mt-4 flex flex-wrap justify-center gap-2 items-center">
-              <span className="text-sm text-black7">Active filters:</span>
+              <span className="text-sm text-white4">Active filters:</span>
               {searchQuery && (
-                <span className="px-3 py-1 bg-black2 rounded-full text-sm text-white border border-black5">
+                <span className="px-3 py-1 bg-black/30 backdrop-blur-sm rounded-full text-sm text-white border border-white/10">
                   Search: {searchQuery}
                 </span>
               )}
               {selectedCategory !== "all" && (
-                <span className="px-3 py-1 bg-black2 rounded-full text-sm text-white border border-black5">
+                <span className="px-3 py-1 bg-black/30 backdrop-blur-sm rounded-full text-sm text-white border border-white/10">
                   Category: {selectedCategory}
                 </span>
               )}
@@ -189,14 +210,14 @@ export default function AllCourses() {
       </section>
 
       {/* All Courses Grid */}
-      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
+      <section className="relative py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-maxContent mx-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">
             <div>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
                 {selectedCategory === "all" ? "All Courses" : selectedCategory}
               </h2>
-              <p className="text-black7 text-sm sm:text-base">
+              <p className="text-white4 text-sm sm:text-base">
                 {filteredCourses.length} {filteredCourses.length === 1 ? "course" : "courses"} found
               </p>
             </div>
@@ -204,24 +225,21 @@ export default function AllCourses() {
 
           {loading ? (
             <div className="flex justify-center items-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow8"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple6"></div>
             </div>
           ) : filteredCourses.length === 0 ? (
             <div className="text-center py-20">
               <div className="text-6xl mb-4">📚</div>
               <h3 className="text-2xl font-bold text-white mb-2">No courses found</h3>
-              <p className="text-black7 mb-6">
+              <p className="text-white4 mb-6">
                 {searchQuery || selectedCategory !== "all"
                   ? "Try adjusting your search or filters"
                   : "No courses available at the moment"}
               </p>
               {(searchQuery || selectedCategory !== "all") && (
-                <button
-                  onClick={clearFilters}
-                  className="px-6 py-3 bg-yellow8 text-black font-semibold rounded-lg hover:bg-yellow9 transition-colors"
-                >
+                <PrimaryCTA onClick={clearFilters}>
                   Clear Filters
-                </button>
+                </PrimaryCTA>
               )}
             </div>
           ) : (
@@ -236,10 +254,10 @@ export default function AllCourses() {
 
       {/* Featured Courses Slider */}
       {coursesData.length > 0 && (
-        <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-black2 border-t border-black5">
+        <section className="relative py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-black/30 backdrop-blur-sm border-t border-white/10">
           <div className="max-w-maxContent mx-auto">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6 sm:mb-8">
-              Featured Courses
+              Featured <HighlightText text={"Courses"} textSize={"text-2xl sm:text-3xl lg:text-4xl"} />
             </h2>
             <CourseSlider courses={coursesData.slice(0, 10)} />
           </div>

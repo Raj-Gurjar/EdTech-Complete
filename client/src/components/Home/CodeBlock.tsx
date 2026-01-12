@@ -37,10 +37,10 @@ export default function CodeBlock({
         </p>
         <div className="flex flex-col sm:flex-row gap-4 mt-4">
           <PrimaryCTA to="/allCourses" className="w-full sm:w-auto">
-            {btn1}
+              {btn1}
           </PrimaryCTA>
           <SecondaryCTA to="/about" className="w-full sm:w-auto">
-            {btn2}
+              {btn2}
           </SecondaryCTA>
         </div>
       </div>

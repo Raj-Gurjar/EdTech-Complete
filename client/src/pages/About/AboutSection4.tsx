@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import HighlightText from "../../user interfaces/HighlightText";
-import Button from "../../user interfaces/Button";
+import PrimaryCTA from "../../user interfaces/PrimaryCTA";
 
 interface Feature {
   id: number;
@@ -8,7 +8,7 @@ interface Feature {
   highlightText?: string;
   description: string;
   button?: {
-    btn_color: string;
+    btn_color?: string;
     btn_name: string;
     btn_link: string;
   };
@@ -23,7 +23,6 @@ export default function AboutSection4() {
       description:
         "We partner with over 25+ universities and organizations worldwide, offering diverse courses and flexible learning paths to help you achieve your educational and professional goals anytime, anywhere.",
       button: {
-        btn_color: "bg-yellow8",
         btn_name: "Learn More",
         btn_link: "/about",
       },
@@ -77,27 +76,21 @@ export default function AboutSection4() {
             key={i.id}
             ref={i.id === 0 ? featureRef : null}
             className={`${i.id === 0 && "lg:col-span-2"} ${
-              i.id % 2 === 1 ? "bg-black4" : "bg-black2"
-            } ${i.id === 3 && "lg:col-start-2"} rounded-lg border border-black5 hover:border-yellow8 transition-all duration-300`}
+              i.id % 2 === 1 ? "bg-black/30 backdrop-blur-sm" : "bg-black/40 backdrop-blur-md"
+            } ${i.id === 3 && "lg:col-start-2"} rounded-lg border border-white/10 hover:border-purple6/50 transition-all duration-300`}
           >
             {i.id === 0 ? (
-              <div className="bg-black3 p-6 sm:p-8 rounded-lg">
+              <div className="bg-black/50 backdrop-blur-md p-6 sm:p-8 rounded-lg">
                 <h1 className="text-xl sm:text-2xl font-bold text-white mb-2">{i.heading}</h1>
                 <h2 className="text-xl sm:text-2xl font-bold mb-4">
-                  <HighlightText text={i.highlightText || ""} />
+                  <HighlightText text={i.highlightText || ""} textSize={"text-xl sm:text-2xl"} />
                 </h2>
                 <p className="text-sm sm:text-base my-4 text-white4 leading-relaxed">{i.description}</p>
                 <div>
                   {i.button && (
-                    <Button
-                      btn_color={i.button.btn_color}
-                      btn_name={i.button.btn_name}
-                      btn_link={i.button.btn_link}
-                      text_size={"text-sm sm:text-base"}
-                      text_color={"text-black"}
-                      px={"px-4 sm:px-6"}
-                      py={"py-2 sm:py-3"}
-                    />
+                    <PrimaryCTA to={i.button.btn_link} className="mt-4">
+                      {i.button.btn_name}
+                    </PrimaryCTA>
                   )}
                 </div>
               </div>

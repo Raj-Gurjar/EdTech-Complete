@@ -54,7 +54,7 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="bg-black2 rounded-xl border border-black5 p-6 sm:p-8 shadow-lg">
+    <div className="bg-black/30 backdrop-blur-sm rounded-xl border border-white/10 p-6 sm:p-8 shadow-lg">
       <div className="mb-6">
         <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
           Share Your Thoughts or Queries
@@ -124,7 +124,7 @@ export default function ContactForm() {
             Subject <span className="text-red2">*</span>
           </label>
           <input
-            className="bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors"
+            className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors"
             id="subject"
             type="text"
             placeholder="What is this regarding?"
@@ -143,7 +143,7 @@ export default function ContactForm() {
           <div className="flex gap-3">
             <select
               {...register("countryCode", {})}
-              className="bg-black3 border border-black5 rounded-lg px-3 py-3 text-white text-sm focus:outline-none focus:border-yellow8 transition-colors flex-shrink-0"
+              className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg px-3 py-3 text-white text-sm focus:outline-none focus:border-purple6 transition-colors flex-shrink-0"
               style={{ width: "120px" }}
             >
               {countryCode.map((country: { code: string }, index: number) => (
@@ -184,7 +184,7 @@ export default function ContactForm() {
             Message <span className="text-red2">*</span>
           </label>
           <textarea
-            className="bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors min-h-[150px] resize-y"
+            className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors min-h-[150px] resize-y"
             id="message"
             rows={6}
             {...register("message", { required: "Message is required" })}
@@ -196,13 +196,18 @@ export default function ContactForm() {
         </div>
 
         {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full sm:w-auto px-8 py-3 bg-yellow8 hover:bg-yellow9 text-black font-semibold rounded-lg transition-all duration-200 hover:scale-105 shadow-lg mt-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-        >
-          {isSubmitting ? "Sending..." : "Send Message"}
-        </button>
+        <div className="mt-2">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full sm:w-auto px-8 py-3 bg-purple6 hover:bg-purple7 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-105 shadow-lg shadow-purple6/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            style={{
+              fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
+            }}
+          >
+            {isSubmitting ? "Sending..." : "Send Message"}
+          </button>
+        </div>
       </form>
     </div>
   );

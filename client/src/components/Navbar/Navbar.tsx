@@ -147,10 +147,10 @@ export default function Navbar() {
             {/* CTA Buttons - Desktop (when not logged in) */}
             {token === null && (
               <div className="hidden lg:flex items-center gap-3">
-                <SecondaryCTA to="/login" className="text-sm">
+                <SecondaryCTA to="/login" className="text-md px-2 py-[8px]">
                   Login
                 </SecondaryCTA>
-                <PrimaryCTA to="/signup" className="text-sm">
+                <PrimaryCTA to="/signup" className="text-md px-2 py-[8px]">
                   Signup
                 </PrimaryCTA>
               </div>

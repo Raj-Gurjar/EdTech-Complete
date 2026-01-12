@@ -1,8 +1,8 @@
 import React from "react";
 import HighlightText from "../../user interfaces/HighlightText";
-import home_vid_1 from "../../assets/videos/home-vid-1.mp4";
 import PrimaryCTA from "../../user interfaces/PrimaryCTA";
 import SecondaryCTA from "../../user interfaces/SecondaryCTA";
+import FramerImageEffect from "./FramerImageEffect";
 
 export default function HomeHeadingSec() {
   return (
@@ -30,19 +30,20 @@ export default function HomeHeadingSec() {
       </div>
 
       {/* Video Section */}
-      <div className="mt-10 sm:mt-12 lg:mt-16 mx-auto max-w-4xl px-4">
-        <div className="relative rounded-lg sm:rounded-xl lg:rounded-2xl overflow-hidden shadow-[0_10px_40px_rgba(96,_28,_255,_0.4),_0_0_20px_rgba(147,_51,_234,_0.3)]">
+      <div className="mt-8 sm:mt-10 lg:mt-16 mx-auto max-w-4xl px-3 sm:px-4">
+        <FramerImageEffect className="w-full">
           <video 
-            className="w-full h-auto"
+            className="w-full h-auto max-h-[50vh] sm:max-h-[60vh] lg:max-h-none object-cover rounded-[19px]"
             muted 
             loop 
             autoPlay
             playsInline
+            preload="auto"
           >
-            <source src={home_vid_1} type="video/mp4" />
+            <source src="https://cdn2.gro.care/e6c97ff1a07e_1768238676032.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-        </div>
+        </FramerImageEffect>
       </div>
     </div>
   );
