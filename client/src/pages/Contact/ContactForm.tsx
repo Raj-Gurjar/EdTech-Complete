@@ -197,16 +197,16 @@ export default function ContactForm() {
 
         {/* Submit Button */}
         <div className="mt-2">
-          <button
-            type="submit"
-            disabled={isSubmitting}
+        <button
+          type="submit"
+          disabled={isSubmitting}
             className="w-full sm:w-auto px-8 py-3 bg-purple6 hover:bg-purple7 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-105 shadow-lg shadow-purple6/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             style={{
               fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
             }}
-          >
-            {isSubmitting ? "Sending..." : "Send Message"}
-          </button>
+        >
+          {isSubmitting ? "Sending..." : "Send Message"}
+        </button>
         </div>
       </form>
     </div>

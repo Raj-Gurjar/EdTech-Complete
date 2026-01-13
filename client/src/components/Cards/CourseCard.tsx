@@ -44,24 +44,24 @@ export default function CourseCard({ course }: CourseCardProps) {
         {/* Course Thumbnail */}
         <FramerImageEffect className="w-full">
           <div className="relative rounded-[19px] overflow-hidden">
-            <img
-              src={course?.thumbnail || "https://via.placeholder.com/400x250"}
-              alt={course?.courseName}
-              className="w-full h-[180px] sm:h-[200px] object-cover group-hover:scale-110 transition-transform duration-500"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = "https://via.placeholder.com/400x250";
-              }}
-            />
+          <img
+            src={course?.thumbnail || "https://via.placeholder.com/400x250"}
+            alt={course?.courseName}
+            className="w-full h-[180px] sm:h-[200px] object-cover group-hover:scale-110 transition-transform duration-500"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "https://via.placeholder.com/400x250";
+            }}
+          />
             <div className="absolute top-3 right-3 z-10">
-              {course.status === "Published" && (
+            {course.status === "Published" && (
                 <span className="bg-purple6 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-lg">
-                  Published
-                </span>
-              )}
-            </div>
-            {/* Gradient Overlay on Hover */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                Published
+              </span>
+            )}
           </div>
+          {/* Gradient Overlay on Hover */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
         </FramerImageEffect>
 
         {/* Course Content */}

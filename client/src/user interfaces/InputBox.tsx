@@ -40,7 +40,7 @@ export default function InputBox({
       )}
       <div className="relative">
         <input
-          className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors text-sm sm:text-base"
+          className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors text-sm sm:text-base"
           type={isPassword && showPassword ? "text" : type}
           id={id}
           name={name}
@@ -53,7 +53,7 @@ export default function InputBox({
         {isPassword && (
           <button
             type="button"
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-white4 hover:text-yellow8 transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-white4 hover:text-purple6 transition-colors"
             onClick={() => setShowPassword(!showPassword)}
           >
             {!showPassword ? <FaEye /> : <FaEyeSlash />}

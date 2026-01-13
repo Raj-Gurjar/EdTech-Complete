@@ -48,8 +48,8 @@ export default function SideBar() {
               to={item.path}
               className={({ isActive }) =>
                 isActive
-                  ? "bg-yellow8 py-1 text-black2  font-bold flex items-center px-5"
-                  : "flex items-center px-5 py-1"
+                  ? "bg-purple6 py-1 text-white font-bold flex items-center px-5 rounded-lg transition-all duration-200"
+                  : "flex items-center px-5 py-1 text-white4 hover:text-white hover:bg-black3 rounded-lg transition-all duration-200"
               }
             >
               <span className="mr-2">{item.icon}</span>

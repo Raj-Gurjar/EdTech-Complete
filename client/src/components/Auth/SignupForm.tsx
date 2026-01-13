@@ -65,7 +65,7 @@ export default function SignupForm({ setIsLoggedIn }: SignupFormProps) {
               onClick={() => setAccountType(ACCOUNT_TYPE.STUDENT)}
               className={`flex-1 py-2 px-4 sm:px-6 rounded-full text-sm sm:text-base font-medium transition-all duration-200 ${
                 accountType === ACCOUNT_TYPE.STUDENT
-                  ? "bg-yellow8 text-black shadow-lg"
+                  ? "bg-purple6 text-white shadow-lg shadow-purple6/40"
                   : "bg-transparent text-white4 hover:text-white"
               }`}
             >
@@ -76,7 +76,7 @@ export default function SignupForm({ setIsLoggedIn }: SignupFormProps) {
               onClick={() => setAccountType(ACCOUNT_TYPE.INSTRUCTOR)}
               className={`flex-1 py-2 px-4 sm:px-6 rounded-full text-sm sm:text-base font-medium transition-all duration-200 ${
                 accountType === ACCOUNT_TYPE.INSTRUCTOR
-                  ? "bg-yellow8 text-black shadow-lg"
+                  ? "bg-purple6 text-white shadow-lg shadow-purple6/40"
                   : "bg-transparent text-white4 hover:text-white"
               }`}
             >
@@ -87,7 +87,7 @@ export default function SignupForm({ setIsLoggedIn }: SignupFormProps) {
               onClick={() => setAccountType(ACCOUNT_TYPE.ADMIN)}
               className={`flex-1 py-2 px-4 sm:px-6 rounded-full text-sm sm:text-base font-medium transition-all duration-200 ${
                 accountType === ACCOUNT_TYPE.ADMIN
-                  ? "bg-yellow8 text-black shadow-lg"
+                  ? "bg-purple6 text-white shadow-lg shadow-purple6/40"
                   : "bg-transparent text-white4 hover:text-white"
               }`}
             >
@@ -183,7 +183,30 @@ export default function SignupForm({ setIsLoggedIn }: SignupFormProps) {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-yellow8 hover:bg-yellow9 rounded-lg py-3 text-black font-semibold transition-all duration-200 hover:scale-[1.02] shadow-lg mt-2"
+            className="w-full mt-2"
+            style={{
+              backgroundColor: 'rgb(139, 92, 246)',
+              borderColor: 'rgba(255, 255, 255, 0.15)',
+              borderWidth: '1px',
+              textAlign: 'center' as const,
+              borderStyle: 'solid',
+              borderRadius: '10px',
+              boxShadow: 'rgba(139, 92, 246, 0.4) 0px 8px 40px 0px, rgba(255, 255, 255, 0) 0px 0px 10px 1px inset, rgba(124, 58, 237, 0.12) 0px 0px 0px 1px',
+              fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
+              fontWeight: 500,
+              letterSpacing: '-0.5px',
+              lineHeight: '26px',
+              color: 'rgb(255, 255, 255)',
+              padding: '12px 24px',
+              transition: 'all 0.3s',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = 'rgba(139, 92, 246, 0.5) 0px 8px 50px 0px, rgba(255, 255, 255, 0.05) 0px 0px 10px 1px inset, rgba(124, 58, 237, 0.15) 0px 0px 0px 1px';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = 'rgba(139, 92, 246, 0.4) 0px 8px 40px 0px, rgba(255, 255, 255, 0) 0px 0px 10px 1px inset, rgba(124, 58, 237, 0.12) 0px 0px 0px 1px';
+            }}
           >
             Create Account
           </button>

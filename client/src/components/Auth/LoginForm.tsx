@@ -68,9 +68,9 @@ export default function LoginForm() {
               />
 
               {/* Forgot Password Link */}
-              <div className="text-sm text-yellow8 cursor-pointer relative flex justify-end -mt-2">
+              <div className="text-sm text-purple6 cursor-pointer relative flex justify-end -mt-2">
                 <Link to="/resetPasswordRequest">
-                  <button className="hover:text-yellow9 hover:underline transition-colors">
+                  <button className="hover:text-purple5 hover:underline transition-colors">
                     Forgot Password?
                   </button>
                 </Link>
@@ -80,7 +80,30 @@ export default function LoginForm() {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-yellow8 hover:bg-yellow9 rounded-lg py-3 text-black font-semibold transition-all duration-200 hover:scale-[1.02] shadow-lg mt-2"
+              className="w-full mt-2"
+              style={{
+                backgroundColor: 'rgb(139, 92, 246)',
+                borderColor: 'rgba(255, 255, 255, 0.15)',
+                borderWidth: '1px',
+                textAlign: 'center' as const,
+                borderStyle: 'solid',
+                borderRadius: '10px',
+                boxShadow: 'rgba(139, 92, 246, 0.4) 0px 8px 40px 0px, rgba(255, 255, 255, 0) 0px 0px 10px 1px inset, rgba(124, 58, 237, 0.12) 0px 0px 0px 1px',
+                fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
+                fontWeight: 500,
+                letterSpacing: '-0.5px',
+                lineHeight: '26px',
+                color: 'rgb(255, 255, 255)',
+                padding: '12px 24px',
+                transition: 'all 0.3s',
+                cursor: 'pointer',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = 'rgba(139, 92, 246, 0.5) 0px 8px 50px 0px, rgba(255, 255, 255, 0.05) 0px 0px 10px 1px inset, rgba(124, 58, 237, 0.15) 0px 0px 0px 1px';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = 'rgba(139, 92, 246, 0.4) 0px 8px 40px 0px, rgba(255, 255, 255, 0) 0px 0px 10px 1px inset, rgba(124, 58, 237, 0.12) 0px 0px 0px 1px';
+              }}
             >
               Log In
             </button>

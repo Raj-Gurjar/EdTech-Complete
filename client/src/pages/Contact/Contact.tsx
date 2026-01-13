@@ -89,7 +89,7 @@ export default function Contact() {
         <div className="w-full lg:w-2/3">
           <ContactForm />
         </div>
-      </div>
+        </div>
       </div>
     </div>
   );

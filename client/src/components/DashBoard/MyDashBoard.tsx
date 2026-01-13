@@ -16,6 +16,7 @@ import {
   FaTrophy
 } from "react-icons/fa";
 import { RootState } from "../../toolkit/reducer";
+import "../../pages/Home/Home.scss";
 
 interface CourseSection {
   _id: string;
@@ -117,9 +118,9 @@ export default function MyDashBoard() {
       title: "Enrolled Courses",
       value: totalEnrolled,
       icon: <FaBook className="text-3xl" />,
-      color: "text-blue-400",
-      bgColor: "bg-blue-400/10",
-      borderColor: "border-blue-400/20",
+      color: "text-purple6",
+      bgColor: "bg-purple6/10",
+      borderColor: "border-purple6/20",
     },
     {
       title: "Completed",
@@ -133,17 +134,17 @@ export default function MyDashBoard() {
       title: "In Progress",
       value: inProgressCourses,
       icon: <FaPlayCircle className="text-3xl" />,
-      color: "text-yellow8",
-      bgColor: "bg-yellow8/10",
-      borderColor: "border-yellow8/20",
+      color: "text-purple6",
+      bgColor: "bg-purple6/10",
+      borderColor: "border-purple6/20",
     },
     {
       title: "Avg. Progress",
       value: `${avgProgress}%`,
       icon: <FaChartLine className="text-3xl" />,
-      color: "text-purple-400",
-      bgColor: "bg-purple-400/10",
-      borderColor: "border-purple-400/20",
+      color: "text-purple6",
+      bgColor: "bg-purple6/10",
+      borderColor: "border-purple6/20",
     },
   ];
 
@@ -156,7 +157,16 @@ export default function MyDashBoard() {
 }
 
   return (
-    <div className="w-11/12 max-w-7xl mx-auto py-6 sm:py-8">
+    <div className="min-h-screen relative w-full overflow-hidden bg-blackBg">
+      {/* Purple Gradient Background Patches */}
+      <div className="home-gradient-bg fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="gradient-patch-1"></div>
+        <div className="gradient-patch-2"></div>
+        <div className="gradient-patch-3"></div>
+        <div className="gradient-patch-4"></div>
+        <div className="gradient-patch-5"></div>
+      </div>
+    <div className="w-11/12 max-w-7xl mx-auto py-6 sm:py-8 relative z-10">
       {/* Header Section */}
       <div className="mb-8">
         <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-white">
@@ -174,7 +184,12 @@ export default function MyDashBoard() {
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className={`bg-gradient-to-br from-black3 to-black4 rounded-xl p-6 border ${stat.borderColor} shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105`}
+                className={`rounded-xl p-6 border ${stat.borderColor} shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105`}
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                }}
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className={`${stat.bgColor} ${stat.color} p-3 rounded-lg`}>
@@ -191,7 +206,15 @@ export default function MyDashBoard() {
 
           {/* Continue Learning Section - Not Completed Courses */}
           {notCompletedCourses.length > 0 && (
-            <div className="bg-black2 rounded-xl p-6 sm:p-8 border border-black5 shadow-lg mb-8">
+            <div 
+              className="rounded-xl p-6 sm:p-8 border shadow-lg mb-8"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                borderColor: 'rgba(255, 255, 255, 0.1)',
+              }}
+            >
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className="text-2xl font-bold text-white mb-2">Continue Learning</h2>
@@ -200,7 +223,7 @@ export default function MyDashBoard() {
                 {notCompletedCourses.length > 3 && (
                   <Link
                     to="/dashboard/enrolledCourses"
-                    className="text-yellow8 hover:text-yellow9 text-sm font-medium flex items-center gap-2 transition-colors"
+                    className="text-purple6 hover:text-purple5 text-sm font-medium flex items-center gap-2 transition-colors"
                   >
                     View All <FaArrowRight className="text-xs" />
                   </Link>
@@ -215,7 +238,21 @@ export default function MyDashBoard() {
                     <Link
                       key={course._id}
                       to={`/courseMenu/${course._id}/section/${course.courseContent?.[0]?._id || ''}/subSection/${course.courseContent?.[0]?.subSections?.[0]?._id || ''}`}
-                      className="bg-black3 rounded-xl overflow-hidden border border-black5 hover:border-yellow8 transition-all duration-300 hover:shadow-xl group"
+                      className="rounded-xl overflow-hidden border transition-all duration-300 hover:shadow-xl group"
+                      style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.5)';
+                        e.currentTarget.style.boxShadow = '0 10px 20px rgba(139, 92, 246, 0.2)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
                     >
                       {/* Course Thumbnail */}
                       <div className="relative h-40 overflow-hidden">
@@ -249,12 +286,15 @@ export default function MyDashBoard() {
                         <div className="mb-3">
                           <div className="flex items-center justify-between mb-2">
                             <span className="text-white4 text-xs">Progress</span>
-                            <span className="text-yellow8 text-xs font-semibold">{progress}%</span>
+                            <span className="text-purple6 text-xs font-semibold">{progress}%</span>
                           </div>
                           <div className="w-full bg-black5 rounded-full h-2">
                             <div
-                              className="h-2 rounded-full transition-all duration-300 bg-yellow8"
-                              style={{ width: `${progress}%` }}
+                              className="h-2 rounded-full transition-all duration-300"
+                              style={{ 
+                                width: `${progress}%`,
+                                backgroundColor: 'rgb(139, 92, 246)',
+                              }}
                             />
                           </div>
                         </div>
@@ -284,11 +324,19 @@ export default function MyDashBoard() {
 
           {/* Completed Courses Section */}
           {completedCourses.length > 0 && (
-            <div className="bg-black2 rounded-xl p-6 sm:p-8 border border-black5 shadow-lg mb-8">
+            <div 
+              className="rounded-xl p-6 sm:p-8 border shadow-lg mb-8"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                borderColor: 'rgba(255, 255, 255, 0.1)',
+              }}
+            >
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
-                    <FaTrophy className="text-yellow8" />
+                    <FaTrophy className="text-purple6" />
                     Completed Courses
                   </h2>
                   <p className="text-white4 text-sm">Great job! Review your completed courses</p>
@@ -296,7 +344,7 @@ export default function MyDashBoard() {
                 {completedCourses.length > 3 && (
                   <Link
                     to="/dashboard/enrolledCourses"
-                    className="text-yellow8 hover:text-yellow9 text-sm font-medium flex items-center gap-2 transition-colors"
+                    className="text-purple6 hover:text-purple5 text-sm font-medium flex items-center gap-2 transition-colors"
                   >
                     View All <FaArrowRight className="text-xs" />
                   </Link>
@@ -309,7 +357,21 @@ export default function MyDashBoard() {
                     <Link
                       key={course._id}
                       to={`/courseMenu/${course._id}/section/${course.courseContent?.[0]?._id || ''}/subSection/${course.courseContent?.[0]?.subSections?.[0]?._id || ''}`}
-                      className="bg-black3 rounded-xl overflow-hidden border border-yellow8/30 hover:border-yellow8 transition-all duration-300 hover:shadow-xl group"
+                      className="rounded-xl overflow-hidden border transition-all duration-300 hover:shadow-xl group"
+                      style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        borderColor: 'rgba(139, 92, 246, 0.3)',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.5)';
+                        e.currentTarget.style.boxShadow = '0 10px 20px rgba(139, 92, 246, 0.2)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.3)';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
                     >
                       {/* Course Thumbnail */}
                       <div className="relative h-40 overflow-hidden">
@@ -324,7 +386,9 @@ export default function MyDashBoard() {
                             <FaBook className="text-4xl text-white4" />
                           </div>
                         )}
-                        <div className="absolute top-2 right-2 bg-yellow8 text-black px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                        <div className="absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1 text-white"
+                          style={{ backgroundColor: 'rgb(139, 92, 246)' }}
+                        >
                           <FaTrophy className="text-xs" />
                           Completed
                         </div>
@@ -347,12 +411,15 @@ export default function MyDashBoard() {
                         <div className="mb-3">
                           <div className="flex items-center justify-between mb-2">
                             <span className="text-white4 text-xs">Progress</span>
-                            <span className="text-yellow8 text-xs font-semibold">100%</span>
+                            <span className="text-purple6 text-xs font-semibold">100%</span>
                           </div>
                           <div className="w-full bg-black5 rounded-full h-2">
                             <div
-                              className="h-2 rounded-full transition-all duration-300 bg-yellow8"
-                              style={{ width: "100%" }}
+                              className="h-2 rounded-full transition-all duration-300"
+                              style={{ 
+                                width: "100%",
+                                backgroundColor: 'rgb(139, 92, 246)',
+                              }}
                             />
                           </div>
                         </div>
@@ -384,48 +451,86 @@ export default function MyDashBoard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Link
               to="/dashboard/enrolledCourses"
-              className="bg-gradient-to-br from-black3 to-black4 rounded-xl p-6 border border-black5 hover:border-yellow8 shadow-lg hover:shadow-xl transition-all duration-300 group"
+              className="rounded-xl p-6 border shadow-lg hover:shadow-xl transition-all duration-300 group"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                borderColor: 'rgba(255, 255, 255, 0.1)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.5)';
+                e.currentTarget.style.boxShadow = '0 10px 20px rgba(139, 92, 246, 0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
             >
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                    <FaBook className="text-yellow8" />
+                    <FaBook className="text-purple6" />
                     View All Courses
                   </h3>
                   <p className="text-white4 text-sm">
                     Browse and continue your enrolled courses
                   </p>
                 </div>
-                <FaArrowRight className="text-yellow8 group-hover:translate-x-1 transition-transform text-xl" />
+                <FaArrowRight className="text-purple6 group-hover:translate-x-1 transition-transform text-xl" />
               </div>
             </Link>
 
             <Link
               to="/allCourses"
-              className="bg-gradient-to-br from-black3 to-black4 rounded-xl p-6 border border-black5 hover:border-yellow8 shadow-lg hover:shadow-xl transition-all duration-300 group"
+              className="rounded-xl p-6 border shadow-lg hover:shadow-xl transition-all duration-300 group"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                borderColor: 'rgba(255, 255, 255, 0.1)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.5)';
+                e.currentTarget.style.boxShadow = '0 10px 20px rgba(139, 92, 246, 0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
             >
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                    <FaGraduationCap className="text-yellow8" />
+                    <FaGraduationCap className="text-purple6" />
                     Explore Courses
                   </h3>
                   <p className="text-white4 text-sm">
                     Discover new courses to expand your skills
                   </p>
                 </div>
-                <FaArrowRight className="text-yellow8 group-hover:translate-x-1 transition-transform text-xl" />
+                <FaArrowRight className="text-purple6 group-hover:translate-x-1 transition-transform text-xl" />
               </div>
             </Link>
           </div>
         </>
       ) : (
         /* Empty State */
-        <div className="bg-black2 rounded-xl p-10 sm:p-16 border border-black5 shadow-lg text-center">
+        <div 
+          className="rounded-xl p-10 sm:p-16 border shadow-lg text-center"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            borderColor: 'rgba(255, 255, 255, 0.1)',
+          }}
+        >
           <div className="max-w-md mx-auto">
             <div className="mb-6 flex justify-center">
-              <div className="bg-yellow8/10 p-6 rounded-full">
-                <FaGraduationCap className="text-6xl text-yellow8" />
+              <div className="p-6 rounded-full"
+                style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)' }}
+              >
+                <FaGraduationCap className="text-6xl text-purple6" />
               </div>
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
@@ -436,13 +541,27 @@ export default function MyDashBoard() {
             </p>
             <button
               onClick={() => navigate("/allCourses")}
-              className="inline-flex items-center gap-2 bg-yellow8 hover:bg-yellow9 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg"
+              className="inline-flex items-center gap-2 text-white font-semibold px-8 py-3 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg"
+              style={{
+                backgroundColor: 'rgb(139, 92, 246)',
+                borderColor: 'rgba(255, 255, 255, 0.15)',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                boxShadow: 'rgba(139, 92, 246, 0.4) 0px 8px 40px 0px',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = 'rgba(139, 92, 246, 0.5) 0px 8px 50px 0px';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = 'rgba(139, 92, 246, 0.4) 0px 8px 40px 0px';
+              }}
             >
               <FaBook /> Explore Courses
             </button>
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 }

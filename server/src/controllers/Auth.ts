@@ -368,7 +368,7 @@ export const logIn = async (req: Request, res: Response): Promise<Response | voi
 export const googleAuth = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         console.log("Entering Google auth controller");
-        const { access_token, user: googleUserInfo } = req.body;
+        const { access_token, user: googleUserInfo, accountType, adminKey } = req.body;
 
         // Validate input
         if (!access_token || !googleUserInfo) {
@@ -491,6 +491,19 @@ export const googleAuth = async (req: Request, res: Response): Promise<Response 
             // User doesn't exist - create new user
             console.log("New user, creating account");
 
+            // Determine account type (default to Student if not provided)
+            const userAccountType = accountType || "Student";
+
+            // Validate admin key if account type is Admin
+            if (userAccountType === "Admin") {
+                if (!adminKey || adminKey !== process.env.ADMIN_SECRET_KEY) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Wrong Admin Secret Key",
+                    });
+                }
+            }
+
             // Generate a random password for Google-authenticated users
             // They won't need it since they use Google to login
             const randomPassword = Math.random().toString(36).slice(-12) + 
@@ -501,13 +514,13 @@ export const googleAuth = async (req: Request, res: Response): Promise<Response 
             // Create profile details
             const profileDetails = await Profile_Model.create({});
 
-            // Create user with default accountType as "Student"
+            // Create user with selected accountType (or default to Student)
             const userData = await User_Model.create({
                 firstName,
                 lastName,
                 email: normalizedEmail,
                 password: hashedPassword,
-                accountType: "Student", // Default to Student for Google sign-ups
+                accountType: userAccountType,
                 additionalDetails: profileDetails._id,
                 profileImage,
             });
