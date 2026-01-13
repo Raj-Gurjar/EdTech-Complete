@@ -66,7 +66,7 @@ export default function EditCourse() {
     return (
       <div className="w-11/12 max-w-7xl mx-auto py-6 sm:py-8">
         <div className="flex flex-col items-center justify-center py-20">
-          <FaSpinner className="text-yellow8 text-5xl animate-spin mb-4" />
+          <FaSpinner className="text-purple6 text-5xl animate-spin mb-4" />
           <p className="text-white text-lg">Loading course details...</p>
         </div>
       </div>
@@ -94,7 +94,7 @@ export default function EditCourse() {
             </button>
             <button
               onClick={populateCourseDetails}
-              className="px-6 py-3 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-colors font-semibold"
+              className="px-6 py-3 bg-purple6 hover:bg-purple5 text-black rounded-lg transition-colors font-semibold"
             >
               Try Again
             </button>

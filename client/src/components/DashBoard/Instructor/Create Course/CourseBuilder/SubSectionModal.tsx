@@ -152,7 +152,7 @@ export default function SubSectionModal({
         {/* Modal Header */}
         <div className="sticky top-0 bg-black2 border-b border-black5 p-6 flex items-center justify-between z-10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-yellow8 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-purple6 flex items-center justify-center">
               <FaPlay className="text-black text-sm" />
             </div>
             <div>
@@ -195,7 +195,7 @@ export default function SubSectionModal({
               placeholder="e.g., Introduction to React Hooks"
               {...register("lectureTitle", { required: true })}
               disabled={view}
-              className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             />
             {errors.lectureTitle && (
               <p className="text-red2 text-sm mt-1">Lecture Title is required</p>
@@ -215,7 +215,7 @@ export default function SubSectionModal({
               placeholder="Provide a detailed description of what students will learn in this lecture..."
               {...register("lectureDesc", { required: true })}
               disabled={view}
-              className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors min-h-[120px] resize-y disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors min-h-[120px] resize-y disabled:opacity-50 disabled:cursor-not-allowed"
             />
             {errors.lectureDesc && (
               <p className="text-red2 text-sm mt-1">
@@ -250,7 +250,7 @@ export default function SubSectionModal({
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 px-6 py-2.5 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-6 py-2.5 bg-purple6 hover:bg-purple5 text-black rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading
                   ? "Processing..."
@@ -266,7 +266,7 @@ export default function SubSectionModal({
               <button
                 type="button"
                 onClick={() => setModalData(null)}
-                className="px-6 py-2.5 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-all font-semibold"
+                className="px-6 py-2.5 bg-purple6 hover:bg-purple5 text-black rounded-lg transition-all font-semibold"
               >
                 Close
               </button>

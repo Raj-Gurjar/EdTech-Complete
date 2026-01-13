@@ -134,7 +134,7 @@ export default function CourseBuilder() {
               id="sectionName"
               placeholder="e.g., Introduction to React"
               {...register("sectionName", { required: true })}
-              className="w-full bg-black2 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors"
+              className="w-full bg-black2 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors"
             />
             {errors.sectionName && (
               <p className="text-red2 text-sm mt-1">Section name is required</p>
@@ -150,7 +150,7 @@ export default function CourseBuilder() {
               id="shortDescription"
               placeholder="A short overview of this section"
               {...register("shortDescription", { required: true })}
-              className="w-full bg-black2 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors"
+              className="w-full bg-black2 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors"
             />
             {errors.shortDescription && (
               <p className="text-red2 text-sm mt-1">Brief description is required</p>
@@ -165,7 +165,7 @@ export default function CourseBuilder() {
               id="longDescription"
               placeholder="Provide more details about this section..."
               {...register("longDescription")}
-              className="w-full bg-black2 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors min-h-[100px] resize-y"
+              className="w-full bg-black2 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors min-h-[100px] resize-y"
             />
           </div>
 
@@ -173,7 +173,7 @@ export default function CourseBuilder() {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2.5 bg-purple6 hover:bg-purple5 text-black rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading
                 ? "Processing..."
@@ -214,7 +214,7 @@ export default function CourseBuilder() {
         </button>
         <button
           onClick={goToNext}
-          className="flex-1 px-6 py-2.5 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-all font-semibold"
+          className="flex-1 px-6 py-2.5 bg-purple6 hover:bg-purple5 text-black rounded-lg transition-all font-semibold"
         >
           Continue to Publish →
         </button>

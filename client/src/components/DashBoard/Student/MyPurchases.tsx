@@ -82,7 +82,7 @@ export default function MyPurchases() {
         </div>
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
-            <FaSpinner className="text-6xl text-yellow8 animate-spin mx-auto mb-4" />
+            <FaSpinner className="text-6xl text-purple6 animate-spin mx-auto mb-4" />
             <p className="text-black7 text-lg">Loading your purchases...</p>
           </div>
         </div>
@@ -111,7 +111,7 @@ export default function MyPurchases() {
           </p>
           <Link
             to="/allCourses"
-            className="inline-flex items-center gap-2 bg-yellow8 hover:bg-yellow9 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:scale-105"
+            className="inline-flex items-center gap-2 bg-purple6 hover:bg-purple5 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:scale-105"
           >
             <FaBook />
             <span>Browse Courses</span>
@@ -143,7 +143,7 @@ export default function MyPurchases() {
           return (
             <div
               key={course._id}
-              className="bg-black4 rounded-xl overflow-hidden border border-black6 hover:border-yellow8 transition-all duration-300 hover:shadow-xl group"
+              className="bg-black4 rounded-xl overflow-hidden border border-black6 hover:border-purple6 transition-all duration-300 hover:shadow-xl group"
             >
               {/* Course Thumbnail */}
               <div className="relative h-40 overflow-hidden">
@@ -174,7 +174,7 @@ export default function MyPurchases() {
               <div className="p-5">
                 {/* Category */}
                 {course.category && (
-                  <div className="flex items-center gap-1 text-yellow8 text-xs font-medium mb-4">
+                  <div className="flex items-center gap-1 text-purple6 text-xs font-medium mb-4">
                     <FaTag className="text-xs" />
                     <span>{course.category.name}</span>
                   </div>
@@ -184,15 +184,15 @@ export default function MyPurchases() {
                 <div className="bg-black5 rounded-lg p-4 mb-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-white4 text-sm">
-                      <FaRupeeSign className="text-yellow8" />
+                      <FaRupeeSign className="text-purple6" />
                       <span>Purchase Price</span>
                     </div>
-                    <span className="text-yellow8 font-bold text-xl">
+                    <span className="text-purple6 font-bold text-xl">
                       ₹{course.price || 0}
                     </span>
                   </div>
                   <div className="flex items-center gap-2 text-white4 text-sm pt-2 border-t border-black6">
-                    <FaCalendarAlt className="text-yellow8" />
+                    <FaCalendarAlt className="text-purple6" />
                     <span>Purchased on: <span className="text-white font-medium">{purchaseDate}</span></span>
                   </div>
                 </div>
@@ -200,7 +200,7 @@ export default function MyPurchases() {
                 {/* Action Button */}
                 <Link
                   to={`/courseMenu/${course._id}/section/${course.courseContent?.[0]?._id || ''}/subSection/${course.courseContent?.[0]?.subSections?.[0]?._id || ''}`}
-                  className="flex items-center justify-center gap-2 w-full bg-yellow8 hover:bg-yellow9 text-black font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 hover:scale-105"
+                  className="flex items-center justify-center gap-2 w-full bg-purple6 hover:bg-purple5 text-black font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 hover:scale-105"
                 >
                   <span>Access Course</span>
                   <FaArrowRight className="text-sm" />

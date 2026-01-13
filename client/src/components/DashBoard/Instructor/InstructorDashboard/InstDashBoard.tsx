@@ -93,9 +93,9 @@ export default function InstDashBoard() {
       title: "Total Income",
       value: `₹${totalAmount.toLocaleString()}`,
       icon: <FaRupeeSign className="text-3xl" />,
-      color: "text-yellow8",
-      bgColor: "bg-yellow8/10",
-      borderColor: "border-yellow8/20",
+      color: "text-purple6",
+      bgColor: "bg-purple6/10",
+      borderColor: "border-purple6/20",
     },
     {
       title: "Avg. per Course",
@@ -161,37 +161,37 @@ export default function InstDashBoard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <Link
               to="/dashboard/myCourses-Instructor"
-              className="bg-gradient-to-br from-black3 to-black4 rounded-xl p-6 border border-black5 hover:border-yellow8 shadow-lg hover:shadow-xl transition-all duration-300 group"
+              className="bg-gradient-to-br from-black3 to-black4 rounded-xl p-6 border border-black5 hover:border-purple6 shadow-lg hover:shadow-xl transition-all duration-300 group"
             >
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                    <FaBook className="text-yellow8" />
+                    <FaBook className="text-purple6" />
                     View All Courses
                   </h3>
                   <p className="text-white4 text-sm">
                     Manage and edit your course content
                   </p>
                 </div>
-                <FaArrowRight className="text-yellow8 group-hover:translate-x-1 transition-transform text-xl" />
+                <FaArrowRight className="text-purple6 group-hover:translate-x-1 transition-transform text-xl" />
               </div>
             </Link>
 
             <Link
               to="/dashboard/createCourse"
-              className="bg-gradient-to-br from-black3 to-black4 rounded-xl p-6 border border-black5 hover:border-yellow8 shadow-lg hover:shadow-xl transition-all duration-300 group"
+              className="bg-gradient-to-br from-black3 to-black4 rounded-xl p-6 border border-black5 hover:border-purple6 shadow-lg hover:shadow-xl transition-all duration-300 group"
             >
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                    <FaPlus className="text-yellow8" />
+                    <FaPlus className="text-purple6" />
                     Create New Course
                   </h3>
                   <p className="text-white4 text-sm">
                     Start building your next course
                   </p>
                 </div>
-                <FaArrowRight className="text-yellow8 group-hover:translate-x-1 transition-transform text-xl" />
+                <FaArrowRight className="text-purple6 group-hover:translate-x-1 transition-transform text-xl" />
               </div>
             </Link>
           </div>
@@ -201,8 +201,8 @@ export default function InstDashBoard() {
         <div className="bg-black2 rounded-xl p-10 sm:p-16 border border-black5 shadow-lg text-center">
           <div className="max-w-md mx-auto">
             <div className="mb-6 flex justify-center">
-              <div className="bg-yellow8/10 p-6 rounded-full">
-                <FaGraduationCap className="text-6xl text-yellow8" />
+              <div className="bg-purple6/10 p-6 rounded-full">
+                <FaGraduationCap className="text-6xl text-purple6" />
               </div>
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
@@ -213,7 +213,7 @@ export default function InstDashBoard() {
             </p>
             <button
               onClick={() => navigate("/dashboard/createCourse")}
-              className="inline-flex items-center gap-2 bg-yellow8 hover:bg-yellow9 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg"
+              className="inline-flex items-center gap-2 bg-purple6 hover:bg-purple5 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg"
             >
               <FaPlus /> Create Your First Course
             </button>

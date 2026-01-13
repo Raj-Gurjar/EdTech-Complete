@@ -79,9 +79,9 @@ export default function HomeStatistics() {
       icon: <FaClock className="text-3xl sm:text-4xl" />,
       value: loading ? "..." : `${formatMinutes(statistics?.totalMinutes)} min`,
       label: "Content",
-      color: "text-yellow8",
-      bgColor: "bg-yellow8/10",
-      borderColor: "border-yellow8/20",
+      color: "text-purple6",
+      bgColor: "bg-purple6/10",
+      borderColor: "border-purple6/20",
     },
   ];
 

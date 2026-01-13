@@ -89,7 +89,7 @@ export default function AllCoursesAdmin({ coursesData }: AllCoursesAdminProps) {
             placeholder="Search courses by name, instructor, or description..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-black3 border border-black5 rounded-lg pl-12 pr-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors"
+            className="w-full bg-black3 border border-black5 rounded-lg pl-12 pr-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors"
           />
           {searchQuery && (
             <button
@@ -112,7 +112,7 @@ export default function AllCoursesAdmin({ coursesData }: AllCoursesAdminProps) {
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
-              className="text-yellow8 hover:text-yellow9 text-sm font-medium transition-colors"
+              className="text-purple6 hover:text-purple5 text-sm font-medium transition-colors"
             >
               Clear Filters
             </button>
@@ -132,7 +132,7 @@ export default function AllCoursesAdmin({ coursesData }: AllCoursesAdminProps) {
                   onClick={() => setStatusFilter("all")}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     statusFilter === "all"
-                      ? "bg-yellow8 text-black"
+                      ? "bg-purple6 text-black"
                       : "bg-black3 text-white4 hover:bg-black4"
                   }`}
                 >
@@ -172,7 +172,7 @@ export default function AllCoursesAdmin({ coursesData }: AllCoursesAdminProps) {
                     onClick={() => setCategoryFilter("all")}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                       categoryFilter === "all"
-                        ? "bg-yellow8 text-black"
+                        ? "bg-purple6 text-black"
                         : "bg-black3 text-white4 hover:bg-black4"
                     }`}
                   >
@@ -184,7 +184,7 @@ export default function AllCoursesAdmin({ coursesData }: AllCoursesAdminProps) {
                       onClick={() => setCategoryFilter(category)}
                       className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                         categoryFilter === category
-                          ? "bg-yellow8 text-black"
+                          ? "bg-purple6 text-black"
                           : "bg-black3 text-white4 hover:bg-black4"
                       }`}
                     >
@@ -200,7 +200,7 @@ export default function AllCoursesAdmin({ coursesData }: AllCoursesAdminProps) {
         {/* Results Count */}
         <div className="mt-4 pt-4 border-t border-black5">
           <p className="text-white4 text-sm">
-            Showing <span className="text-yellow8 font-semibold">{filteredCourses.length}</span>{" "}
+            Showing <span className="text-purple6 font-semibold">{filteredCourses.length}</span>{" "}
             of <span className="text-white font-semibold">{coursesData?.length || 0}</span> courses
           </p>
         </div>

@@ -79,7 +79,7 @@ export default function CourseDraft() {
               type="checkbox"
               id="draft"
               required
-              className="mt-1 w-5 h-5 accent-yellow8 cursor-pointer"
+              className="mt-1 w-5 h-5 accent-purple6 cursor-pointer"
             />
             <label htmlFor="draft" className="flex-1 text-white cursor-pointer">
               <span className="font-medium block mb-1">
@@ -94,7 +94,7 @@ export default function CourseDraft() {
           <button
             disabled={loading}
             type="submit"
-            className="w-full px-6 py-3 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-6 py-3 bg-purple6 hover:bg-purple5 text-black rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Processing..." : "Save Course as Draft"}
           </button>

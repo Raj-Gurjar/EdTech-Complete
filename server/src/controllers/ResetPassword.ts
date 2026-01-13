@@ -87,15 +87,20 @@ export const resetPassword = async (req: Request, res: Response): Promise<Respon
         console.log("tt", token);
         //validation
 
-        if (password.length < 1) {
-            return res.status(400).json({
-                success: false,
-                message: "Password must be greater than 8 characters.",
-            });
-        } else if (password !== confPassword) {
+        if (password !== confPassword) {
             return res.status(400).json({
                 success: false,
                 message: "Passwords do not match.",
+            });
+        }
+
+        //* Validate password strength
+        const { validatePassword } = require("../utils/passwordValidation");
+        const passwordValidation = validatePassword(password);
+        if (!passwordValidation.isValid) {
+            return res.status(400).json({
+                success: false,
+                message: passwordValidation.errors.join(". "),
             });
         }
         console.log("c0");

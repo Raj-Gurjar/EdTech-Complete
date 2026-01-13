@@ -52,7 +52,7 @@ export default function ShowSectionDetails() {
     return (
       <div className="min-h-screen bg-black3 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-yellow8 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple6 mx-auto mb-4"></div>
           <p className="text-black7">Loading section details...</p>
         </div>
       </div>
@@ -66,7 +66,7 @@ export default function ShowSectionDetails() {
           <h2 className="text-2xl font-bold text-white mb-4">Section not found</h2>
           <Link
             to="/allCourses"
-            className="text-yellow8 hover:text-yellow9 transition-colors"
+            className="text-purple6 hover:text-purple5 transition-colors"
           >
             Browse all courses
           </Link>
@@ -81,9 +81,9 @@ export default function ShowSectionDetails() {
       <div className="bg-black2 border-b border-black5 py-3 px-4 sm:px-6 lg:px-8">
         <div className="max-w-maxContent mx-auto">
           <nav className="flex items-center space-x-2 text-sm text-black7">
-            <Link to="/" className="hover:text-yellow8 transition-colors">Home</Link>
+            <Link to="/" className="hover:text-purple6 transition-colors">Home</Link>
             <span>/</span>
-            <Link to="/allCourses" className="hover:text-yellow8 transition-colors">Courses</Link>
+            <Link to="/allCourses" className="hover:text-purple6 transition-colors">Courses</Link>
             <span>/</span>
             <span className="text-white">Section</span>
           </nav>
@@ -107,7 +107,7 @@ export default function ShowSectionDetails() {
           {/* Section Meta Info */}
           <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm sm:text-base">
             <div className="flex items-center gap-2 text-black7">
-              <FaBook className="text-yellow8" />
+              <FaBook className="text-purple6" />
               <span>
                 {sectionData?.subSections?.length || 0}{" "}
                 {sectionData?.subSections?.length === 1 ? "lesson" : "lessons"}
@@ -157,13 +157,13 @@ export default function ShowSectionDetails() {
               sectionData?.subSections?.map((subSection, index) => (
                 <div
                   key={subSection?._id || index}
-                  className="bg-black2 border border-black5 rounded-xl overflow-hidden hover:border-yellow8/30 transition-all duration-300"
+                  className="bg-black2 border border-black5 rounded-xl overflow-hidden hover:border-purple6/30 transition-all duration-300"
                 >
                   {/* Lesson Header */}
                   <div className="p-4 sm:p-6 border-b border-black5">
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-yellow8/20 rounded-full flex items-center justify-center">
-                        <span className="text-yellow8 font-bold text-sm sm:text-base">
+                      <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-purple6/20 rounded-full flex items-center justify-center">
+                        <span className="text-purple6 font-bold text-sm sm:text-base">
                           {index + 1}
                         </span>
                       </div>
@@ -178,7 +178,7 @@ export default function ShowSectionDetails() {
                         )}
                         {subSection?.timeDuration && (
                           <div className="flex items-center gap-2 text-sm text-black7">
-                            <FaClock className="text-yellow8" />
+                            <FaClock className="text-purple6" />
                             <span>{subSection.timeDuration}</span>
                           </div>
                         )}
@@ -207,7 +207,7 @@ export default function ShowSectionDetails() {
 
                   {/* Lesson Completion Indicator */}
                   <div className="px-4 sm:px-6 pb-4 sm:pb-6 flex items-center gap-2 text-sm text-black7">
-                    <FaPlayCircle className="text-yellow8" />
+                    <FaPlayCircle className="text-purple6" />
                     <span>Video lesson</span>
                   </div>
                 </div>
@@ -218,7 +218,7 @@ export default function ShowSectionDetails() {
           {/* Navigation Help */}
           <div className="mt-8 p-4 sm:p-6 bg-black2 border border-black5 rounded-xl">
             <div className="flex items-start gap-3">
-              <FaCheckCircle className="text-yellow8 text-xl flex-shrink-0 mt-1" />
+              <FaCheckCircle className="text-purple6 text-xl flex-shrink-0 mt-1" />
               <div>
                 <h3 className="font-semibold text-white mb-2">Learning Tips</h3>
                 <p className="text-sm text-black8 leading-relaxed">

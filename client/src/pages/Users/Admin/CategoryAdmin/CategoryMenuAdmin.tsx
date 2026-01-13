@@ -62,7 +62,7 @@ export default function CategoryMenuAdmin() {
         </div>
         <Link
           to="/dashboard/createCategory"
-          className="inline-flex items-center gap-2 bg-yellow8 hover:bg-yellow9 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg"
+          className="inline-flex items-center gap-2 bg-purple6 hover:bg-purple5 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg"
         >
           <FaPlus /> Create Category
         </Link>

@@ -42,7 +42,7 @@ export default function Logo({
         </span>
       )}
       {!showText && !showLogo && (
-        <div className={`w-8 h-8 bg-yellow8 rounded-lg flex items-center justify-center ${logoClassName}`}>
+        <div className={`w-8 h-8 bg-purple6 rounded-lg flex items-center justify-center ${logoClassName}`}>
           <span className="text-black font-bold text-sm">SS</span>
         </div>
       )}

@@ -315,8 +315,8 @@ export default function Navbar() {
                   className={({ isActive }) =>
                     `block px-4 py-3 rounded-lg transition-all duration-200 ${
                       isActive
-                        ? "bg-black3 text-yellow8 font-semibold"
-                        : "text-white hover:bg-black3 hover:text-yellow8"
+                        ? "bg-black3 text-purple6 font-semibold"
+                        : "text-white hover:bg-black3 hover:text-purple6"
                     }`
                   }
                 >
@@ -344,8 +344,8 @@ export default function Navbar() {
                         className={({ isActive }) =>
                           `flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
                             isActive
-                              ? "bg-yellow8 text-black2 font-semibold"
-                              : "text-white hover:bg-black3 hover:text-yellow8"
+                              ? "bg-purple6 text-white font-semibold"
+                              : "text-white hover:bg-black3 hover:text-purple6"
                           }`
                         }
                       >

@@ -34,7 +34,7 @@ export default function RatingStars({ Review_Count, Star_Size = 20 }: RatingStar
   }, [Review_Count]);
 
   return (
-    <div className="flex gap-1 text-yellow-100">
+    <div className="flex gap-1 text-purple6">
       {[...new Array(starCount.full)].map((_, i) => {
         return <TiStarFullOutline key={i} size={Star_Size} />;
       })}

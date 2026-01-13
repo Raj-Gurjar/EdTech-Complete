@@ -79,7 +79,7 @@ export default function EnrolledCourses() {
         </div>
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
-            <FaSpinner className="text-6xl text-yellow8 animate-spin mx-auto mb-4" />
+            <FaSpinner className="text-6xl text-purple6 animate-spin mx-auto mb-4" />
             <p className="text-black7 text-lg">Loading your courses...</p>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default function EnrolledCourses() {
           </p>
           <Link
             to="/allCourses"
-            className="inline-flex items-center gap-2 bg-yellow8 hover:bg-yellow9 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:scale-105"
+            className="inline-flex items-center gap-2 bg-purple6 hover:bg-purple5 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:scale-105"
           >
             <FaBook />
             <span>Browse Courses</span>
@@ -166,7 +166,7 @@ export default function EnrolledCourses() {
           return (
             <div
               key={course._id || index}
-              className="bg-black4 rounded-xl shadow-lg overflow-hidden border border-black6 hover:border-yellow8/50 transition-all duration-300 group"
+              className="bg-black4 rounded-xl shadow-lg overflow-hidden border border-black6 hover:border-purple6/50 transition-all duration-300 group"
             >
               <Link to={courseLink} className="block">
                 {/* Course Thumbnail */}
@@ -183,7 +183,7 @@ export default function EnrolledCourses() {
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-white text-sm font-semibold">Progress</span>
-                      <span className="text-yellow8 text-sm font-bold">{progress}%</span>
+                      <span className="text-purple6 text-sm font-bold">{progress}%</span>
                     </div>
                     <ProgressBar
                       completed={progress}
@@ -198,7 +198,7 @@ export default function EnrolledCourses() {
                   </div>
                   {/* Play Button Overlay */}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <div className="bg-yellow8 text-black rounded-full p-4 transform scale-75 group-hover:scale-100 transition-transform">
+                    <div className="bg-purple6 text-black rounded-full p-4 transform scale-75 group-hover:scale-100 transition-transform">
                       <MdPlayArrow className="text-3xl" />
                     </div>
                   </div>
@@ -217,7 +217,7 @@ export default function EnrolledCourses() {
                   )}
 
                   {/* Course Title */}
-                  <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-yellow8 transition-colors">
+                  <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-purple6 transition-colors">
                     {course.courseName}
                   </h3>
 
@@ -282,7 +282,7 @@ export default function EnrolledCourses() {
                           <span className="text-sm font-semibold">Completed</span>
                         </div>
                       ) : progress > 0 ? (
-                        <div className="flex items-center gap-2 text-yellow8">
+                        <div className="flex items-center gap-2 text-purple6">
                           <FaPlayCircle />
                           <span className="text-sm font-semibold">Continue Learning</span>
                         </div>
@@ -293,7 +293,7 @@ export default function EnrolledCourses() {
                         </div>
                       )}
                     </div>
-                    <MdPlayArrow className="text-yellow8 text-xl group-hover:translate-x-1 transition-transform" />
+                    <MdPlayArrow className="text-purple6 text-xl group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
               </Link>

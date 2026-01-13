@@ -191,7 +191,7 @@ export default function CourseInfoForm() {
             Course Title <span className="text-red2">*</span>
           </label>
           <input
-            className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors"
+            className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors"
             id="courseTitle"
             placeholder="e.g., Complete Web Development Bootcamp"
             {...register("courseTitle", { required: true })}
@@ -207,7 +207,7 @@ export default function CourseInfoForm() {
             Course Description <span className="text-red2">*</span>
           </label>
           <textarea
-            className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors min-h-[120px] resize-y"
+            className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors min-h-[120px] resize-y"
             id="courseShortDescription"
             placeholder="Provide a brief description of what students will learn in this course..."
             {...register("courseShortDescription", { required: true })}
@@ -228,7 +228,7 @@ export default function CourseInfoForm() {
               <FaRupeeSign className="absolute left-3 top-1/2 -translate-y-1/2 text-white4" />
               <input
                 id="coursePrice"
-                className="w-full bg-black3 border border-black5 rounded-lg pl-10 pr-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors"
+                className="w-full bg-black3 border border-black5 rounded-lg pl-10 pr-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors"
                 type="number"
                 placeholder="0"
                 min="0"
@@ -250,7 +250,7 @@ export default function CourseInfoForm() {
               Course Category <span className="text-red2">*</span>
             </label>
             <select
-              className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow8 transition-colors"
+              className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple6 transition-colors"
               id="courseCategory"
               defaultValue=""
               {...register("courseCategory", { required: true })}
@@ -279,7 +279,7 @@ export default function CourseInfoForm() {
               Course Language <span className="text-red2">*</span>
             </label>
             <input
-              className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors"
+              className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors"
               id="courseLanguage"
               placeholder="e.g., English, Hindi"
               {...register("courseLanguage", { required: true })}
@@ -311,7 +311,7 @@ export default function CourseInfoForm() {
           <textarea
             id="courseBenefits"
             placeholder="List the key learning outcomes and benefits students will gain from this course..."
-            className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors min-h-[120px] resize-y"
+            className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors min-h-[120px] resize-y"
             {...register("courseBenefits", { required: true })}
           />
           {errors.courseBenefits && (
@@ -359,7 +359,7 @@ export default function CourseInfoForm() {
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 px-6 py-2.5 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-6 py-2.5 bg-purple6 hover:bg-purple5 text-black rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading
               ? "Processing..."

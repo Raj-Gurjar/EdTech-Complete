@@ -12,23 +12,23 @@ interface Instruction {
 export default function CreateCourses() {
   const instructions: Instruction[] = [
     {
-      icon: <FaInfoCircle className="text-yellow8" />,
+      icon: <FaInfoCircle className="text-purple6" />,
       text: "Fill in all required course information accurately",
     },
     {
-      icon: <FaBook className="text-yellow8" />,
+      icon: <FaBook className="text-purple6" />,
       text: "Add at least one section with lectures in the course builder",
     },
     {
-      icon: <FaLightbulb className="text-yellow8" />,
+      icon: <FaLightbulb className="text-purple6" />,
       text: "Review your course before publishing to ensure quality",
     },
     {
-      icon: <FaInfoCircle className="text-yellow8" />,
+      icon: <FaInfoCircle className="text-purple6" />,
       text: "You can save as draft and continue editing later",
     },
     {
-      icon: <FaBook className="text-yellow8" />,
+      icon: <FaBook className="text-purple6" />,
       text: "Make sure to add clear descriptions and learning objectives",
     },
   ];

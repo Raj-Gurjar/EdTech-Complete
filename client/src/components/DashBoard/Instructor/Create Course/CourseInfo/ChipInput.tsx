@@ -96,13 +96,13 @@ export default function ChipInput({
           onChange={(e) => setChipInput(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder={`Add ${label.toLowerCase()}...`}
-          className="flex-1 bg-black3 border border-black5 rounded-lg px-4 py-2.5 text-white placeholder:text-white4 focus:outline-none focus:border-yellow8 transition-colors"
+          className="flex-1 bg-black3 border border-black5 rounded-lg px-4 py-2.5 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors"
         />
         <button
           type="button"
           onClick={addReqHandler}
           disabled={!chipInput.trim()}
-          className="px-4 py-2.5 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="px-4 py-2.5 bg-purple6 hover:bg-purple5 text-black rounded-lg transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           <FaPlus className="text-sm" />
           <span>Add</span>
@@ -118,7 +118,7 @@ export default function ChipInput({
             {chipInputList.map((chip, index) => (
               <div
                 key={index}
-                className="group flex items-center gap-2 bg-black2 border border-black5 rounded-lg px-3 py-1.5 hover:border-yellow8 transition-colors"
+                className="group flex items-center gap-2 bg-black2 border border-black5 rounded-lg px-3 py-1.5 hover:border-purple6 transition-colors"
               >
                 <span className="text-white text-sm">{chip}</span>
                 <button

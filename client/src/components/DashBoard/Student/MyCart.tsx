@@ -81,7 +81,7 @@ export default function MyCart() {
           </p>
           <Link
             to="/allCourses"
-            className="inline-flex items-center gap-2 bg-yellow8 hover:bg-yellow9 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:scale-105"
+            className="inline-flex items-center gap-2 bg-purple6 hover:bg-purple5 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:scale-105"
           >
             <FaBook />
             <span>Browse Courses</span>
@@ -114,7 +114,7 @@ export default function MyCart() {
             return (
               <div
                 key={course._id}
-                className="bg-black4 rounded-xl shadow-lg p-4 sm:p-6 border border-black6 hover:border-yellow8/50 transition-all duration-300"
+                className="bg-black4 rounded-xl shadow-lg p-4 sm:p-6 border border-black6 hover:border-purple6/50 transition-all duration-300"
               >
                 <div className="flex flex-col sm:flex-row gap-4">
                   {/* Course Thumbnail */}
@@ -147,7 +147,7 @@ export default function MyCart() {
 
                       {/* Course Title */}
                       <Link to={`/allCourses/${course._id}`}>
-                        <h3 className="text-lg sm:text-xl font-bold text-white mb-2 hover:text-yellow8 transition-colors line-clamp-2">
+                        <h3 className="text-lg sm:text-xl font-bold text-white mb-2 hover:text-purple6 transition-colors line-clamp-2">
                           {course?.courseName}
                         </h3>
                       </Link>
@@ -194,7 +194,7 @@ export default function MyCart() {
                     {/* Price and Remove Button */}
                     <div className="flex items-center justify-between mt-4 pt-4 border-t border-black6">
                       <div>
-                        <p className="text-2xl font-bold text-yellow8">
+                        <p className="text-2xl font-bold text-purple6">
                           ₹{course?.price || 0}
                         </p>
                       </div>
@@ -241,7 +241,7 @@ export default function MyCart() {
               {/* Total */}
               <div className="flex justify-between items-center">
                 <span className="text-lg font-bold text-white">Total</span>
-                <span className="text-2xl font-bold text-yellow8">₹{finalTotalAmount || 0}</span>
+                <span className="text-2xl font-bold text-purple6">₹{finalTotalAmount || 0}</span>
               </div>
             </div>
 
@@ -249,7 +249,7 @@ export default function MyCart() {
             <button
               onClick={handleBuyCourse}
               disabled={isProcessing || cart.length === 0}
-              className="w-full bg-yellow8 hover:bg-yellow9 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-purple6 hover:bg-purple5 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isProcessing ? (
                 <>
@@ -267,7 +267,7 @@ export default function MyCart() {
             {/* Continue Shopping Link */}
             <Link
               to="/allCourses"
-              className="block mt-4 text-center text-black7 hover:text-yellow8 transition-colors text-sm"
+              className="block mt-4 text-center text-black7 hover:text-purple6 transition-colors text-sm"
             >
               Continue Shopping
             </Link>

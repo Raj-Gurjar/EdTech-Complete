@@ -40,8 +40,8 @@ export default function ProfileDropDown() {
     } else if (accountType === "Instructor" || accountType === "INSTRUCTOR") {
       return {
         icon: <FaChalkboardTeacher className="text-[10px]" />,
-        bgColor: "bg-yellow8",
-        borderColor: "border-yellow7",
+        bgColor: "bg-purple6",
+        borderColor: "border-purple5",
       };
     } else if (accountType === "Admin" || accountType === "ADMIN") {
       return {
@@ -84,12 +84,12 @@ export default function ProfileDropDown() {
           <img
             src={user.profileImage}
             alt="profile-pic"
-            className="h-[40px] w-[40px] rounded-full cursor-pointer border-2 border-transparent hover:border-yellow8 transition-all duration-200 hover:scale-110 object-cover"
+            className="h-[40px] w-[40px] rounded-full cursor-pointer border-2 border-transparent hover:border-purple6 transition-all duration-200 hover:scale-110 object-cover"
             onClick={() => toggleProfile(!profile)}
           />
         ) : (
           <div 
-            className="h-[40px] w-[40px] rounded-full cursor-pointer border-2 border-transparent hover:border-yellow8 transition-all duration-200 hover:scale-110 bg-black5 flex items-center justify-center"
+            className="h-[40px] w-[40px] rounded-full cursor-pointer border-2 border-transparent hover:border-purple6 transition-all duration-200 hover:scale-110 bg-black5 flex items-center justify-center"
             onClick={() => toggleProfile(!profile)}
           >
             <FaUserCircle className="h-5 w-5 text-white4" />
@@ -106,7 +106,7 @@ export default function ProfileDropDown() {
                   <img
                     src={user.profileImage}
                     alt="profile"
-                    className="h-10 w-10 rounded-full border-2 border-yellow8"
+                    className="h-10 w-10 rounded-full border-2 border-purple6"
                   />
                 ) : (
                   <FaUserCircle className="h-10 w-10 text-white4" />
@@ -137,7 +137,7 @@ export default function ProfileDropDown() {
                 className="flex items-center gap-3 px-4 py-2.5 text-white hover:bg-black3 transition-colors duration-150 group"
                 onClick={() => toggleProfile(false)}
               >
-                <FaTachometerAlt className="text-yellow8 group-hover:text-yellow7 transition-colors" />
+                <FaTachometerAlt className="text-purple6 group-hover:text-purple5 transition-colors" />
                 <span className="text-sm">Dashboard</span>
               </Link>
             </li>
@@ -147,7 +147,7 @@ export default function ProfileDropDown() {
                 className="flex items-center gap-3 px-4 py-2.5 text-white hover:bg-black3 transition-colors duration-150 group"
                 onClick={() => toggleProfile(false)}
               >
-                <FaUserEdit className="text-yellow8 group-hover:text-yellow7 transition-colors" />
+                <FaUserEdit className="text-purple6 group-hover:text-purple5 transition-colors" />
                 <span className="text-sm">Edit Profile</span>
               </Link>
             </li>
@@ -157,7 +157,7 @@ export default function ProfileDropDown() {
                 className="flex items-center gap-3 px-4 py-2.5 text-white hover:bg-black3 transition-colors duration-150 group"
                 onClick={() => toggleProfile(false)}
               >
-                <FaCog className="text-yellow8 group-hover:text-yellow7 transition-colors" />
+                <FaCog className="text-purple6 group-hover:text-purple5 transition-colors" />
                 <span className="text-sm">Settings</span>
               </Link>
             </li>

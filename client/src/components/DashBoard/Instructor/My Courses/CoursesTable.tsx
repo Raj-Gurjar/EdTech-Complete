@@ -104,7 +104,7 @@ export default function CoursesTable({
         </p>
         <button
           onClick={() => navigate("/dashboard/createCourse")}
-          className="inline-flex items-center gap-2 px-6 py-3 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-all font-semibold"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-purple6 hover:bg-purple5 text-black rounded-lg transition-all font-semibold"
         >
           <FaBook />
           <span>Create Your First Course</span>
@@ -122,7 +122,7 @@ export default function CoursesTable({
         return (
           <div
             key={course._id}
-            className="bg-black2 rounded-xl border border-black5 overflow-hidden hover:border-yellow8 transition-all"
+            className="bg-black2 rounded-xl border border-black5 overflow-hidden hover:border-purple6 transition-all"
           >
             <div className="flex flex-col lg:flex-row">
               {/* Course Thumbnail */}
@@ -161,7 +161,7 @@ export default function CoursesTable({
                 {/* Course Stats */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
                   <div className="flex items-center gap-2 text-white3">
-                    <FaRupeeSign className="text-yellow8" />
+                    <FaRupeeSign className="text-purple6" />
                     <div>
                       <p className="text-xs text-white4">Price</p>
                       <p className="text-sm font-semibold text-white">
@@ -171,7 +171,7 @@ export default function CoursesTable({
                   </div>
 
                   <div className="flex items-center gap-2 text-white3">
-                    <FaTag className="text-yellow8" />
+                    <FaTag className="text-purple6" />
                     <div>
                       <p className="text-xs text-white4">Category</p>
                       <p className="text-sm font-semibold text-white">
@@ -181,7 +181,7 @@ export default function CoursesTable({
                   </div>
 
                   <div className="flex items-center gap-2 text-white3">
-                    <FaBook className="text-yellow8" />
+                    <FaBook className="text-purple6" />
                     <div>
                       <p className="text-xs text-white4">Lectures</p>
                       <p className="text-sm font-semibold text-white">
@@ -191,7 +191,7 @@ export default function CoursesTable({
                   </div>
 
                   <div className="flex items-center gap-2 text-white3">
-                    <FaClock className="text-yellow8" />
+                    <FaClock className="text-purple6" />
                     <div>
                       <p className="text-xs text-white4">Created</p>
                       <p className="text-sm font-semibold text-white">

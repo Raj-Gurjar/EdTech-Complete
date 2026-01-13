@@ -118,11 +118,11 @@ export default function CoursePlaylistDetails({ setReviewModal }: CoursePlaylist
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs text-black7">Progress</span>
-            <span className="text-xs font-semibold text-yellow8">{progressPercentage}%</span>
+            <span className="text-xs font-semibold text-purple6">{progressPercentage}%</span>
           </div>
           <div className="w-full bg-black5 rounded-full h-2">
             <div
-              className="bg-yellow8 h-2 rounded-full transition-all duration-300"
+              className="bg-purple6 h-2 rounded-full transition-all duration-300"
               style={{ width: `${progressPercentage}%` }}
             />
           </div>
@@ -133,7 +133,7 @@ export default function CoursePlaylistDetails({ setReviewModal }: CoursePlaylist
 
         <button
           onClick={() => setReviewModal(true)}
-          className="w-full bg-yellow8 hover:bg-yellow9 text-black font-semibold px-4 py-2 rounded-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 text-sm"
+          className="w-full bg-purple6 hover:bg-purple5 text-black font-semibold px-4 py-2 rounded-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 text-sm"
         >
           <FaStar />
           <span>Add Review</span>
@@ -169,7 +169,7 @@ export default function CoursePlaylistDetails({ setReviewModal }: CoursePlaylist
                 <div
                   onClick={() => toggleSection(sectionData._id)}
                   className={`p-3 cursor-pointer transition-colors ${
-                    isActive ? "bg-yellow8 bg-opacity-20" : "bg-black5 hover:bg-black6"
+                    isActive ? "bg-purple6 bg-opacity-20" : "bg-black5 hover:bg-black6"
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -189,7 +189,7 @@ export default function CoursePlaylistDetails({ setReviewModal }: CoursePlaylist
                   </div>
                   <div className="mt-2 w-full bg-black6 rounded-full h-1">
                     <div
-                      className="bg-yellow8 h-1 rounded-full transition-all duration-300"
+                      className="bg-purple6 h-1 rounded-full transition-all duration-300"
                       style={{ width: `${sectionProgress}%` }}
                     />
                   </div>
@@ -213,7 +213,7 @@ export default function CoursePlaylistDetails({ setReviewModal }: CoursePlaylist
                           }}
                           className={`p-3 cursor-pointer transition-all duration-200 border-l-4 ${
                             isActiveLecture
-                              ? "bg-yellow8 bg-opacity-20 border-yellow8"
+                              ? "bg-purple6 bg-opacity-20 border-purple6"
                               : "bg-transparent border-transparent hover:bg-black5"
                           }`}
                         >
@@ -229,7 +229,7 @@ export default function CoursePlaylistDetails({ setReviewModal }: CoursePlaylist
                               <p
                                 className={`text-sm ${
                                   isActiveLecture
-                                    ? "text-yellow8 font-semibold"
+                                    ? "text-purple6 font-semibold"
                                     : isCompleted
                                     ? "text-white"
                                     : "text-black7"

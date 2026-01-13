@@ -61,8 +61,8 @@ export default function CategoryTable({ getCategories, courseCategories }: Categ
       {/* Table Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="bg-yellow8/10 p-3 rounded-lg">
-            <FaTags className="text-yellow8 text-xl" />
+          <div className="bg-purple6/10 p-3 rounded-lg">
+            <FaTags className="text-purple6 text-xl" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-white">All Categories</h2>
@@ -89,15 +89,15 @@ export default function CategoryTable({ getCategories, courseCategories }: Categ
           {courseCategories.map((category) => (
             <div
               key={category._id || category.id}
-              className="bg-black3 hover:bg-black4 rounded-lg p-5 border border-black5 hover:border-yellow8/30 transition-all duration-200 group"
+              className="bg-black3 hover:bg-black4 rounded-lg p-5 border border-black5 hover:border-purple6/30 transition-all duration-200 group"
             >
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="bg-yellow8/10 p-2 rounded-lg">
-                      <FaTags className="text-yellow8" />
+                    <div className="bg-purple6/10 p-2 rounded-lg">
+                      <FaTags className="text-purple6" />
                     </div>
-                    <h3 className="text-lg font-semibold text-white group-hover:text-yellow8 transition-colors">
+                    <h3 className="text-lg font-semibold text-white group-hover:text-purple6 transition-colors">
                       {category.name}
                     </h3>
                   </div>
@@ -110,7 +110,7 @@ export default function CategoryTable({ getCategories, courseCategories }: Categ
 
                   <div className="flex items-center gap-4 ml-11 text-white6 text-sm">
                     <div className="flex items-center gap-2">
-                      <FaCalendarAlt className="text-yellow8" />
+                      <FaCalendarAlt className="text-purple6" />
                       <span>
                         Created: {formateDate(category.createdAt) || 
                           (category.createdAt ? category.createdAt.split("T")[0] : "N/A")}
@@ -118,7 +118,7 @@ export default function CategoryTable({ getCategories, courseCategories }: Categ
                     </div>
                     {category.courses && (
                       <div className="flex items-center gap-2">
-                        <FaInfoCircle className="text-yellow8" />
+                        <FaInfoCircle className="text-purple6" />
                         <span>{category.courses.length || 0} courses</span>
                       </div>
                     )}

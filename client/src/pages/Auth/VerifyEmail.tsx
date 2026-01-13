@@ -79,14 +79,14 @@ export default function VerifyEmail() {
             </div>
             <button
               type="submit"
-              className="bg-yellow8 text-black rounded font-semibold py-1"
+              className="bg-purple6 text-black rounded font-semibold py-1"
             >
               Verify Email
             </button>
           </form>
 
           <button
-            className="bg-yellow8 text-black rounded font-semibold py-1 mt-3"
+            className="bg-purple6 text-black rounded font-semibold py-1 mt-3"
             onClick={() => dispatch(sendOTP(email, navigate) as any)}
           >
             Resend OTP

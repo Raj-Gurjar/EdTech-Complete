@@ -117,7 +117,7 @@ export default function SectionDetails({ handleEditSecName }: SectionDetailsProp
           return (
             <div
               key={section._id}
-              className="bg-black3 rounded-xl border border-black5 overflow-hidden transition-all hover:border-yellow8"
+              className="bg-black3 rounded-xl border border-black5 overflow-hidden transition-all hover:border-purple6"
             >
               {/* Section Header */}
               <div className="p-4 bg-black2 border-b border-black5">
@@ -125,7 +125,7 @@ export default function SectionDetails({ handleEditSecName }: SectionDetailsProp
                   <div className="flex items-center gap-3 flex-1">
                     <button
                       onClick={() => toggleSection(section._id)}
-                      className="text-white4 hover:text-yellow8 transition-colors"
+                      className="text-white4 hover:text-purple6 transition-colors"
                     >
                       {isExpanded ? (
                         <FaChevronUp className="text-lg" />
@@ -133,7 +133,7 @@ export default function SectionDetails({ handleEditSecName }: SectionDetailsProp
                         <FaChevronDown className="text-lg" />
                       )}
                     </button>
-                    <HiOutlineBookOpen className="text-yellow8 text-xl" />
+                    <HiOutlineBookOpen className="text-purple6 text-xl" />
                     <div className="flex-1">
                       <h4 className="text-white font-semibold text-base">
                         Section {sectionIndex + 1}: {section.sectionName}
@@ -149,7 +149,7 @@ export default function SectionDetails({ handleEditSecName }: SectionDetailsProp
                       onClick={() =>
                         handleEditSecName(section._id, section.sectionName || "")
                       }
-                      className="p-2 text-white4 hover:text-yellow8 hover:bg-black3 rounded-lg transition-colors"
+                      className="p-2 text-white4 hover:text-purple6 hover:bg-black3 rounded-lg transition-colors"
                       title="Edit Section"
                     >
                       <FaEdit />
@@ -187,12 +187,12 @@ export default function SectionDetails({ handleEditSecName }: SectionDetailsProp
                     section.subSections?.map((lecture: SubSection, lectureIndex: number) => (
                       <div
                         key={lecture?._id}
-                        className="group bg-black2 border border-black5 rounded-lg p-3 hover:border-yellow8 transition-all cursor-pointer"
+                        className="group bg-black2 border border-black5 rounded-lg p-3 hover:border-purple6 transition-all cursor-pointer"
                         onClick={() => setViewSubSection(lecture)}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3 flex-1">
-                            <div className="w-8 h-8 rounded-full bg-black3 flex items-center justify-center text-yellow8 text-xs font-semibold">
+                            <div className="w-8 h-8 rounded-full bg-black3 flex items-center justify-center text-purple6 text-xs font-semibold">
                               {lectureIndex + 1}
                             </div>
                             <FaPlay className="text-white4 text-sm" />
@@ -219,7 +219,7 @@ export default function SectionDetails({ handleEditSecName }: SectionDetailsProp
                                   sectionId: section._id,
                                 })
                               }
-                              className="p-1.5 text-white4 hover:text-yellow8 hover:bg-black3 rounded transition-colors"
+                              className="p-1.5 text-white4 hover:text-purple6 hover:bg-black3 rounded transition-colors"
                               title="Edit Lecture"
                             >
                               <FaEdit className="text-sm" />
@@ -254,7 +254,7 @@ export default function SectionDetails({ handleEditSecName }: SectionDetailsProp
                   {/* Add Lecture Button */}
                   <button
                     onClick={() => setAddSubSection(section._id)}
-                    className="w-full mt-3 py-2.5 px-4 bg-black2 border-2 border-dashed border-black5 hover:border-yellow8 rounded-lg text-white4 hover:text-yellow8 transition-all flex items-center justify-center gap-2 font-medium"
+                    className="w-full mt-3 py-2.5 px-4 bg-black2 border-2 border-dashed border-black5 hover:border-purple6 rounded-lg text-white4 hover:text-purple6 transition-all flex items-center justify-center gap-2 font-medium"
                   >
                     <FaPlus className="text-sm" />
                     <span>Add Lecture</span>

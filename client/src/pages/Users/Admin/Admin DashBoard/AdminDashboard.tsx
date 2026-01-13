@@ -108,9 +108,9 @@ export default function AdminDashboard() {
       title: "Total Courses",
       value: adminData?.totalCourses || 0,
       icon: <FaBook className="text-3xl" />,
-      color: "text-yellow8",
-      bgColor: "bg-yellow8/10",
-      borderColor: "border-yellow8/20",
+      color: "text-purple6",
+      bgColor: "bg-purple6/10",
+      borderColor: "border-purple6/20",
     },
     {
       title: "Total Categories",
@@ -140,9 +140,9 @@ export default function AdminDashboard() {
       title: "Total Earnings",
       value: `₹${parseFloat(String(adminData?.totalEarningAdmin || 0)).toLocaleString()}`,
       icon: <FaRupeeSign className="text-3xl" />,
-      color: "text-yellow8",
-      bgColor: "bg-yellow8/10",
-      borderColor: "border-yellow8/20",
+      color: "text-purple6",
+      bgColor: "bg-purple6/10",
+      borderColor: "border-purple6/20",
     },
   ];
 
@@ -152,7 +152,7 @@ export default function AdminDashboard() {
       description: "View, approve, and manage all courses",
       icon: <FaBook className="text-2xl" />,
       path: "/dashboard/courseMenu-admin",
-      color: "text-yellow8",
+      color: "text-purple6",
     },
     {
       title: "Manage Categories",
@@ -218,7 +218,7 @@ export default function AdminDashboard() {
                 <div className="pt-3 border-t border-black5">
                   <div className="flex justify-between items-center">
                     <span className="text-white font-medium">Total</span>
-                    <span className="text-yellow8 font-bold text-lg">
+                    <span className="text-purple6 font-bold text-lg">
                       {adminData.totalUsers || 0}
                     </span>
                   </div>
@@ -245,7 +245,7 @@ export default function AdminDashboard() {
                 <div className="pt-3 border-t border-black5">
                   <div className="flex justify-between items-center">
                     <span className="text-white4 text-sm">Engagement Rate</span>
-                    <span className="text-yellow8 font-bold">
+                    <span className="text-purple6 font-bold">
                       {adminData.totalUsers && adminData.totalUsers > 0
                         ? Math.round(
                             ((adminData.totalActiveStudents || 0) /
@@ -266,7 +266,7 @@ export default function AdminDashboard() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-white4 text-sm">Courses</span>
-                  <span className="text-yellow8 font-semibold">
+                  <span className="text-purple6 font-semibold">
                     {adminData.totalCourses || 0}
                   </span>
                 </div>
@@ -279,7 +279,7 @@ export default function AdminDashboard() {
                 <div className="pt-3 border-t border-black5">
                   <div className="flex justify-between items-center">
                     <span className="text-white font-medium">Total Revenue</span>
-                    <span className="text-yellow8 font-bold text-lg">
+                    <span className="text-purple6 font-bold text-lg">
                       ₹{parseFloat(String(adminData.totalEarningAdmin || 0)).toLocaleString()}
                     </span>
                   </div>
@@ -296,7 +296,7 @@ export default function AdminDashboard() {
                 <button
                   key={index}
                   onClick={() => navigate(action.path)}
-                  className="bg-gradient-to-br from-black3 to-black4 rounded-xl p-6 border border-black5 hover:border-yellow8 shadow-lg hover:shadow-xl transition-all duration-300 group text-left"
+                  className="bg-gradient-to-br from-black3 to-black4 rounded-xl p-6 border border-black5 hover:border-purple6 shadow-lg hover:shadow-xl transition-all duration-300 group text-left"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1">

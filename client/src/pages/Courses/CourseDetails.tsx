@@ -256,7 +256,7 @@ export default function CourseDetails() {
   if (loading) {
     return (
       <div className="min-h-screen bg-black3 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-yellow8"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple6"></div>
       </div>
     );
   }
@@ -268,7 +268,7 @@ export default function CourseDetails() {
           <h2 className="text-2xl font-bold text-white mb-4">Course not found</h2>
           <Link
             to="/allCourses"
-            className="text-yellow8 hover:text-yellow9 transition-colors"
+            className="text-purple6 hover:text-purple5 transition-colors"
           >
             Browse all courses
           </Link>
@@ -286,9 +286,9 @@ export default function CourseDetails() {
       <div className="bg-black2 border-b border-black5 py-3 px-4 sm:px-6 lg:px-8">
         <div className="max-w-maxContent mx-auto">
           <nav className="flex items-center space-x-2 text-sm text-black7">
-            <Link to="/" className="hover:text-yellow8 transition-colors">Home</Link>
+            <Link to="/" className="hover:text-purple6 transition-colors">Home</Link>
             <span>/</span>
-            <Link to="/allCourses" className="hover:text-yellow8 transition-colors">Courses</Link>
+            <Link to="/allCourses" className="hover:text-purple6 transition-colors">Courses</Link>
             <span>/</span>
             <span className="text-white">{courseData?.courseName}</span>
           </nav>
@@ -303,7 +303,7 @@ export default function CourseDetails() {
             <div className="lg:col-span-2 space-y-6">
               {/* Course Title & Category */}
               <div>
-                <span className="inline-block bg-black1 text-yellow8 text-sm font-medium px-3 py-1 rounded-full mb-3">
+                <span className="inline-block bg-black1 text-purple6 text-sm font-medium px-3 py-1 rounded-full mb-3">
                   {courseData?.category?.name || "Uncategorized"}
                 </span>
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
@@ -332,21 +332,21 @@ export default function CourseDetails() {
                   </div>
                 )}
                 <div className="flex items-center gap-2 text-black7">
-                  <FaUsers className="text-yellow8" />
+                  <FaUsers className="text-purple6" />
                   <span>{studentsEnrolled} {studentsEnrolled === 1 ? "student" : "students"}</span>
                 </div>
                 {courseDuration && (
                   <div className="flex items-center gap-2 text-black7">
-                    <FaClock className="text-yellow8" />
+                    <FaClock className="text-purple6" />
                     <span>{courseDuration}</span>
                   </div>
                 )}
                 <div className="flex items-center gap-2 text-black7">
-                  <FaBook className="text-yellow8" />
+                  <FaBook className="text-purple6" />
                   <span>{totalLectures} {totalLectures === 1 ? "lecture" : "lectures"}</span>
                 </div>
                 <div className="flex items-center gap-2 text-black7">
-                  <FaLanguage className="text-yellow8" />
+                  <FaLanguage className="text-purple6" />
                   <span>{courseData?.language || "English"}</span>
                 </div>
               </div>
@@ -357,7 +357,7 @@ export default function CourseDetails() {
                   <img
                     src={courseData.instructor.profileImage || `https://api.dicebear.com/7.x/initials/svg?seed=${courseData.instructor.firstName}${courseData.instructor.lastName}`}
                     alt={`${courseData.instructor.firstName} ${courseData.instructor.lastName}`}
-                    className="w-16 h-16 rounded-full object-cover border-2 border-yellow8"
+                    className="w-16 h-16 rounded-full object-cover border-2 border-purple6"
                   />
                   <div>
                     <p className="text-black7 text-sm">Created by</p>
@@ -370,7 +370,7 @@ export default function CourseDetails() {
 
               {/* Last Updated */}
               <div className="flex items-center gap-2 text-sm text-black7">
-                <FaCalendarAlt className="text-yellow8" />
+                <FaCalendarAlt className="text-purple6" />
                 <span>Last updated: {formateDate(courseData?.updatedAt)}</span>
               </div>
             </div>
@@ -401,7 +401,7 @@ export default function CourseDetails() {
                   {isEnrolled ? (
                     <Link
                       to="/dashboard/enrolledCourses"
-                      className="block w-full bg-yellow8 hover:bg-yellow9 text-black font-semibold py-3 px-6 rounded-lg text-center transition-all duration-300 hover:scale-105"
+                      className="block w-full bg-purple6 hover:bg-purple5 text-black font-semibold py-3 px-6 rounded-lg text-center transition-all duration-300 hover:scale-105"
                     >
                       Go to Course
                     </Link>
@@ -410,7 +410,7 @@ export default function CourseDetails() {
                       <button
                         onClick={handleBuyCourse}
                         disabled={paymentLoading}
-                        className="w-full bg-yellow8 hover:bg-yellow9 text-black font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-purple6 hover:bg-purple5 text-black font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {paymentLoading ? "Processing..." : "Buy Now"}
                       </button>
@@ -427,7 +427,7 @@ export default function CourseDetails() {
                 {/* Share Button */}
                 <button
                   onClick={handleShare}
-                  className="w-full mt-3 flex items-center justify-center gap-2 text-black7 hover:text-yellow8 transition-colors text-sm"
+                  className="w-full mt-3 flex items-center justify-center gap-2 text-black7 hover:text-purple6 transition-colors text-sm"
                 >
                   <FaShareAlt />
                   <span>Share this course</span>
@@ -438,19 +438,19 @@ export default function CourseDetails() {
                   <h3 className="font-semibold text-white mb-3">This course includes:</h3>
                   <ul className="space-y-2 text-sm text-black7">
                     <li className="flex items-center gap-2">
-                      <FaCheckCircle className="text-yellow8" />
+                      <FaCheckCircle className="text-purple6" />
                       <span>{totalLectures} on-demand video lectures</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <FaCheckCircle className="text-yellow8" />
+                      <FaCheckCircle className="text-purple6" />
                       <span>{courseDuration || "Lifetime"} access</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <FaCheckCircle className="text-yellow8" />
+                      <FaCheckCircle className="text-purple6" />
                       <span>Certificate of completion</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <FaCheckCircle className="text-yellow8" />
+                      <FaCheckCircle className="text-purple6" />
                       <span>Mobile and TV access</span>
                     </li>
                   </ul>
@@ -474,7 +474,7 @@ export default function CourseDetails() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {courseData.whatYouWillLearn.map((item, index) => (
                       <div key={index} className="flex items-start gap-3">
-                        <FaCheckCircle className="text-yellow8 flex-shrink-0 mt-1" />
+                        <FaCheckCircle className="text-purple6 flex-shrink-0 mt-1" />
                         <span className="text-black8">{item}</span>
                       </div>
                     ))}
@@ -490,7 +490,7 @@ export default function CourseDetails() {
                   </h2>
                   <button
                     onClick={toggleAllSections}
-                    className="text-sm text-yellow8 hover:text-yellow9 transition-colors"
+                    className="text-sm text-purple6 hover:text-purple5 transition-colors"
                   >
                     {openSection.length === courseData?.courseContent?.length ? "Collapse All" : "Expand All"}
                   </button>
@@ -518,7 +518,7 @@ export default function CourseDetails() {
                       >
                         <div className="flex items-center gap-3 flex-1 text-left">
                           {openSection.includes(section._id) ? (
-                            <IoIosArrowUp className="text-yellow8 text-xl flex-shrink-0" />
+                            <IoIosArrowUp className="text-purple6 text-xl flex-shrink-0" />
                           ) : (
                             <IoIosArrowDown className="text-black7 text-xl flex-shrink-0" />
                           )}
@@ -544,7 +544,7 @@ export default function CourseDetails() {
                                 key={subSection._id || subIndex}
                                 className="flex items-center gap-3 p-3 hover:bg-black1 rounded transition-colors"
                               >
-                                <FaPlayCircle className="text-yellow8 flex-shrink-0" />
+                                <FaPlayCircle className="text-purple6 flex-shrink-0" />
                                 <span className="text-black8 flex-1">{subSection?.title || `Lecture ${subIndex + 1}`}</span>
                                 {subSection?.timeDuration && (
                                   <span className="text-sm text-black7">{subSection.timeDuration}</span>
@@ -554,7 +554,7 @@ export default function CourseDetails() {
                           </div>
                           <Link
                             to={`/sections/${section._id}`}
-                            className="block mt-4 text-yellow8 hover:text-yellow9 text-sm font-medium transition-colors"
+                            className="block mt-4 text-purple6 hover:text-purple5 text-sm font-medium transition-colors"
                           >
                             View full section details →
                           </Link>
@@ -572,7 +572,7 @@ export default function CourseDetails() {
                   <ul className="space-y-3">
                     {courseData.instructions.map((instruction, index) => (
                       <li key={index} className="flex items-start gap-3 text-black8">
-                        <span className="text-yellow8 mt-1">•</span>
+                        <span className="text-purple6 mt-1">•</span>
                         <span>{instruction}</span>
                       </li>
                     ))}
@@ -604,7 +604,7 @@ export default function CourseDetails() {
                   {token && user?.accountType === ACCOUNT_TYPE.STUDENT && !isEnrolled && (
                     <button
                       onClick={() => setShowReviewModal(true)}
-                      className="bg-yellow8 hover:bg-yellow9 text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm"
+                      className="bg-purple6 hover:bg-purple5 text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm"
                     >
                       Write Review
                     </button>
@@ -622,7 +622,7 @@ export default function CourseDetails() {
                       <ReviewCard key={review._id || index} data={review} />
                     ))}
                     {reviews.length > 5 && (
-                      <button className="w-full py-3 text-yellow8 hover:text-yellow9 font-medium transition-colors">
+                      <button className="w-full py-3 text-purple6 hover:text-purple5 font-medium transition-colors">
                         View all {reviews.length} reviews
                       </button>
                     )}

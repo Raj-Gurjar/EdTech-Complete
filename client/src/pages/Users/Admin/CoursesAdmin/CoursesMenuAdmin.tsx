@@ -86,7 +86,7 @@ export default function CoursesMenuAdmin() {
       {courseCategories.length > 0 && (
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <FaTags className="text-yellow8 text-xl" />
+            <FaTags className="text-purple6 text-xl" />
             <h2 className="text-xl font-semibold text-white">Categories</h2>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -97,7 +97,7 @@ export default function CoursesMenuAdmin() {
                 className={({ isActive }) =>
                   `px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
                     isActive
-                      ? "bg-yellow8 text-black shadow-lg"
+                      ? "bg-purple6 text-black shadow-lg"
                       : "bg-black3 text-white hover:bg-black4 border border-black5"
                   }`
                 }

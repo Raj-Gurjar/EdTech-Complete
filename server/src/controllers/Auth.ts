@@ -152,6 +152,16 @@ export const signUp = async (req: Request, res: Response): Promise<Response | vo
             });
         }
 
+        //* Validate password strength
+        const { validatePassword } = require("../utils/passwordValidation");
+        const passwordValidation = validatePassword(password);
+        if (!passwordValidation.isValid) {
+            return res.status(400).json({
+                success: false,
+                message: passwordValidation.errors.join(". "),
+            });
+        }
+
         if (accountType === "Admin") {
             console.log("Admin log");
             if (adminKey !== process.env.ADMIN_SECRET_KEY) {
@@ -626,18 +636,20 @@ export const changePassword = async (req: AuthRequest, res: Response): Promise<R
                 success: false,
                 message: "Old Password doesn't match.",
             });
-        } else if (newPassword.length < 8) {
-            return res.status(401).json({
-                success: false,
-                message: "Password length must be more than 8 characters",
-            });
-        }
-
-        //TODO : Add more criteria to password (like caps,num etc)
-        else if (newPassword !== confirmNewPassword) {
+        } else if (newPassword !== confirmNewPassword) {
             return res.status(401).json({
                 success: false,
                 message: "New Password and Confirm Password doesn't match.",
+            });
+        }
+
+        //* Validate password strength
+        const { validatePassword } = require("../utils/passwordValidation");
+        const passwordValidation = validatePassword(newPassword);
+        if (!passwordValidation.isValid) {
+            return res.status(401).json({
+                success: false,
+                message: passwordValidation.errors.join(". "),
             });
         }
 

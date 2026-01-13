@@ -46,7 +46,7 @@ export default function ResetRequest() {
               />
               <button
                 type="submit"
-                className="bg-yellow8 text-black rounded font-semibold py-1"
+                className="bg-purple6 text-black rounded font-semibold py-1"
               >
                 Reset Password
               </button>
@@ -54,7 +54,7 @@ export default function ResetRequest() {
           ) : (
             <div className="flex flex-col">
               <button
-                className="bg-yellow8 text-black rounded font-semibold py-1 mt-3"
+                className="bg-purple6 text-black rounded font-semibold py-1 mt-3"
                 onClick={() => setEmailSent(false)}
               >
                 Resend Link or Edit Email

@@ -61,7 +61,7 @@ export default function ShowCourse() {
           </div>
           <button
             onClick={() => navigate("/dashboard/createCourse")}
-            className="flex items-center justify-center gap-2 px-6 py-3 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-all font-semibold hover:scale-105 shadow-lg"
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-purple6 hover:bg-purple5 text-black rounded-lg transition-all font-semibold hover:scale-105 shadow-lg"
           >
             <FaPlus />
             <span>Create New Course</span>
@@ -72,7 +72,7 @@ export default function ShowCourse() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <div className="bg-gradient-to-br from-black3 to-black4 rounded-xl p-4 border border-black5">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-yellow8 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-purple6 flex items-center justify-center">
                 <FaBook className="text-black text-lg" />
               </div>
               <div>
@@ -111,7 +111,7 @@ export default function ShowCourse() {
       {/* Courses List */}
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <FaSpinner className="text-yellow8 text-4xl animate-spin" />
+          <FaSpinner className="text-purple6 text-4xl animate-spin" />
         </div>
       ) : (
         <CoursesTable

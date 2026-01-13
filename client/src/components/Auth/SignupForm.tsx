@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -7,6 +7,9 @@ import { setSignupData } from "../../toolkit/slice/authSlice";
 import { ACCOUNT_TYPE } from "../../utils/constants";
 import InputBox from "../../user interfaces/InputBox";
 import HighlightText from "../../user interfaces/HighlightText";
+import { validatePassword, PasswordValidationResult } from "../../utils/passwordValidation";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 interface SignupFormProps {
   setIsLoggedIn?: (value: boolean) => void;
@@ -33,6 +36,8 @@ export default function SignupForm({ setIsLoggedIn }: SignupFormProps) {
     confirmPassword: "",
     adminKey: "",
   });
+  const [passwordValidation, setPasswordValidation] = useState<PasswordValidationResult | null>(null);
+  const [showPasswordValidation, setShowPasswordValidation] = useState<boolean>(false);
 
   function changeHandler(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
@@ -40,12 +45,34 @@ export default function SignupForm({ setIsLoggedIn }: SignupFormProps) {
       ...prevFormData,
       [name]: value,
     }));
+
+    // Validate password in real-time
+    if (name === "password") {
+      const validation = validatePassword(value);
+      setPasswordValidation(validation);
+      setShowPasswordValidation(value.length > 0);
+    }
   }
 
   const { firstName, lastName, email, password, confirmPassword } = formData;
 
   async function signUpHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    
+    // Validate password
+    const validation = validatePassword(password);
+    if (!validation.isValid) {
+      toast.error("Please fix password validation errors");
+      setShowPasswordValidation(true);
+      return;
+    }
+
+    // Check password match
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
     dispatch(setSignupData({ ...formData, accountType }) as any);
     dispatch(sendOTP(email, navigate) as any);
   }
@@ -140,30 +167,91 @@ export default function SignupForm({ setIsLoggedIn }: SignupFormProps) {
           />
 
           {/* Password */}
-          <InputBox
-            label="Password"
-            placeholder="Enter your password"
-            type="password"
-            id="password"
-            name="password"
-            required={true}
-            isPassword={true}
-            value={formData.password}
-            changeHandler={changeHandler}
-          />
+          <div className="flex flex-col gap-2">
+            <InputBox
+              label="Password"
+              placeholder="Enter your password"
+              type="password"
+              id="password"
+              name="password"
+              required={true}
+              isPassword={true}
+              value={formData.password}
+              changeHandler={changeHandler}
+            />
+            
+            {/* Password Validation Feedback */}
+            {showPasswordValidation && passwordValidation && (
+              <div className="bg-black3 border border-black5 rounded-lg p-3 space-y-2">
+                <p className="text-sm font-medium text-white mb-2">Password must contain:</p>
+                <div className="space-y-1.5">
+                  <div className={`flex items-center gap-2 text-xs ${passwordValidation.checks.minLength ? 'text-green-400' : 'text-white4'}`}>
+                    {passwordValidation.checks.minLength ? (
+                      <FaCheckCircle className="text-green-400" />
+                    ) : (
+                      <FaTimesCircle className="text-white4" />
+                    )}
+                    <span>At least 8 characters</span>
+                  </div>
+                  <div className={`flex items-center gap-2 text-xs ${passwordValidation.checks.hasUpperCase ? 'text-green-400' : 'text-white4'}`}>
+                    {passwordValidation.checks.hasUpperCase ? (
+                      <FaCheckCircle className="text-green-400" />
+                    ) : (
+                      <FaTimesCircle className="text-white4" />
+                    )}
+                    <span>One uppercase letter (A-Z)</span>
+                  </div>
+                  <div className={`flex items-center gap-2 text-xs ${passwordValidation.checks.hasLowerCase ? 'text-green-400' : 'text-white4'}`}>
+                    {passwordValidation.checks.hasLowerCase ? (
+                      <FaCheckCircle className="text-green-400" />
+                    ) : (
+                      <FaTimesCircle className="text-white4" />
+                    )}
+                    <span>One lowercase letter (a-z)</span>
+                  </div>
+                  <div className={`flex items-center gap-2 text-xs ${passwordValidation.checks.hasNumber ? 'text-green-400' : 'text-white4'}`}>
+                    {passwordValidation.checks.hasNumber ? (
+                      <FaCheckCircle className="text-green-400" />
+                    ) : (
+                      <FaTimesCircle className="text-white4" />
+                    )}
+                    <span>One number (0-9)</span>
+                  </div>
+                  <div className={`flex items-center gap-2 text-xs ${passwordValidation.checks.hasSpecialChar ? 'text-green-400' : 'text-white4'}`}>
+                    {passwordValidation.checks.hasSpecialChar ? (
+                      <FaCheckCircle className="text-green-400" />
+                    ) : (
+                      <FaTimesCircle className="text-white4" />
+                    )}
+                    <span>One special character (!@#$%^&*...)</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Confirm Password */}
-          <InputBox
-            label="Confirm Password"
-            placeholder="Confirm your password"
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            required={true}
-            isPassword={true}
-            value={formData.confirmPassword}
-            changeHandler={changeHandler}
-          />
+          <div className="flex flex-col gap-2">
+            <InputBox
+              label="Confirm Password"
+              placeholder="Confirm your password"
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              required={true}
+              isPassword={true}
+              value={formData.confirmPassword}
+              changeHandler={changeHandler}
+            />
+            {confirmPassword && password && confirmPassword !== password && (
+              <span className="text-red2 text-sm">Passwords do not match</span>
+            )}
+            {confirmPassword && password && confirmPassword === password && (
+              <span className="text-green-400 text-sm flex items-center gap-1">
+                <FaCheckCircle /> Passwords match
+              </span>
+            )}
+          </div>
 
           {/* Admin Key - Only shown for Admin */}
           {accountType === ACCOUNT_TYPE.ADMIN && (

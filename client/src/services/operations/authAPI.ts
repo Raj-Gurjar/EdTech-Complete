@@ -155,7 +155,6 @@ export function logout(navigate: NavigateFunction) {
     dispatch(resetCart());
     removeToken();
     localStorage.removeItem("user");
-    toast.success("Logged Out");
     console.log("Log out calling");
     navigate("/");
     console.log("nav calling");

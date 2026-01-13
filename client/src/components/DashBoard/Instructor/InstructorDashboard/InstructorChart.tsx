@@ -33,7 +33,7 @@ export default function InstructorChart({ courses, totalStudents }: InstructorCh
 
   // Modern color palette
   const colors: string[] = [
-    "#F59E0B", // yellow8
+    "#F59E0B", // purple6
     "#3B82F6", // blue
     "#10B981", // green
     "#8B5CF6", // purple
@@ -136,7 +136,7 @@ export default function InstructorChart({ courses, totalStudents }: InstructorCh
             onClick={() => setCurrentChart("students")}
             className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
               currentChart === "students"
-                ? "bg-yellow8 text-black shadow-lg"
+                ? "bg-purple6 text-black shadow-lg"
                 : "text-white4 hover:text-white"
             }`}
           >
@@ -146,7 +146,7 @@ export default function InstructorChart({ courses, totalStudents }: InstructorCh
             onClick={() => setCurrentChart("income")}
             className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
               currentChart === "income"
-                ? "bg-yellow8 text-black shadow-lg"
+                ? "bg-purple6 text-black shadow-lg"
                 : "text-white4 hover:text-white"
             }`}
           >
@@ -168,7 +168,7 @@ export default function InstructorChart({ courses, totalStudents }: InstructorCh
           <p className="text-white4 text-sm mb-1">
             {currentChart === "students" ? "Total Students" : "Total Income"}
           </p>
-          <p className="text-2xl font-bold text-yellow8">
+          <p className="text-2xl font-bold text-purple6">
             {currentChart === "students"
               ? totalStudents.toLocaleString()
               : `₹${courses.reduce((acc, curr) => acc + (curr.totalAmountGenerated || 0), 0).toLocaleString()}`}

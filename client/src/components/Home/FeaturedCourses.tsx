@@ -102,7 +102,7 @@ export default function FeaturedCourses() {
             <Link
               key={course._id}
               to={`/allCourses/${course._id}`}
-              className="bg-black2 rounded-xl overflow-hidden border border-black5 hover:border-yellow8 transition-all duration-300 hover:scale-105 hover:shadow-xl group"
+              className="bg-black2 rounded-xl overflow-hidden border border-black5 hover:border-purple6 transition-all duration-300 hover:scale-105 hover:shadow-xl group"
             >
               {/* Thumbnail */}
               <div className="relative h-48 sm:h-56 overflow-hidden">
@@ -122,7 +122,7 @@ export default function FeaturedCourses() {
 
               {/* Content */}
               <div className="p-4 sm:p-6">
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-yellow8 transition-colors">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-purple6 transition-colors">
                   {course.courseName}
                 </h3>
                 
@@ -134,7 +134,7 @@ export default function FeaturedCourses() {
                 <div className="flex items-center gap-4 mb-4 text-xs sm:text-sm text-white6">
                   {rating > 0 && (
                     <div className="flex items-center gap-1">
-                      <FaStar className="text-yellow8" />
+                      <FaStar className="text-purple6" />
                       <span>{rating.toFixed(1)}</span>
                     </div>
                   )}
@@ -152,10 +152,10 @@ export default function FeaturedCourses() {
                     <p className="text-white4 text-xs sm:text-sm">{instructorName}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-yellow8 font-bold text-lg sm:text-xl">
+                    <span className="text-purple6 font-bold text-lg sm:text-xl">
                       ₹{course.price || 0}
                     </span>
-                    <FaArrowRight className="text-yellow8 group-hover:translate-x-1 transition-transform" />
+                    <FaArrowRight className="text-purple6 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
               </div>
@@ -167,7 +167,7 @@ export default function FeaturedCourses() {
       {/* View All Button */}
       <div className="text-center mt-8 sm:mt-12">
         <Link to="/allCourses">
-          <button className="bg-yellow8 hover:bg-yellow9 text-black font-semibold px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base inline-flex items-center gap-2">
+          <button className="bg-purple6 hover:bg-purple5 text-black font-semibold px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg text-sm sm:text-base inline-flex items-center gap-2">
             View All Courses
             <FaArrowRight />
           </button>

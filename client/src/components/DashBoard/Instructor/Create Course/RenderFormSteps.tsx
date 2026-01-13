@@ -55,7 +55,7 @@ export default function RenderFormSteps({ instructions = [] }: RenderFormStepsPr
                 <div
                   className={`relative z-10 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center font-bold text-sm sm:text-base transition-all duration-300 ${
                     step === item.id
-                      ? "bg-yellow8 text-black scale-110 shadow-lg"
+                      ? "bg-purple6 text-black scale-110 shadow-lg"
                       : step > item.id
                       ? "bg-green-600 text-white"
                       : "bg-black5 text-white4"
@@ -84,7 +84,7 @@ export default function RenderFormSteps({ instructions = [] }: RenderFormStepsPr
                 {index < steps.length - 1 && (
                   <div
                     className={`absolute top-6 left-[60%] w-full h-0.5 ${
-                      step > item.id ? "bg-yellow8" : "bg-black5"
+                      step > item.id ? "bg-purple6" : "bg-black5"
                     } transition-colors duration-300`}
                     style={{ width: "calc(100% - 3.5rem)" }}
                   />
@@ -110,7 +110,7 @@ export default function RenderFormSteps({ instructions = [] }: RenderFormStepsPr
             <div className="w-full lg:w-[30%] order-1 lg:order-2">
               <div className="bg-gradient-to-br from-black3 to-black4 rounded-xl p-6 border border-black5 shadow-lg lg:sticky lg:top-24">
                 <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                  <FaLightbulb className="text-yellow8" />
+                  <FaLightbulb className="text-purple6" />
                   Quick Instructions
                 </h2>
                 <ul className="space-y-3">

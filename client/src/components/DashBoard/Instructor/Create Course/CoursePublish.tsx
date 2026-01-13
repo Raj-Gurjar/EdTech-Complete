@@ -101,7 +101,7 @@ export default function CoursePublish() {
                 {...register("public")}
                 className="sr-only peer"
               />
-              <div className="w-12 h-6 bg-black5 rounded-full peer peer-checked:bg-yellow8 transition-colors duration-200 peer-focus:ring-2 peer-focus:ring-yellow8 peer-focus:ring-offset-2 peer-focus:ring-offset-black2"></div>
+              <div className="w-12 h-6 bg-black5 rounded-full peer peer-checked:bg-purple6 transition-colors duration-200 peer-focus:ring-2 peer-focus:ring-purple6 peer-focus:ring-offset-2 peer-focus:ring-offset-black2"></div>
               <div className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 peer-checked:translate-x-6"></div>
             </div>
             <div className="flex-1">
@@ -157,7 +157,7 @@ export default function CoursePublish() {
           <button
             disabled={loading}
             type="submit"
-            className="flex-1 px-6 py-2.5 bg-yellow8 hover:bg-yellow9 text-black rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-6 py-2.5 bg-purple6 hover:bg-purple5 text-black rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Processing..." : "Save & Complete"}
           </button>
