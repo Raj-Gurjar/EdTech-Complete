@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import SignupForm from "./SignupForm";
 import LoginForm from "./LoginForm";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
-import HighlightText from "../../user interfaces/HighlightText";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useDispatch } from "react-redux";
 import { googleAuth } from "../../services/operations/authAPI";
 import axios from "axios";
-import FramerImageEffect from "../Home/FramerImageEffect";
+import AuthVisual from "./AuthVisual";
 import { ACCOUNT_TYPE } from "../../utils/constants";
 import toast from "react-hot-toast";
+import { FaChevronDown } from "react-icons/fa";
+import HighlightText from "../../user interfaces/HighlightText";
 
 interface AuthTemplateProps {
   title: string;
@@ -32,8 +33,25 @@ export default function AuthTemplate({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [googleAccountType, setGoogleAccountType] = useState<string>("Student");
+  const [signupAccountType, setSignupAccountType] = useState<string>("Student");
   const [adminKey, setAdminKey] = useState<string>("");
   const [showAdminKey, setShowAdminKey] = useState<boolean>(false);
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -104,11 +122,21 @@ export default function AuthTemplate({
             }}
           >
             <h2 className="text-xl sm:text-2xl font-semibold text-white mb-6">
-              {formType === "login" ? "Log In" : "Create Account"}
+              {formType === "login" ? (
+                "Log In"
+              ) : (
+                <>
+                  Create Account as <HighlightText text={signupAccountType} textSize="text-xl sm:text-2xl" />
+                </>
+              )}
             </h2>
 
             {formType === "signup" ? (
-              <SignupForm setIsLoggedIn={setIsLoggedIn} />
+              <SignupForm 
+                setIsLoggedIn={setIsLoggedIn} 
+                accountType={signupAccountType}
+                setAccountType={setSignupAccountType}
+              />
             ) : (
               <LoginForm />
             )}
@@ -120,112 +148,132 @@ export default function AuthTemplate({
               <div className="h-[1px] flex-1 bg-black5"></div>
             </div>
 
-            {/* Account Type Selection for Google Sign-up */}
-            {formType === "signup" && (
-              <div className="mb-4">
-                <p className="text-sm font-medium text-white4 mb-3">
-                  Sign up as:
-                </p>
-                <div className="flex gap-2 bg-black3 p-1.5 rounded-full border border-black5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setGoogleAccountType(ACCOUNT_TYPE.STUDENT);
-                      setShowAdminKey(false);
-                    }}
-                    className={`flex-1 py-2 px-4 sm:px-6 rounded-full text-sm sm:text-base font-medium transition-all duration-200 ${
-                      googleAccountType === ACCOUNT_TYPE.STUDENT
-                        ? "bg-purple6 text-white shadow-lg shadow-purple6/40"
-                        : "bg-transparent text-white4 hover:text-white"
-                    }`}
-                  >
-                    Student
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setGoogleAccountType(ACCOUNT_TYPE.INSTRUCTOR);
-                      setShowAdminKey(false);
-                    }}
-                    className={`flex-1 py-2 px-4 sm:px-6 rounded-full text-sm sm:text-base font-medium transition-all duration-200 ${
-                      googleAccountType === ACCOUNT_TYPE.INSTRUCTOR
-                        ? "bg-purple6 text-white shadow-lg shadow-purple6/40"
-                        : "bg-transparent text-white4 hover:text-white"
-                    }`}
-                  >
-                    Instructor
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setGoogleAccountType(ACCOUNT_TYPE.ADMIN);
-                      setShowAdminKey(true);
-                    }}
-                    className={`flex-1 py-2 px-4 sm:px-6 rounded-full text-sm sm:text-base font-medium transition-all duration-200 ${
-                      googleAccountType === ACCOUNT_TYPE.ADMIN
-                        ? "bg-purple6 text-white shadow-lg shadow-purple6/40"
-                        : "bg-transparent text-white4 hover:text-white"
-                    }`}
-                  >
-                    Admin
-                  </button>
-                </div>
+            {/* Google Sign In Button with Dropdown */}
+            <div className="flex gap-2">
+              {/* Google Sign In Button */}
+              <button
+                onClick={() => {
+                  if (formType === "signup" && googleAccountType === ACCOUNT_TYPE.ADMIN && !adminKey) {
+                    toast.error("Please enter the admin secret key");
+                    return;
+                  }
+                  handleGoogleLogin();
+                }}
+                className="flex-1 flex justify-center items-center gap-x-2 rounded-[10px] py-3 px-6 text-white font-medium transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  backdropFilter: 'blur(2.5px)',
+                  WebkitBackdropFilter: 'blur(2.5px)',
+                  borderWidth: '0px',
+                  borderStyle: 'solid',
+                  borderColor: 'rgba(255, 255, 255, 0.15)',
+                  borderRadius: '10px',
+                  boxShadow: 'none',
+                  fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
+                  fontWeight: 500,
+                  letterSpacing: '-0.5px',
+                  lineHeight: '26px',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                }}
+              >
+                <FcGoogle className="text-2xl" />
+                <span className="text-sm sm:text-base">
+                  {formType === "login" ? "Sign In" : "Sign Up"} with Google
+                </span>
+              </button>
 
-                {/* Admin Key Input */}
-                {showAdminKey && googleAccountType === ACCOUNT_TYPE.ADMIN && (
-                  <div className="mt-4">
-                    <label htmlFor="google-admin-key" className="text-sm font-medium text-white mb-2 block">
-                      Admin Secret Key <span className="text-red2">*</span>
-                    </label>
-                    <input
-                      id="google-admin-key"
-                      type="password"
-                      value={adminKey}
-                      onChange={(e) => setAdminKey(e.target.value)}
-                      placeholder="Enter admin secret key"
-                      className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors text-sm sm:text-base"
-                    />
-                  </div>
-                )}
+              {/* Account Type Dropdown - Only for Signup */}
+              {formType === "signup" && (
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    type="button"
+                    onClick={() => setShowDropdown(!showDropdown)}
+                    className="px-4 py-3 rounded-[10px] text-white font-medium transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2 border border-white/10 bg-black3 hover:bg-black4"
+                    style={{
+                      fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
+                      fontWeight: 500,
+                      letterSpacing: '-0.5px',
+                    }}
+                  >
+                    <span className="text-sm sm:text-base capitalize">{googleAccountType}</span>
+                    <FaChevronDown className={`text-xs transition-transform duration-200 ${showDropdown ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {showDropdown && (
+                    <div className="absolute right-0 mt-2 w-40 bg-black2 border border-black5 rounded-lg shadow-xl z-50 overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setGoogleAccountType(ACCOUNT_TYPE.STUDENT);
+                          setShowAdminKey(false);
+                          setShowDropdown(false);
+                        }}
+                        className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors ${
+                          googleAccountType === ACCOUNT_TYPE.STUDENT
+                            ? "bg-purple6/20 text-purple6"
+                            : "text-white4 hover:text-white hover:bg-black3"
+                        }`}
+                      >
+                        Student
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setGoogleAccountType(ACCOUNT_TYPE.INSTRUCTOR);
+                          setShowAdminKey(false);
+                          setShowDropdown(false);
+                        }}
+                        className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors ${
+                          googleAccountType === ACCOUNT_TYPE.INSTRUCTOR
+                            ? "bg-purple6/20 text-purple6"
+                            : "text-white4 hover:text-white hover:bg-black3"
+                        }`}
+                      >
+                        Instructor
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setGoogleAccountType(ACCOUNT_TYPE.ADMIN);
+                          setShowAdminKey(true);
+                          setShowDropdown(false);
+                        }}
+                        className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors ${
+                          googleAccountType === ACCOUNT_TYPE.ADMIN
+                            ? "bg-purple6/20 text-purple6"
+                            : "text-white4 hover:text-white hover:bg-black3"
+                        }`}
+                      >
+                        Admin
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Admin Key Input - Only shown when Admin is selected */}
+            {formType === "signup" && showAdminKey && googleAccountType === ACCOUNT_TYPE.ADMIN && (
+              <div className="mt-4">
+                <label htmlFor="google-admin-key" className="text-sm font-medium text-white mb-2 block">
+                  Admin Secret Key <span className="text-red2">*</span>
+                </label>
+                <input
+                  id="google-admin-key"
+                  type="password"
+                  value={adminKey}
+                  onChange={(e) => setAdminKey(e.target.value)}
+                  placeholder="Enter admin secret key"
+                  className="w-full bg-black3 border border-black5 rounded-lg px-4 py-3 text-white placeholder:text-white4 focus:outline-none focus:border-purple6 transition-colors text-sm sm:text-base"
+                />
               </div>
             )}
-
-            {/* Google Sign In Button */}
-            <button
-              onClick={() => {
-                if (formType === "signup" && googleAccountType === ACCOUNT_TYPE.ADMIN && !adminKey) {
-                  toast.error("Please enter the admin secret key");
-                  return;
-                }
-                handleGoogleLogin();
-              }}
-              className="w-full flex justify-center items-center gap-x-2 rounded-[10px] py-3 px-6 text-white font-medium transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                backdropFilter: 'blur(2.5px)',
-                WebkitBackdropFilter: 'blur(2.5px)',
-                borderWidth: '0px',
-                borderStyle: 'solid',
-                borderColor: 'rgba(255, 255, 255, 0.15)',
-                borderRadius: '10px',
-                boxShadow: 'none',
-                fontFamily: '"DM Sans", "DM Sans Placeholder", sans-serif',
-                fontWeight: 500,
-                letterSpacing: '-0.5px',
-                lineHeight: '26px',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
-              }}
-            >
-              <FcGoogle className="text-2xl" />
-              <span className="text-sm sm:text-base">
-                {formType === "login" ? "Sign In" : "Sign Up"} with Google
-              </span>
-            </button>
 
             {/* Switch between Login/Signup */}
             <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
@@ -243,17 +291,10 @@ export default function AuthTemplate({
           </div>
         </div>
 
-        {/* Right Side - Image Section */}
+        {/* Right Side - Visual Section */}
         <div className="w-full lg:w-1/2 flex items-center justify-center lg:justify-end">
-          <div className="relative max-w-full lg:max-w-[500px]">
-            <FramerImageEffect>
-              <img
-                src={sideImg}
-                alt="auth-illustration"
-                className="w-full h-auto max-h-[400px] sm:max-h-[500px] lg:max-h-[600px] object-cover rounded-lg"
-                loading="lazy"
-              />
-            </FramerImageEffect>
+          <div className="relative max-w-full lg:max-w-[500px] w-full">
+            <AuthVisual />
           </div>
         </div>
       </div>

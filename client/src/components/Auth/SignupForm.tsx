@@ -6,13 +6,14 @@ import { sendOTP } from "../../services/operations/authAPI";
 import { setSignupData } from "../../toolkit/slice/authSlice";
 import { ACCOUNT_TYPE } from "../../utils/constants";
 import InputBox from "../../user interfaces/InputBox";
-import HighlightText from "../../user interfaces/HighlightText";
 import { validatePassword, PasswordValidationResult } from "../../utils/passwordValidation";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import toast from "react-hot-toast";
 
 interface SignupFormProps {
   setIsLoggedIn?: (value: boolean) => void;
+  accountType?: string;
+  setAccountType?: (type: string) => void;
 }
 
 interface SignupFormData {
@@ -24,8 +25,10 @@ interface SignupFormData {
   adminKey: string;
 }
 
-export default function SignupForm({ setIsLoggedIn }: SignupFormProps) {
-  const [accountType, setAccountType] = useState<string>("Student");
+export default function SignupForm({ setIsLoggedIn, accountType: propAccountType, setAccountType: setPropAccountType }: SignupFormProps) {
+  const [internalAccountType, setInternalAccountType] = useState<string>("Student");
+  const accountType = propAccountType || internalAccountType;
+  const setAccountType = setPropAccountType || setInternalAccountType;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState<SignupFormData>({
@@ -82,10 +85,6 @@ export default function SignupForm({ setIsLoggedIn }: SignupFormProps) {
       <form className="flex flex-col" onSubmit={signUpHandler}>
         {/* Account Type Selection */}
         <div className="mb-6">
-          <p className="text-lg sm:text-xl font-semibold text-white mb-4">
-            Sign Up as <HighlightText text={accountType} />
-          </p>
-
           <div className="flex gap-2 bg-black3 p-1.5 rounded-full border border-black5">
             <button
               type="button"

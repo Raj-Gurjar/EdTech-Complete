@@ -1,11 +1,14 @@
 import React from "react";
-import img1 from "../../assets/images/home-img-1.jpg";
 import HighlightText from "../../user interfaces/HighlightText";
 import FramerImageEffect from "../../components/Home/FramerImageEffect";
 
 export default function AboutSection1() {
-  // Array of image data
-  const images: string[] = [img1, img1, img1];
+  // Array of image data - using Unsplash images for online education theme
+  const images: string[] = [
+    "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80"
+  ];
 
   return (
     <div className="flex justify-center flex-col text-center items-center pt-10 sm:pt-16 pb-12 sm:pb-16 px-4 sm:px-6">

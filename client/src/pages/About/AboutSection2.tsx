@@ -1,5 +1,4 @@
 import React from "react";
-import img1 from "../../assets/images/home-img-1.jpg";
 import HighlightText from "../../user interfaces/HighlightText";
 import FramerImageEffect from "../../components/Home/FramerImageEffect";
 
@@ -33,7 +32,7 @@ export default function AboutSection2() {
         <div className="w-full lg:w-[45%] order-1 lg:order-2">
           <FramerImageEffect className="w-full">
             <img 
-              src={img1} 
+              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80" 
               alt="Our founding story" 
               className="w-full h-auto rounded-[19px] object-cover max-h-[400px] lg:max-h-[500px]" 
             />
