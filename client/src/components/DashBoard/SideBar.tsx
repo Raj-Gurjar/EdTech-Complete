@@ -1,23 +1,11 @@
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import Modal from "../Modals-Popups/Modal";
 import { navItems } from "../../data/SideBarData";
 import { RootState } from "../../toolkit/reducer";
 
-interface ModalData {
-  text1: string;
-  text2: string;
-  btn1Text: string;
-  btn2Text: string;
-  btn1Handler: () => void;
-  btn2Handler: () => void;
-}
 
 export default function SideBar() {
-  const [modal, setModal] = useState<ModalData | null>(null);
   const { user } = useSelector((state: RootState) => state.profile);
-
 
   // Filter navItems based on user account type
   const filteredNavItems = navItems.filter((item) =>
@@ -43,8 +31,6 @@ export default function SideBar() {
           </li>
         ))}
       </ul>
-
-      {modal && <Modal modalData={modal} />}
     </div>
   );
 }

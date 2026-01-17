@@ -87,9 +87,6 @@ export default function MyDashBoard() {
   const inProgressCourses = enrolledCourses?.filter(
     (course) => course.progressPercentage && course.progressPercentage > 0 && course.progressPercentage < 100
   ).length || 0;
-  const notStartedCourses = enrolledCourses?.filter(
-    (course) => !course.progressPercentage || course.progressPercentage === 0
-  ).length || 0;
 
   // Calculate average progress
   const avgProgress = enrolledCourses && enrolledCourses.length > 0
