@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { FaGraduationCap, FaBook, FaLaptop, FaLightbulb, FaRocket } from "react-icons/fa";
 
 export default function AuthVisual() {

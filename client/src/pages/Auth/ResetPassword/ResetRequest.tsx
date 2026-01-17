@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { getPasswordResetToken } from "../../../services/operations/authAPI";
 import InputBox from "../../../user interfaces/InputBox";
 import { SideArrowButton } from "../../../user interfaces/Button";

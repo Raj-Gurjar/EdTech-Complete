@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "../../services/operations/authAPI";
 import Modal from "../Modals-Popups/Modal";
-import { FaSignOutAlt } from "react-icons/fa"; // Importing specific icon
-import { ACCOUNT_TYPE } from "../../utils/constants";
 import { navItems } from "../../data/SideBarData";
 import { RootState } from "../../toolkit/reducer";
 

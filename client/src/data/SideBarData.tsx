@@ -5,7 +5,6 @@ import {
   FaCogs,
   FaBookOpen,
   FaTag,
-  FaSignOutAlt,
 } from "react-icons/fa";
 import { BiSolidDashboard } from "react-icons/bi";
 import { ACCOUNT_TYPE } from "../utils/constants";

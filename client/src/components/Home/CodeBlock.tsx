@@ -1,5 +1,4 @@
-import React from "react";
-import { Link } from "react-router-dom";
+
 import { TypeAnimation } from "react-type-animation";
 import PrimaryCTA from "../../user interfaces/PrimaryCTA";
 import SecondaryCTA from "../../user interfaces/SecondaryCTA";

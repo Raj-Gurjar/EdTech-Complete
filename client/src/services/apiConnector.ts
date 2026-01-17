@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosResponse, AxiosError, InternalAxiosRequestConfig } from "axios";
 import { getStoredToken, isTokenExpired, removeToken, saveToken } from "../utils/tokenUtils";
 import { authEndpoints } from "./api";
 import toast from "react-hot-toast";

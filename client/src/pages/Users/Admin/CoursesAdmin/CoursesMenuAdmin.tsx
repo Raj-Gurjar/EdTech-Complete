@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { getAllCoursesAdmin } from "../../../../services/operations/courseDetailsAPI";
 import { showAllCategories } from "../../../../services/operations/category";
 import AllCoursesAdmin from "./AllCoursesAdmin";
 import { useSelector } from "react-redux";
 import HighlightText from "../../../../user interfaces/HighlightText";
-import { IoSearch } from "react-icons/io5";
-import { FaTags, FaFilter } from "react-icons/fa";
+import { FaTags} from "react-icons/fa";
 import Loader from "../../../../components/Loader/Loader";
 import { RootState } from "../../../../toolkit/reducer";
 

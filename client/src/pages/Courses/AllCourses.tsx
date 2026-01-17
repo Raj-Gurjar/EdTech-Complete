@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
 import { getAllCoursesPublic } from "../../services/operations/courseDetailsAPI";
 import CourseCard from "../../components/Cards/CourseCard";
 import CourseSlider from "../../components/Sliders/CourseSlider";
 import { IoSearch, IoClose } from "react-icons/io5";
-import { BsFilter } from "react-icons/bs";
 import { showAllCategories } from "../../services/operations/category";
 import HighlightText from "../../user interfaces/HighlightText";
 import PrimaryCTA from "../../user interfaces/PrimaryCTA";

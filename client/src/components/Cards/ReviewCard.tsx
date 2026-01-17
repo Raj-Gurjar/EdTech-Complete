@@ -1,4 +1,4 @@
-import React from "react";
+
 import RatingStars from "../../utils/RatingStars";
 import { formateDate } from "../../utils/formatDate";
 

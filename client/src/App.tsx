@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { ACCOUNT_TYPE } from "./utils/constants";
@@ -17,7 +17,6 @@ import ResetRequest from "./pages/Auth/ResetPassword/ResetRequest";
 import ResetPassword from "./pages/Auth/ResetPassword/ResetPassword";
 import DashBoard from "./pages/Users/DashBoard";
 import DashboardRouter from "./components/DashBoard/DashboardRouter";
-import MyDashBoard from "./components/DashBoard/MyDashBoard";
 import MyProfile from "./components/DashBoard/MyProfile";
 import EnrolledCourses from "./components/DashBoard/Student/EnrolledCourses";
 import Settings from "./components/DashBoard/Settings";

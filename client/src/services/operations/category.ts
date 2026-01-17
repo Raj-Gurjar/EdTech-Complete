@@ -1,7 +1,6 @@
 import { apiConnector } from "../apiConnector";
 import { categoryEndpoints } from "../api";
 import toast from "react-hot-toast";
-import { AxiosError } from "axios";
 
 const {
   CREATE_CATEGORY_API,

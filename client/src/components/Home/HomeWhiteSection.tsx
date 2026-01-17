@@ -1,5 +1,4 @@
-import React from "react";
-import { Link } from "react-router-dom";
+
 import HighlightText from "../../user interfaces/HighlightText";
 import HomeTimeLineSection from "./HomeTimeLineSection";
 import HomeRandomImgSection from "./HomeRandomImgSection";

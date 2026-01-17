@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -11,7 +11,6 @@ import {
 } from "../../../../toolkit/slice/viewCourseSlice";
 import {
   getFullDetailsOfCourse,
-  getCourseDetails,
 } from "../../../../services/operations/courseDetailsAPI";
 import CourseReviewModal from "../../../../components/Modals-Popups/CourseReviewModal";
 import { RootState } from "../../../../toolkit/reducer";

@@ -18,7 +18,6 @@ export default function ChipInput({
   register,
   errors,
   setValue,
-  getValues,
   chipValues,
 }: ChipInputProps) {
   const [chipInput, setChipInput] = useState<string>("");

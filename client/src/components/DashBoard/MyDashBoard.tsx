@@ -11,7 +11,6 @@ import {
   FaPlayCircle,
   FaGraduationCap,
   FaArrowRight,
-  FaSpinner,
   FaChartLine,
   FaTrophy
 } from "react-icons/fa";

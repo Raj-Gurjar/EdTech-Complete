@@ -5,7 +5,6 @@ import ReactStars from "react-stars";
 import { createRating } from "../../services/operations/courseDetailsAPI";
 import { 
   FaStar, 
-  FaUserCircle,
   FaSpinner
 } from "react-icons/fa";
 import { MdClose } from "react-icons/md";

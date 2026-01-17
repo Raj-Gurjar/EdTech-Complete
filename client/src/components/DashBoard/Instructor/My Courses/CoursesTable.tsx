@@ -1,6 +1,6 @@
 import React from "react";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   deleteCourse,
@@ -59,7 +59,6 @@ export default function CoursesTable({
   setInstCourses,
   onRefresh,
 }: CoursesTableProps) {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { token } = useSelector((state: RootState) => state.auth);

@@ -3,9 +3,9 @@ import CategoryTable from "./CategoryTable";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../../../toolkit/slice/authSlice";
 import { showAllCategories } from "../../../../services/operations/category";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import HighlightText from "../../../../user interfaces/HighlightText";
-import { FaPlus, FaTags } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import Loader from "../../../../components/Loader/Loader";
 
 interface Category {
@@ -17,7 +17,6 @@ interface Category {
 
 export default function CategoryMenuAdmin() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [courseCategories, setCourseCategories] = useState<Category[]>([]);
   const [loading, setLoadingState] = useState<boolean>(false);
 

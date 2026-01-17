@@ -12,7 +12,6 @@ import Modal from "../Modals-Popups/Modal";
 import { logout } from "../../services/operations/authAPI";
 import { useNavigate } from "react-router-dom";
 import HighlightText from "../../user interfaces/HighlightText";
-import PrimaryCTA from "../../user interfaces/PrimaryCTA";
 import { 
   FaUser,
   FaCamera,
@@ -26,22 +25,6 @@ import {
 import { MdEmail, MdPhone, MdCake, MdTransgender, MdDescription } from "react-icons/md";
 import { RootState } from "../../toolkit/reducer";
 import "../../pages/Home/Home.scss";
-
-interface User {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  accountType: string;
-  profileImage?: string;
-  additionalDetails?: {
-    gender?: string;
-    contactNumber?: string;
-    dateOfBirth?: string;
-    about?: string;
-  };
-  [key: string]: any;
-}
 
 interface ProfileFormData {
   firstName: string;

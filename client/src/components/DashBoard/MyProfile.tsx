@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { formateDate } from "../../utils/formatDate";
@@ -15,34 +15,10 @@ import { MdEmail, MdPhone, MdCake, MdTransgender } from "react-icons/md";
 import { RootState } from "../../toolkit/reducer";
 import "../../pages/Home/Home.scss";
 
-interface User {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  accountType: string;
-  profileImage?: string;
-  additionalDetails?: {
-    gender?: string;
-    contactNumber?: string;
-    dateOfBirth?: string;
-    about?: string;
-  };
-  [key: string]: any;
-}
 
 export default function MyProfile() {
   const { user } = useSelector((state: RootState) => state.profile);
   const navigate = useNavigate();
-
-  const accountTypeColors: Record<string, string> = {
-    Student: "bg-purple6",
-    Instructor: "bg-purple6",
-    Admin: "bg-purple6",
-    STUDENT: "bg-purple6",
-    INSTRUCTOR: "bg-purple6",
-    ADMIN: "bg-purple6",
-  };
 
   const accountTypeText: Record<string, string> = {
     Student: "Student",

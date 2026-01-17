@@ -1,19 +1,12 @@
 import { apiConnector } from "../apiConnector";
-import { authEndpoints, profileEndpoints } from "../api";
+import { profileEndpoints } from "../api";
 import toast from "react-hot-toast";
-import { AxiosError } from "axios";
 
-import { setToken, setLoading } from "../../toolkit/slice/authSlice";
-import { setUser } from "../../toolkit/slice/profileSlice";
-import { resetCart } from "../../toolkit/slice/cartSlice";
-import { logout } from "./authAPI";
 
 const {
-  GET_USER_DETAILS_API,
   GET_USER_ENROLLED_COURSES_API,
   UPDATE_DISPLAY_PICTURE_API,
   UPDATE_PROFILE_API,
-  CHANGE_PASSWORD_API,
   DELETE_PROFILE_API,
   GET_INSTRUCTOR_DASHBOARD_DATA_API,
   GET_ADMIN_DASHBOARD_DATA_API,

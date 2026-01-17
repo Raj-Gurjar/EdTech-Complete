@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { FaCheck, FaLightbulb } from "react-icons/fa";
 import CourseInfoForm from "./CourseInfo/CourseInfoForm";
 import CourseBuilder from "./CourseBuilder/CourseBuilder";
-import CoursePublish from "./CoursePublish";
 import CourseDraft from "./CourseBuilder/CourseDraft";
 import { RootState } from "../../../../toolkit/reducer";
 

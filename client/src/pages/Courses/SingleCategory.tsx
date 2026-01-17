@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Footer from "../../components/Footer/Footer";
 import CourseSlider from "../../components/Sliders/CourseSlider";
 import {
   getCategoryPageDetails,
   showAllCategories,
 } from "../../services/operations/category";
-import SelectedCategory from "../../components/Course-Catalog/SelectedCategory";
 import CourseCard from "../../components/Cards/CourseCard";
 
 interface Category {

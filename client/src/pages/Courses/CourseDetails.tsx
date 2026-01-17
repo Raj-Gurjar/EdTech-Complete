@@ -20,7 +20,6 @@ import {
   FaCheckCircle, 
   FaPlayCircle,
   FaShareAlt,
-  FaHeart,
   FaLanguage,
   FaCalendarAlt
 } from "react-icons/fa";

@@ -1,8 +1,6 @@
 import toast from "react-hot-toast";
-import { updateCompletedLectures } from "../../toolkit/slice/viewCourseSlice";
 import { apiConnector } from "../apiConnector";
 import { courseEndpoints, reviewEndpoints } from "../api";
-import { AxiosError } from "axios";
 
 const {
   GET_ALL_COURSES_PUBLIC_API,
