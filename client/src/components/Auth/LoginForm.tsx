@@ -1,18 +1,15 @@
 import React, { useState } from "react";
-import toast from "react-hot-toast";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../services/operations/authAPI";
 import Loader from "../../components/Loader/Loader";
-import { FaEye } from "react-icons/fa";
-import { FaEyeSlash } from "react-icons/fa";
 import InputBox from "../../user interfaces/InputBox";
 
 export default function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading } = useSelector((state: any) => state.auth);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showPassword] = useState<boolean>(false);
 
   const [formData, setFormData] = useState({
     email: "",

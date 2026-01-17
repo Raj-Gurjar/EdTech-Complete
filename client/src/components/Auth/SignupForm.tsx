@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import { sendOTP } from "../../services/operations/authAPI";
 import { setSignupData } from "../../toolkit/slice/authSlice";
 import { ACCOUNT_TYPE } from "../../utils/constants";
@@ -57,7 +56,7 @@ export default function SignupForm({ setIsLoggedIn, accountType: propAccountType
     }
   }
 
-  const { firstName, lastName, email, password, confirmPassword } = formData;
+  const { email, password, confirmPassword } = formData;
 
   async function signUpHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
