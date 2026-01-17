@@ -42,7 +42,6 @@ export default function AllCourses() {
   const [loading, setLoading] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [showFilters, setShowFilters] = useState<boolean>(false);
 
   const getCategories = async (): Promise<void> => {
     setLoading(true);

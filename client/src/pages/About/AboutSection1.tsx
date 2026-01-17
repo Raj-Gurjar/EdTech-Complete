@@ -35,6 +35,7 @@ export default function AboutSection1() {
             key={index}
             className="flex-1 min-w-[150px] sm:min-w-[200px] max-w-[300px]"
           >
+            // eslint-disable-next-line jsx-a11y/img-redundant-alt
             <img 
               src={image} 
               alt={`About us image ${index + 1}`}

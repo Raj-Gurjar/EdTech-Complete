@@ -20,7 +20,6 @@ interface ReviewFormData {
 }
 
 export default function CourseReviewModal({ setReviewModal }: CourseReviewModalProps) {
-  const { user } = useSelector((state: any) => state.profile);
   const { courseEntireData } = useSelector((state: any) => state.viewCourse);
   const { token } = useSelector((state: any) => state.auth);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
