@@ -11,14 +11,19 @@ const PORT: number = parseInt(process.env.PORT || "4002", 10);
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS configuration - allow only frontend and localhost:3000
+// CORS configuration - allow frontend and localhost:3000
 const allowedOrigins = [
     "http://localhost:3000",
     "http://localhost:3000/",
+    "https://skillscript.vercel.app",
+    "https://skillscript.vercel.app/",
     process.env.FRONTEND_URL || "",
 ].filter(Boolean); // Remove empty strings
 
-// Log allowed origins for debugging
+// Log allowed origins for debugging (only in development)
+if (process.env.NODE_ENV !== "production") {
+    console.log("Allowed CORS origins:", allowedOrigins);
+}
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -39,13 +44,28 @@ app.use(cors({
         if (isAllowed) {
             callback(null, true);
         } else {
+            // Log the blocked origin for debugging
+            console.error(`CORS blocked origin: ${origin}. Allowed origins:`, allowedOrigins);
             callback(new Error(`Not allowed by CORS. Origin: ${origin}`));
         }
     },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    allowedHeaders: [
+        "Content-Type", 
+        "Authorization", 
+        "X-Requested-With",
+        "Accept",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+    ],
+    exposedHeaders: ["Content-Range", "X-Content-Range"],
+    maxAge: 86400, // 24 hours
 }));
+
+// Handle preflight OPTIONS requests explicitly
+app.options("*", cors());
 
 app.use("/api/v1/auth", require("./routes/auth"));
 app.use("/api/v1/category", require("./routes/category"));

@@ -151,11 +151,17 @@ export const apiConnector = (
   params?: Record<string, any>,
   onUploadProgress?: (progressEvent: any) => void
 ): Promise<AxiosResponse> => {
+  // If bodyData is FormData, remove Content-Type header to let browser set it with boundary
+  const finalHeaders = { ...headers };
+  if (bodyData instanceof FormData && finalHeaders) {
+    delete finalHeaders["Content-Type"];
+  }
+
   return axiosInstance({
     method: `${method}`,
     url: `${url}`,
     data: bodyData ? bodyData : null,
-    headers: headers ? headers : null,
+    headers: finalHeaders && Object.keys(finalHeaders).length > 0 ? finalHeaders : undefined,
     params: params ? params : null,
     onUploadProgress: onUploadProgress || undefined,
   });
