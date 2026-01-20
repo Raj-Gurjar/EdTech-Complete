@@ -19,7 +19,6 @@ if (!rootElement) {
 
 const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
 
-console.log("googleClientId", googleClientId);
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   // <React.StrictMode>

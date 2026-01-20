@@ -54,13 +54,11 @@ export default function SingleCategory() {
   const getCategoriesId = async (): Promise<void> => {
     setLoading(true);
     const result = await showAllCategories();
-    console.log("getAllCatId res: ", result);
 
     const category = result.find(
       (ct: Category) => ct.name.split(" ").join("-").toLowerCase() === categoryName
     );
 
-    console.log("cat", category);
     if (category) {
       setCategoryId(category._id);
     }
@@ -70,7 +68,6 @@ export default function SingleCategory() {
 
   const getCatPageDetails = async (): Promise<void> => {
     const result = await getCategoryPageDetails(categoryId);
-    console.log("getCatDetail res: ", result);
     if (result) {
       setCategoryPageData(result?.data);
     }
@@ -87,8 +84,6 @@ export default function SingleCategory() {
       getCatPageDetails();
     }
   }, [categoryId]);
-
-  console.log("Active:", active);
 
   return (
     <div>

@@ -7,7 +7,7 @@ import {
   setEditCourse,
   resetCourseState,
 } from "../../../../toolkit/slice/courseSlice";
-import { getFullDetailsOfCourse } from "../../../../services/operations/courseDetailsAPI";
+import { getCourseDetails } from "../../../../services/operations/courseDetailsAPI";
 import HighlightText from "../../../../user interfaces/HighlightText";
 import { FaSpinner, FaArrowLeft, FaExclamationTriangle } from "react-icons/fa";
 import toast from "react-hot-toast";
@@ -20,19 +20,18 @@ export default function EditCourse() {
   const { course } = useSelector((state: RootState) => state.course);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const { token } = useSelector((state: RootState) => state.auth);
 
   const populateCourseDetails = async (): Promise<void> => {
-    if (!courseId || !token) return;
+    if (!courseId) return;
     
     setLoading(true);
     setError(null);
     
     try {
-      const result = await getFullDetailsOfCourse(courseId, token);
+      const result = await getCourseDetails(courseId);
 
-      // Handle different response structures - API returns { data: { courseDetails, totalDuration } }
-      const courseDetails = result?.courseDetails || result?.data?.courseDetails;
+      // API returns { success: true, data: { courseDetails, totalDuration } }
+      const courseDetails = result?.data?.courseDetails;
 
       if (courseDetails && courseDetails._id) {
         dispatch(setEditCourse(true));

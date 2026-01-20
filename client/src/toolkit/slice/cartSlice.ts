@@ -41,11 +41,9 @@ const cartSlice = createSlice({
     },
 
     removeFromCart: (state, action) => {
-      console.log("in remove");
       const courseId = action.payload;
       const index = state.cart.findIndex((item: any) => item._id === courseId);
 
-      console.log("ind", state.cart[index]);
       if (index >= 0) {
         state.totalItems--;
         state.totalAmount -= state.cart[index].price;
@@ -63,7 +61,6 @@ const cartSlice = createSlice({
     },
     //! add a func to reset cart
     resetCart: (state) => {
-      console.log("resetCart Called");
       state.cart = [];
       state.totalItems = 0;
       state.totalAmount = 0;

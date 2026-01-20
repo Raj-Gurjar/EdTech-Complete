@@ -19,9 +19,6 @@ interface AuthRequest extends Request {
 
 export const updateProfile = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     //TODO : check email exists or not before updating
-    console.log("Inside update profile");
-    console.log("Request body:", req.body);
-    console.log("User ID:", req.user?.id);
     try {
         // Get data from request body
         const {
@@ -49,50 +46,33 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<Re
         const userDetails = await User_Model.findById(userId);
 
         if (!userDetails) {
-            console.log("User not found for ID:", userId);
             return res.status(400).json({
                 success: false,
                 message: "User details not found",
             });
         }
 
-        console.log("User details found:", {
-            userId: userDetails._id,
-            email: userDetails.email,
-            additionalDetails: userDetails.additionalDetails
-        });
-
         let profileId = userDetails.additionalDetails;
         let profileDetails: any = null;
         
         if (!profileId) {
-            console.log("No profile ID found, creating new profile");
             // Create a new profile if it doesn't exist
             profileDetails = await Profile_Model.create({});
             userDetails.additionalDetails = profileDetails._id;
             await userDetails.save();
             profileId = profileDetails._id;
-            console.log("Created new profile:", profileId);
         } else {
             // Try to find the profile
             profileDetails = await Profile_Model.findById(profileId);
             
             // If profile doesn't exist but ID is referenced, create a new one
             if (!profileDetails) {
-                console.log("Profile not found for ID:", profileId, "- Creating new profile");
                 profileDetails = await Profile_Model.create({});
                 userDetails.additionalDetails = profileDetails._id;
                 await userDetails.save();
                 profileId = profileDetails._id;
-                console.log("Created new profile to replace missing one:", profileId);
             }
         }
-
-        console.log("Profile details found:", {
-            profileId: profileDetails._id,
-            gender: profileDetails.gender,
-            dateOfBirth: profileDetails.dateOfBirth
-        });
 
         // Check if email is being changed and if it already exists
         if (email && email !== userDetails.email) {
@@ -121,12 +101,10 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<Re
         }
 
         if (Object.keys(profileUpdate).length > 0) {
-            console.log("Updating profile with:", profileUpdate);
             const profileUpdateResult = await Profile_Model.updateOne(
                 { _id: profileId },
                 { $set: profileUpdate }
             );
-            console.log("Profile update result:", profileUpdateResult);
         }
 
         // Update user details (only update fields that are provided and not empty strings)
@@ -146,14 +124,10 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<Re
         }
 
         if (Object.keys(userUpdate).length > 0) {
-            console.log("Updating user with:", userUpdate);
             const userUpdateResult = await User_Model.updateOne(
                 { _id: userId },
                 { $set: userUpdate }
             );
-            console.log("User update result:", userUpdateResult);
-        } else {
-            console.log("No user fields to update");
         }
 
         // Fetch updated user details with populated additionalDetails
@@ -173,9 +147,7 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<Re
             message: "User's Profile Updated Successfully",
             updatedUser,
         });
-    } catch (error: any) {
-        console.error("Error while updating User Profile:", error);
-        console.error("Error stack:", error.stack);
+    } catch (error: any) {      
         return res.status(500).json({
             success: false,
             message: error.message || "Error while updating User Profile",
@@ -224,11 +196,9 @@ export const getAllUserDetails = async (req: AuthRequest, res: Response): Promis
 //TODO : In this we will have to schedule the delete account for 3 days or so not immediately delete account
 //TODO : Explore -> cronjob
 export const deleteUserAccount = async (req: AuthRequest, res: Response): Promise<Response | void> => {
-    console.log("in dele");
     try {
         //get the id
         const userId = req.user?.id;
-        console.log("userId", userId);
         
         if (!userId) {
             return res.status(400).json({
@@ -239,21 +209,18 @@ export const deleteUserAccount = async (req: AuthRequest, res: Response): Promis
         //validate
 
         const userDetails = await User_Model.findById(userId);
-        // console.log("user de", userDetails);
         if (!userDetails) {
             return res.status(404).json({
                 success: false,
                 message: "User Not Found",
             });
         }
-        // console.log("user de", userDetails);
 
         //first we will delete the additional details,course,courseProgress then user details
         if (userDetails.additionalDetails) {
             await Profile_Model.findByIdAndDelete(userDetails.additionalDetails);
         }
 
-        // console.log("c1");
 
         //TODO: similarly we have to delete it from other schemas also
         // await CourseProgress_Model?.findByIdAndDelete({
@@ -267,7 +234,6 @@ export const deleteUserAccount = async (req: AuthRequest, res: Response): Promis
         //         $pull: { studentsEnrolled: userId },
         //     });
         // }
-        // console.log("c2");
 
         const coursesEnrolled = userDetails.courses;
         for (const courseId of coursesEnrolled) {
@@ -276,11 +242,9 @@ export const deleteUserAccount = async (req: AuthRequest, res: Response): Promis
             });
         }
 
-        // console.log("c3");
 
         await User_Model.findByIdAndDelete(userId);
 
-        // console.log("c4");
         //return
         return res.status(200).json({
             success: true,
@@ -296,7 +260,6 @@ export const deleteUserAccount = async (req: AuthRequest, res: Response): Promis
 
 export const updateDisplayPicture = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
-        console.log("inside upProfi");
         const userId = req.user?.id;
 
         if (!userId) {
@@ -306,9 +269,6 @@ export const updateDisplayPicture = async (req: AuthRequest, res: Response): Pro
             });
         }
 
-        console.log(userId);
-        console.log("req.body", req.body);
-        console.log("req.file :", req.file);
         const displayPicturePath = req.file?.path;
 
         if (!displayPicturePath) {
@@ -318,13 +278,10 @@ export const updateDisplayPicture = async (req: AuthRequest, res: Response): Pro
             });
         }
 
-        // console.log("disp pic path.", displayPicturePath);
-
         const displayImage = await uploadToCloudinary(
             displayPicturePath,
             process.env.CLD_PROFILE_PIC_FOLDER
         );
-        console.log("image..", displayImage);
 
         if (!displayImage) {
             return res.status(500).json({
@@ -347,7 +304,6 @@ export const updateDisplayPicture = async (req: AuthRequest, res: Response): Pro
             updatedUser,
         });
     } catch (error) {
-        console.log("Error in profile pic update", error);
         return res.status(500).json({
             success: false,
             message: "Error in updating the Image.",
@@ -357,9 +313,7 @@ export const updateDisplayPicture = async (req: AuthRequest, res: Response): Pro
 
 export const getEnrolledCourses = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
-        console.log("Entering get Enrolled C id");
         const userId = req.user?.id;
-        console.log("userId", userId);
         
         if (!userId) {
             return res.status(400).json({
@@ -407,7 +361,6 @@ export const getEnrolledCourses = async (req: AuthRequest, res: Response): Promi
 
         userDetails = userDetails.toObject();
 
-        // console.log("user d", userDetails);
         let subSectionLength = 0;
         for (let i = 0; i < userDetails.courses.length; i++) {
             let totalDurationInSeconds = 0;
@@ -452,13 +405,11 @@ export const getEnrolledCourses = async (req: AuthRequest, res: Response): Promi
             }
         }
 
-        // console.log("user details:", userDetails);
         return res.status(200).json({
             success: true,
             userDetails,
         });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({
             success: false,
             message: "Error in finding Enrolled Courses",
@@ -468,7 +419,6 @@ export const getEnrolledCourses = async (req: AuthRequest, res: Response): Promi
 
 export const instructorDashboardData = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
-        console.log("ins insDash");
         // const { instructor } = req.user.id;
 
         if (!req.user?.id) {
@@ -481,7 +431,6 @@ export const instructorDashboardData = async (req: AuthRequest, res: Response): 
         const courseDetails = await Course_Model.find({
             instructor: req.user.id,
         });
-        console.log("ccd", courseDetails);
         const courseData = courseDetails.map((course: any) => {
             const totalStudentsEnrolled = course.studentsEnrolled.length;
             const totalAmountGenerated = totalStudentsEnrolled * course.price;
@@ -497,14 +446,11 @@ export const instructorDashboardData = async (req: AuthRequest, res: Response): 
             return courseDataWithStats;
         });
 
-        console.log("ccd", courseData);
-
         return res.status(200).json({
             success: true,
             data: courseData,
         });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({
             success: false,
             message: "Error in fetching Instructor Course Data",
@@ -514,8 +460,6 @@ export const instructorDashboardData = async (req: AuthRequest, res: Response): 
 
 export const adminDashboardData = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
-        console.log("ins adminDash");
-
         // Aggregate user data
         const userAggregation = User_Model.aggregate([
             {
@@ -551,14 +495,11 @@ export const adminDashboardData = async (req: AuthRequest, res: Response): Promi
             },
         ]);
 
-        console.log("userAggregation", userAggregation);
-
         // Aggregate course and category data
         const [userResults, totalCategories] = await Promise.all([
             userAggregation,
             Category_Model.countDocuments(),
         ]);
-        console.log("userResults", userResults);
 
         const userStats = userResults[0];
         const totalUsers = userStats.totalUsers[0]?.count || 0;
@@ -581,15 +522,6 @@ export const adminDashboardData = async (req: AuthRequest, res: Response): Promi
             return total + course.studentsEnrolled.length * course.price * 0.25;
         }, 0);
 
-        // console.log("totalUsers", totalUsers);
-        // console.log("totalStudents", totalStudents);
-        // console.log("totalInstructors", totalInstructors);
-        // console.log("totalCourses", totalCourses);
-        // console.log("totalCategories", totalCategories);
-        // console.log("totalActiveStudents", totalActiveStudents);
-        // console.log("totalActiveInstructors", totalActiveInstructors);
-        // console.log("totalEarning", totalEarningAdmin.toFixed(2));
-
         return res.status(200).json({
             success: true,
             data: {
@@ -604,7 +536,6 @@ export const adminDashboardData = async (req: AuthRequest, res: Response): Promi
             },
         });
     } catch (error) {
-        console.log("Error in admin dashboard data: ", error);
         return res.status(500).json({
             success: false,
             message: "Error in fetching Data for Admin",
@@ -662,8 +593,7 @@ export const getPublicStatistics = async (req: Request, res: Response): Promise<
                 totalMinutes,
             },
         });
-    } catch (error) {
-        console.log("Error in fetching public statistics: ", error);
+    } catch (error) {   
         return res.status(500).json({
             success: false,
             message: "Error in fetching public statistics",

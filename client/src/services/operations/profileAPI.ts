@@ -37,19 +37,12 @@ export async function getUserEnrolledCourses(token: string): Promise<any[]> {
         Authorization: `Bearer ${token}`,
       }
     );
-    console.log("response inside profileApi", response);
-    console.log("response data", response.data.userDetails.courses);
 
     if (!response.data.success) {
       throw new Error(response.data.message);
     }
     result = response.data.userDetails.courses;
-    console.log("Enrolled courses data result data..", result);
-  } catch (error) {
-    console.log(
-      "Error in fetching Enrolled Courses error..",
-      (error as ApiError).response?.data
-    );
+  } catch (error) { 
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || apiError.message || "Failed to fetch enrolled courses");
   }
@@ -58,7 +51,6 @@ export async function getUserEnrolledCourses(token: string): Promise<any[]> {
 }
 
 export async function updateProfile(data: any, token: string): Promise<any> {
-  console.log("data in api ", data);
   const toastId = toast.loading("Loading...");
 
   let result: any = null;
@@ -68,7 +60,6 @@ export async function updateProfile(data: any, token: string): Promise<any> {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     });
-    console.log("response inside update profileApi", response);
 
     if (!response.data.success) {
       throw new Error(response.data.message);
@@ -77,7 +68,6 @@ export async function updateProfile(data: any, token: string): Promise<any> {
 
     toast.success(response?.data?.message);
   } catch (error) {
-    console.log("Error in updating profile api ...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || apiError.message || "Failed to update profile");
   }
@@ -100,7 +90,6 @@ export async function updateProfileImage(formData: FormData, token: string): Pro
         Authorization: `Bearer ${token}`,
       }
     );
-    console.log("response inside update profile img Api", response);
 
     if (!response.data.success) {
       throw new Error(response?.data?.message);
@@ -110,7 +99,6 @@ export async function updateProfileImage(formData: FormData, token: string): Pro
     localStorage.setItem("user", JSON.stringify(result));
     toast.success(response?.data?.message);
   } catch (error) {
-    console.log("Error in updating profile api ...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || apiError.message || "Failed to update profile image");
   }
@@ -122,12 +110,10 @@ export const deleteAccount = async (data: any, token: string): Promise<boolean |
   const toastId = toast.loading("Loading");
   let result: boolean | null = null;
 
-  console.log("delete profile data : ", data);
   try {
     const response = await apiConnector("DELETE", DELETE_PROFILE_API, data, {
       Authorization: `Bearer ${token}`,
     });
-    console.log("delete account api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not delete this account");
@@ -135,7 +121,6 @@ export const deleteAccount = async (data: any, token: string): Promise<boolean |
     result = true;
     toast.success("Account deleted Successfully");
   } catch (error) {
-    console.log("delete Account api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || apiError.response?.message || apiError.message || "Failed to delete account");
   }
@@ -162,7 +147,6 @@ export const getInstructorData = async (token: string): Promise<any[]> => {
     }
     result = response?.data?.data;
   } catch (error) {
-    console.log("Instructor data api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || apiError.response?.message || apiError.message || "Failed to fetch instructor data");
   }
@@ -189,7 +173,6 @@ export const getAdminData = async (token: string): Promise<any[]> => {
     }
     result = response?.data?.data;
   } catch (error) {
-    console.log("Admin data api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || apiError.response?.message || apiError.message || "Failed to fetch admin data");
   }
@@ -207,8 +190,7 @@ export const getPublicStatistics = async (): Promise<any | null> => {
       throw new Error("Could not get public statistics");
     }
     result = response?.data?.data;
-  } catch (error) {
-    console.log("Public statistics api error...", error);
+  } catch (error) { 
     const apiError = error as ApiError;
     console.error(apiError.response?.data?.message || apiError.response?.message || apiError.message || "Failed to fetch public statistics");
   }

@@ -56,7 +56,6 @@ export default function SectionDetails({ handleEditSecName }: SectionDetailsProp
       sectionId,
       courseId: course._id,
     }, token);
-    // console.log("sec delete result: ", result);
     if (result) {
       dispatch(setCourse(result));
     }
@@ -66,10 +65,8 @@ export default function SectionDetails({ handleEditSecName }: SectionDetailsProp
   const handleDeleteSubSection = async (subSectionId: string, sectionId: string): Promise<void> => {
     if (!course || !token) return;
     
-    const result = await deleteSubSection({ subSectionId, sectionId }, token);
-    // console.log("sub sec delete result: ", result);
+    const result = await deleteSubSection({ subSectionId, sectionId }, token);    
     if (result) {
-      // // TODO: something we can add here
       const updatedCourseContent = course.courseContent?.map((section: CourseSection) =>
         section._id === sectionId ? result : section
       ) || [];

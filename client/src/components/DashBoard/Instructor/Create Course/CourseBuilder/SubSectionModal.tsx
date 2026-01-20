@@ -109,7 +109,6 @@ export default function SubSectionModal({
 
   const onSubmit = async (data: LectureFormData): Promise<void> => {
     if (view) {
-      console.log(data);
       return;
     }
     if (edit) {

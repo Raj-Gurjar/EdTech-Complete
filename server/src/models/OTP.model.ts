@@ -18,9 +18,7 @@ async function sendVerificationEmail(email: string, otp: string): Promise<void> 
             emailContent
         );
 
-        console.log("Mail Response in OTP-schema", mailResponse);
-    } catch (error) {
-        console.log("Error in sending Verification Email", error);
+    } catch (error) { 
         throw error;
     }
 }
@@ -46,7 +44,6 @@ OTP_Schema.pre("save", async function (next) {
         await sendVerificationEmail(this.email, this.otp);
         next();
     } catch (error) {
-        console.log("Error in pre-save hook for OTP:", error);
         // Don't prevent save if email fails - OTP should still be saved
         next();
     }

@@ -38,18 +38,26 @@ interface ApiError {
   message?: string;
 }
 
-export const getAllCoursesPublic = async (): Promise<any[]> => {
+export const getAllCoursesPublic = async (search?: string, category?: string): Promise<any[]> => {
   const toastId = toast.loading("Loading");
   let result: any[] = [];
 
   try {
-    const response = await apiConnector("GET", GET_ALL_COURSES_PUBLIC_API);
+    // Build query parameters
+    const params: Record<string, string> = {};
+    if (search && search.trim()) {
+      params.search = search.trim();
+    }
+    if (category && category.trim() && category !== 'all') {
+      params.category = category.trim();
+    }
+
+    const response = await apiConnector("GET", GET_ALL_COURSES_PUBLIC_API, undefined, undefined, params);
     if (!response?.data?.success) {
       throw new Error("Could not fetch Courses");
     }
     result = response?.data?.data;
   } catch (error) {
-    console.log("Get all courses api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.message || "Failed to fetch courses");
   }
@@ -75,7 +83,6 @@ export const getAllCoursesAdmin = async (token: string): Promise<any[]> => {
     }
     result = response?.data?.data;
   } catch (error) {
-    console.log("Get all courses api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.message || "Failed to fetch courses");
   }
@@ -103,7 +110,6 @@ export const publishCourseAdmin = async (courseId: string, token: string): Promi
     toast.success("Course Published Successfully");
     result = response?.data?.data;
   } catch (error) {
-    console.log("Publish course api error...", error);
     const apiError = error as ApiError;
     toast.error(
       apiError.response?.data?.message || "Error in publishing the course"
@@ -134,7 +140,6 @@ export const unpublishCourseAdmin = async (courseId: string, token: string): Pro
     toast.success("Course Unpublished Successfully");
     result = response?.data?.data;
   } catch (error) {
-    console.log("Unpublish course api error...", error);
     const apiError = error as ApiError;
     toast.error(
       apiError.response?.data?.message || "Error in unpublishing the course"
@@ -153,14 +158,12 @@ export const fetchCourseDetails = async (courseId: string): Promise<any> => {
     const response = await apiConnector("POST", COURSE_DETAILS_API, {
       courseId,
     });
-    console.log("Course detail..", response);
 
     if (!response?.data?.success) {
       throw new Error(response.data.message);
     }
     result = response?.data;
   } catch (error) {
-    console.log("course details api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.message || "Failed to fetch course details");
     result = apiError.response?.data;
@@ -209,7 +212,6 @@ export const addCourseDetails = async (
     toast.success("Course Details added Successfully", { id: toastId });
     result = response?.data?.newCourse;
   } catch (error) {
-    console.log("add course api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || "Failed to add course details", { id: toastId });
   }
@@ -225,15 +227,13 @@ export const editCourseDetails = async (data: any, token: string): Promise<any> 
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     });
-    console.log("edit course detail..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not edit details in Course");
     }
     toast.success("Course Details edited Successfully");
     result = response?.data?.data;
-  } catch (error) {
-    console.log("edit course api error...", error);
+  } catch (error) { 
     const apiError = error as ApiError;
     toast.error(apiError.response?.message || "Failed to edit course details");
   }
@@ -242,7 +242,6 @@ export const editCourseDetails = async (data: any, token: string): Promise<any> 
 };
 
 export const createSection = async (data: any, token: string): Promise<any> => {
-  console.log("entering createSection", data);
   const toastId = toast.loading("Loading");
   let result: any = null;
 
@@ -250,7 +249,6 @@ export const createSection = async (data: any, token: string): Promise<any> => {
     const response = await apiConnector("POST", CREATE_SECTION_API, data, {
       Authorization: `Bearer ${token}`,
     });
-    console.log("create section api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not create section");
@@ -258,11 +256,9 @@ export const createSection = async (data: any, token: string): Promise<any> => {
     toast.success("Section Created Successfully");
     result = response?.data?.data;
   } catch (error) {
-    console.log("create section api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || "Failed to create section");
   }
-  console.log("Result: ", result);
   toast.dismiss(toastId);
   return result;
 };
@@ -300,7 +296,6 @@ export const createSubSection = async (
         }
       }
     );
-    console.log("create sub-section api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not create sub-section");
@@ -308,7 +303,6 @@ export const createSubSection = async (
     toast.success("Sub-Section Created Successfully", { id: toastId });
     result = response?.data?.data;
   } catch (error) {
-    console.log("create sub-section api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || "Failed to create sub-section", { id: toastId });
   }
@@ -318,12 +312,10 @@ export const createSubSection = async (
 export const updateSection = async (data: any, token: string): Promise<any> => {
   const toastId = toast.loading("Loading");
   let result: any = null;
-  console.log("sec update api data: ", data);
   try {
     const response = await apiConnector("PUT", UPDATE_SECTION_API, data, {
       Authorization: `Bearer ${token}`,
     });
-    console.log("update section api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not update section");
@@ -331,7 +323,6 @@ export const updateSection = async (data: any, token: string): Promise<any> => {
     toast.success("Section Updated Successfully");
     result = response?.data?.data;
   } catch (error) {
-    console.log("update section api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || "Failed to update section");
   }
@@ -348,7 +339,6 @@ export const updateSubSection = async (data: any, token: string): Promise<any> =
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     });
-    console.log("update sub-section api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not update sub-section");
@@ -356,7 +346,6 @@ export const updateSubSection = async (data: any, token: string): Promise<any> =
     toast.success("Sub-Section Updated Successfully");
     result = response?.data?.data;
   } catch (error) {
-    console.log("update sub-section api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || "Failed to update sub-section");
   }
@@ -368,12 +357,10 @@ export const deleteSection = async (data: any, token: string): Promise<any> => {
   const toastId = toast.loading("Loading");
   let result: any = null;
 
-  console.log("delete sub sec data : ", data);
   try {
     const response = await apiConnector("DELETE", DELETE_SECTION_API, data, {
       Authorization: `Bearer ${token}`,
     });
-    console.log("delete section api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not delete section");
@@ -381,7 +368,6 @@ export const deleteSection = async (data: any, token: string): Promise<any> => {
     toast.success("Section deleted Successfully");
     result = response?.data?.data;
   } catch (error) {
-    console.log("delete section api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.message || "Failed to delete section");
   }
@@ -397,7 +383,6 @@ export const deleteSubSection = async (data: any, token: string): Promise<any> =
     const response = await apiConnector("DELETE", DELETE_SUBSECTION_API, data, {
       Authorization: `Bearer ${token}`,
     });
-    console.log("delete sub-section api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not delete subsection");
@@ -405,7 +390,6 @@ export const deleteSubSection = async (data: any, token: string): Promise<any> =
     toast.success("subSection deleted Successfully");
     result = response?.data?.data;
   } catch (error) {
-    console.log("delete subsection api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.message || "Failed to delete subsection");
   }
@@ -426,14 +410,12 @@ export const fetchInstructorCourses = async (token: string): Promise<any[]> => {
         Authorization: `Bearer ${token}`,
       }
     );
-    console.log("Instructor courses detail..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not fetch Instructor Courses");
     }
     result = response?.data?.data;
   } catch (error) {
-    console.log("Course Instructor api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.message || "Failed to fetch instructor courses");
     result = Array.isArray(apiError.response?.data) ? apiError.response.data : [];
@@ -446,12 +428,10 @@ export const deleteCourse = async (data: any, token: string): Promise<any> => {
   const toastId = toast.loading("Loading");
   let result: any = null;
 
-  console.log("delete course data : ", data);
   try {
     const response = await apiConnector("DELETE", DELETE_COURSE_API, data, {
       Authorization: `Bearer ${token}`,
     });
-    console.log("delete course api response..", response);
 
     if (!response?.data?.success) {
       throw new Error("Could not delete course");
@@ -459,7 +439,6 @@ export const deleteCourse = async (data: any, token: string): Promise<any> => {
     toast.success("Course deleted Successfully");
     result = response?.data?.data;
   } catch (error) {
-    console.log("delete course api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.message || "Failed to delete course");
   }
@@ -486,7 +465,6 @@ export const getFullDetailsOfCourse = async (courseId: string, token: string): P
     }
     result = response?.data?.data;
   } catch (error) {
-    console.log("Full Course api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.message || "Failed to fetch full course details");
     result = Array.isArray(apiError.response?.data) ? apiError.response.data : (apiError.response?.data || []);
@@ -497,13 +475,11 @@ export const getFullDetailsOfCourse = async (courseId: string, token: string): P
 
 export const markLectureAsComplete = async (data: any, token: string): Promise<boolean> => {
   let result: boolean = false;
-  console.log("mark comp", data);
   const toastId = toast.loading("Loading...");
   try {
     const response = await apiConnector("POST", LECTURE_COMPLETION_API, data, {
       Authorization: `Bearer ${token}`,
     });
-    console.log("Mark Lect as comp api response....", response);
 
     if (!response.data.message) {
       throw new Error(response.data.error);
@@ -511,7 +487,6 @@ export const markLectureAsComplete = async (data: any, token: string): Promise<b
     toast.success("Lecture Completed");
     result = true;
   } catch (error) {
-    console.log("Mark lect api error....", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || apiError.message || "Failed to mark lecture as complete");
     result = false;
@@ -533,9 +508,7 @@ export const getCourseDetails = async (courseId: string): Promise<any> => {
       throw new Error("Could not fetch this Course  Data");
     }
     result = response?.data;
-    console.log("res", result);
   } catch (error) {
-    console.log("course details page api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || "Failed to fetch course details");
     result = apiError.response?.data || {};
@@ -558,7 +531,6 @@ export const getSectionDetails = async (sectionId: string): Promise<any> => {
     }
     result = response?.data;
   } catch (error) {
-    console.log("section details page api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || "Failed to fetch section details");
     result = apiError.response?.data || {};
@@ -582,7 +554,6 @@ export const createRating = async (data: { courseId: string; rating: number; rev
     toast.success("Rating and Review added Successfully");
     result = response?.data?.newCourse;
   } catch (error) {
-    console.log("review api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || "Failed to create rating");
   }
@@ -601,7 +572,6 @@ export const getAllReviews = async (): Promise<any[]> => {
     }
     result = response?.data?.data;
   } catch (error) {
-    console.log("Get all reviews api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || "Failed to fetch reviews");
   }
@@ -617,7 +587,7 @@ export const getCourseDetailsAdmin = async (courseId: string, token: string): Pr
     const response = await apiConnector(
       "POST",
       GET_COURSE_DETAILS_ADMIN_API,
-      courseId,
+      { courseId },
       { Authorization: `Bearer ${token}` }
     );
 
@@ -626,7 +596,6 @@ export const getCourseDetailsAdmin = async (courseId: string, token: string): Pr
     }
     result = response?.data;
   } catch (error) {
-    console.log("course details admin page api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || "Failed to fetch course details");
     result = apiError.response?.data || {};

@@ -26,8 +26,33 @@ interface AuthRequest extends Request {
 
 export const getAllPublishedCourses = async (req: Request, res: Response): Promise<Response | void> => {
     try {
+        const { search, category } = req.query;
+        
+        // Build the query filter
+        const filter: any = { status: "Published" };
+        
+        // Add search filter if provided
+        if (search && typeof search === 'string' && search.trim()) {
+            const searchRegex = new RegExp(search.trim(), 'i'); // Case-insensitive search
+            filter.$or = [
+                { courseName: searchRegex },
+                { courseDescription: searchRegex },
+            ];
+        }
+        
+        // Add category filter if provided
+        if (category && typeof category === 'string' && category.trim() && category !== 'all') {
+            // First, find the category by name
+            const categoryDoc = await Category_Model.findOne({ 
+                name: { $regex: new RegExp(`^${category.trim()}$`, 'i') } 
+            });
+            if (categoryDoc) {
+                filter.category = categoryDoc._id;
+            }
+        }
+
         const allCourse = await Course_Model.find(
-            { status: "Published" },
+            filter,
             {
                 courseName: true,
                 price: true,
@@ -36,9 +61,11 @@ export const getAllPublishedCourses = async (req: Request, res: Response): Promi
                 thumbnail: true,
                 ratingAndReviews: true,
                 studentsEnrolled: true,
+                category: true,
             }
         )
             .populate("instructor")
+            .populate("category")
             .populate({
                 path: "ratingAndReviews",
                 select: "rating", // Only select rating field for performance
@@ -51,7 +78,6 @@ export const getAllPublishedCourses = async (req: Request, res: Response): Promi
             data: allCourse,
         });
     } catch (error: any) {
-        console.log("Get course Error : ", error);
         return res.status(500).json({
             success: false,
             message: "Error in getting all the Courses",
@@ -62,9 +88,7 @@ export const getAllPublishedCourses = async (req: Request, res: Response): Promi
 
 // Get Course by Id
 export const getCourseById = async (req: Request, res: Response): Promise<Response | void> => {
-    console.log("in gg");
     try {
-        console.log("cccby");
         const { courseId } = req.body;
 
         const courseDetails = await Course_Model.findById(courseId)
@@ -89,7 +113,6 @@ export const getCourseById = async (req: Request, res: Response): Promise<Respon
                 },
             })
             .exec();
-        // console.log("course details", courseDetails);
         //valid
         if (!courseDetails) {
             return res.status(400).json({
@@ -107,7 +130,6 @@ export const getCourseById = async (req: Request, res: Response): Promise<Respon
             data: { courseDetails, totalDuration },
         });
     } catch (error: any) {
-        console.log("Error in fetching course details", error);
         return res.status(500).json({
             success: false,
             message: "Error in fetching this course data.",
@@ -120,7 +142,6 @@ export const getCourseById = async (req: Request, res: Response): Promise<Respon
 export const getFullCourseDetails = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
         const { courseId } = req.body;
-        // console.log("ccd", courseId);
         const userId = req.user?.id;
         
         if (!userId) {
@@ -154,22 +175,17 @@ export const getFullCourseDetails = async (req: AuthRequest, res: Response): Pro
             .exec();
 
         //valid
-        // console.log("course Details", courseDetails);
         if (!courseDetails) {
             return res.status(400).json({
                 success: false,
                 message: `Could not find the Course with ${courseId}`,
             });
         }
-        // console.log("Course Details:", courseDetails);
 
         let courseProgressCount = await CourseProgress_Model.findOne({
             courseID: courseId,
             userId: userId,
         });
-        // console.log("Course Progress Count :", courseProgressCount);
-
-        // console.log("ccc", courseDetails.courseContent);
 
         let totalDurationInSeconds = 0;
         courseDetails.courseContent?.forEach((content: any) => {
@@ -178,10 +194,8 @@ export const getFullCourseDetails = async (req: AuthRequest, res: Response): Pro
                 totalDurationInSeconds += timeDurationInSeconds;
             });
         });
-        // console.log("totalDurSec :", totalDurationInSeconds);
         const totalDuration = convertSecondsToDuration(totalDurationInSeconds);
 
-        // console.log("totalDur :", totalDuration);
         //return
         return res.status(200).json({
             success: true,
@@ -194,7 +208,6 @@ export const getFullCourseDetails = async (req: AuthRequest, res: Response): Pro
             },
         });
     } catch (error: any) {
-        console.log("Error in whole course details fetching :", error);
         return res.status(500).json({
             success: false,
             message: "Error in fetching whole course details",
@@ -209,7 +222,6 @@ export const getFullCourseDetails = async (req: AuthRequest, res: Response): Pro
 export const createCourse = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
         //*get the data
-        // console.log("entering createCourse");
         const {
             courseName,
             courseDescription,
@@ -223,11 +235,8 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<Res
         } = req.body;
         let { status } = req.body;
 
-        console.log("req.body", req.body);
-        console.log("req.file :", req.file);
 
         const thumbnailPath = req.file?.path;
-        console.log("thum path", thumbnailPath);
 
         //* validation
 
@@ -250,7 +259,6 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<Res
         if (!status || status === undefined) {
             status = "Draft";
         }
-        // console.log("cp1");
         //TODO: check userID and instructorDetail are equal or not
         const userId = req.user?.id;
         
@@ -260,12 +268,10 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<Res
                 message: "User not authenticated",
             });
         }
-        // console.log("usedId: ", userId);
 
         const instructorDetails = await User_Model.findById(userId, {
             accountType: "Instructor",
         });
-        // console.log("Instructor details: ", instructorDetails);
 
         if (!instructorDetails) {
             return res.status(404).json({
@@ -275,7 +281,6 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<Res
         }
         //* Add course in that Category
         const categoryDetail = await Category_Model.findById(category);
-        // console.log("category Details : ", categoryDetail);
 
         if (!categoryDetail) {
             return res.status(404).json({
@@ -291,7 +296,6 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<Res
             process.env.CLD_THUMBNAIL_FOLDER
         );
 
-        console.log("thumbnail Image:", thumbnailImage);
         if (!thumbnailImage) {
             return res.status(400).json({
                 success: false,
@@ -339,14 +343,12 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<Res
         );
 
         //* return res
-        console.log("newCourse create : ", newCourse);
         return res.status(200).json({
             success: true,
             message: "New Course Created Successfully.",
             newCourse,
         });
     } catch (error: any) {
-        console.log("Error in creating course", error);
         return res.status(500).json({
             success: false,
             message: "Error in Creating Course.",
@@ -359,12 +361,9 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<Res
 //edit Course  (vid. 26, near 1:00hr)
 export const editCourse = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
-        console.log("inside edit course controller");
         const { courseId } = req.body;
         const updates = req.body;
 
-        console.log("updated", req.body);
-        // console.log("entering edit controller", req.body);
 
         const course = await Course_Model.findById(courseId);
 
@@ -374,7 +373,6 @@ export const editCourse = async (req: AuthRequest, res: Response): Promise<Respo
 
         //if thumbnail image is found update it
         if (req.files) {
-            console.log("Thumbnail updated");
             const thumbnail = (req.files as any).thumbnailImage;
             const thumbnailImage = await uploadImageToCloudinary(
                 thumbnail,
@@ -428,7 +426,6 @@ export const editCourse = async (req: AuthRequest, res: Response): Promise<Respo
             data: updatedCourse,
         });
     } catch (error: any) {
-        console.log("Error in editing the course", error);
 
         return res.status(500).json({
             success: false,
@@ -439,11 +436,9 @@ export const editCourse = async (req: AuthRequest, res: Response): Promise<Respo
 };
 
 export const deleteCourse = async (req: AuthRequest, res: Response): Promise<Response | void> => {
-    console.log("Entering in delete section controller");
     try {
         //get data
         const { courseId } = req.body;
-        console.log("courseId: ", req.body);
         // delete from db
 
         const course = await Course_Model.findById(courseId);
@@ -472,11 +467,9 @@ export const deleteCourse = async (req: AuthRequest, res: Response): Promise<Res
 
         // delete course from categoryDB
         const categoryId = course.category;
-        console.log("cp1");
         await Category_Model.findByIdAndUpdate(categoryId, {
             $pull: { courses: courseId },
         });
-        console.log("Deleted from category");
 
         //TODO: delete course from ratingAndReview schema
 
@@ -485,9 +478,7 @@ export const deleteCourse = async (req: AuthRequest, res: Response): Promise<Res
 
         for (const sectionId of courseSections) {
             //delete subsection of the section
-            console.log("cp0", sectionId);
             const section = await Section_Model.findById(sectionId);
-            console.log("cp11", section);
             if (section) {
                 const subSections = section.subSections;
                 for (const subSectionId of subSections) {
@@ -497,8 +488,6 @@ export const deleteCourse = async (req: AuthRequest, res: Response): Promise<Res
 
             await Section_Model.findByIdAndDelete(sectionId);
         }
-        // console.log("cp1");
-        console.log("cp2");
         //Delete the course
 
         await Course_Model.findByIdAndDelete(courseId);
@@ -509,7 +498,6 @@ export const deleteCourse = async (req: AuthRequest, res: Response): Promise<Res
             message: "Course deleted Successfully.",
         });
     } catch (error) {
-        console.log("Error in deleting the course :", error);
         return res.status(500).json({
             success: false,
             message: "Error in Deleting Course",
@@ -538,7 +526,6 @@ export const getInstructorCourses = async (req: AuthRequest, res: Response): Pro
             .populate("category")
 
             .exec();
-        console.log("inst courses", instructorCourses);
 
         // Return
         return res.status(200).json({
@@ -546,7 +533,6 @@ export const getInstructorCourses = async (req: AuthRequest, res: Response): Pro
             data: instructorCourses,
         });
     } catch (error: any) {
-        console.log("Instructor's courses data fetching error", error);
 
         return res.status(500).json({
             success: false,
@@ -558,7 +544,6 @@ export const getInstructorCourses = async (req: AuthRequest, res: Response): Pro
 
 //! ######### Admin Specific ##########
 export const getAllCoursesAdmin = async (req: Request, res: Response): Promise<Response | void> => {
-    console.log("inside all admin cour");
     try {
         const allCourse = await Course_Model.find({}, {})
             .populate("instructor")
@@ -571,7 +556,6 @@ export const getAllCoursesAdmin = async (req: Request, res: Response): Promise<R
             data: allCourse,
         });
     } catch (error: any) {
-        console.log("Get course Error : ", error);
         return res.status(500).json({
             success: false,
             message: "Error in getting all the Courses",
@@ -583,7 +567,6 @@ export const getAllCoursesAdmin = async (req: Request, res: Response): Promise<R
 export const publishCourse = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         const { courseId } = req.body;
-        // console.log("ccd", courseId);
 
         const courseDetails = await Course_Model.findOne({ _id: courseId });
 
@@ -594,8 +577,6 @@ export const publishCourse = async (req: Request, res: Response): Promise<Respon
                 message: `Could not find the Course with ${courseId}`,
             });
         }
-
-        // console.log("course Details", courseDetails);
 
         // If the course status is "Draft", update it to "Publish"
         if (courseDetails.status === "Draft") {
@@ -612,7 +593,6 @@ export const publishCourse = async (req: Request, res: Response): Promise<Respon
             message: "Course Published Successfully.",
         });
     } catch (error: any) {
-        console.log("course publish Error: ", error);
         return res.status(500).json({
             success: false,
             message: "Error in publishing the Course",
@@ -650,7 +630,6 @@ export const unpublishCourse = async (req: Request, res: Response): Promise<Resp
             message: "Course Unpublished Successfully.",
         });
     } catch (error: any) {
-        console.log("course unpublish Error: ", error);
         return res.status(500).json({
             success: false,
             message: "Error in unpublishing the Course",
@@ -661,10 +640,7 @@ export const unpublishCourse = async (req: Request, res: Response): Promise<Resp
 
 export const getCourseByIdAdmin = async (req: Request, res: Response): Promise<Response | void> => {
     try {
-        // console.log("insd get cadmin");
         const { courseId } = req.body;
-
-        // console.log("courseid ", req.body);
 
         const courseDetails = await Course_Model.findById(courseId)
             .populate({
@@ -688,7 +664,6 @@ export const getCourseByIdAdmin = async (req: Request, res: Response): Promise<R
                 },
             })
             .exec();
-        // console.log("course details", courseDetails);
         //valid
         if (!courseDetails) {
             return res.status(400).json({
@@ -705,8 +680,7 @@ export const getCourseByIdAdmin = async (req: Request, res: Response): Promise<R
             success: true,
             data: { courseDetails, totalDuration },
         });
-    } catch (error: any) {
-        console.log("Error in fetching course details", error);
+    } catch (error: any) { 
         return res.status(500).json({
             success: false,
             message: "Error in fetching this course data.",

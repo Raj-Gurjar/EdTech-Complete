@@ -112,7 +112,6 @@ export async function buyCourse(
     }
 
     //initiate the order
-    console.log("be");
     const orderResponse = await apiConnector(
       "POST",
       COURSE_PAYMENT_API,
@@ -121,14 +120,10 @@ export async function buyCourse(
       },
       { Authorization: `Bearer ${token}` }
     );
-    console.log("OrderResponse :", orderResponse);
 
     if (!orderResponse.data.success) {
-      console.log("ds");
       throw new Error(orderResponse.data.messages);
     }
-
-    console.log("OrderResponse :", orderResponse);
 
     //create options
     const options: RazorpayOptions = {
@@ -160,10 +155,8 @@ export async function buyCourse(
     paymentObject.open();
     paymentObject.on("payment.failed", function (response: RazorpayError) {
       toast.error("oops, payment failed");
-      console.log("error in options...", response.error);
     });
   } catch (error) {
-    console.log("PAYMENT error Api...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || "Payment failed");
   }
@@ -206,7 +199,6 @@ async function verifyPayment(bodyData: any, token: string, navigate: NavigateFun
     navigate("/dashboard/enrolledCourses");
     dispatch(resetCart());
   } catch (error) {
-    console.log("Payment Verify error..", error);
     toast.error("Could not verify Payment");
   }
   toast.dismiss(toastId);

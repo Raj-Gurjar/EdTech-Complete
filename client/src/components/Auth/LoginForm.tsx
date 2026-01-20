@@ -66,10 +66,11 @@ export default function LoginForm() {
 
               {/* Forgot Password Link */}
               <div className="text-sm text-purple6 cursor-pointer relative flex justify-end -mt-1">
-                <Link to="/resetPasswordRequest">
-                  <button className="hover:text-purple5 hover:underline transition-colors">
-                    Forgot Password?
-                  </button>
+                <Link 
+                  to="/resetPasswordRequest"
+                  className="hover:text-purple5 hover:underline transition-colors"
+                >
+                  Forgot Password?
                 </Link>
               </div>
             </div>

@@ -70,10 +70,14 @@ export default function CourseInfoForm() {
       setValue("courseShortDescription", course.courseDescription || "");
       setValue("coursePrice", course.price || 0);
       setValue("courseLanguage", course.language || "");
-      setValue("courseTags", course.tag || []);
+      // Handle tags - check both 'tag' and 'tags' fields, ensure it's an array
+      const tags = course.tag || course.tags || [];
+      setValue("courseTags", Array.isArray(tags) ? tags : []);
       setValue("courseBenefits", course.whatYouWillLearn || "");
       setValue("courseCategory", course.category?._id || "");
-      setValue("courseRequirements", course.instruction || []);
+      // Handle instructions - check both 'instruction' and 'instructions' fields, ensure it's an array
+      const instructions = course.instruction || course.instructions || [];
+      setValue("courseRequirements", Array.isArray(instructions) ? instructions : []);
       setValue("courseImage", course.thumbnail || "");
     }
 
@@ -89,11 +93,11 @@ export default function CourseInfoForm() {
       currentValues.courseShortDescription !== course.courseDescription ||
       currentValues.coursePrice !== course.price ||
       currentValues.courseLanguage !== course.language ||
-      JSON.stringify(currentValues.courseTags) !== JSON.stringify(course.tag) ||
+      JSON.stringify(currentValues.courseTags) !== JSON.stringify(course.tag || course.tags || []) ||
       currentValues.courseBenefits !== course.whatYouWillLearn ||
       currentValues.courseCategory !== course.category?._id ||
       currentValues.courseImage !== course.thumbnail ||
-      JSON.stringify(currentValues.courseRequirements) !== JSON.stringify(course.instruction)
+      JSON.stringify(currentValues.courseRequirements) !== JSON.stringify(course.instruction || course.instructions || [])
     );
   };
 
@@ -118,7 +122,8 @@ export default function CourseInfoForm() {
         if (currentValues.courseLanguage !== course.language) {
           formData.append("language", data.courseLanguage);
         }
-        if (JSON.stringify(currentValues.courseTags) !== JSON.stringify(course.tag)) {
+        const courseTags = course.tag || course.tags || [];
+        if (JSON.stringify(currentValues.courseTags) !== JSON.stringify(courseTags)) {
           formData.append("tag", JSON.stringify(data.courseTags));
         }
         if (currentValues.courseBenefits !== course.whatYouWillLearn) {
@@ -130,7 +135,8 @@ export default function CourseInfoForm() {
         if (currentValues.courseImage !== course.thumbnail) {
           formData.append("thumbnail", data.courseImage as File);
         }
-        if (JSON.stringify(currentValues.courseRequirements) !== JSON.stringify(course.instruction)) {
+        const courseInstructions = course.instruction || course.instructions || [];
+        if (JSON.stringify(currentValues.courseRequirements) !== JSON.stringify(courseInstructions)) {
           formData.append("instruction", JSON.stringify(data.courseRequirements));
         }
 
@@ -328,7 +334,7 @@ export default function CourseInfoForm() {
             errors={errors}
             setValue={setValue}
             getValues={getValues}
-            chipValues={editCourse && course ? course.instructions : ""}
+            chipValues={editCourse && course ? (course.instruction || course.instructions || []) : []}
           />
         </div>
 
@@ -341,7 +347,7 @@ export default function CourseInfoForm() {
             errors={errors}
             setValue={setValue}
             getValues={getValues}
-            chipValues={editCourse && course ? course.tags : ""}
+            chipValues={editCourse && course ? (course.tag || course.tags || []) : []}
           />
         </div>
 

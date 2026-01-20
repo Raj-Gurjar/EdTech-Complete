@@ -100,7 +100,6 @@ export default function CourseBuilder() {
   };
 
   const handleEditSecName = (sectionId: string, sectionName: string): void => {
-    console.log("Edit Sec Name called");
     if (editSectionName === sectionId) {
       cancelEdit();
       return;

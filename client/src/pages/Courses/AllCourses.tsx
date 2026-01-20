@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Footer from "../../components/Footer/Footer";
 import { getAllCoursesPublic } from "../../services/operations/courseDetailsAPI";
 import CourseCard from "../../components/Cards/CourseCard";
@@ -52,44 +52,50 @@ export default function AllCourses() {
     setLoading(false);
   };
 
-  const showAllCourses = async (): Promise<void> => {
+  const showAllCourses = useCallback(async (): Promise<void> => {
     setLoading(true);
-    const courses = await getAllCoursesPublic();
+    const courses = await getAllCoursesPublic(
+      searchQuery || undefined,
+      selectedCategory !== "all" ? selectedCategory : undefined
+    );
     if (courses.length > 0) {
       setCoursesData(courses);
       setFilteredCourses(courses);
+    } else {
+      setCoursesData([]);
+      setFilteredCourses([]);
     }
     setLoading(false);
-  };
+  }, [searchQuery, selectedCategory]);
 
-  // Filter courses based on search and category
+  // Fetch courses when search or category changes
   useEffect(() => {
-    let filtered = [...coursesData];
+    // Debounce search to avoid too many API calls
+    const timeoutId = setTimeout(() => {
+      showAllCourses();
+    }, 500); // Wait 500ms after user stops typing
 
-    // Filter by search query
-    if (searchQuery.trim()) {
-      filtered = filtered.filter(
-        (course) =>
-          course.courseName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          course.instructor?.firstName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          course.instructor?.lastName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          course.courseDescription?.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    // Filter by category
-    if (selectedCategory !== "all") {
-      filtered = filtered.filter(
-        (course) => course.category?.name === selectedCategory
-      );
-    }
-
-    setFilteredCourses(filtered);
-  }, [searchQuery, selectedCategory, coursesData]);
+    return () => clearTimeout(timeoutId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery, selectedCategory]);
 
   useEffect(() => {
     getCategories();
-    showAllCourses();
+    // Initial load without search/category
+    const loadInitialCourses = async (): Promise<void> => {
+      setLoading(true);
+      const courses = await getAllCoursesPublic();
+      if (courses.length > 0) {
+        setCoursesData(courses);
+        setFilteredCourses(courses);
+      } else {
+        setCoursesData([]);
+        setFilteredCourses([]);
+      }
+      setLoading(false);
+    };
+    loadInitialCourses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const clearFilters = (): void => {

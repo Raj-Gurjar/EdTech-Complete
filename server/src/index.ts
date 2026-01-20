@@ -19,13 +19,11 @@ const allowedOrigins = [
 ].filter(Boolean); // Remove empty strings
 
 // Log allowed origins for debugging
-console.log("Allowed CORS origins:", allowedOrigins);
 
 app.use(cors({
     origin: (origin, callback) => {
         // Allow requests with no origin (like mobile apps, Postman, or curl requests)
         if (!origin) {
-            console.log("Request with no origin - allowing");
             return callback(null, true);
         }
         
@@ -39,10 +37,8 @@ app.use(cors({
         });
         
         if (isAllowed) {
-            console.log(`CORS: Allowing origin ${origin}`);
             callback(null, true);
         } else {
-            console.log(`CORS: Blocking origin ${origin}. Allowed origins:`, allowedOrigins);
             callback(new Error(`Not allowed by CORS. Origin: ${origin}`));
         }
     },

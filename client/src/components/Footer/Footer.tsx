@@ -73,7 +73,6 @@ export default function Footer() {
     e.preventDefault();
     if (email) {
       // TODO: Implement newsletter subscription
-      console.log("Newsletter subscription:", email);
       setEmail("");
     }
   };

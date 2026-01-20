@@ -37,7 +37,6 @@ export default function CourseDraft() {
 
     await deleteCourse({ courseId: courseId }, token);
 
-    console.log("course dele");
     dispatch(setStep(1));
     dispatch(resetCourseState());
     // navigate("/dashboard/createCourse");

@@ -5,11 +5,9 @@ const Category_Model = require("../models/Category.model");
 export const createCategory = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //get data
-        console.log("in cc");
 
         const { categoryName, categoryDescription } = req.body;
 
-        console.log("rr b", req.body);
 
         //validation
         if (!categoryName || !categoryDescription) {
@@ -59,14 +57,12 @@ export const showAllCategories = async (req: Request, res: Response): Promise<Re
     try {
         const allCategories = await Category_Model.find({}, {});
 
-        // console.log("all categories: ", allCategories);
 
         return res.status(200).json({
             success: true,
             data: allCategories,
         });
     } catch (error) {
-        console.log("Error in getting all categories: ", error);
         return res.status(500).json({
             success: false,
             message: "Error in Getting all categories",
@@ -81,7 +77,6 @@ export const categoryPageDetails = async (req: Request, res: Response): Promise<
 
     try {
         //get the data
-        // console.log("Entering cat page controller");
         const { categoryId } = req.body;
         //get top selling courses
         const selectedCategory = await Category_Model.findById(categoryId)
@@ -98,7 +93,6 @@ export const categoryPageDetails = async (req: Request, res: Response): Promise<
                 ],
             })
             .exec();
-        // console.log("selected course:", selectedCategory);
         //validate
         if (!selectedCategory) {
             return res.status(404).json({
@@ -108,7 +102,6 @@ export const categoryPageDetails = async (req: Request, res: Response): Promise<
         }
 
         if (selectedCategory.courses.length === 0) {
-            console.log("No course found in this category");
             return res.status(404).json({
                 success: false,
                 message: "No course found in this category",
@@ -120,7 +113,6 @@ export const categoryPageDetails = async (req: Request, res: Response): Promise<
             _id: { $ne: categoryId },
         });
 
-        // console.log("not Selected Cat: ", notSelectedCategories);
         let differentCategory = await Category_Model.findOne(
             notSelectedCategories[getRandomInt(notSelectedCategories.length)]
                 ._id
@@ -160,8 +152,7 @@ export const categoryPageDetails = async (req: Request, res: Response): Promise<
                 mostSellingCourses,
             },
         });
-    } catch (error: any) {
-        console.log("Error in category page courses", error);
+    } catch (error: any) {  
         return res.status(500).json({
             success: false,
             message: "Error in getting page details",
@@ -172,10 +163,8 @@ export const categoryPageDetails = async (req: Request, res: Response): Promise<
 
 export const deleteCategory = async (req: Request, res: Response): Promise<Response | void> => {
     try {
-        console.log("inside del cat");
 
         const { categoryId } = req.body;
-        console.log("cid", categoryId);
 
         if (!categoryId) {
             return res.status(400).json({
@@ -183,7 +172,6 @@ export const deleteCategory = async (req: Request, res: Response): Promise<Respo
                 message: "Category not found",
             });
         }
-        console.log("rr", req.body);
 
         await Category_Model.findByIdAndDelete(categoryId);
 
@@ -192,7 +180,6 @@ export const deleteCategory = async (req: Request, res: Response): Promise<Respo
             message: "Category Deleted Successfully",
         });
     } catch (error) {
-        console.log("error in category deletion:", error);
         return res.status(500).json({
             success: false,
             message: "Some error in Deleting the Category",

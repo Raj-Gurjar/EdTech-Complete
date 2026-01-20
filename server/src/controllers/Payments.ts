@@ -19,11 +19,9 @@ interface AuthRequest extends Request {
 
 export const capturePayment = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     //fetch all courses id and user id
-    console.log("inside cap pay cnt");
     const { courses } = req.body;
 
     const userId = req.user?.id;
-    // console.log("userId :", userId);
 
     if (!userId) {
         return res.status(401).json({
@@ -67,7 +65,6 @@ export const capturePayment = async (req: AuthRequest, res: Response): Promise<R
 
             totalAmount += course.price;
         } catch (error) {
-            console.log("Error in capture payment..", error);
             return res.status(500).json({
                 success: false,
                 message: "Error in capture payment",
@@ -88,7 +85,6 @@ export const capturePayment = async (req: AuthRequest, res: Response): Promise<R
             message: paymentResponse,
         });
     } catch (error) {
-        console.log("Error in capture payment 2:", error);
 
         return res.status(500).json({
             success: false,
@@ -217,9 +213,7 @@ const enrollStudents = async (courses: string[], userId: string): Promise<{ succ
                     `${enrolledStudent.firstName}`
                 )
             );
-            // console.log("Email Sent Successfully", emailResponse.response);
-        } catch (error) {
-            console.log("Error in Enrolling Students", error);
+        } catch (error) {   
             return {
                 success: false,
                 message: "Error in Enrolling Students",
@@ -246,7 +240,6 @@ export const sendPaymentMail = async (req: AuthRequest, res: Response): Promise<
     try {
         //find student
 
-        console.log("Inside mail sender");
 
         const enrolledStudent = await User_Model.findById(userId);
 
@@ -270,14 +263,12 @@ export const sendPaymentMail = async (req: AuthRequest, res: Response): Promise<
             )
         );
 
-        console.log("Mail response", emailResponse);
         
         return res.status(200).json({
             success: true,
             message: "Payment success email sent",
         });
     } catch (error) {
-        console.log("Error in sending mail", error);
         return res.status(500).json({
             success: false,
             message: "Error in sending mail",

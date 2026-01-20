@@ -50,7 +50,6 @@ export default function CoursePublish() {
       return;
     }
       
-    console.log("inside else");
     //if form is updated
 
     const formData = new FormData();
@@ -66,7 +65,6 @@ export default function CoursePublish() {
 
     const result = await editCourseDetails(formData, token);
     
-    // console.log("result: ",result);
     if (result) {
       goToCourses();
     }

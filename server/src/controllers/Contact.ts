@@ -36,7 +36,6 @@ export const createContactUs = async (req: Request, res: Response): Promise<Resp
         }
         
         const updateContactUs = await ContactUs_Model.create(contactData);
-        console.log("updated contact data: ", updateContactUs);
 
         //send mail to user
         const emailToUser = await mailSender(
@@ -44,7 +43,6 @@ export const createContactUs = async (req: Request, res: Response): Promise<Resp
             "FeedBack sent successfully",
             "Thanks for sending us the feedback."
         );
-        console.log("Email to user for feedback:", emailToUser);
 
         //send mail to yourself about the feedback
         const emailToUs = await mailSender(
@@ -52,7 +50,6 @@ export const createContactUs = async (req: Request, res: Response): Promise<Resp
             "One FeedBack Received",
             `Someone has just sent us a feedback : ${updateContactUs}`
         );
-        console.log("Email to user for feedback:", emailToUser);
         //return
         return res.status(200).json({
             success: true,

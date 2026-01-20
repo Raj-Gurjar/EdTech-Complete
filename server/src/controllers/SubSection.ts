@@ -7,16 +7,11 @@ const { uploadToCloudinary } = require("../config/cloudinary");
 
 export const createSubSection = async (req: Request, res: Response): Promise<Response | void> => {
     try {
-        console.log("inside subSec");
         //get data
         const { sectionId, title, description } = req.body;
         //get video file
 
-        console.log("req.body :", req.body);
-        console.log("req.file :", req.file);
         const lectureVideoPath = req.file?.path;
-
-        console.log("lec path ", lectureVideoPath);
 
         //validate
         if (!sectionId || !title || !description || !lectureVideoPath) {
@@ -31,7 +26,6 @@ export const createSubSection = async (req: Request, res: Response): Promise<Res
             lectureVideoPath,
             process.env.CLD_LECTURES_FOLDER
         );
-        console.log("uplfv", uploadVideo);
         
         if (!uploadVideo) {
             return res.status(500).json({
@@ -82,7 +76,6 @@ export const createSubSection = async (req: Request, res: Response): Promise<Res
 export const updateSubSection = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //get data
-        console.log("entering update sub sec controller");
         const {
             sectionId,
             subSectionId,
@@ -92,7 +85,6 @@ export const updateSubSection = async (req: Request, res: Response): Promise<Res
         } = req.body;
         //get video file
         // const { video } = req.files.videoFile;
-        console.log("sub sec controller body:", req.body);
         //update subsection
         const subSection = await SubSection_Model.findById(subSectionId);
 
@@ -131,7 +123,6 @@ export const updateSubSection = async (req: Request, res: Response): Promise<Res
             data: updatedSubSection,
         });
     } catch (error) {
-        console.log("Error in updating sub-sec: ", error);
         return res.status(500).json({
             success: false,
             message: "Error in updating subsection",
@@ -140,13 +131,10 @@ export const updateSubSection = async (req: Request, res: Response): Promise<Res
 };
 
 export const deleteSubSection = async (req: Request, res: Response): Promise<Response | void> => {
-    console.log("inside delete sub sec controller");
     try {
         //get the id
         const { subSectionId, sectionId } = req.body;
-        console.log(req.body);
 
-        console.log("dcp1");
         //delete it from section
         await Section_Model.findByIdAndUpdate(
             { _id: sectionId },
@@ -156,15 +144,12 @@ export const deleteSubSection = async (req: Request, res: Response): Promise<Res
                 },
             }
         );
-        console.log("dcp1");
         await SubSection_Model.findByIdAndDelete(subSectionId);
-        console.log("dcp3");
 
         const updatedSection = await Section_Model.findById(sectionId)
             .populate("subSections")
             .exec();
 
-        console.log("dcp4", updatedSection);
         //return
         return res.status(200).json({
             success: true,
@@ -172,7 +157,6 @@ export const deleteSubSection = async (req: Request, res: Response): Promise<Res
             data: updatedSection,
         });
     } catch (error) {
-        console.log("Error in delete sub-sec: ", error);
         return res.status(500).json({
             success: false,
             message: "Error in deleting Subsection",

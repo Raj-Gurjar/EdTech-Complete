@@ -22,7 +22,6 @@ interface AuthRequest extends Request {
 export const sendOTP = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //Extract data
-        console.log("inside send OTP");
         const { email } = req.body;
 
         //* Normalize email (lowercase and trim) to ensure consistent matching
@@ -47,12 +46,10 @@ export const sendOTP = async (req: Request, res: Response): Promise<Response | v
             specialChars: false,
         });
 
-        console.log("OTP generated :", otp);
 
         //Check otp is Unique (check in otp model)
 
         let otpResult = await OTP_Model.findOne({ otp: otp });
-        console.log("otpResult..", otpResult);
 
         while (otpResult) {
             otp = otpGenerator.generate(6, {
@@ -71,24 +68,16 @@ export const sendOTP = async (req: Request, res: Response): Promise<Response | v
 
         const otpBody = await OTP_Model.create(otpPayload);
 
-        console.log("OTP Body created: ", otpBody);
-        console.log("OTP Body ID:", otpBody._id);
-        console.log("OTP Body email:", otpBody.email);
-        console.log("OTP Body otp:", otpBody.otp);
-        console.log("OTP Body createdAt:", otpBody.createdAt);
         
         // Verify OTP was saved by querying it back immediately
         const verifyOtp = await OTP_Model.findById(otpBody._id);
-        console.log("OTP verification by ID:", verifyOtp ? "Found" : "NOT FOUND");
         
         const verifyOtpByEmail = await OTP_Model.findOne({ email: normalizedEmail, otp: otp });
-        console.log("OTP verification by email+otp:", verifyOtpByEmail ? "Found" : "NOT FOUND");
         
         if (!verifyOtp || !verifyOtpByEmail) {
             console.error("CRITICAL: OTP was created but cannot be found immediately after creation!");
             // Try to find any OTPs for this email
             const allForEmail = await OTP_Model.find({ email: normalizedEmail });
-            console.log("All OTPs for email:", allForEmail.length);
         }
 
         res.status(200).json({
@@ -97,7 +86,6 @@ export const sendOTP = async (req: Request, res: Response): Promise<Response | v
             otp,
         });
     } catch (error: any) {
-        console.log("Error in OTP sending :", error);
 
         return res.status(400).json({
             success: false,
@@ -110,7 +98,6 @@ export const sendOTP = async (req: Request, res: Response): Promise<Response | v
 export const signUp = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //* Extract data
-        console.log("in c");
         const {
             firstName,
             lastName,
@@ -127,7 +114,6 @@ export const signUp = async (req: Request, res: Response): Promise<Response | vo
 
         //! User Validation
 
-        console.log("adminkey back", adminKey);
 
         //* Check all entries
         if (
@@ -163,7 +149,6 @@ export const signUp = async (req: Request, res: Response): Promise<Response | vo
         }
 
         if (accountType === "Admin") {
-            console.log("Admin log");
             if (adminKey !== process.env.ADMIN_SECRET_KEY) {
                 return res.status(400).json({
                     success: false,
@@ -199,23 +184,12 @@ export const signUp = async (req: Request, res: Response): Promise<Response | vo
                 .sort({ createdAt: -1 });
         }
 
-        console.log("Recent Otp found:", recentOtp ? "Yes" : "No");
-        console.log("Otp entered by user:", otp);
-        console.log("Email used for OTP lookup (normalized):", normalizedEmail);
-        
-        if (recentOtp) {
-            console.log("Recent OTP from DB - email:", recentOtp.email, "otp:", recentOtp.otp, "createdAt:", recentOtp.createdAt);
-        }
+
 
         // //* validate OTP
         if (!recentOtp) {
             // OTP not found - try to find any OTPs for debugging
             const allOtps = await OTP_Model.find({}).sort({ createdAt: -1 }).limit(5);
-            console.log("Recent OTPs in DB (last 5):", allOtps.map((o: any) => ({ 
-                email: o.email, 
-                otp: o.otp, 
-                createdAt: o.createdAt 
-            })));
             
             // Also check if there are any OTPs for this email with different case
             const caseVariations = await OTP_Model.find({ 
@@ -225,7 +199,6 @@ export const signUp = async (req: Request, res: Response): Promise<Response | vo
                     { email: normalizedEmail }
                 ]
             }).sort({ createdAt: -1 });
-            console.log("OTPs found with case variations:", caseVariations.length);
             
             return res.status(400).json({
                 success: false,
@@ -235,7 +208,6 @@ export const signUp = async (req: Request, res: Response): Promise<Response | vo
         
         if (otp !== recentOtp.otp) {
             //OTP is invalid
-            console.log("OTP mismatch - entered:", otp, "stored:", recentOtp.otp);
             return res.status(400).json({
                 success: false,
                 message: "Entered OTP is Invalid or not Matched",
@@ -244,7 +216,6 @@ export const signUp = async (req: Request, res: Response): Promise<Response | vo
         
         // OTP verified successfully - delete it to prevent reuse
         await OTP_Model.deleteOne({ _id: recentOtp._id });
-        console.log("OTP verified and deleted");
 
         //* Hash Password
         const hashedPassword = await bcrypt.hash(password, 12);
@@ -296,7 +267,6 @@ export const signUp = async (req: Request, res: Response): Promise<Response | vo
 export const logIn = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //Get data
-        console.log("Entering login controller");
         const { email, password } = req.body;
 
         //! User Validation
@@ -377,7 +347,6 @@ export const logIn = async (req: Request, res: Response): Promise<Response | voi
 //! Google Authentication
 export const googleAuth = async (req: Request, res: Response): Promise<Response | void> => {
     try {
-        console.log("Entering Google auth controller");
         const { access_token, user: googleUserInfo, accountType, adminKey } = req.body;
 
         // Validate input
@@ -450,7 +419,6 @@ export const googleAuth = async (req: Request, res: Response): Promise<Response 
 
         if (user) {
             // User exists - log them in
-            console.log("Existing user found, logging in");
 
             const jwtSecret = process.env.JWT_SECRET;
             if (!jwtSecret) {
@@ -499,7 +467,6 @@ export const googleAuth = async (req: Request, res: Response): Promise<Response 
             });
         } else {
             // User doesn't exist - create new user
-            console.log("New user, creating account");
 
             // Determine account type (default to Student if not provided)
             const userAccountType = accountType || "Student";
@@ -585,7 +552,6 @@ export const googleAuth = async (req: Request, res: Response): Promise<Response 
             });
         }
     } catch (error) {
-        console.log("Error in Google auth:", error);
         return res.status(500).json({
             success: false,
             message: "Google authentication failed, please try again",
@@ -744,8 +710,7 @@ export const refreshToken = async (req: Request, res: Response): Promise<Respons
             token: newToken,
             message: "Token refreshed successfully",
         });
-    } catch (error) {
-        console.log("Error in refresh token:", error);
+    } catch (error) {      
         return res.status(500).json({
             success: false,
             message: "Failed to refresh token",

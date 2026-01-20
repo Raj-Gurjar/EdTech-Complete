@@ -30,7 +30,6 @@ const mailSender = async (
             html: body,
         });
 
-        console.log("Mail Info", info);
         return info;
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "Unknown error";

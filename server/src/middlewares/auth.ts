@@ -18,7 +18,6 @@ interface AuthRequest extends Request {
 export const auth = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         //extract token
-        console.log("Entering auth middleware");
 
         const authHeader = req.header("Authorization");
         const token = req.body.token || (authHeader ? authHeader.replace("Bearer ", "") : null);
@@ -49,7 +48,6 @@ export const auth = async (req: AuthRequest, res: Response, next: NextFunction):
             req.user = decodePayload;
         } catch (error: any) {
             //validation issue
-            console.log("Error in auth middleware", error);
             
             // Check if token is expired
             if (error.name === 'TokenExpiredError') {
@@ -80,7 +78,6 @@ export const auth = async (req: AuthRequest, res: Response, next: NextFunction):
         }
         next();
     } catch (error) {
-        console.log("Error in auth middleware", error);
         res.status(401).json({
             success: false,
             message: "Something went wrong while validating Token.",
@@ -149,7 +146,6 @@ export const isInstructor = async (req: AuthRequest, res: Response, next: NextFu
 //! Check Admin
 export const isAdmin = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        console.log("inside admin middlew");
         
         if (!req.user) {
             res.status(401).json({

@@ -69,7 +69,6 @@ export const createRatingNReview = async (req: AuthRequest, res: Response): Prom
                 new: true,
             }
         );
-        console.log("Updated Course:", updateCourse);
         //*return
         return res.status(200).json({
             success: true,
@@ -148,7 +147,6 @@ export const getAllRatingAndReviews = async (req: Request, res: Response): Promi
             .exec();
 
         //return
-        // console.log("rr", allReviews);
         return res.status(200).json({
             success: true,
             data: allReviews,

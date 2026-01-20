@@ -27,11 +27,9 @@ const courseSlice = createSlice({
   reducers: {
     setStep: (state, action: PayloadAction<number>) => {
       state.step = action.payload;
-      console.log("step: ", state.step);
     },
     setCourse: (state, action: PayloadAction<Course | null>) => {
       state.course = action.payload;
-      console.log("course state", state.course);
     },
     setEditCourse: (state, action: PayloadAction<boolean>) => {
       state.editCourse = action.payload;

@@ -37,8 +37,6 @@ export function sendOTP(email: string, navigate: NavigateFunction) {
         email,
         checkUserPresent: true,
       });
-      console.log("send otp api res :", response);
-      console.log(response.data.success);
 
       if (!response.data.success) {
         throw new Error(response.data.success);
@@ -46,7 +44,6 @@ export function sendOTP(email: string, navigate: NavigateFunction) {
       toast.success("OTP Sent Successfully");
       navigate("/verifyEmail");
     } catch (error) {
-      console.log("send auth otp error..", (error as ApiError).response?.data);
       const apiError = error as ApiError;
       toast.error(apiError.response?.data?.message || "Failed to send OTP");
     }
@@ -70,8 +67,6 @@ export function signUp(
     const toastId = toast.loading("Loading...");
     dispatch(setLoading(true));
 
-    console.log("inside signup api", adminKey);
-
     try {
       const response = await apiConnector("POST", SIGN_UP_API, {
         accountType,
@@ -83,7 +78,6 @@ export function signUp(
         otp,
         adminKey,
       });
-      console.log("Sign up api response...", response);
 
       if (!response.data.success) {
         throw new Error(response.data.message);
@@ -92,7 +86,6 @@ export function signUp(
       toast.success("SignUp Successful");
       navigate("/login");
     } catch (error) {
-      console.log("SignUp api error...", (error as ApiError).response);
       const apiError = error as ApiError;
       toast.error(`SignUp failed! ${apiError.response?.data?.message || "Unknown error"}`);
       navigate("/signup");
@@ -106,20 +99,15 @@ export function login(email: string, password: string, navigate: NavigateFunctio
   return async (dispatch: Dispatch<AnyAction>) => {
     const toastId = toast.loading("Loading...");
     dispatch(setLoading(true));
-    console.log("Entering login api func");
     try {
-      console.log("Entering try block login api");
       const response = await apiConnector("POST", LOGIN_API, {
         email,
         password,
       });
-      console.log("Exiting response");
-      console.log("Login api response....", response);
 
       if (!response.data.success) {
         throw new Error("error res: " + response.data.message);
       }
-      console.log("Login data..", response?.data?.token);
       toast.success("Login Successful");
       navigate("/dashboard/myDashboard");
 
@@ -136,10 +124,8 @@ export function login(email: string, password: string, navigate: NavigateFunctio
         : `https://api.dicebear.com/7.x/initials/svg?seed=${response.data.user.firstName}${response.data.user.lastName}`;
 
       dispatch(setUser({ ...response.data.user, image: userImage }));
-      console.log("set user..", response.data.user);
       localStorage.setItem("user", JSON.stringify(response.data.user));
     } catch (error) {
-      console.log("Login api error ...", error);
       const apiError = error as ApiError;
       toast.error(apiError.response?.data?.message || "Login Failed");
     }
@@ -155,9 +141,7 @@ export function logout(navigate: NavigateFunction) {
     dispatch(resetCart());
     removeToken();
     localStorage.removeItem("user");
-    console.log("Log out calling");
     navigate("/");
-    console.log("nav calling");
   };
 }
 
@@ -170,7 +154,6 @@ export function getPasswordResetToken(email: string, setEmailSent: (value: boole
         email,
       });
 
-      console.log("Reset Password token response...", response);
 
       if (!response.data.success) {
         throw new Error(response.data.message);
@@ -178,7 +161,6 @@ export function getPasswordResetToken(email: string, setEmailSent: (value: boole
       toast.success("Reset Email Sent");
       setEmailSent(true);
     } catch (error) {
-      console.log("Reset password token error");
       toast.error("Failed to send Email for resetting password");
     }
     dispatch(setLoading(false));
@@ -196,7 +178,6 @@ export function resetPassword(password: string, confPassword: string, token: str
         token,
       });
 
-      console.log("Reset Password response...", response);
 
       if (!response.data.success) {
         throw new Error(response.data.message);
@@ -204,7 +185,6 @@ export function resetPassword(password: string, confPassword: string, token: str
       toast.success("Password Reset Successful");
       navigate("/login");
     } catch (error) {
-      console.log("Reset password error", error);
       const apiError = error as ApiError;
       toast.error(apiError.response?.data?.message || "Failed to reset password");
     }
@@ -222,8 +202,6 @@ export function googleAuth(authData: string | object, navigate: NavigateFunction
       const payload = typeof authData === "string" ? JSON.parse(authData) : authData;
 
       const response = await apiConnector("POST", GOOGLE_AUTH_API, payload);
-
-      console.log("Google auth response...", response);
 
       if (!response.data.success) {
         throw new Error(response.data.message);
@@ -245,10 +223,8 @@ export function googleAuth(authData: string | object, navigate: NavigateFunction
         : `https://api.dicebear.com/7.x/initials/svg?seed=${response.data.user.firstName}${response.data.user.lastName}`;
 
       dispatch(setUser({ ...response.data.user, image: userImage }));
-      console.log("set user..", response.data.user);
       localStorage.setItem("user", JSON.stringify(response.data.user));
     } catch (error) {
-      console.log("Google auth error...", error);
       const apiError = error as ApiError;
       toast.error(apiError.response?.data?.message || "Google Authentication Failed");
     }

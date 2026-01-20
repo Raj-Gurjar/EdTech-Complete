@@ -25,7 +25,6 @@ export default function CourseMenu() {
     if (!courseId || !token) return;
     
     const courseData = await getFullDetailsOfCourse(courseId, token);
-    console.log("course Data", courseData);
 
     dispatch(setCourseSectionData(courseData?.courseDetails?.courseContent));
     dispatch(setEntireCourseData(courseData.courseDetails));

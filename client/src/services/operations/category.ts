@@ -72,7 +72,6 @@ export const showAllCategories = async (): Promise<any[]> => {
 export const getCategoryPageDetails = async (
   categoryId: string
 ): Promise<any> => {
-  console.log("inside getCatPageDetails");
   const toastId = toast.loading("Loading");
   let result: any = [];
 

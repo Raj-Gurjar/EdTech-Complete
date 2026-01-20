@@ -53,13 +53,10 @@ export const createSection = async (req: Request, res: Response): Promise<Respon
 };
 
 export const updateSection = async (req: Request, res: Response): Promise<Response | void> => {
-    console.log("Going inside update section");
     try {
         //*get data
 
         const { sectionName, sectionId, courseId } = req.body;
-
-        console.log("sec update ", req.body);
 
         //section db update
         const updateSectionData = await Section_Model.findByIdAndUpdate(
@@ -85,7 +82,6 @@ export const updateSection = async (req: Request, res: Response): Promise<Respon
             data: updatedCourse,
         });
     } catch (error) {
-        console.log("Error in updating section controller", error);
         return res.status(500).json({
             success: false,
             message: "Error in updating Section Data",
@@ -94,11 +90,9 @@ export const updateSection = async (req: Request, res: Response): Promise<Respon
 };
 
 export const deleteSection = async (req: Request, res: Response): Promise<Response | void> => {
-    console.log("Entering in delete section controller");
     try {
         //get data
         const { sectionId, courseId } = req.body;
-        console.log("section ID:", sectionId, ", courseId: ", courseId);
         // delete from db
 
         //remove section form course and update it
@@ -133,7 +127,6 @@ export const deleteSection = async (req: Request, res: Response): Promise<Respon
             })
             .exec();
 
-        console.log(" Sec controller deleted Successfully");
         //return
         return res.status(200).json({
             success: true,
@@ -149,14 +142,12 @@ export const deleteSection = async (req: Request, res: Response): Promise<Respon
 };
 
 export const sectionById = async (req: Request, res: Response): Promise<Response | void> => {
-    console.log("Section Details");
     try {
         const sectionId = req.body.id;
 
         const sectionDetails = await Section_Model.findById(sectionId)
             .populate("subSections")
             .exec();
-        // console.log("course details", courseDetails);
         //valid
         if (!sectionDetails) {
             return res.status(400).json({
@@ -164,14 +155,12 @@ export const sectionById = async (req: Request, res: Response): Promise<Response
                 message: `Could not find the Section with ${sectionId}`,
             });
         }
-        // console.log("Course Details:", courseDetails);
         //return
         return res.status(200).json({
             success: true,
             data: sectionDetails,
         });
     } catch (error) {
-        console.log("Error in fetching section details", error);
         return res.status(500).json({
             success: false,
             message: "Error in fetching this section data.",

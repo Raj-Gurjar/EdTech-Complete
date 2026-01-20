@@ -108,6 +108,22 @@ export default function CourseDetails() {
 
   const isEnrolled = user && courseData?.studentsEnrolled?.includes(user?._id);
 
+  // Convert seconds to minutes format
+  const formatDuration = (duration: string | number | undefined): string => {
+    if (!duration) return "";
+    const seconds = typeof duration === 'string' ? parseInt(duration, 10) : duration;
+    if (isNaN(seconds) || seconds === 0) return "";
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    if (minutes > 0 && remainingSeconds > 0) {
+      return `${minutes}m ${remainingSeconds}s`;
+    } else if (minutes > 0) {
+      return `${minutes}m`;
+    } else {
+      return `${remainingSeconds}s`;
+    }
+  };
+
   const handleToggleSection = (id: string): void => {
     setOpenSection(
       openSection.includes(id)
@@ -537,26 +553,61 @@ export default function CourseDetails() {
 
                       {openSection.includes(section._id) && (
                         <div className="border-t border-black5 bg-black2 p-4">
-                          <div className="space-y-2">
-                            {section?.subSections?.map((subSection, subIndex) => (
-                              <div
-                                key={subSection._id || subIndex}
-                                className="flex items-center gap-3 p-3 hover:bg-black1 rounded transition-colors"
+                          {isEnrolled ? (
+                            <>
+                              <div className="space-y-2">
+                                {section?.subSections?.map((subSection, subIndex) => (
+                                  <div
+                                    key={subSection._id || subIndex}
+                                    className="flex items-center gap-3 p-3 hover:bg-black1 rounded transition-colors"
+                                  >
+                                    <FaPlayCircle className="text-purple6 flex-shrink-0" />
+                                    <span className="text-black8 flex-1">{subSection?.title || `Lecture ${subIndex + 1}`}</span>
+                                    {subSection?.timeDuration && (
+                                      <span className="text-sm text-black7">{formatDuration(subSection.timeDuration)}</span>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                              <Link
+                                to={`/sections/${section._id}`}
+                                className="block mt-4 text-purple6 hover:text-purple5 text-sm font-medium transition-colors"
                               >
-                                <FaPlayCircle className="text-purple6 flex-shrink-0" />
-                                <span className="text-black8 flex-1">{subSection?.title || `Lecture ${subIndex + 1}`}</span>
-                                {subSection?.timeDuration && (
-                                  <span className="text-sm text-black7">{subSection.timeDuration}</span>
+                                View full section details →
+                              </Link>
+                            </>
+                          ) : (
+                            <div className="text-center py-6">
+                              <div className="bg-black1 border border-black5 rounded-lg p-6">
+                                <FaPlayCircle className="text-purple6 text-4xl mx-auto mb-3 opacity-50" />
+                                <p className="text-white font-semibold mb-2">Content Locked</p>
+                                <p className="text-black7 text-sm mb-4">
+                                  {token 
+                                    ? "Purchase this course to access all lectures and materials"
+                                    : "Please login and purchase this course to access all lectures and materials"}
+                                </p>
+                                {token && !isEnrolled && courseData && (
+                                  <button
+                                    onClick={() => {
+                                      dispatch(addToCart(courseData));
+                                      navigate("/dashboard/myCart");
+                                    }}
+                                    className="px-4 py-2 bg-purple6 hover:bg-purple5 text-black font-semibold rounded-lg transition-colors text-sm"
+                                  >
+                                    Add to Cart
+                                  </button>
+                                )}
+                                {!token && (
+                                  <button
+                                    onClick={() => navigate("/login")}
+                                    className="px-4 py-2 bg-purple6 hover:bg-purple5 text-black font-semibold rounded-lg transition-colors text-sm"
+                                  >
+                                    Login to Purchase
+                                  </button>
                                 )}
                               </div>
-                            ))}
-                          </div>
-                          <Link
-                            to={`/sections/${section._id}`}
-                            className="block mt-4 text-purple6 hover:text-purple5 text-sm font-medium transition-colors"
-                          >
-                            View full section details →
-                          </Link>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
@@ -565,19 +616,41 @@ export default function CourseDetails() {
               </div>
 
               {/* Requirements/Instructions */}
-              {courseData?.instructions && courseData.instructions.length > 0 && (
-                <div className="bg-black2 border border-black5 rounded-xl p-6 sm:p-8">
-                  <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Requirements</h2>
-                  <ul className="space-y-3">
-                    {courseData.instructions.map((instruction, index) => (
-                      <li key={index} className="flex items-start gap-3 text-black8">
-                        <span className="text-purple6 mt-1">•</span>
-                        <span>{instruction}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              {(() => {
+                // Handle instructions - could be array, string array, or JSON string
+                // Also check for 'instruction' (singular) field
+                let instructions: string[] = [];
+                const instructionData = courseData?.instructions || courseData?.instruction;
+                
+                if (instructionData) {
+                  if (Array.isArray(instructionData)) {
+                    instructions = instructionData;
+                  } else if (typeof instructionData === 'string') {
+                    try {
+                      // Try to parse if it's a JSON string
+                      const parsed = JSON.parse(instructionData);
+                      instructions = Array.isArray(parsed) ? parsed : [instructionData];
+                    } catch {
+                      // If not JSON, treat as single string
+                      instructions = [instructionData];
+                    }
+                  }
+                }
+                
+                return instructions.length > 0 ? (
+                  <div className="bg-black2 border border-black5 rounded-xl p-6 sm:p-8">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Requirements</h2>
+                    <ul className="space-y-3">
+                      {instructions.map((instruction, index) => (
+                        <li key={index} className="flex items-start gap-3 text-black8">
+                          <span className="text-purple6 mt-1">•</span>
+                          <span>{instruction}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null;
+              })()}
 
               {/* Reviews Section */}
               <div className="bg-black2 border border-black5 rounded-xl p-6 sm:p-8">

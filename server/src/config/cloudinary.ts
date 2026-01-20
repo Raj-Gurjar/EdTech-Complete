@@ -30,9 +30,6 @@ export const uploadToCloudinary = async (
     quality?: number | string
 ): Promise<UploadResponse | null> => {
     try {
-        console.log("inside cloudinary config");
-        console.log("file", localFilePath);
-        
         if (!localFilePath) {
             console.error("Could not find the file's path");
             return null;
@@ -55,7 +52,6 @@ export const uploadToCloudinary = async (
             options
         ) as UploadResponse;
 
-        console.log("file is uploaded on cloudinary");
         fs.unlinkSync(localFilePath); // delete from local path
 
         return uploadResponse;
@@ -65,7 +61,6 @@ export const uploadToCloudinary = async (
             fs.unlinkSync(localFilePath);
         }
         const errorMessage = error instanceof Error ? error.message : "Unknown error";
-        console.log("cloudinary error :", errorMessage);
         return null;
     }
 };

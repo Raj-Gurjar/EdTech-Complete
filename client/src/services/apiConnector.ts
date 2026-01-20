@@ -151,7 +151,6 @@ export const apiConnector = (
   params?: Record<string, any>,
   onUploadProgress?: (progressEvent: any) => void
 ): Promise<AxiosResponse> => {
-  console.log("entering api connector", bodyData);
   return axiosInstance({
     method: `${method}`,
     url: `${url}`,

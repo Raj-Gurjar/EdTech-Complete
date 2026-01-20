@@ -9,10 +9,8 @@ const mailSender = require("../utils/mailSender");
 export const resetPasswordToken = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //get data
-        console.log("reset pass");
 
         const { email } = req.body;
-        console.log("email", email);
         //verify email
         if (!email) {
             return res.status(400).json({
@@ -30,12 +28,9 @@ export const resetPasswordToken = async (req: Request, res: Response): Promise<R
             });
         }
 
-        console.log("User exists");
-
         //token generate
         const token = crypto.randomBytes(20).toString("hex");
 
-        console.log("New token..", token);
 
         //update user by adding token and expire time
         const updatedDetails = await User_Model.findOneAndUpdate(
@@ -46,13 +41,10 @@ export const resetPasswordToken = async (req: Request, res: Response): Promise<R
             },
             { new: true }
         );
-        console.log("Updated Details ..", updatedDetails);
         //create url
 
         const resetPasswordUrl = `${process.env.FRONTENT_URL}/reset-password/${token}`;
-        const validityTime = 5; // 5 minutes
-
-        console.log("reset password url", resetPasswordUrl);
+        const validityTime = 5;
 
         // Send mail containing URL
         await mailSender(
@@ -60,7 +52,6 @@ export const resetPasswordToken = async (req: Request, res: Response): Promise<R
             "Password Reset Link",
             passwordResetEmail(resetPasswordUrl, validityTime)
         );
-        console.log("Mail sent");
         //return res
         return res.status(200).json({
             success: true,
@@ -78,13 +69,9 @@ export const resetPasswordToken = async (req: Request, res: Response): Promise<R
 export const resetPassword = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         //get data
-        console.log("in reset pass");
 
         const { password, confPassword, token } = req.body;
 
-        console.log("reqb", req.body);
-
-        console.log("tt", token);
         //validation
 
         if (password !== confPassword) {
@@ -103,14 +90,12 @@ export const resetPassword = async (req: Request, res: Response): Promise<Respon
                 message: passwordValidation.errors.join(". "),
             });
         }
-        console.log("c0");
 
         //get user details
         const userDetails = await User_Model.findOne({
             resetPasswordToken: token,
         });
 
-        console.log("c1");
 
         //if no entry - invalid token
         if (!userDetails) {
@@ -127,19 +112,15 @@ export const resetPassword = async (req: Request, res: Response): Promise<Respon
                 message: "Link is expired, please regenerate it.",
             });
         }
-        console.log("c2");
         //hash password
         const hashedNewPassword = await bcrypt.hash(password, 10);
 
-        console.log("c3");
         //password update
         await User_Model.findOneAndUpdate(
             { resetPasswordToken: token },
             { password: hashedNewPassword },
             { new: true }
         );
-
-        console.log("c4");
 
         //send success mail
 
@@ -149,7 +130,6 @@ export const resetPassword = async (req: Request, res: Response): Promise<Respon
             message: "Password reset Successful.",
         });
     } catch (error) {
-        console.log("Error in resetting the password", error);
         return res.status(500).json({
             success: false,
             message: "Error in resetting the password.",

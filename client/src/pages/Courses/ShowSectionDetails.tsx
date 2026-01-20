@@ -46,7 +46,6 @@ export default function ShowSectionDetails() {
     }
   }, [sectionId]);
 
-  console.log("sectionData :", sectionData);
 
   if (loading) {
     return (
