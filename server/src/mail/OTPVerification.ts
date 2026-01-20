@@ -52,7 +52,7 @@ export const otpVerificationEmail = (otp: string): string => {
     <body>
         <div class="container">
             <div class="header">
-                <h2>OTP Verification from EdTech</h2>
+                <h2>OTP Verification from SkillScript</h2>
             </div>
             <div class="content">
                 <p class="message">Dear User,</p>

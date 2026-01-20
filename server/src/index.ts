@@ -58,7 +58,7 @@ app.use("/api/v1/course", require("./routes/ratings"));
 app.use("/api/v1/reach", require("./routes/contact"));
 
 app.get("/", (req: Request, res: Response) => {
-    res.send("Welcome to EdTech Server");
+    res.send("Welcome to SkillScript Server");
 });
 
 // Connect to database

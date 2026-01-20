@@ -24,7 +24,7 @@ const mailSender = async (
         } as MailTransporter);
 
         const info = await transporter.sendMail({
-            from: "EdTech - by Raj",
+            from: "SkillScript - by Raj",
             to: email,
             subject: title,
             html: body,

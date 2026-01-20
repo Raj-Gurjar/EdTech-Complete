@@ -14,7 +14,7 @@ async function sendVerificationEmail(email: string, otp: string): Promise<void> 
         const emailContent = otpVerificationEmail(otp);
         const mailResponse = await mailSender(
             email,
-            "Verification Email from EdTech",
+            "Verification Email from SkillScript",
             emailContent
         );
 
