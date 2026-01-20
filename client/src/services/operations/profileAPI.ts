@@ -66,10 +66,10 @@ export async function updateProfile(data: any, token: string): Promise<any> {
     }
     result = response?.data?.updatedUser;
 
-    toast.success(response?.data?.message);
+    toast.success(response?.data?.message, { id: toastId, duration: 3000 });
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || apiError.message || "Failed to update profile");
+    toast.error(apiError.response?.data?.message || apiError.message || "Failed to update profile", { id: toastId, duration: 4000 });
   }
   toast.dismiss(toastId);
   return result;
@@ -97,10 +97,10 @@ export async function updateProfileImage(formData: FormData, token: string): Pro
     result = response?.data?.updatedUser;
 
     localStorage.setItem("user", JSON.stringify(result));
-    toast.success(response?.data?.message);
+    toast.success(response?.data?.message, { id: toastId, duration: 3000 });
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || apiError.message || "Failed to update profile image");
+    toast.error(apiError.response?.data?.message || apiError.message || "Failed to update profile image", { id: toastId, duration: 4000 });
   }
   toast.dismiss(toastId);
   return result;
@@ -119,10 +119,10 @@ export const deleteAccount = async (data: any, token: string): Promise<boolean |
       throw new Error("Could not delete this account");
     }
     result = true;
-    toast.success("Account deleted Successfully");
+    toast.success("Account deleted Successfully", { id: toastId, duration: 3000 });
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || apiError.response?.message || apiError.message || "Failed to delete account");
+    toast.error(apiError.response?.data?.message || apiError.response?.message || apiError.message || "Failed to delete account", { id: toastId, duration: 4000 });
   }
   toast.dismiss(toastId);
   return result;

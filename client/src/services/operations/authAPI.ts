@@ -41,11 +41,11 @@ export function sendOTP(email: string, navigate: NavigateFunction) {
       if (!response.data.success) {
         throw new Error(response.data.success);
       }
-      toast.success("OTP Sent Successfully");
+      toast.success("OTP Sent Successfully", { duration: 3000 });
       navigate("/verifyEmail");
     } catch (error) {
       const apiError = error as ApiError;
-      toast.error(apiError.response?.data?.message || "Failed to send OTP");
+      toast.error(apiError.response?.data?.message || "Failed to send OTP", { duration: 4000 });
     }
     dispatch(setLoading(false));
     toast.dismiss(toastId);
@@ -83,11 +83,11 @@ export function signUp(
         throw new Error(response.data.message);
       }
 
-      toast.success("SignUp Successful");
+      toast.success("SignUp Successful", { duration: 3000 });
       navigate("/login");
     } catch (error) {
       const apiError = error as ApiError;
-      toast.error(`SignUp failed! ${apiError.response?.data?.message || "Unknown error"}`);
+      toast.error(`SignUp failed! ${apiError.response?.data?.message || "Unknown error"}`, { duration: 4000 });
       navigate("/signup");
     }
     dispatch(setLoading(false));
@@ -108,7 +108,7 @@ export function login(email: string, password: string, navigate: NavigateFunctio
       if (!response.data.success) {
         throw new Error("error res: " + response.data.message);
       }
-      toast.success("Login Successful");
+      toast.success("Login Successful", { duration: 3000 });
       navigate("/dashboard/myDashboard");
 
       const newToken = response?.data?.token;
@@ -127,7 +127,7 @@ export function login(email: string, password: string, navigate: NavigateFunctio
       localStorage.setItem("user", JSON.stringify(response.data.user));
     } catch (error) {
       const apiError = error as ApiError;
-      toast.error(apiError.response?.data?.message || "Login Failed");
+      toast.error(apiError.response?.data?.message || "Login Failed", { duration: 4000 });
     }
     dispatch(setLoading(false));
     toast.dismiss(toastId);
@@ -158,10 +158,10 @@ export function getPasswordResetToken(email: string, setEmailSent: (value: boole
       if (!response.data.success) {
         throw new Error(response.data.message);
       }
-      toast.success("Reset Email Sent");
+      toast.success("Reset Email Sent", { duration: 3000 });
       setEmailSent(true);
     } catch (error) {
-      toast.error("Failed to send Email for resetting password");
+      toast.error("Failed to send Email for resetting password", { duration: 4000 });
     }
     dispatch(setLoading(false));
   };
@@ -182,11 +182,11 @@ export function resetPassword(password: string, confPassword: string, token: str
       if (!response.data.success) {
         throw new Error(response.data.message);
       }
-      toast.success("Password Reset Successful");
+      toast.success("Password Reset Successful", { duration: 3000 });
       navigate("/login");
     } catch (error) {
       const apiError = error as ApiError;
-      toast.error(apiError.response?.data?.message || "Failed to reset password");
+      toast.error(apiError.response?.data?.message || "Failed to reset password", { duration: 4000 });
     }
     dispatch(setLoading(false));
   };
@@ -207,7 +207,7 @@ export function googleAuth(authData: string | object, navigate: NavigateFunction
         throw new Error(response.data.message);
       }
 
-      toast.success("Google Authentication Successful");
+      toast.success("Google Authentication Successful", { duration: 3000 });
       navigate("/dashboard/myDashboard");
 
       const newToken = response?.data?.token;
@@ -226,7 +226,7 @@ export function googleAuth(authData: string | object, navigate: NavigateFunction
       localStorage.setItem("user", JSON.stringify(response.data.user));
     } catch (error) {
       const apiError = error as ApiError;
-      toast.error(apiError.response?.data?.message || "Google Authentication Failed");
+      toast.error(apiError.response?.data?.message || "Google Authentication Failed", { duration: 4000 });
     }
     dispatch(setLoading(false));
     toast.dismiss(toastId);

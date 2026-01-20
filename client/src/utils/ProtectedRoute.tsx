@@ -34,7 +34,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
         localStorage.removeItem("user");
         
         if (window.location.pathname !== "/login") {
-          toast.error("Session expired. Please login again.");
+          toast.error("Session expired. Please login again.", { duration: 4000 });
           window.location.href = "/login";
         }
         return;

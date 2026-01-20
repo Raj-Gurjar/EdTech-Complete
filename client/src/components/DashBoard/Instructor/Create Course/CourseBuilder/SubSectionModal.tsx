@@ -113,7 +113,7 @@ export default function SubSectionModal({
     }
     if (edit) {
       if (!isFormUpdated()) {
-        toast.error("No changes made to the form");
+        toast.error("No changes made to the form", { duration: 4000 });
       } else {
         await handleEditSubSection();
       }

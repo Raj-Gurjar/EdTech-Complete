@@ -47,13 +47,13 @@ export default function CourseBuilder() {
 
   function goToNext(): void {
     if (course?.courseContent?.length === 0) {
-      toast.error("Please add atleast one Section.");
+      toast.error("Please add atleast one Section.", { duration: 4000 });
       return;
     }
     if (
       course?.courseContent?.some((section: any) => section?.subSections?.length === 0)
     ) {
-      toast.error("Please add atleast one Lecture in each section");
+      toast.error("Please add atleast one Lecture in each section", { duration: 4000 });
       return;
     }
 

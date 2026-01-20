@@ -65,10 +65,10 @@ export default function EditProfile() {
 
     if (result) {
       dispatch(setUser(result));
-      toast.success("Profile updated successfully!");
+      toast.success("Profile updated successfully!", { duration: 3000 });
       navigate("/dashboard/myProfile");
     } else {
-      toast.error("Failed to update profile");
+      toast.error("Failed to update profile", { duration: 4000 });
     }
   };
 
@@ -104,7 +104,7 @@ export default function EditProfile() {
   const uploadImageHandler = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     if (!profileImg) {
-      toast.error("Please select an image first");
+      toast.error("Please select an image first", { duration: 4000 });
       return;
     }
 
@@ -118,7 +118,7 @@ export default function EditProfile() {
       dispatch(setUser(result));
       setProfileImage("");
       setShowImg("");
-      toast.success("Profile image updated successfully!");
+      toast.success("Profile image updated successfully!", { duration: 3000 });
     }
     setIsUploading(false);
   };

@@ -107,7 +107,7 @@ export async function buyCourse(
     );
 
     if (!res) {
-      toast.error("RazorPay SDK failed to load.");
+      toast.error("RazorPay SDK failed to load.", { duration: 4000 });
       return;
     }
 
@@ -154,11 +154,11 @@ export async function buyCourse(
 
     paymentObject.open();
     paymentObject.on("payment.failed", function (response: RazorpayError) {
-      toast.error("oops, payment failed");
+      toast.error("oops, payment failed", { duration: 4000 });
     });
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || "Payment failed");
+    toast.error(apiError.response?.data?.message || "Payment failed", { duration: 4000 });
   }
   toast.dismiss(toastId);
 }
@@ -195,11 +195,11 @@ async function verifyPayment(bodyData: any, token: string, navigate: NavigateFun
       throw new Error(response.data.message);
     }
 
-    toast.success("Payment Successful, you are added to the course");
+    toast.success("Payment Successful, you are added to the course", { id: toastId, duration: 3000 });
     navigate("/dashboard/enrolledCourses");
     dispatch(resetCart());
   } catch (error) {
-    toast.error("Could not verify Payment");
+    toast.error("Could not verify Payment", { id: toastId, duration: 4000 });
   }
   toast.dismiss(toastId);
   dispatch(setPaymentLoading(false));

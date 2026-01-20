@@ -217,7 +217,7 @@ export default function CourseDetails() {
       }
     } catch (error) {
       console.error("Error fetching course:", error);
-      toast.error("Failed to load course details");
+      toast.error("Failed to load course details", { duration: 4000 });
     }
     setLoading(false);
   };
@@ -245,7 +245,7 @@ export default function CourseDetails() {
 
   const handleAddToCart = (): void => {
     if (user?.accountType === ACCOUNT_TYPE.INSTRUCTOR || user?.accountType === ACCOUNT_TYPE.ADMIN) {
-      toast.error("Only a Student Account can buy a course");
+      toast.error("Only a Student Account can buy a course", { duration: 4000 });
       return;
     }
 
@@ -265,7 +265,7 @@ export default function CourseDetails() {
 
   const handleShare = (): void => {
     copy(window.location.href);
-    toast.success("Course link copied to clipboard!");
+    toast.success("Course link copied to clipboard!", { duration: 3000 });
   };
 
   if (loading) {

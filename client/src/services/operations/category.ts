@@ -39,12 +39,12 @@ export const createCategory = async (
     if (!response?.data?.success) {
       throw new Error("Could not create category");
     }
-    toast.success("Category Created Successfully");
+    toast.success("Category Created Successfully", { id: toastId, duration: 3000 });
     result = response?.data?.data;
   } catch (error) {
     console.log("create category api error...", error);
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || "Failed to create category");
+    toast.error(apiError.response?.data?.message || "Failed to create category", { id: toastId, duration: 4000 });
   }
   toast.dismiss(toastId);
   result = true;
@@ -115,11 +115,11 @@ export const deleteCategory = async (
     if (!response?.data?.success) {
       throw new Error("Could not delete category");
     }
-    toast.success("Category deleted Successfully");
+    toast.success("Category deleted Successfully", { id: toastId, duration: 3000 });
     result = response?.data?.data;
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || "Failed to delete category");
+    toast.error(apiError.response?.data?.message || "Failed to delete category", { id: toastId, duration: 4000 });
   }
   toast.dismiss(toastId);
   return result;

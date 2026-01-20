@@ -64,14 +64,14 @@ export default function SignupForm({ setIsLoggedIn, accountType: propAccountType
     // Validate password
     const validation = validatePassword(password);
     if (!validation.isValid) {
-      toast.error("Please fix password validation errors");
+      toast.error("Please fix password validation errors", { duration: 4000 });
       setShowPasswordValidation(true);
       return;
     }
 
     // Check password match
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error("Passwords do not match", { duration: 4000 });
       return;
     }
 

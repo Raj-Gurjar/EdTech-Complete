@@ -35,6 +35,7 @@ export async function createContactUs(data: ContactFormData): Promise<boolean> {
 
     toast.success("Message sent successfully! We'll get back to you soon.", {
       id: toastId,
+      duration: 3000,
     });
     return true;
   } catch (error) {
@@ -42,7 +43,7 @@ export async function createContactUs(data: ContactFormData): Promise<boolean> {
     const apiError = error as ApiError;
     toast.error(
       apiError.response?.data?.message || "Failed to send message. Please try again.",
-      { id: toastId }
+      { id: toastId, duration: 4000 }
     );
     return false;
   }

@@ -154,7 +154,7 @@ export default function AuthTemplate({
               <button
                 onClick={() => {
                   if (formType === "signup" && googleAccountType === ACCOUNT_TYPE.ADMIN && !adminKey) {
-                    toast.error("Please enter the admin secret key");
+                    toast.error("Please enter the admin secret key", { duration: 4000 });
                     return;
                   }
                   handleGoogleLogin();

@@ -116,7 +116,7 @@ axiosInstance.interceptors.response.use(
         
         // Only show toast if not already on login page
         if (window.location.pathname !== "/login") {
-          toast.error("Session expired. Please login again.");
+          toast.error("Session expired. Please login again.", { duration: 4000 });
           window.location.href = "/login";
         }
         
@@ -133,7 +133,7 @@ axiosInstance.interceptors.response.use(
         localStorage.removeItem("user");
         
         if (window.location.pathname !== "/login") {
-          toast.error("Authentication failed. Please login again.");
+          toast.error("Authentication failed. Please login again.", { duration: 4000 });
           window.location.href = "/login";
         }
       }

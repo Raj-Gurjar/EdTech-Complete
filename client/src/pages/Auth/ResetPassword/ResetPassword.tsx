@@ -54,14 +54,14 @@ export default function ResetPassword() {
     // Validate password
     const validation = validatePassword(newPassword);
     if (!validation.isValid) {
-      toast.error("Please fix password validation errors");
+      toast.error("Please fix password validation errors", { duration: 4000 });
       setShowPasswordValidation(true);
       return;
     }
 
     // Check password match
     if (newPassword !== confNewPassword) {
-      toast.error("Passwords do not match");
+      toast.error("Passwords do not match", { duration: 4000 });
       return;
     }
 

@@ -116,7 +116,7 @@ export default function CourseDetailsAdmin() {
       }
     } catch (error) {
       console.error("Error fetching course details: ", error);
-      toast.error("Failed to fetch course details.");
+      toast.error("Failed to fetch course details.", { duration: 4000 });
     }
     setLoading(false);
   }, [courseId, token]);
@@ -135,10 +135,10 @@ export default function CourseDetailsAdmin() {
           status: COURSE_STATUS.PUBLISHED,
         };
       });
-      toast.success("Course published successfully.");
+      toast.success("Course published successfully.", { duration: 3000 });
     } catch (error) {
       console.error("Error publishing course: ", error);
-      toast.error("Failed to publish the course.");
+      toast.error("Failed to publish the course.", { duration: 4000 });
     }
     setLoading(false);
   };
@@ -157,10 +157,10 @@ export default function CourseDetailsAdmin() {
           status: COURSE_STATUS.DRAFT,
         };
       });
-      toast.success("Course unpublished successfully.");
+      toast.success("Course unpublished successfully.", { duration: 3000 });
     } catch (error) {
       console.error("Error unpublishing course: ", error);
-      toast.error("Failed to unpublish the course.");
+      toast.error("Failed to unpublish the course.", { duration: 4000 });
     }
     setLoading(false);
   };
@@ -173,7 +173,7 @@ export default function CourseDetailsAdmin() {
 
   const handleShare = (): void => {
     copy(window.location.href);
-    toast.success("Link Copied");
+    toast.success("Link Copied", { duration: 3000 });
   };
 
   const handleToggleSection = (id: string): void => {

@@ -45,7 +45,7 @@ export default function CourseReviewModal({ setReviewModal }: CourseReviewModalP
 
   const onSubmit = async (data: ReviewFormData) => {
     if (!data.courseRating || data.courseRating === 0) {
-      toast.error("Please select a rating");
+      toast.error("Please select a rating", { duration: 4000 });
       return;
     }
 
@@ -61,7 +61,7 @@ export default function CourseReviewModal({ setReviewModal }: CourseReviewModalP
       );
 
       if (result) {
-        toast.success("Review submitted successfully!");
+        toast.success("Review submitted successfully!", { duration: 3000 });
         setReviewModal(false);
       }
     } catch (error) {

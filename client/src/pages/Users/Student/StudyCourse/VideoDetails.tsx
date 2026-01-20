@@ -206,9 +206,9 @@ export default function VideoDetails() {
 
     if (res) {
       dispatch(updateCompletedLectures(subSectionId));
-      toast.success("Lecture marked as completed!");
+      toast.success("Lecture marked as completed!", { duration: 3000 });
     } else {
-      toast.error("Failed to mark lecture as completed");
+      toast.error("Failed to mark lecture as completed", { duration: 4000 });
     }
     setLoading(false);
   };

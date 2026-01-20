@@ -26,7 +26,31 @@ root.render(
       <Provider store={store}>
         <BrowserRouter>
           <App />
-          <Toaster/>
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: '#1a1a1a',
+                color: '#fff',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+              },
+              success: {
+                duration: 3000,
+                iconTheme: {
+                  primary: '#8b5cf6',
+                  secondary: '#fff',
+                },
+              },
+              error: {
+                duration: 4000,
+                iconTheme: {
+                  primary: '#ef4444',
+                  secondary: '#fff',
+                },
+              },
+            }}
+          />
         </BrowserRouter>
       </Provider>
     </GoogleOAuthProvider>

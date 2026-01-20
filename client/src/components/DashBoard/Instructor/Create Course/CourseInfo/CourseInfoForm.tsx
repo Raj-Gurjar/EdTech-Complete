@@ -149,7 +149,7 @@ export default function CourseInfoForm() {
           dispatch(setStep(2));
         }
       } else {
-        toast.error("No changes made to the form");
+        toast.error("No changes made to the form", { duration: 4000 });
       }
       return;
     }

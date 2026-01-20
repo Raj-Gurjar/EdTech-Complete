@@ -107,12 +107,13 @@ export const publishCourseAdmin = async (courseId: string, token: string): Promi
     if (!response?.data?.success) {
       throw new Error("Could not publish the Course");
     }
-    toast.success("Course Published Successfully");
+    toast.success("Course Published Successfully", { duration: 3000 });
     result = response?.data?.data;
   } catch (error) {
     const apiError = error as ApiError;
     toast.error(
-      apiError.response?.data?.message || "Error in publishing the course"
+      apiError.response?.data?.message || "Error in publishing the course",
+      { duration: 4000 }
     );
   }
 
@@ -137,12 +138,13 @@ export const unpublishCourseAdmin = async (courseId: string, token: string): Pro
     if (!response?.data?.success) {
       throw new Error("Could not unpublish the Course");
     }
-    toast.success("Course Unpublished Successfully");
+    toast.success("Course Unpublished Successfully", { duration: 3000 });
     result = response?.data?.data;
   } catch (error) {
     const apiError = error as ApiError;
     toast.error(
-      apiError.response?.data?.message || "Error in unpublishing the course"
+      apiError.response?.data?.message || "Error in unpublishing the course",
+      { duration: 4000 }
     );
   }
 
@@ -209,11 +211,11 @@ export const addCourseDetails = async (
     if (!response?.data?.success) {
       throw new Error("Could not add details in Course");
     }
-    toast.success("Course Details added Successfully", { id: toastId });
+    toast.success("Course Details added Successfully", { id: toastId, duration: 3000 });
     result = response?.data?.newCourse;
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || "Failed to add course details", { id: toastId });
+    toast.error(apiError.response?.data?.message || "Failed to add course details", { id: toastId, duration: 4000 });
   }
   return result;
 };
@@ -231,11 +233,11 @@ export const editCourseDetails = async (data: any, token: string): Promise<any> 
     if (!response?.data?.success) {
       throw new Error("Could not edit details in Course");
     }
-    toast.success("Course Details edited Successfully");
+    toast.success("Course Details edited Successfully", { id: toastId, duration: 3000 });
     result = response?.data?.data;
   } catch (error) { 
     const apiError = error as ApiError;
-    toast.error(apiError.response?.message || "Failed to edit course details");
+    toast.error(apiError.response?.message || "Failed to edit course details", { id: toastId, duration: 4000 });
   }
   toast.dismiss(toastId);
   return result;
@@ -253,11 +255,11 @@ export const createSection = async (data: any, token: string): Promise<any> => {
     if (!response?.data?.success) {
       throw new Error("Could not create section");
     }
-    toast.success("Section Created Successfully");
+    toast.success("Section Created Successfully", { id: toastId, duration: 3000 });
     result = response?.data?.data;
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || "Failed to create section");
+    toast.error(apiError.response?.data?.message || "Failed to create section", { id: toastId, duration: 4000 });
   }
   toast.dismiss(toastId);
   return result;
@@ -300,11 +302,11 @@ export const createSubSection = async (
     if (!response?.data?.success) {
       throw new Error("Could not create sub-section");
     }
-    toast.success("Sub-Section Created Successfully", { id: toastId });
+    toast.success("Sub-Section Created Successfully", { id: toastId, duration: 3000 });
     result = response?.data?.data;
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || "Failed to create sub-section", { id: toastId });
+    toast.error(apiError.response?.data?.message || "Failed to create sub-section", { id: toastId, duration: 4000 });
   }
   return result;
 };
@@ -320,11 +322,11 @@ export const updateSection = async (data: any, token: string): Promise<any> => {
     if (!response?.data?.success) {
       throw new Error("Could not update section");
     }
-    toast.success("Section Updated Successfully");
+    toast.success("Section Updated Successfully", { id: toastId, duration: 3000 });
     result = response?.data?.data;
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || "Failed to update section");
+    toast.error(apiError.response?.data?.message || "Failed to update section", { id: toastId, duration: 4000 });
   }
   toast.dismiss(toastId);
   return result;
@@ -343,11 +345,11 @@ export const updateSubSection = async (data: any, token: string): Promise<any> =
     if (!response?.data?.success) {
       throw new Error("Could not update sub-section");
     }
-    toast.success("Sub-Section Updated Successfully");
+    toast.success("Sub-Section Updated Successfully", { id: toastId, duration: 3000 });
     result = response?.data?.data;
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || "Failed to update sub-section");
+    toast.error(apiError.response?.data?.message || "Failed to update sub-section", { id: toastId, duration: 4000 });
   }
   toast.dismiss(toastId);
   return result;
@@ -365,11 +367,11 @@ export const deleteSection = async (data: any, token: string): Promise<any> => {
     if (!response?.data?.success) {
       throw new Error("Could not delete section");
     }
-    toast.success("Section deleted Successfully");
+    toast.success("Section deleted Successfully", { id: toastId, duration: 3000 });
     result = response?.data?.data;
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.message || "Failed to delete section");
+    toast.error(apiError.response?.message || "Failed to delete section", { id: toastId, duration: 4000 });
   }
   toast.dismiss(toastId);
   return result;
@@ -387,11 +389,11 @@ export const deleteSubSection = async (data: any, token: string): Promise<any> =
     if (!response?.data?.success) {
       throw new Error("Could not delete subsection");
     }
-    toast.success("subSection deleted Successfully");
+    toast.success("subSection deleted Successfully", { id: toastId, duration: 3000 });
     result = response?.data?.data;
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.message || "Failed to delete subsection");
+    toast.error(apiError.response?.message || "Failed to delete subsection", { id: toastId, duration: 4000 });
   }
   toast.dismiss(toastId);
   return result;
@@ -436,11 +438,11 @@ export const deleteCourse = async (data: any, token: string): Promise<any> => {
     if (!response?.data?.success) {
       throw new Error("Could not delete course");
     }
-    toast.success("Course deleted Successfully");
+    toast.success("Course deleted Successfully", { id: toastId, duration: 3000 });
     result = response?.data?.data;
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.message || "Failed to delete course");
+    toast.error(apiError.response?.message || "Failed to delete course", { id: toastId, duration: 4000 });
   }
   toast.dismiss(toastId);
   return result;
@@ -484,11 +486,11 @@ export const markLectureAsComplete = async (data: any, token: string): Promise<b
     if (!response.data.message) {
       throw new Error(response.data.error);
     }
-    toast.success("Lecture Completed");
+    toast.success("Lecture Completed", { id: toastId, duration: 3000 });
     result = true;
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || apiError.message || "Failed to mark lecture as complete");
+    toast.error(apiError.response?.data?.message || apiError.message || "Failed to mark lecture as complete", { id: toastId, duration: 4000 });
     result = false;
   }
   toast.dismiss(toastId);
@@ -551,11 +553,11 @@ export const createRating = async (data: { courseId: string; rating: number; rev
     if (!response?.data?.success) {
       throw new Error("Could not Create Review");
     }
-    toast.success("Rating and Review added Successfully");
+    toast.success("Rating and Review added Successfully", { id: toastId, duration: 3000 });
     result = response?.data?.newCourse;
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || "Failed to create rating");
+    toast.error(apiError.response?.data?.message || "Failed to create rating", { id: toastId, duration: 4000 });
   }
   toast.dismiss(toastId);
   return result;

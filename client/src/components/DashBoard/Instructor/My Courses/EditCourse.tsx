@@ -38,12 +38,12 @@ export default function EditCourse() {
         dispatch(setCourse(courseDetails));
       } else {
         setError("Course not found or invalid course data");
-        toast.error("Failed to load course details");
+        toast.error("Failed to load course details", { duration: 4000 });
       }
     } catch (err) {
       console.error("Error loading course:", err);
       setError("Failed to load course. Please try again.");
-      toast.error("Failed to load course details");
+      toast.error("Failed to load course details", { duration: 4000 });
     } finally {
       setLoading(false);
     }
