@@ -62,7 +62,7 @@ export const showAllCategories = async (): Promise<any[]> => {
     }
     result = response?.data?.data;
   } catch (error) {
-    console.log("course category api error...", error);
+    console.log("course category api error..", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.message || "Failed to fetch categories");
   }

@@ -234,15 +234,12 @@ export default function VideoDetails() {
           (course) => course._id === sectionId
         );
 
-        // console.log("filerD", filteredData);
 
         const section = filteredData?.[0] as CourseSectionData | undefined;
         const subSections = section?.subSections || section?.subSection || [];
         const filteredVideoData = subSections.filter(
           (data: any) => data._id === subSectionId
         );
-
-        // console.log("filerVidD", filteredVideoData);
 
         if (filteredVideoData?.[0]) {
           setVideoData(filteredVideoData[0] as VideoData);
