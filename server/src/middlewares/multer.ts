@@ -1,15 +1,28 @@
 import multer from "multer";
 import { Request, Response, NextFunction } from "express";
+import fs from "fs";
+import path from "path";
 
-const storage = multer.diskStorage({
-    destination: function (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) {
-        cb(null, "./public/temp");
-    },
-    filename: function (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) {
-        const uniqueSuffix = Date.now();
-        cb(null, uniqueSuffix + "-" + file.originalname);
-    },
-});
+// Use memory storage for serverless environments (Vercel), disk storage for local
+// Check for Vercel environment variable first, then fallback to production check
+const isServerless = process.env.VERCEL === "1" || (process.env.NODE_ENV === "production" && !process.env.ALLOW_DISK_STORAGE);
+
+const storage = isServerless 
+    ? multer.memoryStorage()
+    : multer.diskStorage({
+        destination: function (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) {
+            const tempDir = path.join(process.cwd(), "public", "temp");
+            // Ensure temp directory exists
+            if (!fs.existsSync(tempDir)) {
+                fs.mkdirSync(tempDir, { recursive: true });
+            }
+            cb(null, tempDir);
+        },
+        filename: function (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) {
+            const uniqueSuffix = Date.now();
+            cb(null, uniqueSuffix + "-" + file.originalname);
+        },
+    });
 
 // File size limits
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB for images (thumbnails, profile images)

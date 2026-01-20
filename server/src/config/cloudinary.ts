@@ -24,14 +24,14 @@ interface UploadResponse {
 }
 
 export const uploadToCloudinary = async (
-    localFilePath: string,
+    localFilePath: string | Buffer,
     folder: string,
     height?: number,
     quality?: number | string
 ): Promise<UploadResponse | null> => {
     try {
         if (!localFilePath) {
-            console.error("Could not find the file's path");
+            console.error("Could not find the file's path or buffer");
             return null;
         }
 
@@ -47,20 +47,52 @@ export const uploadToCloudinary = async (
             options.quality = quality;
         }
 
-        const uploadResponse = await cloudinary.v2.uploader.upload(
-            localFilePath,
-            options
-        ) as UploadResponse;
+        // Handle both file path (local) and buffer (serverless)
+        let uploadResponse: UploadResponse;
+        if (Buffer.isBuffer(localFilePath)) {
+            // Serverless environment - upload from buffer using data URI
+            uploadResponse = await new Promise<UploadResponse>((resolve, reject) => {
+                const uploadStream = cloudinary.v2.uploader.upload_stream(
+                    options,
+                    (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result as UploadResponse);
+                        }
+                    }
+                );
+                uploadStream.end(localFilePath);
+            });
+        } else {
+            // Local environment - upload from file path
+            uploadResponse = await cloudinary.v2.uploader.upload(
+                localFilePath,
+                options
+            ) as UploadResponse;
 
-        fs.unlinkSync(localFilePath); // delete from local path
+            // Delete local file after upload
+            if (fs.existsSync(localFilePath)) {
+                try {
+                    fs.unlinkSync(localFilePath);
+                } catch (unlinkError) {
+                    // Ignore unlink errors
+                }
+            }
+        }
 
         return uploadResponse;
     } catch (error) {
-        // Clean up file even if upload fails
-        if (fs.existsSync(localFilePath)) {
-            fs.unlinkSync(localFilePath);
+        // Clean up file even if upload fails (only for file paths, not buffers)
+        if (typeof localFilePath === 'string' && fs.existsSync(localFilePath)) {
+            try {
+                fs.unlinkSync(localFilePath);
+            } catch (unlinkError) {
+                // Ignore unlink errors
+            }
         }
         const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        console.error("Cloudinary upload error:", errorMessage);
         return null;
     }
 };

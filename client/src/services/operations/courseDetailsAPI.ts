@@ -31,6 +31,7 @@ const { GET_ALL_REVIEWS_API } = reviewEndpoints;
 interface ApiError {
   response?: {
     data?: {
+      error: string;
       message?: string;
     };
     message?: string;
@@ -209,13 +210,18 @@ export const addCourseDetails = async (
     );
 
     if (!response?.data?.success) {
-      throw new Error("Could not add details in Course");
+      throw new Error(response?.data?.message || "Could not add details in Course");
     }
     toast.success("Course Details added Successfully", { id: toastId, duration: 3000 });
     result = response?.data?.newCourse;
   } catch (error) {
     const apiError = error as ApiError;
-    toast.error(apiError.response?.data?.message || "Failed to add course details", { id: toastId, duration: 4000 });
+    const errorMessage = apiError.response?.data?.message || 
+                        apiError.response?.data?.error || 
+                        apiError.message || 
+                        "Failed to add course details";
+    toast.error(errorMessage, { id: toastId, duration: 3000 });
+    console.error("Course creation error:", errorMessage, apiError.response?.data);
   }
   return result;
 };

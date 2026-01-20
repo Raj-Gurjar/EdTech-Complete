@@ -222,7 +222,7 @@ export const getFullCourseDetails = async (req: AuthRequest, res: Response): Pro
 export const createCourse = async (req: AuthRequest, res: Response): Promise<Response | void> => {
     try {
         //*get the data
-        const {
+        let {
             courseName,
             courseDescription,
             whatYouWillLearn,
@@ -235,8 +235,33 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<Res
         } = req.body;
         let { status } = req.body;
 
+        // Parse JSON strings if they are strings
+        if (typeof instructions === 'string') {
+            try {
+                instructions = JSON.parse(instructions);
+            } catch (e) {
+                // If parsing fails, keep as is
+            }
+        }
+        if (typeof tag === 'string') {
+            try {
+                tag = JSON.parse(tag);
+            } catch (e) {
+                // If parsing fails, keep as is
+            }
+        }
+        if (typeof whatYouWillLearn === 'string') {
+            try {
+                whatYouWillLearn = JSON.parse(whatYouWillLearn);
+            } catch (e) {
+                // If parsing fails, keep as is
+            }
+        }
 
+
+        // Handle both disk storage (path) and memory storage (buffer) for serverless
         const thumbnailPath = req.file?.path;
+        const thumbnailBuffer = req.file?.buffer;
 
         //* validation
 
@@ -248,7 +273,7 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<Res
             !language ||
             !category ||
             !tag ||
-            !thumbnailPath
+            (!thumbnailPath && !thumbnailBuffer)
         ) {
             return res.status(400).json({
                 success: false,
@@ -290,16 +315,25 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<Res
         }
 
         //* Upload thumbnail to cloudinary
+        // Check if Cloudinary environment variables are set
+        if (!process.env.CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+            return res.status(500).json({
+                success: false,
+                message: "Cloudinary configuration is missing. Please check environment variables.",
+            });
+        }
 
+        // Use buffer for serverless, path for local
+        const thumbnailFile = thumbnailBuffer || thumbnailPath;
         const thumbnailImage = await uploadToCloudinary(
-            thumbnailPath,
-            process.env.CLD_THUMBNAIL_FOLDER
+            thumbnailFile,
+            process.env.CLD_THUMBNAIL_FOLDER || "thumbnails"
         );
 
         if (!thumbnailImage) {
             return res.status(400).json({
                 success: false,
-                message: "Unable to upload thumbnail to cloudinary",
+                message: "Unable to upload thumbnail to cloudinary. Please check file format and size.",
             });
         }
 
@@ -349,11 +383,28 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<Res
             newCourse,
         });
     } catch (error: any) {
+        console.error("Error in creating course:", error);
+        const errorMessage = error?.message || "Unknown error";
+        const errorStack = error?.stack;
+        
+        // Log full error details for debugging
+        console.error("Error details:", {
+            message: errorMessage,
+            stack: errorStack,
+            file: req.file ? {
+                fieldname: req.file.fieldname,
+                originalname: req.file.originalname,
+                mimetype: req.file.mimetype,
+                size: req.file.size,
+                hasPath: !!req.file.path,
+                hasBuffer: !!req.file.buffer
+            } : "No file uploaded"
+        });
+        
         return res.status(500).json({
             success: false,
             message: "Error in Creating Course.",
-            // data:newCourse,
-            error: error.message,
+            error: process.env.NODE_ENV === "development" ? errorMessage : "An error occurred while creating the course. Please try again.",
         });
     }
 };
