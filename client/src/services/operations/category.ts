@@ -106,7 +106,7 @@ export const deleteCategory = async (
     const response = await apiConnector(
       "DELETE",
       DELETE_CATEGORY_API,
-      categoryId,
+      { categoryId },
       {
         Authorization: `Bearer ${token}`,
       }
@@ -118,7 +118,6 @@ export const deleteCategory = async (
     toast.success("Category deleted Successfully");
     result = response?.data?.data;
   } catch (error) {
-    console.log("delete category api error...", error);
     const apiError = error as ApiError;
     toast.error(apiError.response?.data?.message || "Failed to delete category");
   }
