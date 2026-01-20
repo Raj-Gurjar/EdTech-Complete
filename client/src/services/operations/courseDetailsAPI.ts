@@ -191,7 +191,7 @@ export const addCourseDetails = async (
       CREATE_COURSE_API, 
       data, 
       {
-        "Content-Type": "multipart/form-data",
+        // Don't set Content-Type for FormData - browser will set it with boundary
         Authorization: `Bearer ${token}`,
       },
       undefined,
@@ -287,7 +287,7 @@ export const createSubSection = async (
       CREATE_SUBSECTION_API, 
       data, 
       {
-        "Content-Type": "multipart/form-data",
+        // Don't set Content-Type for FormData - browser will set it with boundary
         Authorization: `Bearer ${token}`,
       },
       undefined,

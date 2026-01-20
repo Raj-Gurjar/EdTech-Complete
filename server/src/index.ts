@@ -8,9 +8,6 @@ const app = express();
 
 const PORT: number = parseInt(process.env.PORT || "4002", 10);
 
-app.use(express.json());
-app.use(cookieParser());
-
 // CORS configuration - allow frontend and localhost:3000
 const allowedOrigins = [
     "http://localhost:3000",
@@ -20,11 +17,10 @@ const allowedOrigins = [
     process.env.FRONTEND_URL || "",
 ].filter(Boolean); // Remove empty strings
 
-// Log allowed origins for debugging (only in development)
-if (process.env.NODE_ENV !== "production") {
-    console.log("Allowed CORS origins:", allowedOrigins);
-}
+// Log allowed origins for debugging
+console.log("Allowed CORS origins:", allowedOrigins);
 
+// CORS middleware - must be before other middleware
 app.use(cors({
     origin: (origin, callback) => {
         // Allow requests with no origin (like mobile apps, Postman, or curl requests)
@@ -62,10 +58,38 @@ app.use(cors({
     ],
     exposedHeaders: ["Content-Range", "X-Content-Range"],
     maxAge: 86400, // 24 hours
+    preflightContinue: false,
+    optionsSuccessStatus: 204
 }));
 
-// Handle preflight OPTIONS requests explicitly
-app.options("*", cors());
+app.use(express.json());
+app.use(cookieParser());
+
+// Handle preflight OPTIONS requests explicitly for all routes
+app.options("*", (req: Request, res: Response) => {
+    const origin = req.headers.origin;
+    
+    // Check if origin is allowed
+    if (origin) {
+        const normalizedOrigin = origin.endsWith("/") ? origin.slice(0, -1) : origin;
+        const isAllowed = allowedOrigins.some(allowed => {
+            const normalizedAllowed = allowed.endsWith("/") ? allowed.slice(0, -1) : allowed;
+            return normalizedOrigin === normalizedAllowed;
+        });
+        
+        if (isAllowed) {
+            res.header("Access-Control-Allow-Origin", origin);
+            res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+            res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers");
+            res.header("Access-Control-Allow-Credentials", "true");
+            res.header("Access-Control-Max-Age", "86400");
+            return res.sendStatus(204);
+        }
+    }
+    
+    // If origin not allowed, still respond (browser will handle the error)
+    res.sendStatus(204);
+});
 
 app.use("/api/v1/auth", require("./routes/auth"));
 app.use("/api/v1/category", require("./routes/category"));

@@ -86,7 +86,7 @@ export async function updateProfileImage(formData: FormData, token: string): Pro
       UPDATE_DISPLAY_PICTURE_API,
       formData,
       {
-        "Content-Type": "multipart/form-data",
+        // Don't set Content-Type for FormData - browser will set it with boundary
         Authorization: `Bearer ${token}`,
       }
     );
